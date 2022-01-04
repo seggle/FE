@@ -3,7 +3,7 @@
     <h1 class="class-title">기계학습</h1>
     <nav class="class-nav">
         <router-link class="class-nav-list" to="/">전체 문제</router-link>
-        <router-link class="class-nav-list" to="/">수강생 및 TA 관리</router-link>
+        <router-link class="class-nav-list" to="/class-manager">수강생 및 TA 관리</router-link>
         <router-link class="class-nav-list" to="/">시험 관리</router-link>
         <router-link class="class-nav-list" to="/">문제</router-link>
     </nav>
@@ -21,7 +21,6 @@ export default {
 .class-nav-bar {
     display: flex;
     justify-content: space-between;
-    padding: 8vh 30vh;
 }
 
 .class-title {
