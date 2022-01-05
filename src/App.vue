@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-5">
-      <a class="navbar-brand" href="">Seggle</a>
+      <a class="navbar-brand" href="" id="title">Seggle</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -84,7 +84,9 @@ nav {
   color: black;
   background-color: white;
 }
-
+#title {
+  font-weight: bold;
+}
 #nav a.router-link-exact-active {
   font-family: Roboto;
   font-style: bolder;
