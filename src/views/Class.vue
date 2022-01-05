@@ -1,5 +1,5 @@
 <template>
-  <div class="class">
+  <div class="container">
     <ClassNavBar/>
   </div>
 </template>
@@ -17,7 +17,5 @@ export default {
 </script>
 
 <style>
-.class {
-  padding: 8vh 30vh;
-}
+
 </style>
