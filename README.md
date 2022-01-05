@@ -1,2 +1,2 @@
-# FE
+# Main homepage
 seggle front-end
