@@ -56,12 +56,6 @@ h1 {
       color: black;
     }
   }
-  .selected {
-    padding-bottom: 6px;
-    border-bottom: 2px solid black;
-    font-weight: 700;
-    color: black;
-  }
 }
 
 </style>
