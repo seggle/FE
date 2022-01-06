@@ -1,15 +1,10 @@
 <template>
   <div class="class-nav-bar py-5">
-    <div class="row">
-      <div class="col-md-3">
-        <h1 id="title">기계학습</h1>
-      </div>
-      <div class="col-md-8">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg">
           <div class="container-fluid">
-            <spacer></spacer>
+            <h1 id="title">기계학습</h1>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+              <div class="icon">☰</div>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav">
@@ -29,8 +24,6 @@
             </div>
           </div>
         </nav>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -40,14 +33,35 @@ export default {
 }
 </script>
 
-<style scoped>
-nav {
-  border-radius: 20px;
+<style lang="scss" scoped>
+h1 {
+  padding: 0px 4rem;
+  margin-bottom: 0rem;
 }
+.navbar-toggler {
+    &:focus {
+    box-shadow: 0 0 0 0rem;
+  }
+}
+
 #navbarNav {
-  justify-content: space-around;
+  justify-content: space-evenly;
+  .nav-item {
+    padding: 10px 40px;
+    &:hover {
+      background-color: var(--bs-light);
+      font-weight: bold;
+    }
+    .nav-link {
+      color: black;
+    }
+  }
+  .selected {
+    padding-bottom: 6px;
+    border-bottom: 2px solid black;
+    font-weight: 700;
+    color: black;
+  }
 }
-.nav-item {
-  padding: 0px 50px;
-}
+
 </style>
