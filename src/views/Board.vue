@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <form class="board col" v-on:submit.prevent="submitForm">
-        <h1 class="board-header py-4 fw-bolder">글쓰기</h1>
+  <div class="container px-5 py-5">
+    <form class="board py-5" v-on:submit.prevent="submitForm">
+        <h1 id="title">글쓰기</h1>
         <div class="title py-2">
             <label for="board-title" class="p-2 fs-4">제목</label>
             <input id="board-title" class="form-control" type="text" placeholder="제목을 입력하세요">
@@ -21,11 +21,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.board {
+  text-align:left;
+}
 #board-content {
     resize: none;
 }
-
 .btn {
     float: right;
 }
