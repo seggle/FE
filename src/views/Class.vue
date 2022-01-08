@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <ClassNavBar/>
+    <!--밑에 페이지가 뿌려짐-->
+    <router-view></router-view>
   </div>
 </template>
 

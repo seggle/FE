@@ -1,6 +1,5 @@
 <template>
-  <div class="container py-5">
-    <ClassNavBar/>
+  <div class="container">
     <div id="class-manager-form" class="form-floating row px-5 py-5" v-on:submit.prevent="submitForm">
       <form class="class-student-form col-md-4">
         <label for="class-student" class="p-2 fs-4">수강생</label>
@@ -18,13 +17,9 @@
 
 <script>
 // @ is an alias to /src
-import ClassNavBar from '@/components/ClassNavBar.vue'
 
 export default {
-  name: 'ClassManager',
-  components: {
-    ClassNavBar
-  }
+  name: 'ClassStudentManager'
 }
 </script>
 

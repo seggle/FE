@@ -9,13 +9,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">전체 문제</a>
+                  <a class="nav-link" href="/class">전체 문제</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/class-manager">수강생 및 TA 관리</a>
+                  <a class="nav-link" href="/class/student-manage">수강생 및 TA 관리</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">시험 관리</a>
+                  <a class="nav-link" href="/class/exam-manage">시험 관리</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">문제</a>
