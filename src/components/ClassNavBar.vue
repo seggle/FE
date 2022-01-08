@@ -18,7 +18,7 @@
                   <a class="nav-link" href="/class/exam-manage">시험 관리</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">문제</a>
+                  <a class="nav-link" href="/class/contest">문제</a>
                 </li>
               </ul>
             </div>
