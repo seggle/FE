@@ -11,26 +11,11 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>RESET</td>
-      <td>EXCEPTION</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>RESET</td>
-      <td>EXCEPTION</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
+    <tr v-for="users in userList" :key="users">
+      <th scope="row">{{ users._id }}</th>
+      <td>{{ users.username }}</td>
+      <td>{{ users.userIP }}</td>
+      <td>{{ users.userStartTime }}</td>
       <td>RESET</td>
       <td>EXCEPTION</td>
     </tr>
@@ -40,7 +25,25 @@
 
 <script>
 export default {
-
+  name: 'ClassExamManage',
+  data () {
+    return {
+      userList: [ // api로 받아와야될 부분
+        {
+          _id: '1',
+          username: 'user1',
+          userIP: 'userIP1',
+          userStartTime: '2022-01-08-17:08'
+        },
+        {
+          _id: '2',
+          username: 'user2',
+          userIP: 'userIP2',
+          userStartTime: '2022-01-08-17:09'
+        }
+      ]
+    }
+  }
 }
 </script>
 
