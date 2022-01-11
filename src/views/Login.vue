@@ -1,18 +1,12 @@
 <template>
 <div class="container">
   <h1 id="title">Seggle</h1>
-  <form id="login-form" class="row needs-validation" novalidate>
+  <form id="login-form" class="row" @submit.prevent="submitForm">
     <div class="id-form">
-      <input type="text" class="form-control" id="validationID" placeholder="아이디" required>
-      <div class="invalid-feedback">
-        아이디를 입력해주세요.
-      </div>
+      <input v-model="userID" type="text" class="form-control" id="validationID" placeholder="아이디" required>
     </div>
     <div class="password-form">
-      <input type="password" class="form-control" id="validationPassword" placeholder="비밀번호" required>
-      <div class="invalid-feedback">
-        비밀번호를 입력해주세요.
-      </div>
+      <input v-model="userPWD" type="password" class="form-control" id="validationPassword" placeholder="비밀번호" required>
     </div>
     <button class="btn" type="submit">로그인</button>
   </form>
@@ -24,8 +18,29 @@
 </template>
 
 <script>
+import api from '@/api/index.js'
 export default {
-  name: 'Login'
+  name: 'Login',
+  data () {
+    return {
+      userID: '',
+      userPWD: ''
+    }
+  },
+  methods: {
+    async submitForm () {
+      try {
+        const data = {
+          user_id: this.userID,
+          user_password: this.userPWD
+        }
+        const res = await api.loginUser(data)
+        console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 }
 </script>
 
