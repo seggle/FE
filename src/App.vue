@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-5">
-      <a class="navbar-brand" href="" id="title">Seggle</a>
+      <a class="navbar-brand" href="/" id="title">Seggle</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -30,21 +30,21 @@
               aria-labelledby="navbarDropdownBlog"
             >
               <li>
-                <a class="dropdown-item" href="">일반</a>
+                <a class="dropdown-item" href="/problem/general">일반</a>
               </li>
               <li>
-                <a class="dropdown-item" href="">대회</a>
+                <a class="dropdown-item" href="/problem/contest">대회</a>
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">건의게시판</a>
+            <a class="nav-link" href="/suggest">건의게시판</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">공지사항</a>
+            <a class="nav-link" href="/announce">공지사항</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">FAQ</a>
+            <a class="nav-link" href="/faq">FAQ</a>
           </li>
         </ul>
         <form class="d-flex">
@@ -60,7 +60,6 @@
       </div>
     </div>
   </nav>
-
   <router-view />
 </template>
 <script>
