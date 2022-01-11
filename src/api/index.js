@@ -5,7 +5,11 @@ const instance = axios.create({
 })
 
 function loginUser (data) {
-  return instance.post('/users/login', data)
+  return instance.post('users/login', data)
 }
 
-export default { loginUser }
+function registerUser (data) {
+  return instance.post('users', data)
+}
+
+export default { loginUser, registerUser }
