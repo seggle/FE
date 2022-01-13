@@ -1,12 +1,14 @@
 import axios from 'axios'
-import store from '../store'
+import { setInterceptors } from './interceptors'
 
-const instance = axios.create({
-  baseURL: 'https://df30c447-6ff1-484d-b7bc-273f799bb063.mock.pstmn.io/', // api 서버
-  headers: {
-    Authorization: store.state.token
-  }
-})
+function createInstance () {
+  const instance = axios.create({
+    baseURL: 'https://df30c447-6ff1-484d-b7bc-273f799bb063.mock.pstmn.io/' // api 서버
+  })
+  return setInterceptors(instance)
+}
+
+const instance = createInstance()
 
 function registerUser (data) {
   return instance.post('users', data)

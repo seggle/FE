@@ -19,6 +19,7 @@
 
 <script>
 import api from '@/api/index.js'
+import { saveAuthToCookie, saveUserToCookie } from '@/utils/cookies.js'
 export default {
   name: 'Login',
   data () {
@@ -35,9 +36,12 @@ export default {
           user_password: this.userPWD
         }
         const res = await api.loginUser(data)
-        console.log(res)
+        // state 값 갱신
         this.$store.commit('setToken', res.data.token)
         this.$store.commit('setUserid', res.data.user.user_id)
+        // 브라우저 저장소에 쿠키 저장
+        saveAuthToCookie(res.data.token)
+        saveUserToCookie(res.data.user.user_id)
         this.$router.push('/')
       } catch (err) {
         console.log(err)
