@@ -56,7 +56,15 @@
           />
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        <button type="button" class="btn btn-dark" id="login">로그인</button>
+        <!-- 로그인 했을 때 -->
+        <template v-if="isUserLogin">
+          <p> {{ this.$store.state.userid }} </p>
+          <button type="button" class="btn btn-dark" id="logout" @click="logout">로그아웃</button>
+        </template>
+        <!-- 로그인 안했을 때 -->
+        <template v-else>
+          <button type="button" class="btn btn-dark" id="login">로그인</button>
+        </template>
       </div>
     </div>
   </nav>
@@ -66,8 +74,28 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
+import api from '@/api/index.js'
 
-export default {}
+export default {
+  data () {
+    return {
+      userid: this.$store.state.userid
+    }
+  },
+  methods: {
+    async logout () {
+      const res = await api.logoutUser(this.userid)
+      console.log(res)
+      this.$store.commit('clearUserid')
+      this.$router.push('/login')
+    }
+  },
+  computed: {
+    isUserLogin () {
+      return this.$store.getters.isLogin
+    }
+  }
+}
 </script>
 
 <style>

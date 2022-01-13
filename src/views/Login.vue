@@ -11,7 +11,7 @@
     <button class="btn" type="submit">로그인</button>
   </form>
   <div class="info-link">
-    <a href="#" class="link-join">회원가입</a>
+    <a href="/register" class="link-join">회원가입</a>
     <a href="#" class="link-password">비밀번호 찾기</a>
   </div>
 </div>
@@ -36,6 +36,9 @@ export default {
         }
         const res = await api.loginUser(data)
         console.log(res)
+        this.$store.commit('setToken', res.data.token)
+        this.$store.commit('setUserid', res.data.user.user_id)
+        this.$router.push('/')
       } catch (err) {
         console.log(err)
       }
