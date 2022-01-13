@@ -75,6 +75,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import api from '@/api/index.js'
+import { deleteCookie } from '@/utils/cookies.js'
 
 export default {
   data () {
@@ -86,7 +87,12 @@ export default {
     async logout () {
       const res = await api.logoutUser(this.userid)
       console.log(res)
+      // state 값 삭제
+      this.$store.commit('clearToken')
       this.$store.commit('clearUserid')
+      // 쿠키 삭제
+      deleteCookie('til_auth')
+      deleteCookie('til_user')
       this.$router.push('/login')
     }
   },
