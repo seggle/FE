@@ -22,4 +22,12 @@ function logoutUser (data) {
   return instance.put('users/logout', data)
 }
 
-export default { registerUser, loginUser, logoutUser }
+function checkUserIDorEmail (data) {
+  return instance.post('check-userid-or-email', data)
+}
+
+function findPassword (data) {
+  return instance.post('find-password', data)
+}
+
+export default { registerUser, loginUser, logoutUser, checkUserIDorEmail, findPassword }
