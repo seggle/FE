@@ -7,6 +7,8 @@ import ClassExamManage from '@/views/ClassExamManage.vue'
 
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import FindPassword from '@/views/FindPassword.vue'
+import ResetPassword from '@/views/ResetPassword.vue'
 
 const routes = [
   {
@@ -35,6 +37,16 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/find-password',
+    name: 'FindPassword',
+    component: FindPassword
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: ResetPassword
   }
 ]
 
