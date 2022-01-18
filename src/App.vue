@@ -38,13 +38,13 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/suggest">건의게시판</a>
+            <a class="nav-link" href="/proposals">건의게시판</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/announce">공지사항</a>
+            <a class="nav-link" href="/announcements">공지사항</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/faq">FAQ</a>
+            <a class="nav-link" href="/faqs">FAQ</a>
           </li>
         </ul>
         <form class="d-flex">
