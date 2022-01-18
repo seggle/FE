@@ -30,4 +30,14 @@ function findPassword (data) {
   return instance.post('find-password', data)
 }
 
-export default { registerUser, loginUser, logoutUser, checkUserIDorEmail, findPassword }
+function resetPassword (data) {
+  return instance.put('reset-password', data)
+}
+export default {
+  registerUser,
+  loginUser,
+  logoutUser,
+  checkUserIDorEmail,
+  findPassword,
+  resetPassword
+}
