@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+<<<<<<< HEAD
 import store from '@/store'
 
 import Class from '@/views/Class.vue'
@@ -9,9 +10,46 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import FindPassword from '@/views/FindPassword.vue'
 import ResetPassword from '@/views/ResetPassword.vue'
+=======
+import Home from '../views/Home.vue'
+import User from '../views/User.vue'
+import Class from '../views/Class.vue'
+import ClassStudentManage from '../views/ClassStudentManage.vue'
+import ClassExamManage from '../views/ClassExamManage.vue'
+import FAQ from '../views/FAQ.vue'
+import Announcement from '../views/Announcement.vue'
+>>>>>>> 8a12e28a511544b5acc1a10fa4ca3654d1a59211
 
-const routes = [
+const routes = [{
+  path: '/',
+  name: 'Home',
+  component: Home
+},
+{
+  path: '/user',
+  name: 'User',
+  component: User
+},
+{
+  path: '/faqs',
+  name: 'FAQ',
+  component: FAQ
+},
+{
+  path: '/announcements',
+  name: 'Announcement',
+  component: Announcement
+},
+{
+  path: '/class',
+  name: 'Class',
+  component: Class,
+  children: [{
+    path: 'student-manage',
+    component: ClassStudentManage
+  },
   {
+<<<<<<< HEAD
     // 수업
     path: '/class',
     name: 'Class',
@@ -47,7 +85,13 @@ const routes = [
     path: '/reset-password',
     name: 'ResetPassword',
     component: ResetPassword
+=======
+    path: 'exam-manage',
+    component: ClassExamManage
+>>>>>>> 8a12e28a511544b5acc1a10fa4ca3654d1a59211
   }
+  ]
+}
 ]
 
 const router = createRouter({
