@@ -63,7 +63,7 @@
         </template>
         <!-- 로그인 안했을 때 -->
         <template v-else>
-          <button type="button" class="btn btn-dark" id="login">로그인</button>
+          <button type="button" class="btn btn-dark" id="login"><a href="/login">로그인</a></button>
         </template>
       </div>
     </div>
