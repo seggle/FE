@@ -118,7 +118,7 @@ nav {
   background-color: white;
 }
 #title {
-  font-weight: bold;
+  font-weight: 800;
 }
 #nav a.router-link-exact-active {
   font-family: Roboto;
@@ -136,7 +136,11 @@ nav {
 }
 .btn {
   background: #0e1b49;
+  color: white;
   border-radius: 50px;
   margin: 3px;
+}
+.btn:hover {
+  color: white;
 }
 </style>

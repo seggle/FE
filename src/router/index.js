@@ -16,6 +16,8 @@ import User from '../views/User.vue'
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
 
+import Problem from '@/views/Problem.vue'
+
 const routes = [{
   path: '/',
   name: 'Home',
@@ -82,6 +84,11 @@ const routes = [{
   path: '/reset-password',
   name: 'ResetPassword',
   component: ResetPassword
+},
+{
+  path: '/problem',
+  name: 'Problem',
+  component: Problem
 }
 ]
 
