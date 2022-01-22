@@ -3,7 +3,7 @@ import { setInterceptors } from './interceptors'
 
 function createInstance () {
   const instance = axios.create({
-    baseURL: 'https://df30c447-6ff1-484d-b7bc-273f799bb063.mock.pstmn.io/' // api 서버
+    baseURL: 'https://a12eaf14-a0cf-4e2a-97a7-5df468feb9b0.mock.pstmn.io/' // api 서버
   })
   return setInterceptors(instance)
 }
@@ -33,11 +33,55 @@ function findPassword (data) {
 function resetPassword (data) {
   return instance.put('reset-password', data)
 }
+
+function getUserCompetitionList (userID) {
+  return instance.get(`/users/${userID}/competitions`)
+}
+
+function joinCompetition (competitionID) {
+  return instance.post(`competitions/${competitionID}/user-engage`)
+}
+
+function getCompetitions (competitionID) {
+  return instance.get('competitions', {
+    params: {
+      competition_id: competitionID
+    }
+  })
+}
+
+function getCompetitionsLeaderboard (competitionID) {
+  return instance.get('leaderboards/competition', {
+    params: {
+      competition_id: competitionID
+    }
+  })
+}
+
+function getUserSubmissions (userID, competitionID) {
+  return instance.get('submissions', {
+    params: {
+      uid: userID,
+      cid: competitionID
+    }
+  })
+}
+
+function submitFile (competitionID, userID, data) {
+  return instance.post(`submissions/${competitionID}/${userID}`, data)
+}
+
 export default {
   registerUser,
   loginUser,
   logoutUser,
   checkUserIDorEmail,
   findPassword,
-  resetPassword
+  resetPassword,
+  getUserCompetitionList,
+  joinCompetition,
+  getCompetitions,
+  getCompetitionsLeaderboard,
+  getUserSubmissions,
+  submitFile
 }

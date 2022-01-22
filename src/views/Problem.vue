@@ -1,35 +1,70 @@
 <template>
   <div class="container">
     <div class="problem-header">
-      <h1 id="title">따릉이 대여량 예측 경진대회</h1>
-      <button class="btn">참여하기</button>
+      <h1 id="title">{{ this.problemTitle }}</h1>
+      <button class="btn" @click="joinCompetition" :disabled="alreadyJoined">{{ this.joinText }}</button>
     </div>
     <div class="problem-content row">
+      <!-- 세로 메뉴 탭 -->
       <div class="problem-tab col-2">
         <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active" id="list-info-list" data-bs-toggle="list" href="#list-info" role="tab" aria-controls="list-info">문제 설명</a>
-          <a class="list-group-item list-group-item-action" id="list-data-list" data-bs-toggle="list" href="#list-data" role="tab" aria-controls="list-data">데이터</a>
-          <a class="list-group-item list-group-item-action" id="list-leaderboard-list" data-bs-toggle="list" href="#list-leaderboard" role="tab" aria-controls="list-leaderboard">리더보드</a>
-          <a class="list-group-item list-group-item-action" id="list-submit-list" data-bs-toggle="list" href="#list-submit" role="tab" aria-controls="list-submit">제출</a>
+          <a class="list-group-item list-group-item-action active"
+            data-bs-toggle="list" role="tab"
+            id="list-info-list"
+            href="#list-info"
+            aria-controls="list-info">문제 설명
+          </a>
+          <a class="list-group-item list-group-item-action"
+            data-bs-toggle="list" role="tab"
+            id="list-data-list"
+            href="#list-data"
+            aria-controls="list-data">데이터
+          </a>
+          <a class="list-group-item list-group-item-action"
+            data-bs-toggle="list" role="tab"
+            id="list-leaderboard-list"
+            href="#list-leaderboard"
+            aria-controls="list-leaderboard">리더보드
+          </a>
+          <a class="list-group-item list-group-item-action"
+            data-bs-toggle="list" role="tab"
+            id="list-submit-list"
+            href="#list-submit"
+            aria-controls="list-submit"
+            :disabled="alreadyJoined == false">제출
+          </a>
         </div>
       </div>
+      <!-- 탭 내용 -->
       <div class="problem-tab-content col-10">
         <div class="tab-content" id="nav-tabContent">
         <!-- 문제 설명 -->
-          <div class="tab-pane fade show active" id="list-info" role="tabpanel" aria-labelledby="list-info-list">
+          <div class="tab-pane fade show active" role="tabpanel"
+                id="list-info" aria-labelledby="list-info-list"
+                :key="problemInfo">
             <h5 class="list-title">문제 설명</h5>
-            <p class="list-content"> 문제 설명 </p>
+            <p class="list-content">
+              {{ problemInfo.description }}
+            </p>
             <div class="period">
               <h5>시작 시간</h5>
-              <p class="list-content"> 시작 시간 </p>
+              <p class="list-content">
+                {{ problemInfo.startTime }}
+              </p>
               <h5>종료 시간</h5>
-              <p class="list-content"> 종료 시간 </p>
+              <p class="list-content">
+                {{ problemInfo.endTime }}
+              </p>
             </div>
           </div>
         <!-- 데이터 -->
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
-            <h5 class="list-title">데이터 설명<button class="btn">다운로드</button></h5>
-            <p class="list-content"> 데이터 설명 </p>
+            <h5 class="list-title">데이터 설명
+                <button class="btn" :disabled="alreadyJoined == false">다운로드</button>
+            </h5>
+            <p class="list-content">
+              {{ this.dataDescription }}
+            </p>
           </div>
         <!-- 리더보드 -->
           <div class="tab-pane fade" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
@@ -44,12 +79,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="users in userList" :key="users">
-                <th scope="row">{{ users._id }}</th>
-                <td>{{ users.username }}</td>
-                <td>{{ users.userScore }}</td>
+                <tr v-for="users in leaderboardList" :key="users">
+                <th scope="row">{{ users.submission_id }}</th>
+                <td>{{ users.user_name }}</td>
+                <td>{{ users.submission_score }}</td>
                 <td>{{ users.userSubmitCount }}</td>
-                <td>{{ users.userSubmitDate }}</td>
+                <td>{{ users.submission_time }}</td>
                 </tr>
             </tbody>
             </table>
@@ -63,10 +98,11 @@
               <input type="file" class="form-control" accept=".ipynb">
               <button class="btn">파일 제출</button>
             </div>
+
             <table class="table">
             <thead>
                 <tr>
-                <th scope="col">#</th>
+                <th scope="col">선택</th>
                 <th scope="col">csv 파일 이름</th>
                 <th scope="col">ipynb 파일 이름</th>
                 <th scope="col">점수</th>
@@ -75,11 +111,13 @@
             </thead>
             <tbody>
                 <tr v-for="submit in submitList" :key="submit">
-                <th scope="row">{{ submit._id }}</th>
-                <td>{{ submit.csvFile }}</td>
-                <td>{{ submit.ipynbFile }}</td>
-                <td>{{ submit.submitScore }}</td>
-                <td>{{ submit.submitDate }}</td>
+                <th scope="row">
+                  <input class="form-check-input" type="checkbox" @select="submitFile()">
+                </th>
+                <td>{{ submit.submission_csv }}</td>
+                <td>{{ submit.submission_ipynb }}</td>
+                <td>{{ submit.submission_score }}</td>
+                <td>{{ submit.submission_time }}</td>
                 </tr>
             </tbody>
             </table>
@@ -92,8 +130,105 @@
 </template>
 
 <script>
+import api from '@/api/index.js'
+
 export default {
-  name: 'Problem'
+  name: 'Problem',
+  data () {
+    return {
+      userID: this.$store.state.userid,
+      joinText: '참여하기',
+      alreadyJoined: false,
+      problemID: '',
+      problemTitle: '',
+      problemInfo: {
+        description: '',
+        startTime: '',
+        endTime: ''
+      },
+      dataDescription: '',
+      leaderboardList: [],
+      submitList: []
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.problemID = this.$route.params.problemID
+      this.getUserInfo()
+      this.getCompetitionProblem()
+      this.getCompetitionLeaderboard()
+      this.getUserSubmissions()
+    },
+    async getUserInfo () {
+      try {
+        const res = await api.getUserCompetitionList(this.userID)
+        const competitionList = res.data
+        for (let i = 0; i < competitionList.length; i++) {
+          if (String(competitionList[i].competition_id) === this.problemID) {
+            this.joinText = '참여중'
+            this.alreadyJoined = true
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getCompetitionProblem () {
+      try {
+        const res = await api.getCompetitions(this.problemID)
+        const problem = res.data
+
+        this.problemTitle = problem.problem_title
+        this.problemInfo.description = problem.problem_description
+        this.problemInfo.startTime = problem.competition_start_time
+        this.problemInfo.endTime = problem.competition_end_time
+        this.dataDescription = problem.problem_data_description
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getCompetitionLeaderboard () {
+      try {
+        const res = await api.getCompetitionsLeaderboard(this.problemID)
+        this.leaderboardList = res.data
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async joinCompetition () {
+      try {
+        const res = await api.joinCompetition(this.problemID)
+        console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getUserSubmissions () {
+      try {
+        const res = await api.getUserSubmissions(this.userID, this.problemID)
+        console.log(res)
+        this.submitList = res.data
+        console.log(this.submitList)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async submitFile () {
+      try {
+        // const data = {
+        //   submission_csv: // 체크박스에 선택된 csv 파일
+        //   submission_ipynb: // 체크박스에 선택된 ipynb 파일
+        // }
+        // const res = await api.submitFile(this.problemID, this.userID, data)
+        // console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 }
 </script>
 

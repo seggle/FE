@@ -11,4 +11,5 @@ app.use(router)
 app.use(VueCalendarHeatMap)
 // app.component('apexchart', VueApexCharts)
 // app.use(VueApexCharts)
+
 app.mount('#app')

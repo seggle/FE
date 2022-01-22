@@ -86,7 +86,7 @@ const routes = [{
   component: ResetPassword
 },
 {
-  path: '/problem',
+  path: '/problem/:problemID',
   name: 'Problem',
   component: Problem
 }
