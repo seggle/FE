@@ -16,7 +16,8 @@ import User from '../views/User.vue'
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
 
-import Problem from '@/views/Problem.vue'
+import Problem from '@/views/problem/Problem.vue'
+import CreateProblem from '@/views/problem/CreateProblem.vue'
 
 const routes = [{
   path: '/',
@@ -89,6 +90,11 @@ const routes = [{
   path: '/problem/:problemID',
   name: 'Problem',
   component: Problem
+},
+{
+  path: '/create-problem',
+  name: 'CreateProblem',
+  component: CreateProblem
 }
 ]
 
