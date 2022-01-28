@@ -58,17 +58,34 @@ function getCompetitionsLeaderboard (competitionID) {
   })
 }
 
-function getUserSubmissions (userID, competitionID) {
+function getUserSubmissions (userID, competitionID, contestProblemID) {
   return instance.get('submissions', {
     params: {
       uid: userID,
-      cid: competitionID
+      cid: competitionID,
+      cpid: contestProblemID
     }
   })
 }
 
-function submitFile (competitionID, userID, data) {
+function selectFile (competitionID, userID, data) {
   return instance.post(`submissions/${competitionID}/${userID}`, data)
+}
+
+function getClassProblem (classID, contestID, contestProblemID) {
+  return instance.get(`class/${classID}/contests/${contestID}/${contestProblemID}`)
+}
+
+function getClassLeaderboard (contestProblemID) {
+  return instance.get('leaderboards/contest-problem/', {
+    params: {
+      cp_id: contestProblemID
+    }
+  })
+}
+
+function getClassUserList (classID) {
+  return instance.get(`/class/${classID}/users`)
 }
 
 export default {
@@ -83,5 +100,8 @@ export default {
   getCompetitions,
   getCompetitionsLeaderboard,
   getUserSubmissions,
-  submitFile
+  selectFile,
+  getClassProblem,
+  getClassLeaderboard,
+  getClassUserList
 }

@@ -87,9 +87,16 @@ const routes = [{
   component: ResetPassword
 },
 {
-  path: '/problem/:problemID',
+  path: '/problem/:problemType/:problemID',
   name: 'Problem',
-  component: Problem
+  component: Problem,
+  meta: { auth: true },
+  children: [
+    {
+      path: ':contestID/:contestProblemID',
+      component: Problem
+    }
+  ]
 },
 {
   path: '/create-problem',

@@ -1,8 +1,11 @@
 <template>
-  <div class="container">
+  <div class="container" :key="problemInfo" v-if="isClassUser || this.problemType == 'general'">
     <div class="problem-header">
-      <h1 id="title">{{ this.problemTitle }}</h1>
-      <button class="btn" @click="joinCompetition" :disabled="alreadyJoined">{{ this.joinText }}</button>
+      <h1 id="title">{{ problemInfo.problem_title}}</h1>
+      <button v-if="this.problemType == 'general'"
+              class="btn"
+              @click="joinCompetition"
+              :disabled="alreadyJoined">{{ this.joinText }}</button>
     </div>
     <div class="problem-content row">
       <!-- 세로 메뉴 탭 -->
@@ -44,48 +47,48 @@
                 :key="problemInfo">
             <h5 class="list-title">문제 설명</h5>
             <p class="list-content">
-              {{ problemInfo.description }}
+              {{ problemInfo.problem_description }}
             </p>
             <div class="period">
               <h5>시작 시간</h5>
               <p class="list-content">
-                {{ problemInfo.startTime }}
+                {{ problemInfo.problem_start_time }}
               </p>
               <h5>종료 시간</h5>
               <p class="list-content">
-                {{ problemInfo.endTime }}
+                {{ problemInfo.problem_end_time }}
               </p>
             </div>
           </div>
         <!-- 데이터 -->
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
             <h5 class="list-title">데이터 설명
-                <button class="btn" :disabled="alreadyJoined == false">다운로드</button>
+              <button class="btn" :disabled="alreadyJoined == false">다운로드</button>
             </h5>
             <p class="list-content">
-              {{ this.dataDescription }}
+              {{ this.problem_data_description }}
             </p>
           </div>
         <!-- 리더보드 -->
           <div class="tab-pane fade" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
             <table class="table">
             <thead>
-                <tr>
+              <tr>
                 <th scope="col">#</th>
                 <th scope="col">이름</th>
                 <th scope="col">점수</th>
                 <th scope="col">제출 횟수</th>
                 <th scope="col">제출 날짜</th>
-                </tr>
+              </tr>
             </thead>
             <tbody>
-                <tr v-for="users in leaderboardList" :key="users">
+              <tr v-for="users in leaderboardList" :key="users">
                 <th scope="row">{{ users.submission_id }}</th>
                 <td>{{ users.user_name }}</td>
                 <td>{{ users.submission_score }}</td>
                 <td>{{ users.userSubmitCount }}</td>
                 <td>{{ users.submission_time }}</td>
-                </tr>
+              </tr>
             </tbody>
             </table>
           </div>
@@ -96,32 +99,32 @@
               <input type="file" class="form-control" accept=".csv" placeholder="첨부파일">
               <h5 class="list-title">ipynb 파일 제출</h5>
               <input type="file" class="form-control" accept=".ipynb">
-              <button class="btn">파일 제출</button>
+              <button class="btn" @click="submitFile()">파일 제출</button>
             </div>
 
             <table class="table">
-            <thead>
+              <thead>
                 <tr>
-                <th scope="col">선택</th>
-                <th scope="col">csv 파일 이름</th>
-                <th scope="col">ipynb 파일 이름</th>
-                <th scope="col">점수</th>
-                <th scope="col">제출 날짜</th>
+                  <th scope="col">선택</th>
+                  <th scope="col">csv 파일 이름</th>
+                  <th scope="col">ipynb 파일 이름</th>
+                  <th scope="col">점수</th>
+                  <th scope="col">제출 날짜</th>
                 </tr>
-            </thead>
-            <tbody>
-                <tr v-for="submit in submitList" :key="submit">
-                <th scope="row">
-                  <input class="form-check-input" type="checkbox" @select="submitFile()">
-                </th>
-                <td>{{ submit.submission_csv }}</td>
-                <td>{{ submit.submission_ipynb }}</td>
-                <td>{{ submit.submission_score }}</td>
-                <td>{{ submit.submission_time }}</td>
+              </thead>
+              <tbody>
+                <tr v-for="(submit, i) in submitList" :key="i">
+                  <th scope="row">
+                    <input class="form-check-input" type="checkbox" @select="this.submitRowIndex = i">
+                  </th>
+                  <td>{{ submit.submission_csv }}</td>
+                  <td>{{ submit.submission_ipynb }}</td>
+                  <td>{{ submit.submission_score }}</td>
+                  <td>{{ submit.submission_time }}</td>
                 </tr>
-            </tbody>
+              </tbody>
             </table>
-            <button class="btn">제출</button>
+            <button class="btn" @click="totalSubmit()">제출</button>
           </div>
         </div>
       </div>
@@ -139,16 +142,16 @@ export default {
       userID: this.$store.state.userid,
       joinText: '참여하기',
       alreadyJoined: false,
-      problemID: '',
-      problemTitle: '',
-      problemInfo: {
-        description: '',
-        startTime: '',
-        endTime: ''
-      },
+      isClassUser: false,
+      problemType: '',
+      problemID: '', // 대회 문제 아이디, 수업 아이디
+      contestID: '', // 수업 사이드바 아이디
+      contestProblemID: '', // 수업 사이드바 하위 문제 아이디
+      problemInfo: [],
       dataDescription: '',
       leaderboardList: [],
-      submitList: []
+      submitList: [],
+      submitRowIndex: ''
     }
   },
   mounted () {
@@ -156,13 +159,21 @@ export default {
   },
   methods: {
     init () {
+      this.problemType = this.$route.params.problemType
       this.problemID = this.$route.params.problemID
-      this.getUserInfo()
-      this.getCompetitionProblem()
-      this.getCompetitionLeaderboard()
+      if (this.problemType === 'general') {
+        this.getUserStatus()
+      }
+      if (this.problemType === 'class') {
+        this.contestID = this.$route.params.contestID
+        this.contestProblemID = this.$route.params.contestProblemID
+        this.getClassUserList()
+      }
+      this.getProblem()
+      this.getLeaderboard()
       this.getUserSubmissions()
     },
-    async getUserInfo () {
+    async getUserStatus () {
       try {
         const res = await api.getUserCompetitionList(this.userID)
         const competitionList = res.data
@@ -173,26 +184,41 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err)
+        console.log(err.response.data)
       }
     },
-    async getCompetitionProblem () {
+    async getClassUserList () {
       try {
-        const res = await api.getCompetitions(this.problemID)
-        const problem = res.data
-
-        this.problemTitle = problem.problem_title
-        this.problemInfo.description = problem.problem_description
-        this.problemInfo.startTime = problem.competition_start_time
-        this.problemInfo.endTime = problem.competition_end_time
-        this.dataDescription = problem.problem_data_description
+        const res = await api.getClassUserList(this.problemID)
+        const userList = res.data
+        console.log('userlist', userList)
+        for (let i = 0; i < userList.length; i++) {
+          if (String(userList[i].user_id) === this.userID) {
+            this.isClassUser = true
+            this.alreadyJoined = true
+          }
+        }
       } catch (err) {
         console.log(err)
       }
     },
-    async getCompetitionLeaderboard () {
+    async getProblem () {
       try {
-        const res = await api.getCompetitionsLeaderboard(this.problemID)
+        let res = await api.getCompetitions(this.problemID)
+        if (this.problemType === 'class') {
+          res = await api.getClassProblem(this.problemID, this.contestID, this.contestProblemID)
+        }
+        this.problemInfo = res.data
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getLeaderboard () {
+      try {
+        let res = await api.getCompetitionsLeaderboard(this.problemID)
+        if (this.problemType === 'class') {
+          res = await api.getClassLeaderboard(this.contestProblemID)
+        }
         this.leaderboardList = res.data
       } catch (err) {
         console.log(err)
@@ -200,8 +226,7 @@ export default {
     },
     async joinCompetition () {
       try {
-        const res = await api.joinCompetition(this.problemID)
-        console.log(res)
+        await api.joinCompetition(this.problemID)
       } catch (err) {
         console.log(err)
       }
@@ -209,9 +234,7 @@ export default {
     async getUserSubmissions () {
       try {
         const res = await api.getUserSubmissions(this.userID, this.problemID)
-        console.log(res)
         this.submitList = res.data
-        console.log(this.submitList)
       } catch (err) {
         console.log(err)
       }
@@ -219,11 +242,33 @@ export default {
     async submitFile () {
       try {
         // const data = {
-        //   submission_csv: // 체크박스에 선택된 csv 파일
-        //   submission_ipynb: // 체크박스에 선택된 ipynb 파일
+        //   submission_csv:
+        //   submission_ipynb:
         // }
         // const res = await api.submitFile(this.problemID, this.userID, data)
         // console.log(res)
+        // this.getUserSubmissions() // 제출 후 아래 제출 내역 리로드
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async selectFile (i) {
+      try {
+        // const data = {
+        //   submission_csv: // 체크박스에 선택된 csv 파일
+        //   submission_ipynb: // 체크박스에 선택된 ipynb 파일
+        // }
+        // const res = await api.selectFile(this.problemID, this.userID, data)
+        // console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async totalSubmit () {
+      try {
+        // const data = {
+        // submitRowIndex의 값을 데이터로 전송
+        // }
       } catch (err) {
         console.log(err)
       }

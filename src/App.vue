@@ -33,7 +33,7 @@
                 <a class="dropdown-item" href="/problem/general">일반</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/problem/contest">대회</a>
+                <a class="dropdown-item" href="/problem/class">수업 및 시험</a>
               </li>
             </ul>
           </li>
