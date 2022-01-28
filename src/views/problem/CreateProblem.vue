@@ -1,11 +1,12 @@
 <template>
   <div class="container">
-    <form class="create-problem-form">
+    <form class="create-problem-form" @submit.prevent="submitForm">
       <div class="problem-header">
         <input type="text"
               class="form-control"
               v-model="problemTitle"
-              placeholder="문제 이름을 입력하세요.">
+              placeholder="문제 이름을 입력하세요."
+              required>
         <button class="btn" type="submit">문제 생성</button>
       </div>
       <div class="problem-content row">
@@ -16,34 +17,42 @@
               data-bs-toggle="list" role="tab"
               id="list-info-list"
               href="#list-info"
-              aria-controls="list-info">문제 설명
-            </a>
+              aria-controls="list-info">문제 설명</a>
             <a class="list-group-item list-group-item-action"
               data-bs-toggle="list" role="tab"
               id="list-data-list"
               href="#list-data"
-              aria-controls="list-data">데이터
-            </a>
+              aria-controls="list-data">데이터</a>
           </div>
         </div>
         <!-- 탭 내용 -->
         <div class="problem-tab-content col-10">
           <div class="tab-content" id="nav-tabContent">
             <!-- 문제 설명 -->
-            <div class="tab-pane fade show active" role="tabpanel"
-                  id="list-info" aria-labelledby="list-info-list"
+            <div class="tab-pane fade show active"
+                  role="tabpanel"
+                  id="list-info"
+                  aria-labelledby="list-info-list"
                   :key="problemInfo">
               <h5 class="list-title">문제 설명</h5>
               <textarea id="problem-description"
                           class="form-control"
                           v-model="problemInfo.description"
                           placeholder="문제 설명을 입력하세요."></textarea>
-              <div class="period">
+              <div v-if="this.problemType == 'general' " class="period">
                 <h5>시작 시간</h5>
                 <Datepicker v-model="problemInfo.startTime" placeholder="시작 시간" textInput />
 
                 <h5>종료 시간</h5>
                 <Datepicker v-model="problemInfo.endTime" placeholder="종료 시간" textInput />
+              </div>
+              <div v-if="this.problemType == 'class' " class="form-check form-switch">
+                <label class="form-check-label" for="publicSwitch">전체 공개</label>
+                <input v-model="problemInfo.public"
+                      class="form-check-input"
+                      id="publicSwitch"
+                      type="checkbox"
+                      role="switch">
               </div>
             </div>
             <!-- 데이터 -->
@@ -66,20 +75,54 @@
 </template>
 
 <script>
-
+import api from '@/api/index.js'
 export default {
   name: 'CreateProblem',
   data () {
     return {
+      problemType: '',
       problemTitle: '',
       problemInfo: {
         description: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        public: true
       },
       dataInfo: {
         description: '',
         dataFile: ''
+      }
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.problemType = this.$route.params.problemType
+    },
+    async submitForm () {
+      try {
+        const data = {
+          title: this.problemTitle,
+          description: this.problemInfo.description,
+          created_user: this.$store.state.userid,
+          data: this.dataInfo.dataFile,
+          data_description: this.dataInfo.description
+        }
+        if (this.problemType === 'general') {
+          data.start_time = this.problemInfo.startTime
+          data.end_time = this.problemInfo.endTime
+          console.log(data)
+          await api.createGeneralProblem(data)
+        }
+        if (this.problemType === 'class') {
+          data.pubilc = this.problemInfo.public
+          console.log(data)
+          await api.createClassProblem(data)
+        }
+      } catch (err) {
+        console.log(err)
       }
     }
   }
@@ -149,6 +192,16 @@ export default {
         font-weight: bold;
       }
     }
+    .form-check {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .form-check-input {
+        width: 4em;
+        height: 2em;
+        margin: 0em 1em;
+      }
+    }
     .btn {
       float: right;
       padding: 0.5rem 1.5rem;
@@ -171,6 +224,7 @@ export default {
     }
     .data-file {
       display: flex;
+      align-items: center;
       .form-control {
         width: 30%;
         line-height: initial;

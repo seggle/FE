@@ -89,6 +89,7 @@ export default {
       // state 값 삭제
       this.$store.commit('clearToken')
       this.$store.commit('clearUserid')
+      this.$store.commit('clearUserType')
       // 쿠키 삭제
       deleteCookie('til_auth')
       deleteCookie('til_user')

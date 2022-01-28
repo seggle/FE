@@ -40,30 +40,22 @@ const routes = [{
   component: Announcement
 },
 {
+  // 수업
   path: '/class',
   name: 'Class',
   component: Class,
-  children: [{
-    path: 'student-manage',
-    component: ClassStudentManage
-  },
-  {
-    // 수업
-    path: '/class',
-    name: 'Class',
-    component: Class,
-    meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-    children: [
-      {
-        path: 'student-manage',
-        component: ClassStudentManage
-      },
-      {
-        path: 'exam-manage',
-        component: ClassExamManage
-      }
-    ]
-  }
+  meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  children: [
+    {
+      path: 'student-manage',
+      component: ClassStudentManage,
+      meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+    },
+    {
+      path: 'exam-manage',
+      component: ClassExamManage,
+      meta: { isAdmin: true }
+    }
   ]
 },
 {
@@ -99,9 +91,10 @@ const routes = [{
   ]
 },
 {
-  path: '/create-problem',
+  path: '/:problemType/create-problem',
   name: 'CreateProblem',
   component: CreateProblem
+  // meta: { isAdmin: true }
 }
 ]
 
@@ -112,11 +105,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && !store.getters.isLogin) {
-    console.log('인증이 필요합니다')
-    next('/login')
-    return
-  }
-  next()
+    alert('로그인이 필요합니다')
+    next({ name: 'Login' })
+  } else if (to.meta.isAdmin && !store.getters.isAdmin) {
+    alert('잘못된 접근입니다')
+    next({ name: 'NotFound' })
+  } else next()
 })
 
 export default router

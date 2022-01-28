@@ -22,6 +22,10 @@ function logoutUser (data) {
   return instance.put('users/logout', data)
 }
 
+function getUserInfo (username) {
+  return instance.get(`users/${username}`)
+}
+
 function checkUserIDorEmail (data) {
   return instance.post('check-userid-or-email', data)
 }
@@ -92,6 +96,7 @@ export default {
   registerUser,
   loginUser,
   logoutUser,
+  getUserInfo,
   checkUserIDorEmail,
   findPassword,
   resetPassword,
