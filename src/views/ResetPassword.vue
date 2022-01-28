@@ -1,24 +1,45 @@
 <template>
 <div class="container">
   <h1 id="title">비밀번호 재설정</h1>
-  <form id="login-form" class="row"
+  <form id="reset-password-form" class="row"
         :key="formResetPassword"
         :class="{ 'was-validated': validated }"
         @submit.prevent="handleResetPassword" novalidate>
     <div class="current-password-form">
       <label for="current-password">현재 비밀번호</label>
-      <input v-model="formResetPassword.currentPassword" type="password" id="current-password" class="form-control" required>
-      <div class="invalid-feedback">{{ this.feedback.currentPassword }}</div>
+      <input v-model="formResetPassword.currentPassword"
+            type="password"
+            id="current-password"
+            class="form-control"
+            @blur="checkCurrentPassword" @focus="invalid.currentPassword = false"
+            required>
+      <div class="invalid-feedback">
+        {{ this.feedback.currentPassword }}
+      </div>
     </div>
     <div class="new-password-form">
       <label for="new-password">새로운 비밀번호</label>
-      <input v-model="formResetPassword.newPassword" type="password" id="new-password" class="form-control" required>
-      <div class="invalid-feedback">{{ this.feedback.newPassword }}</div>
+      <input v-model="formResetPassword.newPassword"
+            type="password"
+            id="new-password"
+            class="form-control"
+            required>
+      <div class="invalid-feedback">
+        {{ this.feedback.newPassword }}
+      </div>
     </div>
     <div class="new-password-again-form">
       <label for="new-password-again">새로운 비밀번호 확인</label>
-      <input v-model="formResetPassword.newPasswordAgain" type="password" id="new-password-again" class="form-control" required>
-      <div class="invalid-feedback">{{ this.feedback.newPasswordAgain }}</div>
+      <input v-model="formResetPassword.newPasswordAgain"
+            type="password"
+            id="new-password-again"
+            class="form-control"
+            :class="{'is-invalid': invalid.newPasswordAgain }"
+            @blur="checkNewPasswordAgain" @focus="invalid.newPasswordAgain = false"
+            required>
+      <div class="invalid-feedback">
+        {{ this.feedback.newPasswordAgain }}
+      </div>
     </div>
     <button class="btn" type="submit">비밀번호 변경</button>
   </form>
@@ -31,6 +52,7 @@ export default {
   name: 'ResetPassword',
   data () {
     return {
+      userID: this.$store.state.userid,
       formResetPassword: {
         currentPassword: '',
         newPassword: '',
@@ -49,23 +71,24 @@ export default {
       }
     }
   },
-  method: {
+  methods: {
     async submitForm () {
       try {
         const data = {
-          user_id: this.formResetPassword.userID,
-          user_password: this.formResetPassword.currentPassword,
+          current_password: this.formResetPassword.currentPassword,
           new_password: this.formResetPassword.newPassword
         }
-        const res = await api.resetPassword(data)
+        const res = await api.resetPassword(this.userID, data)
         console.log(res)
       } catch (err) {
         console.log(err)
       }
     },
+    checkCurrentPassword () {
+      // 기존 비밀번호와 일치하는지
+    },
     checkNewPasswordAgain () {
       if (this.formResetPassword.newPassword !== this.formResetPassword.newPasswordAgain) {
-        console.log('비밀번호 일치하지 않음')
         this.feedback.newPasswordAgain = '비밀번호가 일치하지 않습니다.'
         this.invalid.newPasswordAgain = true
       }
@@ -74,7 +97,6 @@ export default {
       if (Object.values(this.formResetPassword).includes('') || Object.values(this.invalid).includes(false)) {
         return false
       } else {
-        console.log('통과')
         return true
       }
     },

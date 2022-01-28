@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-<<<<<<< HEAD
 import store from '@/store'
 
 import Class from '@/views/Class.vue'
@@ -10,15 +9,10 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import FindPassword from '@/views/FindPassword.vue'
 import ResetPassword from '@/views/ResetPassword.vue'
-=======
 import Home from '../views/Home.vue'
 import User from '../views/User.vue'
-import Class from '../views/Class.vue'
-import ClassStudentManage from '../views/ClassStudentManage.vue'
-import ClassExamManage from '../views/ClassExamManage.vue'
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
->>>>>>> 8a12e28a511544b5acc1a10fa4ca3654d1a59211
 
 const routes = [{
   path: '/',
@@ -41,56 +35,41 @@ const routes = [{
   component: Announcement
 },
 {
+  // 수업
   path: '/class',
   name: 'Class',
   component: Class,
-  children: [{
-    path: 'student-manage',
-    component: ClassStudentManage
-  },
-  {
-<<<<<<< HEAD
-    // 수업
-    path: '/class',
-    name: 'Class',
-    component: Class,
-    meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-    children: [
-      {
-        path: 'student-manage',
-        component: ClassStudentManage
-      },
-      {
-        path: 'exam-manage',
-        component: ClassExamManage
-      }
-    ]
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register
-  },
-  {
-    path: '/find-password',
-    name: 'FindPassword',
-    component: FindPassword
-  },
-  {
-    path: '/reset-password',
-    name: 'ResetPassword',
-    component: ResetPassword
-=======
-    path: 'exam-manage',
-    component: ClassExamManage
->>>>>>> 8a12e28a511544b5acc1a10fa4ca3654d1a59211
-  }
+  meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  children: [
+    {
+      path: 'student-manage',
+      component: ClassStudentManage
+    },
+    {
+      path: 'exam-manage',
+      component: ClassExamManage
+    }
   ]
+},
+{
+  path: '/login',
+  name: 'Login',
+  component: Login
+},
+{
+  path: '/register',
+  name: 'Register',
+  component: Register
+},
+{
+  path: '/find-password',
+  name: 'FindPassword',
+  component: FindPassword
+},
+{
+  path: '/reset-password',
+  name: 'ResetPassword',
+  component: ResetPassword
 }
 ]
 

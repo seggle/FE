@@ -1,18 +1,22 @@
 <template>
 <div class="container">
   <h1 id="title">비밀번호 찾기</h1>
-  <form id="find-password-form" class="row"
+  <form id="find-password-form"
+        class="row"
         :class="{ 'was-validated': validated }"
-        @blur="validated = true"
         @submit.prevent="handleFindPassword" novalidate>
     <div class="email-form">
       <label for="email">이메일</label>
-      <input v-model="email"
+      <input v-model="this.useremail"
             type="email"
             id="email"
             class="form-control"
+            :class="{'is-invalid': invalidEmail }"
+            @blur="checkUserEmail" @focus="invalidEmail = false"
             required>
-      <div class="invalid-feedback">이메일을 입력하세요</div>
+      <div class="invalid-feedback">
+        {{ this.feedback }}
+      </div>
     </div>
     <button class="btn" type="submit">메일전송</button>
   </form>
@@ -20,18 +24,46 @@
 </template>
 
 <script>
+import api from '@/api/index.js'
+import validator from '@/utils/validators.js'
 export default {
   name: 'FindPassword',
   data () {
     return {
-      email: '',
-      validated: false
+      userID: this.$store.state.userid,
+      useremail: '',
+      validated: false,
+      invalidEmail: false,
+      feedback: '이메일을 입력하세요'
     }
   },
-  method: {
+  methods: {
     handleFindPassword () {
-      console.log('find-pwd')
-      this.$router.push('/login')
+      if (!this.invalidEmail && this.useremail !== '') {
+        this.submitForm()
+        this.$router.push('/login')
+      } else {
+        this.validated = true
+      }
+    },
+    checkUserEmail () {
+      if (!(validator.validateEmail(this.useremail))) {
+        this.feedback = '이메일 형식이 올바르지 않습니다.'
+        this.invalidEmail = true
+      }
+    },
+    async submitForm () {
+      try {
+        const data = {
+          username: this.userID,
+          email: this.useremail
+        }
+        const res = await api.findPassword(data)
+        console.log(res)
+        alert('이메일을 전송하였습니다.')
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }

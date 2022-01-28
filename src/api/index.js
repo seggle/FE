@@ -3,7 +3,7 @@ import { setInterceptors } from './interceptors'
 
 function createInstance () {
   const instance = axios.create({
-    baseURL: 'https://df30c447-6ff1-484d-b7bc-273f799bb063.mock.pstmn.io/' // api 서버
+    baseURL: 'https://efca6327-0540-445e-91df-2230fa4c20a4.mock.pstmn.io/' // api 서버
   })
   return setInterceptors(instance)
 }
@@ -27,11 +27,11 @@ function checkUserIDorEmail (data) {
 }
 
 function findPassword (data) {
-  return instance.post('find-password', data)
+  return instance.post('users/password', data)
 }
 
-function resetPassword (data) {
-  return instance.put('reset-password', data)
+function resetPassword (username, data) {
+  return instance.patch(`users/${username}`, data)
 }
 export default {
   registerUser,
