@@ -39,20 +39,32 @@
                           class="form-control"
                           v-model="problemInfo.description"
                           placeholder="문제 설명을 입력하세요."></textarea>
-              <div v-if="this.problemType == 'general' " class="period">
-                <h5>시작 시간</h5>
-                <Datepicker v-model="problemInfo.startTime" placeholder="시작 시간" textInput />
+              <div class="form-option">
+                <div class="form-metrics col-3">
+                  <label class="form-label">평가 지표</label>
+                  <select class="form-select">
+                    <option v-for="item in problemInfo.metrics" :key="item">{{ item }}</option>
+                  </select>
+                </div>
 
-                <h5>종료 시간</h5>
-                <Datepicker v-model="problemInfo.endTime" placeholder="종료 시간" textInput />
-              </div>
-              <div v-if="this.problemType == 'class' " class="form-check form-switch">
-                <label class="form-check-label" for="publicSwitch">전체 공개</label>
-                <input v-model="problemInfo.public"
-                      class="form-check-input"
-                      id="publicSwitch"
-                      type="checkbox"
-                      role="switch">
+                <div class="form-start-time col-3">
+                  <label class="form-label">시작 시간</label>
+                  <Datepicker v-model="problemInfo.startTime" placeholder="시작 시간" textInput />
+                </div>
+
+                <div class="form-end-time col-3">
+                  <label class="form-label">종료 시간</label>
+                  <Datepicker v-model="problemInfo.endTime" placeholder="종료 시간" textInput />
+                </div>
+
+                <div v-if="this.problemType == 'class' " class="form-check form-switch">
+                  <label class="form-label">전체 공개</label>
+                  <input v-model="problemInfo.public"
+                        class="form-check-input"
+                        id="publicSwitch"
+                        type="checkbox"
+                        role="switch">
+                </div>
               </div>
             </div>
             <!-- 데이터 -->
@@ -84,6 +96,7 @@ export default {
       problemTitle: '',
       problemInfo: {
         description: '',
+        metrics: ['RSME', 'MSE', 'Accuracy'],
         startTime: '',
         endTime: '',
         public: true
@@ -181,26 +194,21 @@ export default {
       margin-top: 1.5rem;
       font-weight: bold;
     }
-    .period {
+    .form-option {
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
       align-items: center;
       padding: 1rem 0rem;
-      h5 {
-        padding: 0rem 1rem;
-        margin-bottom: 0rem;
+      .form-label {
+        display: block;
         font-weight: bold;
+        font-size: 1rem;
       }
     }
-    .form-check {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      .form-check-input {
-        width: 4em;
+    .form-check-input {
+        width: 5em;
         height: 2em;
         margin: 0em 1em;
-      }
     }
     .btn {
       float: right;

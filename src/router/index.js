@@ -17,6 +17,7 @@ import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
 
 import GeneralList from '@/views/problem/GeneralList.vue'
+import ClassList from '@/views/problem/ClassList.vue'
 import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
 
@@ -82,6 +83,10 @@ const routes = [{
 {
   path: '/problem/general',
   component: GeneralList
+},
+{
+  path: '/problem/class',
+  component: ClassList
 },
 {
   path: '/problem/:problemType/:problemID',
