@@ -16,6 +16,7 @@ import User from '../views/User.vue'
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
 
+import GeneralList from '@/views/problem/GeneralList.vue'
 import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
 
@@ -77,6 +78,10 @@ const routes = [{
   path: '/reset-password',
   name: 'ResetPassword',
   component: ResetPassword
+},
+{
+  path: '/problem/general',
+  component: GeneralList
 },
 {
   path: '/problem/:problemType/:problemID',
