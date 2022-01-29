@@ -4,7 +4,8 @@
     <h1 id="title">수업 및 시험</h1>
     <div class="button-group">
       <button class="btn" @click="goEdit">편집</button>
-      <button class="btn">수업 생성</button>
+      <button class="btn" id="show-modal" @click="showModal = true">수업 생성</button>
+      <ModalClassList v-if="showModal" @close="showModal = false" />
     </div>
   </header>
   <table class="table">
@@ -28,12 +29,14 @@
 </template>
 
 <script>
+import ModalClassList from '@/components/ModalClassList.vue'
 import Pagination from '@/components/Pagination.vue'
 import api from '@/api/index.js'
 
 export default {
   name: 'ClassList',
   components: {
+    ModalClassList,
     Pagination
   },
   data () {
@@ -52,7 +55,8 @@ export default {
           name: '인공지능 챌린지',
           is_show: true
         }
-      ]
+      ],
+      showModal: false
     }
   },
   mounted () {
