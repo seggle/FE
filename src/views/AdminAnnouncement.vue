@@ -63,23 +63,23 @@
     </thead>
     <tbody>
       <tr :loading="loading" v-for="announcement in announcementList" :key="announcement">
-        <th scope="row">{{ announcement.announcement_id }}</th>
-        <td>{{ announcement.announcement_title}}</td>
-        <td>{{ announcement.announcement_created_time }}</td>
-        <td>{{ announcement.announcement_last_modified }}</td>
+        <th scope="row">{{ announcement.id }}</th>
+        <td>{{ announcement.title}}</td>
+        <td>{{ announcement.created_time }}</td>
+        <td>{{ announcement.last_modified }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.announcement_visible" @change="changeSwitch(announcement.announcement_id)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.visible" @change="changeSwitch(announcement.id)">
           </div>
         </td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.announcement_important" @change="changeSwitch(announcement.announcement_id)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.important" @change="changeSwitch(announcement.id)">
           </div>
         </td>
         <td scope="row">
-          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement(announcement.announcement_id)">편집</a> |
-          <a class="ghost-button" @click="deleteAnnouncement(announcement.announcement_id)">삭제</a>
+          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement(announcement.id)">편집</a> |
+          <a class="ghost-button" @click="deleteAnnouncement(announcement.id)">삭제</a>
         </td>
       </tr>
     </tbody>
@@ -103,7 +103,7 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'ClassExamManage',
+  name: 'AdminAnnouncement',
   data () {
     return {
       currentAnnouncementID: '',
@@ -114,7 +114,6 @@ export default {
       announcementImportant: false,
       createMode: true,
       loading: false,
-      pageSize: 15,
       keyword: ''
     }
   },
@@ -123,18 +122,17 @@ export default {
   },
   methods: {
     init () {
-      this.getAnnouncementList(1)
+      this.getAnnouncementList(0)
     },
-    async getAnnouncementList (currentpage) {
+    async getAnnouncementList (page) {
       try {
         this.loading = true
-        const res = await api.getAnnouncementList((currentpage - 1) * this.pageSize, this.pageSize, this.keyword)
+        const res = await api.getAnnouncementList(page, this.keyword)
         this.loading = false
         this.announcementList = res.data
-        console.log(res.data)
         for (var i = 0; i < this.announcementList.length; i++) {
-          this.announcementList[i].announcement_created_time = this.announcementList[i].announcement_created_time.slice(0, 10) + ' ' + this.announcementList[i].announcement_created_time.slice(11, 19)
-          this.announcementList[i].announcement_last_modified = this.announcementList[i].announcement_last_modified.slice(0, 10) + ' ' + this.announcementList[i].announcement_last_modified.slice(11, 19)
+          this.announcementList[i].created_time = this.announcementList[i].created_time.slice(0, 10) + ' ' + this.announcementList[i].created_time.slice(11, 19)
+          this.announcementList[i].last_modified = this.announcementList[i].last_modified.slice(0, 10) + ' ' + this.announcementList[i].last_modified.slice(11, 19)
         }
       } catch (error) {
         console.log(error)
@@ -157,17 +155,18 @@ export default {
         if (typeof announcementID === 'undefined') {
           this.createMode = true
           this.currentAnnouncementID = ''
-          this.faqQuestion = ''
-          this.faqAnswer = ''
-          this.faqVisible = true
+          this.announcementTitle = ''
+          this.announcementContext = ''
+          this.announcementVisible = true
+          this.announcementImportant = false
         } else {
           this.currentAnnouncementID = announcementID
           this.createMode = false
           const res = await api.editAnnouncement(announcementID)
-          this.announcementTitle = res.data[0].announcement_title
-          this.announcementContext = res.data[0].announcement_context
-          this.announcementVisible = res.data[0].announcement_visible
-          this.announcementImportant = res.data[0].announcement_important
+          this.announcementTitle = res.data[0].title
+          this.announcementContext = res.data[0].context
+          this.announcementVisible = res.data[0].visible
+          this.announcementImportant = res.data[0].important
         }
       } catch (error) {
         console.log(error)
@@ -176,10 +175,10 @@ export default {
     async submitAnnouncement () {
       try {
         const data = {
-          announcement_title: this.announcementTitle,
-          announcement_context: this.announcementContext,
-          announcement_important: this.announcementImportant,
-          announcement_visible: this.announcementVisible
+          title: this.announcementTitle,
+          context: this.announcementContext,
+          important: this.announcementImportant,
+          visible: this.announcementVisible
         }
         if (this.currentAnnouncementID === '') {
           const res = await api.submitAnnouncement(data)
@@ -195,8 +194,8 @@ export default {
     async changeSwitch (announcementID) {
       try {
         const data = {
-          announcement_important: this.announcementImportant,
-          announcement_visible: this.announcementVisible
+          important: this.announcementImportant,
+          visible: this.announcementVisible
         }
         const res = await api.changeAnnouncementSwitch(announcementID, data)
         console.log(res.data)
@@ -207,7 +206,7 @@ export default {
   },
   watch: {
     'keyword' () {
-      this.getAnnouncementList(1)
+      this.getAnnouncementList(0)
     }
   }
 }

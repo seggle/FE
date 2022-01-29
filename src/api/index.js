@@ -15,15 +15,15 @@ function getFAQList () {
 }
 
 function deleteFAQ (faqID) {
-  return instance.delete('admin/faqs', { params: faqID })
+  return instance.delete('admin/faqs/' + faqID)
 }
 
 function editFAQ (faqID) {
-  return instance.get('admin/faqs', { params: faqID })
+  return instance.get('admin/faqs/' + faqID)
 }
 
-function submitEditFAQ (data) {
-  return instance.put('admin/faqs', { data })
+function submitEditFAQ (faqID, data) {
+  return instance.patch('admin/faqs/' + faqID, { data })
 }
 
 function submitFAQ (data) {
@@ -31,15 +31,14 @@ function submitFAQ (data) {
 }
 
 function changeFAQSwitch (faqID) {
-  return instance.put('admin/faqs/check', { params: faqID })
+  return instance.put('admin/faqs/check', { params: { faqID } })
 }
 
-function getAnnouncementList (offset, limit, keyword) {
-  const params = { offset, limit }
+function getAnnouncementList (page, keyword) {
+  const params = { page }
   if (keyword) {
     params.keyword = keyword
   }
-  console.log(params)
   return instance.get('admin/announcements', { params: params })
 }
 
@@ -60,19 +59,44 @@ function submitEditAnnouncement (announcementID, data) {
 }
 
 function changeAnnouncementSwitch (announcementID, data) {
+  console.log(data)
   return instance.put('admin/announcements/' + announcementID + '/check', { data })
 }
 
-function getUserList (page, size, keyword) {
-  return instance.get('admin/users', { params: page, size, keyword })
+function getUserList (page, keyword) {
+  const params = { page }
+  if (keyword) {
+    params.keyword = keyword
+  }
+  return instance.get('admin/users', { params: params })
 }
 
-function editUser (userID) {
-  return instance.get('admin/users/' + userID)
+function editUser (username) {
+  return instance.get('admin/users/' + username)
 }
 
-function submitUser (userID, data) {
-  return instance.put('admin/users/' + userID, { data })
+function submitUser (username, data) {
+  return instance.put('admin/users/' + username, { data })
 }
 
-export default { submitUser, editUser, getUserList, getFAQList, deleteFAQ, editFAQ, submitEditFAQ, submitFAQ, changeFAQSwitch, getAnnouncementList, deleteAnnouncement, editAnnouncement, submitEditAnnouncement, submitAnnouncement, changeAnnouncementSwitch }
+function deleteUser (username) {
+  return instance.delete('admin/users/' + username)
+}
+
+function getAdminProblemList (page, keyword) {
+  const params = { page }
+  if (keyword) {
+    params.keyword = keyword
+  }
+  return instance.get('admin/problems', { params: params })
+}
+
+function deleteProblem (problemID) {
+  return instance.delete('admin/problems/' + problemID)
+}
+
+function changeAdminProblemSwitch (problemID) {
+  return instance.put('admin/problems/check', { params: { problemID } })
+}
+
+export default { getAdminProblemList, changeAdminProblemSwitch, deleteProblem, deleteUser, submitUser, editUser, getUserList, getFAQList, deleteFAQ, editFAQ, submitEditFAQ, submitFAQ, changeFAQSwitch, getAnnouncementList, deleteAnnouncement, editAnnouncement, submitEditAnnouncement, submitAnnouncement, changeAnnouncementSwitch }

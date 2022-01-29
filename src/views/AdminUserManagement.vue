@@ -24,11 +24,11 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">아이디</h5>
-                    <input class="col-6" type="text" v-model="userID" disabled>
+                    <input class="col-6" type="text" v-model="userName" disabled>
                 </div>
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">이름</h5>
-                    <input class="col-6" type="text" v-model="userName" disabled>
+                    <input class="col-6" type="text" v-model="Name" disabled>
                 </div>
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">이메일</h5>
@@ -67,14 +67,15 @@
     </thead>
     <tbody>
       <tr :loading="loading" v-for="user in userList" :key="user">
-        <th scope="row">{{ user._id }}</th>
-        <td>{{ user.user_id }}</td>
-        <td>{{ user.user_name }}</td>
-        <td>{{ user.user_email }}</td>
-        <td>{{ user.user_created_time }}</td>
-        <td>{{ user.user_privilege }}</td>
+        <th scope="row">{{ user.id }}</th>
+        <td>{{ user.username }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.date_joined }}</td>
+        <td>{{ user.privilege }}</td>
         <td scope="row">
-          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#userModal" @click="openUser(user._id)">편집</a>
+          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#userModal" @click="openUser(user.username)">편집</a> |
+          <a class="ghost-button" @click="deleteUser(user.username)">삭제</a>
         </td>
       </tr>
     </tbody>
@@ -98,14 +99,13 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'ClassExamManage',
+  name: 'AdminUser',
   data () {
     return {
       currentid: '',
       userList: [],
       selected: '',
       loading: false,
-      pageSize: 15,
       keyword: ''
     }
   },
@@ -114,43 +114,42 @@ export default {
   },
   methods: {
     init () {
-      this.getUserList(1)
+      this.getUserList(0)
     },
     async getUserList (page) {
       try {
         this.loading = true
-        const res = await api.getUserList((page - 1) * this.pageSize, this.pageSize, this.keyword)
-        console.log(res)
+        const res = await api.getUserList(page, this.keyword)
         this.loading = false
         this.userList = res.data
         for (var i = 0; i < this.userList.length; i++) {
-          this.userList[i].user_created_time = this.userList[i].user_created_time.slice(0, 10) + ' ' + this.userList[i].user_created_time.slice(11, 19)
-          if (this.userList[i].user_privilege === 0) {
-            this.userList[i].user_privilege = '학생'
-          } else if (this.userList[i].user_privilege === 1) {
-            this.userList[i].user_privilege = '교수'
+          this.userList[i].date_joined = this.userList[i].date_joined.slice(0, 10) + ' ' + this.userList[i].date_joined.slice(11, 19)
+          if (this.userList[i].privilege === 0) {
+            this.userList[i].privilege = '학생'
+          } else if (this.userList[i].privilege === 1) {
+            this.userList[i].privilege = '교수'
           } else {
-            this.userList[i].user_privilege = '관리자'
+            this.userList[i].privilege = '관리자'
           }
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async openUser (userID) {
+    async openUser (userName) {
       try {
-        this.currentid = userID
-        const res = await api.editUser(userID)
-        if (res.data[0].user_privilege === 0) {
+        this.currentName = userName
+        const res = await api.editUser(userName)
+        if (res.data[0].privilege === 0) {
           this.selected = 'student'
-        } else if (res.data[0].user_privilege === 1) {
+        } else if (res.data[0].privilege === 1) {
           this.selected = 'prof'
         } else {
           this.selected = 'admin'
         }
-        this.userID = res.data[0].user_id
-        this.userName = res.data[0].user_name
-        this.userEmail = res.data[0].user_email
+        this.userName = res.data[0].username
+        this.Name = res.data[0].name
+        this.userEmail = res.data[0].email
       } catch (error) {
         console.log(error)
       }
@@ -165,11 +164,20 @@ export default {
           this.selected = 2
         }
         const data = {
-          user_privilege: this.selected
+          privilege: this.selected
         }
-        console.log(data)
-        const res = await api.submitUser(this.currentid, data)
+        const res = await api.submitUser(this.currentName, data)
         console.log(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async deleteUser (userName) {
+      try {
+        if (confirm('삭제하시겠습니까?')) {
+          const res = await api.deleteUser(userName)
+          console.log(res.data)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -177,7 +185,7 @@ export default {
   },
   watch: {
     'keyword' () {
-      this.getUserList(1)
+      this.getUserList(0)
     }
   }
 }

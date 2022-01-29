@@ -14,7 +14,7 @@
             </form>
       </div>
       <div>
-        <button class="btn btn-dark" id="announce-create" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement()">+ 문제 생성</button>
+        <button class="btn btn-dark" id="problem-create" @click="openProblem()">+ 문제 생성</button>
       </div>
     </div>
     <div class="table-div">
@@ -30,19 +30,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr :loading="loading" v-for="announcement in announcementList" :key="announcement">
-        <th scope="row">{{ announcement.announcement_id }}</th>
-        <td>{{ announcement.announcement_title}}</td>
-        <td>{{ announcement.announcement_created_time }}</td>
-        <td>작성자</td>
+      <tr :loading="loading" v-for="problem in problemList" :key="problem">
+        <th scope="row">{{ problem.id }}</th>
+        <td>{{ problem.title}}</td>
+        <td>{{ problem.created_time }}</td>
+        <td>{{ problem.created_user }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.announcement_visible" @change="changeSwitch(announcement.announcement_id)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="problem.public" @change="changeSwitch(problem.id)">
           </div>
         </td>
         <td scope="row">
-          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement(announcement.announcement_id)">편집</a> |
-          <a class="ghost-button" @click="deleteAnnouncement(announcement.announcement_id)">삭제</a>
+          <a class="ghost-button" @click="openProblem(problem.id)">편집</a> |
+          <a class="ghost-button" @click="deleteProblem(problem.id)">삭제</a>
         </td>
       </tr>
     </tbody>
@@ -66,18 +66,11 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'ClassExamManage',
+  name: 'AdminAllProblems',
   data () {
     return {
-      currentAnnouncementID: '',
-      announcementList: [],
-      announcementTitle: '',
-      announcementContext: '',
-      announcementVisible: true,
-      announcementImportant: false,
-      createMode: true,
+      problemList: [],
       loading: false,
-      pageSize: 15,
       keyword: ''
     }
   },
@@ -86,81 +79,38 @@ export default {
   },
   methods: {
     init () {
-      this.getAnnouncementList(1)
+      this.getProblemList(0)
     },
-    async getAnnouncementList (page) {
+    async getProblemList (page) {
       try {
         this.loading = true
-        const res = await api.getAnnouncementList((page - 1) * this.pageSize, this.pageSize, this.keyword)
+        const res = await api.getAdminProblemList(page, this.keyword)
         this.loading = false
-        this.announcementList = res.data
-        for (var i = 0; i < this.announcementList.length; i++) {
-          this.announcementList[i].announcement_created_time = this.announcementList[i].announcement_created_time.slice(0, 10) + ' ' + this.announcementList[i].announcement_created_time.slice(11, 19)
-          this.announcementList[i].announcement_last_modified = this.announcementList[i].announcement_last_modified.slice(0, 10) + ' ' + this.announcementList[i].announcement_last_modified.slice(11, 19)
+        this.problemList = res.data
+        for (var i = 0; i < this.problemList.length; i++) {
+          this.problemList[i].created_time = this.problemList[i].created_time.slice(0, 10) + ' ' + this.problemList[i].created_time.slice(11, 19)
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async deleteAnnouncement (announcementID) {
+    async deleteProblem (problemID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          console.log(announcementID)
-          const res = await api.deleteAnnouncement(announcementID)
+          const res = await api.deleteProblem(problemID)
           console.log(res.data)
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async openAnnouncement (announcementID) {
-      try {
-        console.log(announcementID)
-        if (typeof announcementID === 'undefined') {
-          this.createMode = true
-          this.currentAnnouncementID = ''
-          this.faqQuestion = ''
-          this.faqAnswer = ''
-          this.faqVisible = true
-        } else {
-          this.currentAnnouncementID = announcementID
-          this.createMode = false
-          const res = await api.editAnnouncement(announcementID)
-          this.announcementTitle = res.data[0].announcement_title
-          this.announcementContext = res.data[0].announcement_context
-          this.announcementVisible = res.data[0].announcement_visible
-          this.announcementImportant = res.data[0].announcement_important
-        }
-      } catch (error) {
-        console.log(error)
-      }
+    async openProblem (problemID) {
     },
     async submitAnnouncement () {
-      try {
-        const data = {
-          announcement_title: this.announcementTitle,
-          announcement_context: this.announcementContext,
-          announcement_important: this.announcementImportant,
-          announcement_visible: this.announcementVisible
-        }
-        if (this.currentAnnouncementID === '') {
-          const res = await api.submitAnnouncement(data)
-          console.log(res.data)
-        } else {
-          const res = await api.submitEditAnnouncement(this.currentAnnouncementID, data)
-          console.log(res.data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
     },
-    async changeSwitch (announcementID) {
+    async changeSwitch (problemID) {
       try {
-        const data = {
-          announcement_important: this.announcementImportant,
-          announcement_visible: this.announcementVisible
-        }
-        const res = await api.changeAnnouncementSwitch(announcementID, data)
+        const res = await api.changeAdminProblemSwitch(problemID)
         console.log(res.data)
       } catch (error) {
         console.log(error)
@@ -169,7 +119,7 @@ export default {
   },
   watch: {
     'keyword' () {
-      this.getAnnouncementList(1)
+      this.getProblemList(0)
     }
   }
 }

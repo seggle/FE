@@ -47,18 +47,18 @@
     </thead>
     <tbody>
       <tr v-for="faq in faqList" :key="faq">
-        <th scope="row">{{ faq.faq_id }}</th>
-        <td>{{ faq.faq_question}}</td>
-        <td>{{ faq.faq_created_time }}</td>
-        <td>{{ faq.faq_last_modified }}</td>
+        <th scope="row">{{ faq.id }}</th>
+        <td>{{ faq.question}}</td>
+        <td>{{ faq.created_time }}</td>
+        <td>{{ faq.last_modified }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="faq.faq_visible" @change="changeSwitch(faq.faq_id)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="faq.visible" @change="changeSwitch(faq.id)">
           </div>
         </td>
         <td scope="row">
-          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#faqModal" @click="openFAQ(faq.faq_id)">편집</a> |
-          <a class="ghost-button" @click="deleteFAQ(faq.faq_id)">삭제</a>
+          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#faqModal" @click="openFAQ(faq.id)">편집</a> |
+          <a class="ghost-button" @click="deleteFAQ(faq.id)">삭제</a>
         </td>
       </tr>
     </tbody>
@@ -80,8 +80,7 @@ export default {
       faqAnswer: '',
       faqVisible: true,
       createMode: true,
-      loading: false,
-      pageSize: 15
+      loading: false
     }
   },
   mounted () {
@@ -96,8 +95,8 @@ export default {
         const res = await api.getFAQList()
         this.faqList = res.data
         for (var i = 0; i < this.faqList.length; i++) {
-          this.faqList[i].faq_created_time = this.faqList[i].faq_created_time.slice(0, 10) + ' ' + this.faqList[i].faq_created_time.slice(11, 19)
-          this.faqList[i].faq_last_modified = this.faqList[i].faq_last_modified.slice(0, 10) + ' ' + this.faqList[i].faq_last_modified.slice(11, 19)
+          this.faqList[i].created_time = this.faqList[i].created_time.slice(0, 10) + ' ' + this.faqList[i].created_time.slice(11, 19)
+          this.faqList[i].last_modified = this.faqList[i].last_modified.slice(0, 10) + ' ' + this.faqList[i].last_modified.slice(11, 19)
         }
       } catch (error) {
         console.log(error)
@@ -126,9 +125,9 @@ export default {
           this.currentFaqID = faqID
           this.createMode = false
           const res = await api.editFAQ(faqID)
-          this.faqQuestion = res.data[0].faq_question
-          this.faqAnswer = res.data[0].faq_answer
-          this.faqVisible = res.data[0].faq_visible
+          this.faqQuestion = res.data[0].question
+          this.faqAnswer = res.data[0].answer
+          this.faqVisible = res.data[0].visible
         }
       } catch (error) {
         console.log(error)
@@ -138,20 +137,19 @@ export default {
       try {
         if (this.currentFaqID === '') {
           const data = {
-            faq_question: this.faqQuestion,
-            faq_answer: this.faqAnswer,
-            faq_visible: this.faqVisible
+            question: this.faqQuestion,
+            answer: this.faqAnswer,
+            visible: this.faqVisible
           }
           const res = await api.submitFAQ(data)
           console.log(res.data)
         } else {
           const data = {
-            faq_id: this.currentFaqID,
-            faq_question: this.faqQuestion,
-            faq_answer: this.faqAnswer,
-            faq_visible: this.faqVisible
+            question: this.faqQuestion,
+            answer: this.faqAnswer,
+            visible: this.faqVisible
           }
-          const res = await api.submitEditFAQ(data)
+          const res = await api.submitEditFAQ(this.currentFaqID, data)
           console.log(res.data)
         }
       } catch (error) {
