@@ -76,6 +76,14 @@ function selectFile (competitionID, userID, data) {
   return instance.post(`submissions/${competitionID}/${userID}`, data)
 }
 
+function getClassList (userID) {
+  return instance.get(`users/${userID}/class`)
+}
+
+function editClassList (userID, data) {
+  return instance.patch(`users/${userID}/class`, data)
+}
+
 function getClassProblem (classID, contestID, contestProblemID) {
   return instance.get(`class/${classID}/contests/${contestID}/${contestProblemID}`)
 }
@@ -106,6 +114,8 @@ export default {
   getCompetitionsLeaderboard,
   getUserSubmissions,
   selectFile,
+  getClassList,
+  editClassList,
   getClassProblem,
   getClassLeaderboard,
   getClassUserList

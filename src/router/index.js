@@ -18,6 +18,7 @@ import Announcement from '../views/Announcement.vue'
 
 import GeneralList from '@/views/problem/GeneralList.vue'
 import ClassList from '@/views/problem/ClassList.vue'
+import EditClassList from '@/views/problem/EditClassList.vue'
 import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
 
@@ -43,18 +44,20 @@ const routes = [{
 },
 {
   // 수업
-  path: '/class',
+  path: '/class/:classID',
   name: 'Class',
   component: Class,
-  meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  // meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
   children: [
     {
       path: 'student-manage',
-      component: ClassStudentManage,
-      meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+      name: 'ClassStudentManage',
+      component: ClassStudentManage
+      // meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
     },
     {
       path: 'exam-manage',
+      name: 'ClassExamManage',
       component: ClassExamManage,
       meta: { isAdmin: true }
     }
@@ -82,11 +85,18 @@ const routes = [{
 },
 {
   path: '/problem/general',
+  name: 'GeneralList',
   component: GeneralList
 },
 {
   path: '/problem/class',
+  name: 'ClassList',
   component: ClassList
+},
+{
+  path: '/problem/edit-class',
+  name: 'EditClassList',
+  component: EditClassList
 },
 {
   path: '/problem/:problemType/:problemID',

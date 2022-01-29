@@ -2,10 +2,7 @@
 <div class="container">
   <header>
     <h1 id="title">수업 및 시험</h1>
-    <div class="button-group">
-      <button class="btn" @click="goEdit">편집</button>
-      <button class="btn">수업 생성</button>
-    </div>
+    <button class="btn" @click="editClassList">저장</button>
   </header>
   <table class="table">
     <thead>
@@ -16,26 +13,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for=" classes in classList" :key="classes" @click="goClass(classes.id)">
-        <th scope="row">{{ classes.id }}</th>
+      <tr v-for=" classes in classList" :key="classes">
+        <th scope="row">
+          <input class="form-check-input"
+                type="checkbox"
+                :value="classes.id"
+                v-model="checkList"></th>
         <td>{{ classes.semester }}</td>
         <td>{{ classes.name }}</td>
       </tr>
     </tbody>
   </table>
-  <Pagination/>
 </div>
 </template>
 
 <script>
-import Pagination from '@/components/Pagination.vue'
 import api from '@/api/index.js'
 
 export default {
-  name: 'ClassList',
-  components: {
-    Pagination
-  },
+  name: 'EditClassList',
   data () {
     return {
       userID: this.$store.state.userid,
@@ -52,27 +48,44 @@ export default {
           name: '인공지능 챌린지',
           is_show: true
         }
-      ]
+      ],
+      checkList: []
     }
   },
   mounted () {
     // this.getClassList()
+    this.alreadyChecked()
   },
   methods: {
-    goClass (classID) {
-      this.$router.push({
-        name: 'Class',
-        params: { classID: classID }
-      })
-    },
-    goEdit () {
-      this.$router.push({ name: 'EditClassList' })
-    },
     async getClassList () {
       try {
         const res = await api.getClassList(this.userID)
         console.log(res)
         this.classList = res.data
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    alreadyChecked () {
+      // is_show이면 체크되어있어야함
+      for (let i = 0; i < this.classList.length; i++) {
+        if (this.classList[i].is_show) {
+          this.checkList.push(this.classList[i].id)
+        }
+      }
+    },
+    async editClassList () {
+      try {
+        const data = []
+        for (let i = 0; i < this.checkList.length; i++) {
+          const item = {}
+          item.class_id = this.checkList[i]
+          data.push(item)
+        }
+        // const res = await api.editClassList(this.userID, data)
+        // console.log(res)
+        alert('변경사항이 저장되었습니다.')
+        this.$router.push({ name: 'ClassList' })
       } catch (err) {
         console.log(err)
       }
