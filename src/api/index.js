@@ -38,6 +38,10 @@ function resetPassword (data) {
   return instance.put('reset-password', data)
 }
 
+function getCompetitionList () {
+  return instance.get('/competitions')
+}
+
 function getUserCompetitionList (userID) {
   return instance.get(`/users/${userID}/competitions`)
 }
@@ -108,6 +112,7 @@ export default {
   checkUserIDorEmail,
   findPassword,
   resetPassword,
+  getCompetitionList,
   getUserCompetitionList,
   joinCompetition,
   getCompetitions,
