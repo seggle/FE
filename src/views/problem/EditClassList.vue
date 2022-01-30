@@ -10,10 +10,12 @@
         <th scope="col">#</th>
         <th scope="col">수강학기</th>
         <th scope="col">제목</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for=" classes in classList" :key="classes">
+      <tr v-for=" (classes, i) in classList" :key="i">
         <th scope="row">
           <input class="form-check-input"
                 type="checkbox"
@@ -21,6 +23,13 @@
                 v-model="checkList"></th>
         <td>{{ classes.semester }}</td>
         <td>{{ classes.name }}</td>
+        <td><a @click="clickModal(i)">편집</a></td>
+        <ModalClassList v-if="showModal"
+                        @close="showModal = false"
+                        mode="수업 편집"
+                        :semester="classList[rowIndex].semester"
+                        :title="classList[rowIndex].name"/>
+        <td>삭제</td>
       </tr>
     </tbody>
   </table>
@@ -29,32 +38,23 @@
 
 <script>
 import api from '@/api/index.js'
-
+import ModalClassList from '@/components/ModalClassList.vue'
 export default {
   name: 'EditClassList',
+  components: {
+    ModalClassList
+  },
   data () {
     return {
       userID: this.$store.state.userid,
-      classList: [ // api로 받아올 부분
-        {
-          id: '1',
-          semester: '2020-2학기',
-          name: '기계학습',
-          is_show: true
-        },
-        {
-          id: '2',
-          semester: '2021-2학기',
-          name: '인공지능 챌린지',
-          is_show: true
-        }
-      ],
-      checkList: []
+      classList: [],
+      checkList: [],
+      showModal: false,
+      rowIndex: ''
     }
   },
   mounted () {
-    // this.getClassList()
-    this.alreadyChecked()
+    this.getClassList()
   },
   methods: {
     async getClassList () {
@@ -62,6 +62,7 @@ export default {
         const res = await api.getClassList(this.userID)
         console.log(res)
         this.classList = res.data
+        this.alreadyChecked()
       } catch (err) {
         console.log(err)
       }
@@ -74,6 +75,10 @@ export default {
         }
       }
     },
+    clickModal (i) {
+      this.showModal = true
+      this.rowIndex = i
+    },
     async editClassList () {
       try {
         const data = []
@@ -82,8 +87,8 @@ export default {
           item.class_id = this.checkList[i]
           data.push(item)
         }
-        // const res = await api.editClassList(this.userID, data)
-        // console.log(res)
+        const res = await api.editClassList(this.userID, data)
+        console.log(res)
         alert('변경사항이 저장되었습니다.')
         this.$router.push({ name: 'ClassList' })
       } catch (err) {

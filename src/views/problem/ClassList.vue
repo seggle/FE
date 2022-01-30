@@ -5,7 +5,9 @@
     <div class="button-group">
       <button class="btn" @click="goEdit">편집</button>
       <button class="btn" id="show-modal" @click="showModal = true">수업 생성</button>
-      <ModalClassList v-if="showModal" @close="showModal = false" />
+      <ModalClassList v-if="showModal"
+                      @close="showModal = false"
+                      mode="수업 생성"/>
     </div>
   </header>
   <table class="table">
@@ -42,25 +44,12 @@ export default {
   data () {
     return {
       userID: this.$store.state.userid,
-      classList: [ // api로 받아올 부분
-        {
-          id: '1',
-          semester: '2020-2학기',
-          name: '기계학습',
-          is_show: true
-        },
-        {
-          id: '2',
-          semester: '2021-2학기',
-          name: '인공지능 챌린지',
-          is_show: true
-        }
-      ],
+      classList: [],
       showModal: false
     }
   },
   mounted () {
-    // this.getClassList()
+    this.getClassList()
   },
   methods: {
     goClass (classID) {
@@ -75,7 +64,6 @@ export default {
     async getClassList () {
       try {
         const res = await api.getClassList(this.userID)
-        console.log(res)
         this.classList = res.data
       } catch (err) {
         console.log(err)

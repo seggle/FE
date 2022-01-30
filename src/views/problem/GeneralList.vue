@@ -2,7 +2,7 @@
 <div class="container">
   <header>
     <h1 id="title">일반 대회</h1>
-    <button class="btn">문제 생성</button>
+    <button class="btn" @click="goCreateProblem">문제 생성</button>
   </header>
   <table class="table">
     <thead>
@@ -103,6 +103,12 @@ export default {
         }
         this.progressBar.push(progress)
       }
+    },
+    goCreateProblem () {
+      this.$router.push({
+        name: 'CreateProblem',
+        params: { problemType: 'general' }
+      })
     },
     goProblem (problemID) {
       this.$router.push({

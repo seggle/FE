@@ -80,6 +80,10 @@ function selectFile (competitionID, userID, data) {
   return instance.post(`submissions/${competitionID}/${userID}`, data)
 }
 
+function createClass (data) {
+  return instance.post('/class', data)
+}
+
 function getClassList (userID) {
   return instance.get(`users/${userID}/class`)
 }
@@ -119,6 +123,7 @@ export default {
   getCompetitionsLeaderboard,
   getUserSubmissions,
   selectFile,
+  createClass,
   getClassList,
   editClassList,
   getClassProblem,
