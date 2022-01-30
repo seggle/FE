@@ -108,6 +108,10 @@ function getClassUserList (classID) {
   return instance.get(`/class/${classID}/users`)
 }
 
+function createContest (classID) {
+  return instance.post(`/class/${classID}/contests`)
+}
+
 export default {
   registerUser,
   loginUser,
@@ -128,5 +132,6 @@ export default {
   editClassList,
   getClassProblem,
   getClassLeaderboard,
-  getClassUserList
+  getClassUserList,
+  createContest
 }

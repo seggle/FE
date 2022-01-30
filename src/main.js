@@ -4,6 +4,7 @@ import VueCalendarHeatMap from 'vue3-calendar-heatmap'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/styles/index.scss'
 
 import Datepicker from 'vue3-date-time-picker'
 import 'vue3-date-time-picker/dist/main.css'

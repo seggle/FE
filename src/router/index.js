@@ -4,6 +4,7 @@ import store from '@/store'
 import Class from '@/views/Class.vue'
 import ClassStudentManage from '@/views/ClassStudentManage.vue'
 import ClassExamManage from '@/views/ClassExamManage.vue'
+import ClassProblem from '@/views/ClassProblem.vue'
 
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
@@ -60,6 +61,11 @@ const routes = [{
       name: 'ClassExamManage',
       component: ClassExamManage,
       meta: { isAdmin: true }
+    },
+    {
+      path: 'class-problem',
+      name: 'ClassProblem',
+      component: ClassProblem
     }
   ]
 },
