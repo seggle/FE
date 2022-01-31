@@ -33,7 +33,7 @@
                 <a class="dropdown-item" href="/problem/general">일반</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/problem/contest">대회</a>
+                <a class="dropdown-item" href="/problem/class">수업 및 시험</a>
               </li>
             </ul>
           </li>
@@ -89,6 +89,7 @@ export default {
       // state 값 삭제
       this.$store.commit('clearToken')
       this.$store.commit('clearUserid')
+      this.$store.commit('clearUserType')
       // 쿠키 삭제
       deleteCookie('til_auth')
       deleteCookie('til_user')
@@ -118,7 +119,7 @@ nav {
   background-color: white;
 }
 #title {
-  font-weight: bold;
+  font-weight: 800;
 }
 #nav a.router-link-exact-active {
   font-family: Roboto;
@@ -136,7 +137,11 @@ nav {
 }
 .btn {
   background: #0e1b49;
+  color: white;
   border-radius: 50px;
   margin: 3px;
+}
+.btn:hover {
+  color: white;
 }
 </style>

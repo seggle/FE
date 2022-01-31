@@ -4,6 +4,11 @@ import VueCalendarHeatMap from 'vue3-calendar-heatmap'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/styles/index.scss'
+
+import Datepicker from 'vue3-date-time-picker'
+import 'vue3-date-time-picker/dist/main.css'
+
 import VMdEditor from '@kangc/v-md-editor'
 import '@kangc/v-md-editor/lib/style/base-editor.css'
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
@@ -20,11 +25,13 @@ VMdEditor.use(vuepressTheme, {
 })
 VMdEditor.lang.use('ko-KR', koKR)
 
-var app = createApp(App)
+const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(VueCalendarHeatMap)
 // app.component('apexchart', VueApexCharts)
 // app.use(VueApexCharts)
+app.component('Datepicker', Datepicker)
+
 app.mount('#app')
 app.use(VMdEditor)
