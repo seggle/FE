@@ -9,6 +9,7 @@ import AdminUserManagement from '../views/AdminUserManagement.vue'
 import AdminAllClasses from '../views/AdminAllClasses.vue'
 
 import Class from '@/views/Class.vue'
+import ClassAllProblem from '@/views/ClassAllProblem.vue'
 import ClassStudentManage from '@/views/ClassStudentManage.vue'
 import ClassExamManage from '@/views/ClassExamManage.vue'
 
@@ -47,15 +48,19 @@ const routes = [{
   path: '/class',
   name: 'Class',
   component: Class,
-  meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-  children: [{
-    path: 'student-manage',
-    component: ClassStudentManage
-  },
-  {
-    path: 'exam-manage',
-    component: ClassExamManage
-  }
+  children: [
+    {
+      path: 'all-problems',
+      component: ClassAllProblem
+    },
+    {
+      path: 'student-manage',
+      component: ClassStudentManage
+    },
+    {
+      path: 'exam-manage',
+      component: ClassExamManage
+    }
   ]
 },
 {
