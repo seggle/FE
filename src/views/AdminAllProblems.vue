@@ -50,12 +50,21 @@
   </div>
   <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
+    <li class="page-item disabled" v-if="currentPage==1">
+      <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
     </li>
-    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-    <li class="page-item">
+    <li class="page-item" v-else>
+      <a class="page-link" @click="getProblemList(currentPage-1)">이전</a>
+    </li>
+    <div v-for="page in total" :key="page">
+    <li class="page-item active" v-if="page==currentPage"><a class="page-link" @click="getProblemList(page)">{{ page }}</a></li>
+    <li class="page-item" v-else><a class="page-link" @click="getProblemList(page)">{{ page }}</a></li>
+    </div>
+    <li class="page-item disabled" v-if="currentPage==total">
       <a class="page-link" href="#">다음</a>
+    </li>
+    <li class="page-item" v-else>
+      <a class="page-link" @click="getProblemList(currentPage+1)">다음</a>
     </li>
   </ul>
 </nav>
@@ -71,7 +80,9 @@ export default {
     return {
       problemList: [],
       loading: false,
-      keyword: ''
+      keyword: '',
+      total: 0,
+      currentPage: 1
     }
   },
   mounted () {
@@ -79,14 +90,16 @@ export default {
   },
   methods: {
     init () {
-      this.getProblemList(0)
+      this.getProblemList(1)
     },
     async getProblemList (page) {
       try {
         this.loading = true
+        this.currentPage = page
         const res = await api.getAdminProblemList(page, this.keyword)
         this.loading = false
-        this.problemList = res.data
+        this.total = parseInt(res.data.count / 15) + 1
+        this.problemList = res.data.results
         for (var i = 0; i < this.problemList.length; i++) {
           this.problemList[i].created_time = this.problemList[i].created_time.slice(0, 10) + ' ' + this.problemList[i].created_time.slice(11, 19)
         }
@@ -119,7 +132,7 @@ export default {
   },
   watch: {
     'keyword' () {
-      this.getProblemList(0)
+      this.getProblemList(1)
     }
   }
 }

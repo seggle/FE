@@ -3,7 +3,7 @@ import { setInterceptors } from './interceptors'
 
 function createInstance () {
   const instance = axios.create({
-    baseURL: 'https://91079725-6adf-4682-a6b2-dea7ebb71c08.mock.pstmn.io' // api 서버
+    baseURL: 'https://ac62009e-b49c-4b89-bd12-5ed1e3631abb.mock.pstmn.io' // api 서버
   })
   return setInterceptors(instance)
 }
