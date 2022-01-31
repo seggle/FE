@@ -31,11 +31,11 @@ function checkUserIDorEmail (data) {
 }
 
 function findPassword (data) {
-  return instance.post('find-password', data)
+  return instance.post('users/password', data)
 }
 
-function resetPassword (data) {
-  return instance.put('reset-password', data)
+function resetPassword (username, data) {
+  return instance.patch(`users/${username}`, data)
 }
 
 function getCompetitionList () {
