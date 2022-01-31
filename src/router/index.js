@@ -47,26 +47,14 @@ const routes = [{
   path: '/class',
   name: 'Class',
   component: Class,
+  meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
   children: [{
     path: 'student-manage',
     component: ClassStudentManage
   },
   {
-    // 수업
-    path: '/class',
-    name: 'Class',
-    component: Class,
-    meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-    children: [
-      {
-        path: 'student-manage',
-        component: ClassStudentManage
-      },
-      {
-        path: 'exam-manage',
-        component: ClassExamManage
-      }
-    ]
+    path: 'exam-manage',
+    component: ClassExamManage
   }
   ]
 },
