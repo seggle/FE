@@ -6,6 +6,9 @@
             <a class="nav-link" href="/admin/all-problems">전체 문제</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="/admin/all-classes">전체 수업</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="/admin/announcements">공지사항</a>
         </li>
         <li class="nav-item">

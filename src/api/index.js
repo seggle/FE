@@ -99,4 +99,15 @@ function changeAdminProblemSwitch (problemID) {
   return instance.put('admin/problems/check', { params: { problemID } })
 }
 
-export default { getAdminProblemList, changeAdminProblemSwitch, deleteProblem, deleteUser, submitUser, editUser, getUserList, getFAQList, deleteFAQ, editFAQ, submitEditFAQ, submitFAQ, changeFAQSwitch, getAnnouncementList, deleteAnnouncement, editAnnouncement, submitEditAnnouncement, submitAnnouncement, changeAnnouncementSwitch }
+function getAdminClassList (page, keyword) {
+  const params = { page }
+  if (keyword) {
+    params.keyword = keyword
+  }
+  return instance.get('admin/class', { params: params })
+}
+
+function deleteClass (classID) {
+  return instance.delete('admin/class/' + classID)
+}
+export default { deleteClass, getAdminClassList, getAdminProblemList, changeAdminProblemSwitch, deleteProblem, deleteUser, submitUser, editUser, getUserList, getFAQList, deleteFAQ, editFAQ, submitEditFAQ, submitFAQ, changeFAQSwitch, getAnnouncementList, deleteAnnouncement, editAnnouncement, submitEditAnnouncement, submitAnnouncement, changeAnnouncementSwitch }

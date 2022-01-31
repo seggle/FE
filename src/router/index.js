@@ -3,10 +3,11 @@ import Class from '../views/Class.vue'
 import ClassStudentManage from '../views/ClassStudentManage.vue'
 import ClassExamManage from '../views/ClassExamManage.vue'
 import Admin from '../views/Admin.vue'
-import AllProblems from '../views/AdminAllProblems.vue'
-import Announcment from '../views/AdminAnnouncement.vue'
-import Faq from '../views/AdminFaq.vue'
-import UserManagement from '../views/AdminUserManagement.vue'
+import AdminAllProblems from '../views/AdminAllProblems.vue'
+import AdminAnnouncment from '../views/AdminAnnouncement.vue'
+import AdminFaq from '../views/AdminFaq.vue'
+import AdminUserManagement from '../views/AdminUserManagement.vue'
+import AdminAllClasses from '../views/AdminAllClasses.vue'
 
 const routes = [
   {
@@ -31,19 +32,23 @@ const routes = [
     children: [
       {
         path: 'all-problems',
-        component: AllProblems
+        component: AdminAllProblems
+      },
+      {
+        path: 'all-classes',
+        component: AdminAllClasses
       },
       {
         path: 'announcements',
-        component: Announcment
+        component: AdminAnnouncment
       },
       {
         path: 'faqs',
-        component: Faq
+        component: AdminFaq
       },
       {
         path: 'user-management',
-        component: UserManagement
+        component: AdminUserManagement
       }
     ]
   }
