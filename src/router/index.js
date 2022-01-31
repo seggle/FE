@@ -1,6 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
+import Admin from '../views/Admin.vue'
+import AdminAllProblems from '../views/AdminAllProblems.vue'
+import AdminAnnouncment from '../views/AdminAnnouncement.vue'
+import AdminFaq from '../views/AdminFaq.vue'
+import AdminUserManagement from '../views/AdminUserManagement.vue'
+import AdminAllClasses from '../views/AdminAllClasses.vue'
+
 import Class from '@/views/Class.vue'
 import ClassStudentManage from '@/views/ClassStudentManage.vue'
 import ClassExamManage from '@/views/ClassExamManage.vue'
@@ -48,13 +55,13 @@ const routes = [{
   path: '/class/:classID',
   name: 'Class',
   component: Class,
-  // meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
   children: [
     {
       path: 'student-manage',
       name: 'ClassStudentManage',
-      component: ClassStudentManage
-      // meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+      component: ClassStudentManage,
+      meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
     },
     {
       path: 'exam-manage',
@@ -66,6 +73,33 @@ const routes = [{
       path: 'class-problem',
       name: 'ClassProblem',
       component: ClassProblem
+    }
+  ]
+},
+{
+  path: '/admin',
+  name: 'Admin',
+  component: Admin,
+  children: [
+    {
+      path: 'all-problems',
+      component: AdminAllProblems
+    },
+    {
+      path: 'all-classes',
+      component: AdminAllClasses
+    },
+    {
+      path: 'announcements',
+      component: AdminAnnouncment
+    },
+    {
+      path: 'faqs',
+      component: AdminFaq
+    },
+    {
+      path: 'user-management',
+      component: AdminUserManagement
     }
   ]
 },
