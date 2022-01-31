@@ -15,6 +15,10 @@ import User from '../views/User.vue'
 
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
+import AnnouncementDetail from '../views/AnnouncementDetail.vue'
+import Proposal from '../views/Proposal.vue'
+import ProposalDetail from '../views/ProposalDetail.vue'
+import ProposalCreate from '../views/ProposalCreate.vue'
 
 const routes = [{
   path: '/',
@@ -22,7 +26,7 @@ const routes = [{
   component: Home
 },
 {
-  path: '/user',
+  path: '/users',
   name: 'User',
   component: User
 },
@@ -35,6 +39,26 @@ const routes = [{
   path: '/announcements',
   name: 'Announcement',
   component: Announcement
+},
+{
+  path: '/announcements/:id',
+  name: 'AnnouncementDetail',
+  component: AnnouncementDetail
+},
+{
+  path: '/proposals',
+  name: 'Proposal',
+  component: Proposal
+},
+{
+  path: '/proposals/:id',
+  name: 'ProposalDetail',
+  component: ProposalDetail
+},
+{
+  path: '/proposals/create',
+  name: 'ProposalCreate',
+  component: ProposalCreate
 },
 {
   path: '/class',
@@ -50,15 +74,14 @@ const routes = [{
     name: 'Class',
     component: Class,
     meta: { auth: true }, // 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-    children: [
-      {
-        path: 'student-manage',
-        component: ClassStudentManage
-      },
-      {
-        path: 'exam-manage',
-        component: ClassExamManage
-      }
+    children: [{
+      path: 'student-manage',
+      component: ClassStudentManage
+    },
+    {
+      path: 'exam-manage',
+      component: ClassExamManage
+    }
     ]
   }
   ]
