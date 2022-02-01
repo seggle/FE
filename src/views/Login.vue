@@ -39,11 +39,10 @@ export default {
           password: this.password
         }
         const res = await api.loginUser(data)
-        console.log(res.data)
         // 위에 로그 보고 밑에 형태 고쳐야함->일단 로그인 되게는 만들어놓기는 했는데 수정필요
-        this.$store.commit('setToken', res.data)
+        this.$store.commit('setToken', res.data.access)
         this.$store.commit('setUserid', this.userID)
-        saveAuthToCookie(res.data)
+        saveAuthToCookie(res.data.access)
         saveUserToCookie(this.userID)
         this.$router.push('/')
       } catch (err) {

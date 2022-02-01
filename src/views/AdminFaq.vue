@@ -26,7 +26,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-            <button type="button" class="btn btn-primary" id="faq-save" @click="submitFaq">저장</button>
+            <button type="button" class="btn btn-primary" id="faq-save" data-bs-dismiss="modal" @click="submitFaq">저장</button>
             </div>
         </div>
         </div>
@@ -93,7 +93,8 @@ export default {
     async getFAQList () {
       try {
         const res = await api.getFAQList()
-        this.faqList = res.data
+        console.log(res.data)
+        this.faqList = res.data.results
         for (var i = 0; i < this.faqList.length; i++) {
           this.faqList[i].created_time = this.faqList[i].created_time.slice(0, 10) + ' ' + this.faqList[i].created_time.slice(11, 19)
           this.faqList[i].last_modified = this.faqList[i].last_modified.slice(0, 10) + ' ' + this.faqList[i].last_modified.slice(11, 19)
@@ -105,8 +106,8 @@ export default {
     async deleteFAQ (faqID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          const res = await api.deleteFAQ(faqID)
-          console.log(res.data)
+          await api.deleteFAQ(faqID)
+          this.getFAQList()
         }
       } catch (error) {
         console.log(error)
@@ -125,9 +126,9 @@ export default {
           this.currentFaqID = faqID
           this.createMode = false
           const res = await api.editFAQ(faqID)
-          this.faqQuestion = res.data[0].question
-          this.faqAnswer = res.data[0].answer
-          this.faqVisible = res.data[0].visible
+          this.faqQuestion = res.data.question
+          this.faqAnswer = res.data.answer
+          this.faqVisible = res.data.visible
         }
       } catch (error) {
         console.log(error)
@@ -152,6 +153,7 @@ export default {
           const res = await api.submitEditFAQ(this.currentFaqID, data)
           console.log(res.data)
         }
+        this.getFAQList()
       } catch (error) {
         console.log(error)
       }

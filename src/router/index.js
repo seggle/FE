@@ -86,26 +86,32 @@ const routes = [{
   path: '/admin',
   name: 'Admin',
   component: Admin,
+  meta: { isSuperAdmin: true },
   children: [
     {
       path: 'all-problems',
-      component: AdminAllProblems
+      component: AdminAllProblems,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'all-classes',
-      component: AdminAllClasses
+      component: AdminAllClasses,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'announcements',
-      component: AdminAnnouncment
+      component: AdminAnnouncment,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'faqs',
-      component: AdminFaq
+      component: AdminFaq,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'user-management',
-      component: AdminUserManagement
+      component: AdminUserManagement,
+      meta: { isSuperAdmin: true }
     }
   ]
 },
