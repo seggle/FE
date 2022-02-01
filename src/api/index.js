@@ -99,7 +99,9 @@ function editClassList (userID, data) {
 }
 
 function getClassProblem (classID, contestID, contestProblemID) {
-  return instance.get(`class/${classID}/contests/${contestID}/${contestProblemID}`)
+  return instance.get(
+        `class/${classID}/contests/${contestID}/${contestProblemID}`
+  )
 }
 
 function getClassLeaderboard (contestProblemID) {
@@ -221,6 +223,51 @@ function deleteClass (classID) {
   return instance.delete('admin/class/' + classID)
 }
 
+function showUserCompetition () {
+  return instance.get('user-competition')
+}
+
+function showUserHeatmap () {
+  return instance.get('user-heatmap')
+}
+
+function getFAQ () {
+  return instance.get('faqs')
+}
+
+function getAnnouncement (page, keyword) {
+  const params = { page }
+  if (keyword) {
+    params.keyword = keyword
+  }
+  return instance.get('announcements', { params: params })
+}
+
+function getAnnouncementDetail (id) {
+  return instance.get('announcements/' + id)
+}
+
+function getProposal (page) {
+  const params = { page }
+  return instance.get('proposals', { params: params })
+}
+
+function getProposalDetail (id) {
+  return instance.get('proposals/' + id)
+}
+
+function createProposal (id, data) {
+  return instance.post('proposals/' + id, data)
+}
+
+function editProposal (id, data) {
+  return instance.patch('proposals/' + id, data)
+}
+
+function deleteProposal (id) {
+  return instance.delete('proposals/' + id)
+}
+
 export default {
   registerUser,
   loginUser,
@@ -263,5 +310,15 @@ export default {
   editAnnouncement,
   submitEditAnnouncement,
   submitAnnouncement,
-  changeAnnouncementSwitch
+  changeAnnouncementSwitch,
+  showUserCompetition,
+  showUserHeatmap,
+  getFAQ,
+  getAnnouncement,
+  getAnnouncementDetail,
+  getProposal,
+  getProposalDetail,
+  createProposal,
+  editProposal,
+  deleteProposal
 }

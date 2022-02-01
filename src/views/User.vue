@@ -3,9 +3,9 @@
     <div class="class-nav-bar">
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-          <h1 id="title">{{ user_id }}님, 반갑습니다!</h1>
+          <h1 id="title">{{ this.$store.state.userid }}님, 반갑습니다!</h1>
           <router-link
-            :to="`/users/${user_id}`"
+            :to="`/users/${this.$store.state.userid}`"
             class="btn btn-primary btn-sm px-4 me-sm-3"
             id="head"
             >회원 탈퇴</router-link
@@ -26,20 +26,18 @@
           <th scope="col">#</th>
           <th scope="col">문제제목</th>
           <th scope="col"></th>
+          <th scope="col"></th>
           <th scope="col">마감 날짜</th>
           <th scope="col">등수</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="problems in problemList" :key="problems">
+        <tr v-for="(problems, index) in problemList" :key="index">
           <td>{{ problemList.indexOf(problems, 0) + 1 }}</td>
           <td>{{ problems.problem_title }}</td>
-          <td>
-            D-{{
-              problems.competition_end_time - problems.competition_start_time
-            }}
-          </td>
-          <td>{{ problems.competition_end_time }}</td>
+          <td><progress max="100" value="70">70%</progress></td>
+          <td>D- {{ d_day[index] }}</td>
+          <td>{{ problems.competition_end_time.slice(0, 10) }}</td>
           <td>
             {{ problems.competition_user_rank }}/{{
               problems.competition_user_total
@@ -54,42 +52,44 @@
   </div>
 </template>
 <script>
-import 'vue-calendar-heatmap/dist/vue-calendar-heatmap.browser'
-import 'vue-calendar-heatmap/dist/vue-calendar-heatmap.common'
+import api from '@/api/index.js'
 import 'vue-calendar-heatmap'
 export default {
   name: 'User',
-  data () {
+  data: () => {
     return {
-      user_id: 19012345,
-      problemList: [
-        {
-          competition_id: 1,
-          problem_id: 1,
-          problem_title: '따릉이 대여량 예측 경진대회',
-          competition_start_time: '2013-01-29T12:34:56.000000Z',
-          competition_end_time: '2013-01-29T12:34:56.000000Z',
-          competition_user_rank: 3,
-          competition_user_total: 20
-        },
-        {
-          competition_id: 1,
-          problem_id: 1,
-          problem_title: '따릉이 대여량 예측 경진대회',
-          competition_start_time: '2013-01-29T12:34:56.000000Z',
-          competition_end_time: '2013-01-29T12:34:56.000000Z',
-          competition_user_rank: 3,
-          competition_user_total: 20
-        }
-      ],
-      heatmapValues: [
-        { date: '2021-9-22', count: 6 },
-        { date: '2021-10-22', count: 4 },
-        { date: '2021-10-30', count: 1 },
-        { date: '2021-11-10', count: 5 },
-        { date: '2021-11-20', count: 6 }
-      ],
+      problemList: [],
+      heatmapValues: [],
+      d_day: [],
       endDate: '2021-11-21'
+    }
+  },
+  created () {
+    this.showUserInfo()
+  },
+  methods: {
+    async showUserInfo () {
+      try {
+        const res = await api.showUserCompetition()
+        this.problemList = res.data
+        for (var i = 0; i < this.problemList.length; i++) {
+          var time = this.problemList[i].competition_end_time
+          var year = time.slice(0, 4)
+          var month = time.slice(5, 7)
+          var date = time.slice(8, 10)
+          year = Number(year)
+          month = Number(month) - 1
+          date = Number(date)
+          console.log(year, month, date)
+          var dday = new Date(year, month, date)
+          var gap = dday.getTime() - new Date().getTime()
+          var result = Math.ceil(gap / (1000 * 60 * 60 * 24))
+          console.log(result)
+          this.d_day.push(result)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
