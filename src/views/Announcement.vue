@@ -7,65 +7,73 @@
         </div>
       </nav>
     </div>
-    <table class="table py-3">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">제목</th>
-          <th scope="col">내용</th>
-          <th scope="col">작성일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="announces in announceList" :key="announces">
-          <td>{{ announces.announcement_id }}</td>
-          <td>{{ announces.announcement_title }}</td>
-          <td></td>
-          <td>{{ announces.announcement_created_time }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <nav class="page" aria-label="...">
-      <ul class="pagination">
-        <li class="page-item disabled">
-          <span class="page-link">Previous</span>
-        </li>
-        <li class="page-item active" aria-current="page">
-          <span class="page-link" href="#">1</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
+    <div class="searchWrap">
+      <input type="search" v-model="keyword" />
+      <router-link
+        @click="fnSearch"
+        :to="{ query: { keyword: keyword } }"
+        class="btn btn-primary btn-sm px-4 me-sm-3"
+        id="head"
+        >검색</router-link
+      >
+    </div>
+    <paginated-list :list-array="announcementList" />
+    <footer>
+      <button>
+        <router-link
+          tag="button"
+          @click="getAnnouncement(0)"
+          :to="{ query: { page: '0' } }"
+          >1</router-link
+        >
+      </button>
+      <button>
+        <router-link
+          tag="button"
+          @click="getAnnouncement(1)"
+          :to="{ query: { page: '1' } }"
+          >2</router-link
+        >
+      </button>
+    </footer>
   </div>
 </template>
 <script>
+import api from '@/api/index.js'
+import PaginatedList from '@/components/PaginatedList.vue'
 export default {
-  name: 'User',
-  data () {
+  name: 'simple-pagination',
+  components: {
+    PaginatedList
+  },
+  data: () => {
     return {
-      user_id: 19012345,
-      announceList: [
-        {
-          announcement_id: 1,
-          announcement_title: '세글 이용 공지',
-          announcement_created_time: '2013-01-29T12:34:56.000000Z',
-          announcement_last_modified: '2013-01-29T12:34:56.000000Z',
-          announcement_important: true,
-          announcement_visible: true
-        },
-        {
-          announcement_id: 2,
-          announcement_title: '세글 이용 공지2',
-          announcement_created_time: '2013-01-29T12:34:56.000000Z',
-          announcement_last_modified: '2013-01-29T12:34:56.000000Z',
-          announcement_important: true,
-          announcement_visible: true
-        }
-      ]
+      announcementList: [],
+      keyword: '',
+      loading: false
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.getAnnouncement(0)
+    },
+    async getAnnouncement (page) {
+      try {
+        this.loading = true
+        const res = await api.getAnnouncement(page, this.keyword)
+        this.loading = false
+        this.announcementList = res.data
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  },
+  watch: {
+    keyword () {
+      this.getAnnouncement(1)
     }
   }
 }
@@ -84,5 +92,8 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.btnRightWrap .btnSearch {
+  color: white;
 }
 </style>

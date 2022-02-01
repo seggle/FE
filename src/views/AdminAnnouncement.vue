@@ -41,7 +41,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-            <button type="button" class="btn btn-primary" id="announce-save" @click="submitAnnouncement">저장</button>
+            <button type="button" class="btn btn-primary" id="announce-save" data-bs-dismiss="modal" @click="submitAnnouncement">저장</button>
             </div>
         </div>
         </div>
@@ -69,12 +69,12 @@
         <td>{{ announcement.last_modified }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.visible" @change="changeSwitch(announcement.id)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.visible" @change="changeSwitch(announcement.id, announcement.visible, announcement.important)">
           </div>
         </td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.important" @change="changeSwitch(announcement.id)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.important" @change="changeSwitch(announcement.id, announcement.visible, announcement.important)">
           </div>
         </td>
         <td scope="row">
@@ -140,9 +140,10 @@ export default {
         this.loading = true
         this.currentPage = page
         const res = await api.getAnnouncementList(page, this.keyword)
-        console.log(res.data)
         this.loading = false
-        this.total = parseInt(res.data.count / 15) + 1
+        if (res.data.count !== 0) {
+          this.total = parseInt((res.data.count - 1) / 15) + 1
+        }
         this.announcementList = res.data.results
         for (var i = 0; i < this.announcementList.length; i++) {
           this.announcementList[i].created_time = this.announcementList[i].created_time.slice(0, 10) + ' ' + this.announcementList[i].created_time.slice(11, 19)
@@ -155,9 +156,8 @@ export default {
     async deleteAnnouncement (announcementID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          console.log(announcementID)
-          const res = await api.deleteAnnouncement(announcementID)
-          console.log(res.data)
+          await api.deleteAnnouncement(announcementID)
+          this.getAnnouncementList(this.currentPage)
         }
       } catch (error) {
         console.log(error)
@@ -165,7 +165,6 @@ export default {
     },
     async openAnnouncement (announcementID) {
       try {
-        console.log(announcementID)
         if (typeof announcementID === 'undefined') {
           this.createMode = true
           this.currentAnnouncementID = ''
@@ -177,10 +176,10 @@ export default {
           this.currentAnnouncementID = announcementID
           this.createMode = false
           const res = await api.editAnnouncement(announcementID)
-          this.announcementTitle = res.data[0].title
-          this.announcementContext = res.data[0].context
-          this.announcementVisible = res.data[0].visible
-          this.announcementImportant = res.data[0].important
+          this.announcementTitle = res.data.title
+          this.announcementContext = res.data.context
+          this.announcementVisible = res.data.visible
+          this.announcementImportant = res.data.important
         }
       } catch (error) {
         console.log(error)
@@ -195,24 +194,22 @@ export default {
           visible: this.announcementVisible
         }
         if (this.currentAnnouncementID === '') {
-          const res = await api.submitAnnouncement(data)
-          console.log(res.data)
+          await api.submitAnnouncement(data)
         } else {
-          const res = await api.submitEditAnnouncement(this.currentAnnouncementID, data)
-          console.log(res.data)
+          await api.submitEditAnnouncement(this.currentAnnouncementID, data)
         }
+        this.getAnnouncementList(this.currentPage)
       } catch (error) {
         console.log(error)
       }
     },
-    async changeSwitch (announcementID) {
+    async changeSwitch (announcementID, visible, important) {
       try {
         const data = {
-          important: this.announcementImportant,
-          visible: this.announcementVisible
+          visible: visible,
+          important: important
         }
-        const res = await api.changeAnnouncementSwitch(announcementID, data)
-        console.log(res.data)
+        await api.changeAnnouncementSwitch(announcementID, data)
       } catch (error) {
         console.log(error)
       }

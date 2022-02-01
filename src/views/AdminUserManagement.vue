@@ -134,7 +134,7 @@ export default {
         const res = await api.getUserList(page, this.keyword)
         this.loading = false
         this.total = parseInt(res.data.count / 15) + 1
-        this.userList = res.data.results
+        this.userList = res.data
         for (var i = 0; i < this.userList.length; i++) {
           this.userList[i].date_joined = this.userList[i].date_joined.slice(0, 10) + ' ' + this.userList[i].date_joined.slice(11, 19)
           if (this.userList[i].privilege === 0) {

@@ -40,11 +40,18 @@ export default {
           password: this.password
         }
         const res = await api.loginUser(data)
+<<<<<<< HEAD
         this.$store.commit('setAcessToken', res.data.access)
         this.$store.commit('setRefreshToken', res.data.refresh)
         this.$store.commit('setUserid', this.userID)
         saveAcessToken(res.data.access)
         saveRefreshToken(res.data.refresh)
+=======
+        // 위에 로그 보고 밑에 형태 고쳐야함->일단 로그인 되게는 만들어놓기는 했는데 수정필요
+        this.$store.commit('setToken', res.data.access)
+        this.$store.commit('setUserid', this.userID)
+        saveAuthToCookie(res.data.access)
+>>>>>>> bc049699bef1377acb8bd2ba907a18524bfc602f
         saveUserToCookie(this.userID)
         this.$router.push('/')
       } catch (err) {

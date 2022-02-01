@@ -24,6 +24,10 @@ import User from '../views/User.vue'
 
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
+import AnnouncementDetail from '../views/AnnouncementDetail.vue'
+import Proposal from '../views/Proposal.vue'
+import ProposalDetail from '../views/ProposalDetail.vue'
+import ProposalCreate from '../views/ProposalCreate.vue'
 
 import GeneralList from '@/views/problem/GeneralList.vue'
 import ClassList from '@/views/problem/ClassList.vue'
@@ -37,7 +41,7 @@ const routes = [{
   component: Home
 },
 {
-  path: '/user',
+  path: '/users',
   name: 'User',
   component: User
 },
@@ -52,60 +56,85 @@ const routes = [{
   component: Announcement
 },
 {
+  path: '/announcements/:id',
+  name: 'AnnouncementDetail',
+  component: AnnouncementDetail
+},
+{
+  path: '/proposals',
+  name: 'Proposal',
+  component: Proposal
+},
+{
+  path: '/proposals/:id',
+  name: 'ProposalDetail',
+  component: ProposalDetail
+},
+{
+  path: '/proposals/create',
+  name: 'ProposalCreate',
+  component: ProposalCreate
+},
+{
   // 수업
   path: '/class/:classID',
   name: 'Class',
   component: Class,
   meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-  children: [
-    {
-      path: 'all-problems',
-      name: 'ClassAllProblem',
-      component: ClassAllProblem
-    },
-    {
-      path: 'student-manage',
-      name: 'ClassStudentManage',
-      component: ClassStudentManage,
-      meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
-    },
-    {
-      path: 'exam-manage',
-      name: 'ClassExamManage',
-      component: ClassExamManage,
-      meta: { isAdmin: true }
-    },
-    {
-      path: 'class-problem',
-      name: 'ClassProblem',
-      component: ClassProblem
-    }
+  children: [{
+    path: 'all-problems',
+    name: 'ClassAllProblem',
+    component: ClassAllProblem
+  },
+  {
+    path: 'student-manage',
+    name: 'ClassStudentManage',
+    component: ClassStudentManage,
+    meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+  },
+  {
+    path: 'exam-manage',
+    name: 'ClassExamManage',
+    component: ClassExamManage,
+    meta: { isAdmin: true }
+  },
+  {
+    path: 'class-problem',
+    name: 'ClassProblem',
+    component: ClassProblem
+  }
   ]
 },
 {
   path: '/admin',
   name: 'Admin',
   component: Admin,
+  meta: { isSuperAdmin: true },
   children: [
     {
       path: 'all-problems',
-      component: AdminAllProblems
+      component: AdminAllProblems,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'all-classes',
-      component: AdminAllClasses
+      component: AdminAllClasses,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'announcements',
-      component: AdminAnnouncment
+      component: AdminAnnouncment,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'faqs',
-      component: AdminFaq
+      component: AdminFaq,
+      meta: { isSuperAdmin: true }
     },
     {
       path: 'user-management',
-      component: AdminUserManagement
+      component: AdminUserManagement,
+      meta: { isSuperAdmin: true }
     }
   ]
 },
@@ -149,12 +178,10 @@ const routes = [{
   name: 'Problem',
   component: Problem,
   meta: { auth: true },
-  children: [
-    {
-      path: ':contestID/:contestProblemID',
-      component: Problem
-    }
-  ]
+  children: [{
+    path: ':contestID/:contestProblemID',
+    component: Problem
+  }]
 },
 {
   path: '/:problemType/create-problem',
