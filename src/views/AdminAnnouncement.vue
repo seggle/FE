@@ -140,6 +140,7 @@ export default {
         this.loading = true
         this.currentPage = page
         const res = await api.getAnnouncementList(page, this.keyword)
+        console.log(res.data)
         this.loading = false
         this.total = parseInt(res.data.count / 15) + 1
         this.announcementList = res.data.results

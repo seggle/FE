@@ -3,7 +3,13 @@ import { setInterceptors } from './interceptors'
 
 function createInstance () {
   const instance = axios.create({
-    baseURL: 'https://efca6327-0540-445e-91df-2230fa4c20a4.mock.pstmn.io' // api 서버
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    proxy: {
+      target: 'http://3.37.186.158:8000',
+      changeOrigin: true
+    }
   })
   return setInterceptors(instance)
 }
@@ -15,11 +21,12 @@ function registerUser (data) {
 }
 
 function loginUser (data) {
-  return instance.post('users/login', data)
+  return instance.post('users/login/', data)
 }
 
 function logoutUser (data) {
-  return instance.put('users/logout', data)
+  console.log(data)
+  return instance.post('users/logout/', data)
 }
 
 function getUserInfo (username) {
@@ -27,7 +34,7 @@ function getUserInfo (username) {
 }
 
 function checkUserIDorEmail (data) {
-  return instance.post('check-userid-or-email', data)
+  return instance.post('check-userid-or-email/', data)
 }
 
 function findPassword (data) {
@@ -141,7 +148,7 @@ function getAnnouncementList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('admin/announcements', { params: params })
+  return instance.get('/admin/announcements', { params: params })
 }
 
 function deleteAnnouncement (announcementID) {
