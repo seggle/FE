@@ -1,5 +1,5 @@
 module.exports = {
-    devServer: {
-        proxy: 'http://3.37.186.158:8000'
-    }
+  devServer: {
+    proxy: 'http://3.37.186.158:8000'
+  }
 }
