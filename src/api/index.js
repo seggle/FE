@@ -121,30 +121,30 @@ function createContest (classID) {
 }
 
 function getFAQList () {
-  return instance.get('faqs/')
+  return instance.get('/admin/faqs/')
 }
 
 function deleteFAQ (faqID) {
-  return instance.delete('faqs/' + faqID)
+  return instance.delete('/admin/faqs/' + faqID)
 }
 
 function editFAQ (faqID) {
-  return instance.get('faqs/' + faqID)
+  return instance.get('/admin/faqs/' + faqID)
 }
 
 function submitEditFAQ (faqID, data) {
-  return instance.patch('faqs/' + faqID, data)
+  return instance.patch('/admin/faqs/' + faqID, data)
 }
 
 function submitFAQ (data) {
-  return instance.post('faqs/', data)
+  return instance.post('/admin/faqs/', data)
 }
 
 function changeFAQSwitch (faqID) {
   const data = {
     id: faqID
   }
-  return instance.post('faqs/check/', data)
+  return instance.post('/admin/faqs/check/', data)
 }
 
 function getAnnouncementList (page, keyword) {
@@ -156,23 +156,23 @@ function getAnnouncementList (page, keyword) {
 }
 
 function deleteAnnouncement (announcementID) {
-  return instance.delete('announcements/' + announcementID)
+  return instance.delete('/admin/announcements/' + announcementID)
 }
 
 function editAnnouncement (announcementID) {
-  return instance.get(`announcements/${announcementID}`)
+  return instance.get(`/admin/announcements/${announcementID}`)
 }
 
 function submitAnnouncement (data) {
-  return instance.post('announcements/', data)
+  return instance.post('/admin/announcements/', data)
 }
 
 function submitEditAnnouncement (announcementID, data) {
-  return instance.put('announcements/' + announcementID, data)
+  return instance.put('/admin/announcements/' + announcementID, data)
 }
 
 function changeAnnouncementSwitch (announcementID, data) {
-  return instance.post(`announcements/${announcementID}/check`, data)
+  return instance.put(`/admin/announcements/${announcementID}/check`, data)
 }
 
 function getUserList (page, keyword) {
@@ -180,19 +180,19 @@ function getUserList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('users', { params: params })
+  return instance.get('/admin/users', { params: params })
 }
 
 function editUser (username) {
-  return instance.get('users/' + username)
+  return instance.get('/admin/users/' + username)
 }
 
 function submitUser (username, data) {
-  return instance.put('users/' + username, data)
+  return instance.put('/admin/users/' + username, data)
 }
 
 function deleteUser (username) {
-  return instance.delete('admin/users/' + username)
+  return instance.delete('/admin/users/' + username)
 }
 
 function getAdminProblemList (page, keyword) {
@@ -200,15 +200,15 @@ function getAdminProblemList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('admin/problems', { params: params })
+  return instance.get('/admin/problems', { params: params })
 }
 
 function deleteProblem (problemID) {
-  return instance.delete('admin/problems/' + problemID)
+  return instance.delete('/admin/problems/' + problemID)
 }
 
 function changeAdminProblemSwitch (problemID) {
-  return instance.put('admin/problems/check', { params: { problemID } })
+  return instance.put('/admin/problems/check', { params: { problemID } })
 }
 
 function getAdminClassList (page, keyword) {
@@ -216,11 +216,11 @@ function getAdminClassList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('admin/class', { params: params })
+  return instance.get('/admin/class', { params: params })
 }
 
 function deleteClass (classID) {
-  return instance.delete('admin/class/' + classID)
+  return instance.delete('/admin/class/' + classID)
 }
 
 function showUserCompetition () {
