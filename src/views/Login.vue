@@ -21,7 +21,8 @@
 
 <script>
 import api from '@/api/index.js'
-import { saveAuthToCookie, saveUserToCookie } from '@/utils/cookies.js'
+import { saveUserToCookie } from '@/utils/cookies.js'
+import { saveAcessToken, saveRefreshToken } from '@/utils/jwt.js'
 export default {
   name: 'Login',
   data () {
@@ -39,11 +40,11 @@ export default {
           password: this.password
         }
         const res = await api.loginUser(data)
-        console.log(res.data)
-        // 위에 로그 보고 밑에 형태 고쳐야함->일단 로그인 되게는 만들어놓기는 했는데 수정필요
-        this.$store.commit('setToken', res.data)
+        this.$store.commit('setAcessToken', res.data.access)
+        this.$store.commit('setRefreshToken', res.data.refresh)
         this.$store.commit('setUserid', this.userID)
-        saveAuthToCookie(res.data)
+        saveAcessToken(res.data.access)
+        saveRefreshToken(res.data.refresh)
         saveUserToCookie(this.userID)
         this.$router.push('/')
       } catch (err) {

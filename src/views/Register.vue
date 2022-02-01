@@ -107,10 +107,11 @@ export default {
     async submitForm () {
       try {
         const data = {
-          user_id: this.formRegister.userID,
-          user_name: this.formRegister.username,
-          user_email: this.formRegister.email,
-          user_password: this.formRegister.password
+          username: this.formRegister.userID,
+          name: this.formRegister.username,
+          email: this.formRegister.email,
+          password: this.formRegister.password,
+          password2: this.formRegister.passwordAgain
         }
         const res = await api.registerUser(data)
         console.log(res)
@@ -140,7 +141,7 @@ export default {
       }
     },
     checkUserID () {
-      this.checkUserExist()
+      // this.checkUserExist()
       if (!(validator.validateID(this.formRegister.userID))) {
         console.log('유효하지 않은 아이디입니다.')
         this.feedback.userID = '아이디 형식이 올바르지 않습니다.'
@@ -148,7 +149,7 @@ export default {
       }
     },
     checkUserEmail () {
-      this.checkUserExist()
+      // this.checkUserExist()
       if (!(validator.validateEmail(this.formRegister.email))) {
         this.feedback.email = '이메일 형식이 올바르지 않습니다.'
         this.invalidEmail = true

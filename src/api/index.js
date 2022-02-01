@@ -17,7 +17,7 @@ function createInstance () {
 const instance = createInstance()
 
 function registerUser (data) {
-  return instance.post('users', data)
+  return instance.post('users/', data)
 }
 
 function loginUser (data) {
@@ -25,7 +25,6 @@ function loginUser (data) {
 }
 
 function logoutUser (data) {
-  console.log(data)
   return instance.post('users/logout/', data)
 }
 

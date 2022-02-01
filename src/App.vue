@@ -74,7 +74,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import api from '@/api/index.js'
-import { deleteCookie } from '@/utils/cookies.js'
+import { destroyToken } from '@/utils/jwt.js'
 
 export default {
   data () {
@@ -84,16 +84,20 @@ export default {
   },
   methods: {
     async logout () {
-      const res = await api.logoutUser(this.userid)
-      console.log(res)
-      // state 값 삭제
-      this.$store.commit('clearToken')
-      this.$store.commit('clearUserid')
-      this.$store.commit('clearUserType')
-      // 쿠키 삭제
-      deleteCookie('til_auth')
-      deleteCookie('til_user')
-      this.$router.push('/login')
+      try {
+        const data = {
+          refresh: this.$store.state.refreshToken
+        }
+        const res = await api.logoutUser(data)
+        console.log(res)
+        this.$store.commit('clearToken')
+        this.$store.commit('clearUserid')
+        this.$store.commit('clearUserType')
+        destroyToken()
+        this.$router.push('/login')
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   computed: {

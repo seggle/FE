@@ -1,16 +1,18 @@
 import { createStore } from 'vuex'
-import { getAuthFromCookie, getUserFromCookie } from '@/utils/cookies'
+import { getUserFromCookie } from '@/utils/cookies'
+import { getAccessToken, getRefreshToken } from '@/utils/jwt'
 import api from '@/api/index.js'
 
 export default createStore({
   state: {
     userid: getUserFromCookie() || '',
-    token: getAuthFromCookie() || '',
+    accessToken: getAccessToken() || '',
+    refreshToken: getRefreshToken() || '',
     usertype: ''
   },
   getters: {
     isLogin (state) {
-      return state.userid !== ''
+      return !!state.accessToken
     },
     isAdmin (state) {
       return state.usertype === 0 || state.usertype === 1
@@ -26,11 +28,13 @@ export default createStore({
     clearUserid (state) {
       state.userid = ''
     },
-    setToken (state, token) {
-      state.token = token
+    setToken (state, accessToken, refreshToken) {
+      state.accessToken = accessToken
+      state.refreshToken = refreshToken
     },
     clearToken (state) {
-      state.token = ''
+      state.accessToken = ''
+      state.refreshToken = ''
     },
     setUserType (state, usertype) {
       state.usertype = usertype
