@@ -7,5 +7,5 @@
 $ git clone https://github.com/seggle/FE.git
 $ cd FE
 $ npm install
-$ npm run server
+$ npm run serve
 ```
