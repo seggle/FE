@@ -1,24 +1,29 @@
 import store from '@/store'
+import axios from 'axios'
 
 export function setInterceptors (instance) {
-// Add a request interceptor
   instance.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    config.headers.Authorization = store.state.accessToken
+    config.headers.Authorization = store.state.accessToken ? `Bearer ${store.state.accessToken}` : store.state.accessToken
     return config
-  }, function (error) {
-    // Do something with request error
+  },
+  function (error) {
     return Promise.reject(error)
   })
 
-  // Add a response interceptor
   instance.interceptors.response.use(function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response
-  }, function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+  },
+  async function (error) {
+    try {
+      const errorAPI = error.response.config
+      if (error.response.status === 401 && errorAPI.retry === undefined && store.state.refreshToken !== '') {
+        errorAPI.retry = true
+        await store.dispatch('refreshAccessToken')
+        return await axios(errorAPI)
+      }
+    } catch (err) {
+      console.log('axios.interceptors.response error: ', err)
+    }
     return Promise.reject(error)
   })
   return instance

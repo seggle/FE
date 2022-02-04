@@ -28,8 +28,12 @@ function logoutUser (data) {
   return instance.post('users/logout/', data)
 }
 
+function refreshAccessToken (data) {
+  return instance.post('/users/login/refresh', data)
+}
+
 function getUserInfo (username) {
-  return instance.get(`users/${username}`)
+  return instance.get(`users/${username}/`)
 }
 
 function checkUserIDorEmail (data) {
@@ -272,6 +276,7 @@ export default {
   registerUser,
   loginUser,
   logoutUser,
+  refreshAccessToken,
   getUserInfo,
   checkUserIDorEmail,
   findPassword,
