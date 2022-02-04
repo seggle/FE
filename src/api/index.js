@@ -28,8 +28,12 @@ function logoutUser (data) {
   return instance.post('users/logout/', data)
 }
 
+function refreshAccessToken (data) {
+  return instance.post('/users/login/refresh', data)
+}
+
 function getUserInfo (username) {
-  return instance.get(`users/${username}`)
+  return instance.get(`users/${username}/`)
 }
 
 function checkUserIDorEmail (data) {
@@ -188,11 +192,11 @@ function editUser (username) {
 }
 
 function submitUser (username, data) {
-  return instance.put('/admin/users/' + username, data)
+  return instance.put(`/admin/users/${username}/`, data)
 }
 
 function deleteUser (username) {
-  return instance.delete('/admin/users/' + username)
+  return instance.delete(`/admin/users/${username}`)
 }
 
 function getAdminProblemList (page, keyword) {
@@ -272,6 +276,7 @@ export default {
   registerUser,
   loginUser,
   logoutUser,
+  refreshAccessToken,
   getUserInfo,
   checkUserIDorEmail,
   findPassword,

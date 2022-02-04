@@ -21,8 +21,7 @@
 
 <script>
 import api from '@/api/index.js'
-import { saveUserToCookie } from '@/utils/cookies.js'
-import { saveAcessToken, saveRefreshToken } from '@/utils/jwt.js'
+import { saveAccessToCookie, saveRefreshToCookie, saveUserToCookie } from '@/utils/cookies.js'
 export default {
   name: 'Login',
   data () {
@@ -40,11 +39,14 @@ export default {
           password: this.password
         }
         const res = await api.loginUser(data)
-        this.$store.commit('setToken', res.data.access, res.data.refresh)
+        this.$store.commit('setAccessToken', res.data.access)
+        this.$store.commit('setRefreshToken', res.data.refresh)
         this.$store.commit('setUserid', this.userID)
-        saveAcessToken(res.data.access)
-        saveRefreshToken(res.data.refresh)
+        this.$store.dispatch('getUserType', this.userID)
+        saveAccessToCookie(res.data.access)
+        saveRefreshToCookie(res.data.refresh)
         saveUserToCookie(this.userID)
+        this.$store.dispatch('getUserType')
         this.$router.push('/')
       } catch (err) {
         console.log(err)

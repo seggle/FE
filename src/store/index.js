@@ -1,24 +1,24 @@
 import { createStore } from 'vuex'
-import { getUserFromCookie } from '@/utils/cookies'
-import { getAccessToken, getRefreshToken } from '@/utils/jwt'
+import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie } from '@/utils/cookies'
+import { saveUserType, getUsertype } from '@/utils/jwt'
 import api from '@/api/index.js'
 
 export default createStore({
   state: {
     userid: getUserFromCookie() || '',
-    accessToken: getAccessToken() || '',
-    refreshToken: getRefreshToken() || '',
-    usertype: ''
+    accessToken: getAccessFromCookie() || '',
+    refreshToken: getRefreshFromCookie() || '',
+    usertype: getUsertype() || ''
   },
   getters: {
     isLogin (state) {
-      return !!state.accessToken
+      return !!state.accessToken && !!state.refreshToken
     },
     isAdmin (state) {
-      return state.usertype === 0 || state.usertype === 1
+      return state.usertype === '1' || state.usertype === '2'
     },
     isSuperAdmin (state) {
-      return state.usertype === 0
+      return state.usertype === '2'
     }
   },
   mutations: {
@@ -28,8 +28,10 @@ export default createStore({
     clearUserid (state) {
       state.userid = ''
     },
-    setToken (state, accessToken, refreshToken) {
+    setAccessToken (state, accessToken) {
       state.accessToken = accessToken
+    },
+    setRefreshToken (state, refreshToken) {
       state.refreshToken = refreshToken
     },
     clearToken (state) {
@@ -44,10 +46,25 @@ export default createStore({
     }
   },
   actions: {
-    getUserType () {
-      api.getUserInfo().then(res => {
-        this.commit('setUserType', res.data.privilege || '')
-      })
+    async getUserType () {
+      try {
+        const res = await api.getUserInfo(this.state.userid)
+        console.log('getUserType: ', res)
+        this.commit('setUserType', res.data.privilege)
+        saveUserType(res.data.privilege)
+      } catch (err) {
+        console.log('getUserType error: ', err)
+      }
+    },
+    async refreshAccessToken () {
+      try {
+        const res = await api.refreshAccessToken({
+          refresh: this.state.refreshToken
+        })
+        this.commit('setUserid', res.data.access)
+      } catch (err) {
+        console.log('refreshAccessToekn error: ', err)
+      }
     }
   },
   modules: {

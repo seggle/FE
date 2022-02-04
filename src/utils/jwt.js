@@ -17,9 +17,19 @@ function saveRefreshToken (token) {
   window.localStorage.setItem(REFRESH_TOKEN, token)
 }
 
+function saveUserType (usertype) {
+  console.log(typeof usertype)
+  window.localStorage.setItem('UserType', usertype)
+}
+
+function getUsertype () {
+  return window.localStorage.getItem('UserType')
+}
+
 function destroyToken () {
   window.localStorage.removeItem(ACCESS_TOKEN)
   window.localStorage.removeItem(REFRESH_TOKEN)
+  window.localStorage.removeItem('UserType')
 }
 
 export {
@@ -27,5 +37,7 @@ export {
   getRefreshToken,
   saveAcessToken,
   saveRefreshToken,
-  destroyToken
+  destroyToken,
+  saveUserType,
+  getUsertype
 }

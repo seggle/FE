@@ -61,7 +61,7 @@ export default {
   methods: {
     goContest (contestID) {
       this.$router.push({
-        name: 'class-contest-list',
+        name: 'ClassContestList',
         params: { contestID: contestID }
       })
     }
