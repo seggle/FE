@@ -24,15 +24,15 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">아이디</h5>
-                    <input class="col-6" type="text" v-model="userName" disabled>
+                    <input class="col-6" type="text" :value="userName" disabled>
                 </div>
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">이름</h5>
-                    <input class="col-6" type="text" v-model="Name" disabled>
+                    <input class="col-6" type="text" :value="Name" disabled>
                 </div>
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">이메일</h5>
-                    <input class="col-6" type="text" v-model="userEmail" disabled>
+                    <input class="col-6" type="text" :value="userEmail" disabled>
                 </div>
                 <div class="mb-3">
                     <h5 style="float:left" class="col-3">사용자유형</h5>
@@ -45,7 +45,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary" id="announce-save" @click="submitUser">저장</button>
+                <button type="button" class="btn btn-primary" id="announce-save" data-bs-dismiss="modal" @click="submitUser">저장</button>
             </div>
         </div>
         </div>
@@ -117,7 +117,10 @@ export default {
       loading: false,
       keyword: '',
       total: 0,
-      currentPage: 1
+      currentPage: 1,
+      Name: '',
+      userEmail: '',
+      userName: ''
     }
   },
   mounted () {
@@ -133,8 +136,10 @@ export default {
         this.currentPage = page
         const res = await api.getUserList(page, this.keyword)
         this.loading = false
-        this.total = parseInt(res.data.count / 15) + 1
-        this.userList = res.data
+        if (res.data.count !== 0) {
+          this.total = parseInt((res.data.count - 1) / 15) + 1
+        }
+        this.userList = res.data.results
         for (var i = 0; i < this.userList.length; i++) {
           this.userList[i].date_joined = this.userList[i].date_joined.slice(0, 10) + ' ' + this.userList[i].date_joined.slice(11, 19)
           if (this.userList[i].privilege === 0) {
@@ -153,16 +158,16 @@ export default {
       try {
         this.currentName = userName
         const res = await api.editUser(userName)
-        if (res.data[0].privilege === 0) {
+        if (res.data.privilege === 0) {
           this.selected = 'student'
-        } else if (res.data[0].privilege === 1) {
+        } else if (res.data.privilege === 1) {
           this.selected = 'prof'
         } else {
           this.selected = 'admin'
         }
-        this.userName = res.data[0].username
-        this.Name = res.data[0].name
-        this.userEmail = res.data[0].email
+        this.userName = res.data.username
+        this.Name = res.data.name
+        this.userEmail = res.data.email
       } catch (error) {
         console.log(error)
       }
@@ -179,8 +184,8 @@ export default {
         const data = {
           privilege: this.selected
         }
-        const res = await api.submitUser(this.currentName, data)
-        console.log(res.data)
+        await api.submitUser(this.currentName, data)
+        this.getUserList(1)
       } catch (error) {
         console.log(error)
       }
@@ -190,6 +195,7 @@ export default {
         if (confirm('삭제하시겠습니까?')) {
           const res = await api.deleteUser(userName)
           console.log(res.data)
+          this.getUserList(1)
         }
       } catch (error) {
         console.log(error)

@@ -42,6 +42,7 @@ export default {
         const res = await api.loginUser(data)
         this.$store.commit('setToken', res.data.access, res.data.refresh)
         this.$store.commit('setUserid', this.userID)
+        this.$store.dispatch('getUserType', this.userID)
         saveAcessToken(res.data.access)
         saveRefreshToken(res.data.refresh)
         saveUserToCookie(this.userID)
