@@ -30,6 +30,7 @@ import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 import Proposal from '../views/Proposal.vue'
 import ProposalDetail from '../views/ProposalDetail.vue'
 import ProposalCreate from '../views/ProposalCreate.vue'
+import ExamSubmission from '../views/ExamSubmission.vue'
 
 import GeneralList from '@/views/problem/GeneralList.vue'
 import ClassList from '@/views/problem/ClassList.vue'
@@ -53,7 +54,8 @@ const routes = [{
 {
   path: '/users',
   name: 'User',
-  component: User
+  component: User,
+  meta: { auth: true } // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
 },
 {
   path: '/faqs',
@@ -83,7 +85,13 @@ const routes = [{
 {
   path: '/proposals/create',
   name: 'ProposalCreate',
-  component: ProposalCreate
+  component: ProposalCreate,
+  meta: { auth: true } // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+},
+{
+  path: '/test',
+  name: ExamSubmission,
+  component: ExamSubmission
 },
 {
   // 수업
@@ -105,8 +113,7 @@ const routes = [{
   {
     path: 'exam-manage',
     name: 'ClassExamManage',
-    component: ClassExamManage,
-    meta: { isAdmin: true }
+    component: ClassExamManage
   },
   {
     path: 'class-problem',
@@ -124,7 +131,8 @@ const routes = [{
       name: 'ClassContestListEdit',
       component: ClassContestListEdit,
       meta: { isAdmin: true }
-    }]
+    }
+    ]
   }
   ]
 },
@@ -134,32 +142,31 @@ const routes = [{
   component: Admin,
   meta: { isSuperAdmin: true },
   beforeEnter: requireAuth(),
-  children: [
-    {
-      path: 'all-problems',
-      component: AdminAllProblems,
-      meta: { isSuperAdmin: true }
-    },
-    {
-      path: 'all-classes',
-      component: AdminAllClasses,
-      meta: { isSuperAdmin: true }
-    },
-    {
-      path: 'announcements',
-      component: AdminAnnouncment,
-      meta: { isSuperAdmin: true }
-    },
-    {
-      path: 'faqs',
-      component: AdminFaq,
-      meta: { isSuperAdmin: true }
-    },
-    {
-      path: 'user-management',
-      component: AdminUserManagement,
-      meta: { isSuperAdmin: true }
-    }
+  children: [{
+    path: 'all-problems',
+    component: AdminAllProblems,
+    meta: { isSuperAdmin: true }
+  },
+  {
+    path: 'all-classes',
+    component: AdminAllClasses,
+    meta: { isSuperAdmin: true }
+  },
+  {
+    path: 'announcements',
+    component: AdminAnnouncment,
+    meta: { isSuperAdmin: true }
+  },
+  {
+    path: 'faqs',
+    component: AdminFaq,
+    meta: { isSuperAdmin: true }
+  },
+  {
+    path: 'user-management',
+    component: AdminUserManagement,
+    meta: { isSuperAdmin: true }
+  }
   ]
 },
 {

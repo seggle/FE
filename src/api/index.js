@@ -17,23 +17,23 @@ function createInstance () {
 const instance = createInstance()
 
 function registerUser (data) {
-  return instance.post('users/', data)
+  return instance.post('/users/', data)
 }
 
 function loginUser (data) {
-  return instance.post('users/login/', data)
+  return instance.post('/users/login/', data)
 }
 
 function logoutUser (data) {
-  return instance.post('users/logout/', data)
+  return instance.post('/users/logout/', data)
 }
 
 function refreshAccessToken (data) {
-  return instance.post('/users/login/refresh', data)
+  return instance.post('/users/login/refresh/', data)
 }
 
 function getUserInfo (username) {
-  return instance.get(`users/${username}/`)
+  return instance.get(`/users/${username}/`)
 }
 
 function checkUserIDorEmail (data) {
@@ -41,23 +41,23 @@ function checkUserIDorEmail (data) {
 }
 
 function findPassword (data) {
-  return instance.post('users/password', data)
+  return instance.post('users/password/', data)
 }
 
 function resetPassword (username, data) {
-  return instance.patch(`users/${username}`, data)
+  return instance.patch(`users/${username}/`, data)
 }
 
 function getCompetitionList () {
-  return instance.get('/competitions')
+  return instance.get('/competitions/')
 }
 
 function getUserCompetitionList (userID) {
-  return instance.get(`/users/${userID}/competitions`)
+  return instance.get(`/users/${userID}/competitions/`)
 }
 
 function joinCompetition (competitionID) {
-  return instance.post(`competitions/${competitionID}/user-engage`)
+  return instance.post(`competitions/${competitionID}/user-engage/`)
 }
 
 function getCompetitions (competitionID) {
@@ -87,24 +87,24 @@ function getUserSubmissions (userID, competitionID, contestProblemID) {
 }
 
 function selectFile (competitionID, userID, data) {
-  return instance.post(`submissions/${competitionID}/${userID}`, data)
+  return instance.post(`submissions/${competitionID}/${userID}/`, data)
 }
 
 function createClass (data) {
-  return instance.post('/class', data)
+  return instance.post('/class/', data)
 }
 
 function getClassList (userID) {
-  return instance.get(`users/${userID}/class`)
+  return instance.get(`users/${userID}/class/`)
 }
 
 function editClassList (userID, data) {
-  return instance.patch(`users/${userID}/class`, data)
+  return instance.patch(`users/${userID}/class/`, data)
 }
 
 function getClassProblem (classID, contestID, contestProblemID) {
   return instance.get(
-        `class/${classID}/contests/${contestID}/${contestProblemID}`
+    `class/${classID}/contests/${contestID}/${contestProblemID}/`
   )
 }
 
@@ -117,11 +117,11 @@ function getClassLeaderboard (contestProblemID) {
 }
 
 function getClassUserList (classID) {
-  return instance.get(`/class/${classID}/users`)
+  return instance.get(`/class/${classID}/users/`)
 }
 
 function createContest (classID) {
-  return instance.post(`/class/${classID}/contests`)
+  return instance.post(`/class/${classID}/contests/`)
 }
 
 function getFAQList () {
@@ -236,7 +236,7 @@ function showUserHeatmap () {
 }
 
 function getFAQ () {
-  return instance.get('faqs')
+  return instance.get('/faqs')
 }
 
 function getAnnouncement (page, keyword) {

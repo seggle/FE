@@ -1,17 +1,17 @@
 function saveAccessToCookie (value) {
-  document.cookie = `til_access=${value}; max-age=30 * 60`
+  document.cookie = `til_access=${value}; path=/; max-age=1800`
 }
 
 function saveRefreshToCookie (value) {
-  document.cookie = `til_refresh=${value}`
+  document.cookie = `til_refresh=${value}; path=/`
 }
 
 function saveUserToCookie (value) {
-  document.cookie = `til_user=${value}`
+  document.cookie = `til_user=${value}; path=/`
 }
 
 function saveUserTypeToCookie (value) {
-  document.cookie = `til_user_type=${value}`
+  document.cookie = `til_user_type=${value}; path=/`
 }
 
 function getAccessFromCookie () {
@@ -43,7 +43,7 @@ function getUserTypeFromCookie () {
 }
 
 function deleteCookie (value) {
-  document.cookie = `${value}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+  document.cookie = `${value}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
 }
 
 export {
