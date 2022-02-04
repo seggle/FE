@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie } from '@/utils/cookies'
+import { saveUserType, getUsertype } from '@/utils/jwt'
 import api from '@/api/index.js'
 
 export default createStore({
@@ -7,17 +8,17 @@ export default createStore({
     userid: getUserFromCookie() || '',
     accessToken: getAccessFromCookie() || '',
     refreshToken: getRefreshFromCookie() || '',
-    usertype: ''
+    usertype: getUsertype() || ''
   },
   getters: {
     isLogin (state) {
       return !!state.accessToken && !!state.refreshToken
     },
     isAdmin (state) {
-      return state.usertype === 1 || state.usertype === 2
+      return state.usertype === '1' || state.usertype === '2'
     },
     isSuperAdmin (state) {
-      return state.usertype === 2
+      return state.usertype === '2'
     }
   },
   mutations: {
@@ -50,6 +51,7 @@ export default createStore({
         const res = await api.getUserInfo(this.state.userid)
         console.log('getUserType: ', res)
         this.commit('setUserType', res.data.privilege)
+        saveUserType(res.data.privilege)
       } catch (err) {
         console.log('getUserType error: ', err)
       }

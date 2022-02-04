@@ -1,12 +1,12 @@
 <template>
 <div class="contest-nav-bar">
-  <nav class="nav flex-column bg-light px-4 py-3">
+  <nav class="nav flex-column bg-light px-3 py-2">
     <div class="nav-header px-1 py-2">
       <span id="title">문제</span>
       <a class="icon" @click="showModal = true">+</a>
       <ModalContestList v-if="showModal" @close="showModal = false" />
     </div>
-    <ul class="navbar-nav px-3">
+    <ul class="navbar-nav">
       <li class="nav-item" v-for="contest in contestList" :key="contest">
         <a class="nav-link" @click="goContest(contest.contestID)">{{ contest.contestTitle }}</a>
       </li>
@@ -44,7 +44,7 @@ export default {
   methods: {
     goContest (contestID) {
       this.$router.push({
-        name: 'class-contest-list',
+        name: 'ClassContestList',
         params: { contestID: contestID }
       })
     }

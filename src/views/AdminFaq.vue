@@ -94,7 +94,7 @@ export default {
       try {
         const res = await api.getFAQList()
         console.log(res.data)
-        this.faqList = res.data.results
+        this.faqList = res.data
         for (var i = 0; i < this.faqList.length; i++) {
           this.faqList[i].created_time = this.faqList[i].created_time.slice(0, 10) + ' ' + this.faqList[i].created_time.slice(11, 19)
           this.faqList[i].last_modified = this.faqList[i].last_modified.slice(0, 10) + ' ' + this.faqList[i].last_modified.slice(11, 19)

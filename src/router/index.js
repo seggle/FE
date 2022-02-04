@@ -13,6 +13,8 @@ import ClassAllProblem from '@/views/ClassAllProblem.vue'
 import ClassStudentManage from '@/views/ClassStudentManage.vue'
 import ClassExamManage from '@/views/ClassExamManage.vue'
 import ClassProblem from '@/views/ClassProblem.vue'
+import ClassContestList from '@/views/ClassContestList.vue'
+import ClassContestListEdit from '@/views/ClassContestListEdit.vue'
 
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
@@ -34,6 +36,14 @@ import ClassList from '@/views/problem/ClassList.vue'
 import EditClassList from '@/views/problem/EditClassList.vue'
 import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
+
+const requireAuth = () => (to, from, next) => {
+  if (to.meta.isSuperAdmin && store.getters.isSuperAdmin) {
+    return next()
+  }
+  alert('접근 권한이 없습니다.')
+  next('/login')
+}
 
 const routes = [{
   path: '/',
@@ -101,7 +111,20 @@ const routes = [{
   {
     path: 'class-problem',
     name: 'ClassProblem',
-    component: ClassProblem
+    component: ClassProblem,
+    meta: { isAdmin: true },
+    children: [{
+      path: ':contestID',
+      name: 'ClassContestList',
+      component: ClassContestList,
+      meta: { isAdmin: true }
+    },
+    {
+      path: ':contestID/edit-list',
+      name: 'ClassContestListEdit',
+      component: ClassContestListEdit,
+      meta: { isAdmin: true }
+    }]
   }
   ]
 },
@@ -110,6 +133,7 @@ const routes = [{
   name: 'Admin',
   component: Admin,
   meta: { isSuperAdmin: true },
+  beforeEnter: requireAuth(),
   children: [
     {
       path: 'all-problems',

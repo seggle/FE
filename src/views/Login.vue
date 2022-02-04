@@ -42,6 +42,7 @@ export default {
         this.$store.commit('setAccessToken', res.data.access)
         this.$store.commit('setRefreshToken', res.data.refresh)
         this.$store.commit('setUserid', this.userID)
+        this.$store.dispatch('getUserType', this.userID)
         saveAccessToCookie(res.data.access)
         saveRefreshToCookie(res.data.refresh)
         saveUserToCookie(this.userID)
