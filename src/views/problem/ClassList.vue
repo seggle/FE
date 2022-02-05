@@ -63,7 +63,7 @@ export default {
     },
     async getClassList () {
       try {
-        const res = await api.getClassList(this.userID)
+        const res = await api.getClassList()
         this.classList = res.data
       } catch (err) {
         console.log(err)

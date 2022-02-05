@@ -59,7 +59,7 @@ export default {
   methods: {
     async getClassList () {
       try {
-        const res = await api.getClassList(this.userID)
+        const res = await api.getClassList()
         console.log(res)
         this.classList = res.data
         this.alreadyChecked()
@@ -87,7 +87,7 @@ export default {
           item.class_id = this.checkList[i]
           data.push(item)
         }
-        const res = await api.editClassList(this.userID, data)
+        const res = await api.editClassList(data)
         console.log(res)
         alert('변경사항이 저장되었습니다.')
         this.$router.push({ name: 'ClassList' })

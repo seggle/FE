@@ -94,12 +94,12 @@ function createClass (data) {
   return instance.post('/class', data)
 }
 
-function getClassList (userID) {
-  return instance.get(`users/${userID}/class`)
+function getClassList () {
+  return instance.get('/users/class/')
 }
 
-function editClassList (userID, data) {
-  return instance.patch(`users/${userID}/class`, data)
+function editClassList (data) {
+  return instance.patch('/users/class', data)
 }
 
 function getClassProblem (classID, contestID, contestProblemID) {
