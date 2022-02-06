@@ -3,19 +3,33 @@
   <h1 id="title">비밀번호 찾기</h1>
   <form id="find-password-form"
         class="row"
+        :key="formFindPassword"
         :class="{ 'was-validated': validated }"
         @submit.prevent="handleFindPassword" novalidate>
+    <div class="username-form">
+      <label for="username">아이디</label>
+      <input v-model="formFindPassword.username"
+            type="text"
+            id="username"
+            class="form-control"
+            :class="{'is-invalid': invalid.username }"
+            @focus="invalid.username = false"
+            required>
+      <div class="invalid-feedback">
+        {{ this.feedback.username }}
+      </div>
+    </div>
     <div class="email-form">
       <label for="email">이메일</label>
-      <input v-model="this.useremail"
+      <input v-model="formFindPassword.useremail"
             type="email"
             id="email"
             class="form-control"
-            :class="{'is-invalid': invalidEmail }"
-            @blur="checkUserEmail" @focus="invalidEmail = false"
+            :class="{'is-invalid': invalid.email }"
+            @blur="checkUserEmail" @focus="invalid.email = false"
             required>
       <div class="invalid-feedback">
-        {{ this.feedback }}
+        {{ this.feedback.email }}
       </div>
     </div>
     <button class="btn" type="submit">메일전송</button>
@@ -30,39 +44,54 @@ export default {
   name: 'FindPassword',
   data () {
     return {
-      userID: this.$store.state.userid,
-      useremail: '',
+      formFindPassword: {
+        username: '',
+        useremail: ''
+      },
       validated: false,
-      invalidEmail: false,
-      feedback: '이메일을 입력하세요'
+      invalid: {
+        username: false,
+        email: false
+      },
+      feedback: {
+        username: '아이디를 입력하세요',
+        email: '이메일을 입력하세요'
+      }
     }
   },
   methods: {
-    handleFindPassword () {
-      if (!this.invalidEmail && this.useremail !== '') {
-        this.submitForm()
-        this.$router.push('/login')
-      } else {
-        this.validated = true
-      }
-    },
     checkUserEmail () {
-      if (!(validator.validateEmail(this.useremail))) {
-        this.feedback = '이메일 형식이 올바르지 않습니다.'
-        this.invalidEmail = true
+      if (!(validator.validateEmail(this.formFindPassword.useremail))) {
+        this.feedback.email = '이메일 형식이 올바르지 않습니다.'
+        this.invalid.email = true
       }
     },
     async submitForm () {
       try {
         const data = {
-          username: this.userID,
-          email: this.useremail
+          username: this.formFindPassword.username,
+          email: this.formFindPassword.useremail
         }
         const res = await api.findPassword(data)
         console.log(res)
         alert('이메일을 전송하였습니다.')
+        this.$router.push('/login')
       } catch (err) {
         console.log(err)
+      }
+    },
+    checkFormValid () {
+      if (Object.values(this.formFindPassword).includes('') || Object.values(this.invalid).includes(true)) {
+        return false
+      } else {
+        return true
+      }
+    },
+    handleFindPassword () {
+      if (this.checkFormValid()) {
+        this.submitForm()
+      } else {
+        this.validated = true
       }
     }
   }
