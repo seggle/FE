@@ -18,7 +18,6 @@ function saveRefreshToken (token) {
 }
 
 function saveUserType (usertype) {
-  console.log(typeof usertype)
   window.localStorage.setItem('UserType', usertype)
 }
 

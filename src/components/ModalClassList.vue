@@ -53,8 +53,11 @@ export default {
     mode: {
       type: String
     },
+    classID: {
+      type: Number
+    },
     semester: {
-      type: String
+      type: Number
     },
     title: {
       type: String
@@ -64,8 +67,8 @@ export default {
     return {
       classYear: '',
       semesterOption: [
-        { name: '1학기' },
-        { name: '2학기' }
+        { name: 1 },
+        { name: 2 }
       ],
       classSemester: '',
       classTitle: '',
@@ -85,7 +88,7 @@ export default {
     changeEditMode () {
       if (this.mode === '수업 편집') {
         this.classTitle = this.title
-        this.classSemester = this.semester.substring(5)
+        this.classSemester = this.semester
         this.placeholder = this.classTitle
       }
     },
@@ -103,8 +106,7 @@ export default {
           year: this.classYear,
           semester: this.classSemester
         }
-        const res = await api.createClass(data)
-        console.log(res)
+        await api.createClass(data)
         alert(`${this.classTitle} 수업이 등록되었습니다.`)
         this.$router.go({ name: 'ClassList' })
       } catch (err) {
@@ -113,8 +115,15 @@ export default {
     },
     async editClass () {
       try {
-        console.log('편집')
-        // 아직 api 안 만들어짐
+        const data = {
+          name: this.classTitle,
+          year: this.classYear,
+          semester: this.classSemester
+        }
+        console.log(this.classID + 1)
+        await api.editClass(data, this.classID + 1)
+        alert(`${this.classTitle} 수업이 수정되었습니다.`)
+        this.$router.go({ name: 'EditClassList' })
       } catch (err) {
         console.log(err)
       }

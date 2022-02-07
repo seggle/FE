@@ -64,7 +64,11 @@ export default {
     async getClassList () {
       try {
         const res = await api.getClassList()
-        this.classList = res.data
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].is_show) {
+            this.classList.push(res.data[i])
+          }
+        }
       } catch (err) {
         console.log(err)
       }

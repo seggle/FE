@@ -74,9 +74,19 @@
                         class="form-control"
                         v-model="dataInfo.description"
                         placeholder="문제 설명을 입력하세요."></textarea>
-              <div class="data-file">
-                <h5 class="list-title">데이터 파일 업로드</h5>
-                <input type="file" class="form-control" accept=".zip" required>
+              <div class="form-option">
+                <div class="data-file col-5">
+                  <label class="form-label">데이터 파일 업로드</label>
+                  <label class="file-upload-btn" for="data-file-input">업로드</label>
+                  <input id="data-file-input" type="file" accept=".zip" required @change="uploadFile">
+                  <div class="upload-file-name">{{ dataInfo.dataFile.name }}</div>
+                </div>
+                <div class="solution-file col-5">
+                  <label class="form-label">정답 파일 업로드</label>
+                  <label class="file-upload-btn" for="solution-file-input">업로드</label>
+                  <input id="solution-file-input" type="file" accept=".csv" required @change="uploadFile">
+                  <div class="upload-file-name">{{ dataInfo.solutionFile.name }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -103,7 +113,8 @@ export default {
       },
       dataInfo: {
         description: '',
-        dataFile: ''
+        dataFile: '',
+        solutionFile: ''
       }
     }
   },
@@ -128,14 +139,28 @@ export default {
           data.end_time = this.problemInfo.endTime
           console.log(data)
           await api.createGeneralProblem(data)
+          alert('문제가 생성되었습니다.')
+          this.$router.push({ name: 'GeneralList' })
         }
         if (this.problemType === 'class') {
           data.pubilc = this.problemInfo.public
           console.log(data)
           await api.createClassProblem(data)
+          alert('문제가 생성되었습니다.')
+          this.$router.push({ name: 'ClassList' })
         }
       } catch (err) {
         console.log(err)
+      }
+    },
+    uploadFile (e) {
+      const files = e.target.files || e.dataTransfer.files
+      const id = e.target.id
+      console.log(id)
+      if (id === 'data-file-input') {
+        this.dataInfo.dataFile = files[0]
+      } else {
+        this.dataInfo.solutionFile = files[0]
       }
     }
   }
@@ -199,11 +224,11 @@ export default {
       justify-content: space-evenly;
       align-items: center;
       padding: 1rem 0rem;
-      .form-label {
-        display: block;
-        font-weight: bold;
-        font-size: 1rem;
-      }
+    }
+    .form-label {
+      // display: block;
+      font-weight: bold;
+      font-size: 1rem;
     }
     .form-check-input {
         width: 5em;
@@ -225,21 +250,38 @@ export default {
       line-height: 10;
       resize: none;
     }
-    .form-control::file-selector-button {
-        color: transparent;
-        background-color: transparent;
-        border: none;
+    // .form-control::file-selector-button {
+    //     color: transparent;
+    //     background-color: transparent;
+    //     border: none;
+    // }
+    input[type="file"] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
     }
-    .data-file {
-      display: flex;
-      align-items: center;
-      .form-control {
-        width: 30%;
-        line-height: initial;
-        padding: 1rem;
-        margin-top: 1.5rem;
-      }
+    .file-upload-btn {
+      display: inline-block;
+      padding: 5px 20px;
+      background: #0e1b49;
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-left: 10px;
     }
+    // .data-file {
+    //   display: flex;
+    //   align-items: center;
+    //   .form-control {
+    //     width: 30%;
+    //     line-height: initial;
+    //     padding: 1rem;
+    //     margin-top: 1.5rem;
+    //   }
+    // }
   }
 }
 </style>
