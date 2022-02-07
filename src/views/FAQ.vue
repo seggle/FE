@@ -57,6 +57,7 @@ export default {
       try {
         const res = await api.getFAQ()
         this.faqList = res.data
+        console.log(res.data)
       } catch (error) {
         console.log(error)
       }
