@@ -20,6 +20,7 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import FindPassword from '@/views/FindPassword.vue'
 import ResetPassword from '@/views/ResetPassword.vue'
+import Resign from '@/views/Resign.vue'
 
 import Home from '../views/Home.vue'
 import User from '../views/User.vue'
@@ -188,6 +189,11 @@ const routes = [{
   path: '/reset-password',
   name: 'ResetPassword',
   component: ResetPassword
+},
+{
+  path: '/resign',
+  name: 'Resign',
+  component: Resign
 },
 {
   path: '/problem/general',

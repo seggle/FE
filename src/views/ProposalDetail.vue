@@ -172,6 +172,7 @@ export default {
           contetxt: this.context
         }
         const proposalId = this.$route.params.id
+        console.log(proposalId)
         const res = await api.editProposal(proposalId, data)
         console.log(res.data)
       } catch (error) {
