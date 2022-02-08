@@ -97,7 +97,7 @@ export default {
     async logout () {
       try {
         const res = await api.logoutUser({
-          refresh_token: this.$store.state.refreshToken
+          refresh: this.$store.state.refreshToken
         })
         console.log(res)
         this.$store.commit('clearToken')

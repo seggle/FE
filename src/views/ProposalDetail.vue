@@ -169,7 +169,7 @@ export default {
       try {
         const data = {
           title: this.title,
-          contetxt: this.context
+          context: this.context
         }
         const proposalId = this.$route.params.id
         console.log(proposalId)
