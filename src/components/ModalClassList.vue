@@ -120,8 +120,7 @@ export default {
           year: this.classYear,
           semester: this.classSemester
         }
-        console.log(this.classID + 1)
-        await api.editClass(data, this.classID + 1)
+        await api.editClass(data, this.classID)
         alert(`${this.classTitle} 수업이 수정되었습니다.`)
         this.$router.go({ name: 'EditClassList' })
       } catch (err) {

@@ -94,6 +94,10 @@ function createClass (data) {
   return instance.post('/class/', data)
 }
 
+function getClass (classID) {
+  return instance.get(`/class/${classID}`)
+}
+
 function editClass (data, classID) {
   return instance.patch(`/class/${classID}`, data)
 }
@@ -301,6 +305,7 @@ export default {
   getUserSubmissions,
   selectFile,
   createClass,
+  getClass,
   editClass,
   removeClass,
   getClassList,

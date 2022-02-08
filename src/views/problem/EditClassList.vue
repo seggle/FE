@@ -27,10 +27,10 @@
         <ModalClassList v-if="showModal"
                         @close="showModal = false"
                         mode="수업 편집"
-                        :classID="rowIndex"
+                        :classID="classList[rowIndex].id"
                         :semester="classList[rowIndex].semester"
                         :title="classList[rowIndex].name"/>
-        <td><a @click="removeClass(i)">삭제</a></td>
+        <td><a @click="removeClass(classes.id)">삭제</a></td>
       </tr>
     </tbody>
   </table>
@@ -99,7 +99,7 @@ export default {
     async removeClass (classID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          const res = await api.removeClass(classID + 1)
+          const res = await api.removeClass(classID)
           console.log(res)
           alert('변경사항이 저장되었습니다.')
           this.$router.push({ name: 'ClassList' })
