@@ -48,6 +48,10 @@ function resetPassword (username, data) {
   return instance.patch(`users/${username}/`, data)
 }
 
+function resignUser (username) {
+  return instance.delete(`users/${username}`)
+}
+
 function getCompetitionList () {
   return instance.get('/competitions/')
 }
@@ -104,7 +108,7 @@ function editClassList (userID, data) {
 
 function getClassProblem (classID, contestID, contestProblemID) {
   return instance.get(
-    `class/${classID}/contests/${contestID}/${contestProblemID}/`
+        `class/${classID}/contests/${contestID}/${contestProblemID}/`
   )
 }
 
@@ -227,12 +231,12 @@ function deleteClass (classID) {
   return instance.delete('/admin/class/' + classID)
 }
 
-function showUserCompetition () {
-  return instance.get('user-competition')
+function showUserCompetition (username) {
+  return instance.get(`/users/${username}/competitions`)
 }
 
-function showUserHeatmap () {
-  return instance.get('user-heatmap')
+function showUserHeatmap (username) {
+  return instance.get(`/users/${username}/contributions`)
 }
 
 function getFAQ () {
@@ -253,23 +257,23 @@ function getAnnouncementDetail (id) {
 
 function getProposal (page) {
   const params = { page }
-  return instance.get('proposals', { params: params })
+  return instance.get('/proposals', { params: params })
 }
 
 function getProposalDetail (id) {
-  return instance.get('proposals/' + id)
+  return instance.get('/proposals/' + id)
 }
 
-function createProposal (id, data) {
-  return instance.post('proposals/' + id, data)
+function createProposal (data) {
+  return instance.post('/proposals/', data)
 }
 
 function editProposal (id, data) {
-  return instance.patch('proposals/' + id, data)
+  return instance.patch('/proposals/' + id, data)
 }
 
 function deleteProposal (id) {
-  return instance.delete('proposals/' + id)
+  return instance.delete('/proposals/' + id)
 }
 
 function getProblemList (page, keyword) {
@@ -301,6 +305,7 @@ export default {
   checkUserIDorEmail,
   findPassword,
   resetPassword,
+  resignUser,
   getCompetitionList,
   getUserCompetitionList,
   joinCompetition,

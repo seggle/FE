@@ -16,7 +16,9 @@
           제출
         </button>
       </form>
-      <button class="btn btn-primary btn-sm px-4 me-sm-3">Start</button>
+      <button class="btn btn-primary btn-sm px-4 me-sm-3" @click="examStart">
+        Start
+      </button>
     </div>
   </div>
   <router-view></router-view>
@@ -28,6 +30,14 @@ export default {
   name: 'ClassProblemTest',
   components: {
     ClassNavBar
+  },
+  methods: {
+    examStart () {
+      if (confirm('시작하시겠습니까?')) {
+        alert('시험이 시작되었습니다.')
+      } else {
+      }
+    }
   }
 }
 </script>

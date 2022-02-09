@@ -8,49 +8,87 @@
       </nav>
     </div>
     <div class="searchWrap">
-      <input type="search" v-model="keyword" />
-      <router-link
-        @click="fnSearch"
-        :to="{ query: { keyword: keyword } }"
-        class="btn btn-primary btn-sm px-4 me-sm-3"
-        id="head"
-        >검색</router-link
-      >
+      <form>
+        <input
+          type="search"
+          class="form-control"
+          placeholder="검색"
+          aria-label="검색"
+          v-model="keyword"
+        />
+      </form>
     </div>
-    <paginated-list :list-array="announcementList" />
-    <footer>
-      <button>
-        <router-link
-          tag="button"
-          @click="getAnnouncement(0)"
-          :to="{ query: { page: '0' } }"
-          >1</router-link
-        >
-      </button>
-      <button>
-        <router-link
-          tag="button"
-          @click="getAnnouncement(1)"
-          :to="{ query: { page: '1' } }"
-          >2</router-link
-        >
-      </button>
-    </footer>
+    <div class="table-div">
+      <table class="table py-3">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">제목</th>
+            <th scope="col">작성일</th>
+            <th scope="col">마지막 수정일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            :loading="loading"
+            v-for="announce in announcementList"
+            :key="announce"
+          >
+            <th scope="row">{{ announce.id }}</th>
+            <td>
+              <router-link
+                :to="`/announcements/${announce.id}`"
+                class="title"
+                >{{ announce.title }}</router-link
+              >
+            </td>
+            <td>{{ announce.created_time }}</td>
+            <td>{{ announce.last_modified }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled" v-if="currentPage == 1">
+          <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
+        </li>
+        <li class="page-item" v-else>
+          <a class="page-link" @click="getAnnouncement(currentPage - 1)"
+            >이전</a
+          >
+        </li>
+        <div v-for="page in total" :key="page">
+          <li class="page-item active" v-if="page == currentPage">
+            <a class="page-link" @click="getAnnouncement(page)">{{ page }}</a>
+          </li>
+          <li class="page-item" v-else>
+            <a class="page-link" @click="getAnnouncement(page)">{{ page }}</a>
+          </li>
+        </div>
+        <li class="page-item disabled" v-if="currentPage == total">
+          <a class="page-link" href="#">다음</a>
+        </li>
+        <li class="page-item" v-else>
+          <a class="page-link" @click="getAnnouncement(currentPage + 1)"
+            >다음</a
+          >
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 <script>
 import api from '@/api/index.js'
-import PaginatedList from '@/components/PaginatedList.vue'
 export default {
-  name: 'simple-pagination',
-  components: {
-    PaginatedList
-  },
+  name: 'Announcement',
   data: () => {
     return {
       announcementList: [],
       keyword: '',
-      loading: false
+      loading: false,
+      total: 0,
+      currentPage: 1
     }
   },
   mounted () {
@@ -63,9 +101,24 @@ export default {
     async getAnnouncement (page) {
       try {
         this.loading = true
+        this.currentPage = page
         const res = await api.getAnnouncement(page, this.keyword)
         this.loading = false
+        if (res.data.count !== 0) {
+          this.total = parseInt((res.data.count - 1) / 15) + 1
+        }
         this.announcementList = res.data.results
+        console.log(res.data)
+        for (var i = 0; i < this.announcementList.length; i++) {
+          this.announcementList[i].created_time =
+            this.announcementList[i].created_time.slice(0, 10) +
+            ' ' +
+            this.announcementList[i].created_time.slice(11, 19)
+          this.announcementList[i].last_modified =
+            this.announcementList[i].last_modified.slice(0, 10) +
+            ' ' +
+            this.announcementList[i].last_modified.slice(11, 19)
+        }
       } catch (error) {
         console.log(error)
       }

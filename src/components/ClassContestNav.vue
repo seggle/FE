@@ -15,6 +15,7 @@
       </ul>
     </nav>
     <button
+      v-if="this.$store.state.usertype !== 0"
       class="btn btn-primary btn-sm px-4 me-sm-3"
       @click="problemModal = true"
     >
