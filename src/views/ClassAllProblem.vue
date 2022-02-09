@@ -16,37 +16,6 @@
         <button class="btn btn-dark" id="problem-create" @click="openProblem()">+ 문제 생성</button>
       </div>
     </div>
-    <div class="row d-flex mb-2 mt-3" style="padding-left: 0px;">
-    <div class="col-lg-3 col-md-6 mb-2">
-        <h5 style="float:left" class="col-3">수업명</h5>
-        <select class="btn-toggle col-9" style="float:left; text-align: center" v-model="classSelected">
-            <option value="all">전체</option>
-            <option v-for="Class in classlist" :key="Class" :value="Class">{{ Class }}</option>
-        </select>
-    </div>
-    <div class="col-lg-3 col-md-6 mb-2">
-        <h5 style="float:left" class="col-3">연도</h5>
-        <select class="btn-toggle col-9" style="float:left; text-align: center" v-model="yearSelected">
-            <option value=0>전체</option>
-            <option v-for="year in yearlist" :key="year" :value="year">{{ year }}</option>
-        </select>
-    </div>
-    <div class="col-lg-3 col-md-6 mb-2">
-        <h5 style="float:left" class="col-3">학기</h5>
-        <select class="btn-toggle col-9" style="float:left; text-align: center" v-model="semesterSelected">
-            <option value=0>전체</option>
-            <option value=1>1학기</option>
-            <option value=2>2학기</option>
-        </select>
-    </div>
-    <div class="col-lg-3 col-md-6 mb-2">
-        <h5 style="float:left" class="col-3">작성자</h5>
-        <select class="btn-toggle col-9" style="float:left; text-align: center" v-model="createUserSelected">
-            <option value="all">전체</option>
-            <option v-for="createUser in createUserlist" :key="createUser" :value="createUser">{{ createUser }}</option>
-        </select>
-    </div>
-</div>
     <div class="table-div">
     <table class="table">
     <thead>
@@ -105,20 +74,14 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'AdminAllProblems',
+  name: 'ClassAllProblems',
   data () {
     return {
       problemList: [],
       loading: false,
       keyword: '',
       total: 0,
-      currentPage: 1,
-      classSelected: 'all',
-      yearSelected: 0,
-      semesterSelected: 0,
-      createUserSelected: 'all',
-      yearlist: [2022, 2023],
-      classlist: ['기계학습', '인공지능']
+      currentPage: 1
     }
   },
   mounted () {
@@ -132,9 +95,9 @@ export default {
       try {
         this.loading = true
         this.currentPage = page
-        const res = await api.getProblemList(page, this.keyword, this.yearSelected, this.classSelected, parseInt(this.semesterSelected), this.createUserSelected)
+        const res = await api.getProblemList(page, this.keyword)
         this.loading = false
-        this.total = parseInt(res.data.count / 15) + 1
+        this.total = parseInt((res.data.count - 1) / 15) + 1
         this.problemList = res.data.results
         for (var i = 0; i < this.problemList.length; i++) {
           this.problemList[i].created_time = this.problemList[i].created_time.slice(0, 10) + ' ' + this.problemList[i].created_time.slice(11, 19)
@@ -146,20 +109,38 @@ export default {
     async deleteProblem (problemID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          const res = await api.deleteProblem(problemID)
-          console.log(res.data)
+          await api.deleteProblem(problemID)
+          this.getProblemList(this.currentPage)
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async openProblem (problemID) {
-    },
-    async submitAnnouncement () {
+    openProblem (problemID) {
+      try {
+        if (typeof problemID === 'undefined') {
+          this.$router.push({
+            name: 'CreateProblem',
+            params: { problemType: 'class' }
+          })
+        } else {
+          console.log(problemID)
+          this.$router.push({
+            name: 'Problem',
+            params: {
+              problemType: 'class',
+              problemID: problemID
+            }
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
     async changeSwitch (problemID) {
       try {
         const res = await api.changeProblemSwitch(problemID)
+        this.getProblemList(this.currentPage)
         console.log(res.data)
       } catch (error) {
         console.log(error)
@@ -168,18 +149,6 @@ export default {
   },
   watch: {
     'keyword' () {
-      this.getProblemList(1)
-    },
-    'yearSelected' () {
-      this.getProblemList(1)
-    },
-    'semesterSelected' () {
-      this.getProblemList(1)
-    },
-    'classSelected' () {
-      this.getProblemList(1)
-    },
-    'createUserSelecte' () {
       this.getProblemList(1)
     }
   }

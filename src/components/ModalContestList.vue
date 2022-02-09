@@ -64,10 +64,11 @@ export default {
     async submitForm () {
       try {
         const data = {
-          contest_name: this.contestInfo.title,
-          contest_start_time: this.contestInfo.startTime.toISOString(),
-          contest_end_time: this.contestInfo.endTime.toISOString(),
-          is_exam: this.contestInfo.checkedExam
+          name: this.contestInfo.title,
+          start_time: this.contestInfo.startTime.toISOString(),
+          end_time: this.contestInfo.endTime.toISOString(),
+          is_exam: this.contestInfo.checkedExam,
+          visible: true
         }
         const res = await api.createContest(this.classID, data)
         console.log(res)

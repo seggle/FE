@@ -120,8 +120,8 @@ function getClassUserList (classID) {
   return instance.get(`/class/${classID}/users/`)
 }
 
-function createContest (classID) {
-  return instance.post(`/class/${classID}/contests/`)
+function createContest (classID, data) {
+  return instance.post(`/class/${classID}/contests`, data)
 }
 
 function getFAQList () {
@@ -207,7 +207,7 @@ function getAdminProblemList (page, keyword) {
   return instance.get('/admin/problems', { params: params })
 }
 
-function deleteProblem (problemID) {
+function deleteAdminProblem (problemID) {
   return instance.delete('/admin/problems/' + problemID)
 }
 
@@ -244,11 +244,11 @@ function getAnnouncement (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('announcements', { params: params })
+  return instance.get('/announcements', { params: params })
 }
 
 function getAnnouncementDetail (id) {
-  return instance.get('announcements/' + id)
+  return instance.get('/announcements/' + id)
 }
 
 function getProposal (page) {
@@ -270,6 +270,26 @@ function editProposal (id, data) {
 
 function deleteProposal (id) {
   return instance.delete('proposals/' + id)
+}
+
+function getProblemList (page, keyword) {
+  const params = { page }
+  if (keyword) {
+    params.keyword = keyword
+  }
+  return instance.get('/problems', { params: params })
+}
+
+function deleteProblem (id) {
+  return instance.delete(`/problems/${id}`)
+}
+
+function changeProblemSwitch (id) {
+  return instance.post(`/problems/${id}/check`)
+}
+
+function createClassProblem (data) {
+  return instance.post('/problems/', data)
 }
 
 export default {
@@ -299,7 +319,7 @@ export default {
   getAdminClassList,
   getAdminProblemList,
   changeAdminProblemSwitch,
-  deleteProblem,
+  deleteAdminProblem,
   deleteUser,
   submitUser,
   editUser,
@@ -325,5 +345,9 @@ export default {
   getProposalDetail,
   createProposal,
   editProposal,
-  deleteProposal
+  deleteProposal,
+  getProblemList,
+  deleteProblem,
+  changeProblemSwitch,
+  createClassProblem
 }

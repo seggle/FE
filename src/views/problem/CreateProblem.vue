@@ -76,7 +76,7 @@
                         placeholder="문제 설명을 입력하세요."></textarea>
               <div class="data-file">
                 <h5 class="list-title">데이터 파일 업로드</h5>
-                <input type="file" class="form-control" accept=".zip" required>
+                <input type="file" class="form-control" accept=".zip">
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@ export default {
           title: this.problemTitle,
           description: this.problemInfo.description,
           created_user: this.$store.state.userid,
-          data: this.dataInfo.dataFile,
+          // data: this.dataInfo.dataFile,
           data_description: this.dataInfo.description
         }
         if (this.problemType === 'general') {

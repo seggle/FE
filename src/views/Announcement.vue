@@ -58,14 +58,14 @@ export default {
   },
   methods: {
     init () {
-      this.getAnnouncement(0)
+      this.getAnnouncement(1)
     },
     async getAnnouncement (page) {
       try {
         this.loading = true
         const res = await api.getAnnouncement(page, this.keyword)
         this.loading = false
-        this.announcementList = res.data
+        this.announcementList = res.data.results
       } catch (error) {
         console.log(error)
       }
