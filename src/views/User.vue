@@ -5,14 +5,14 @@
         <div class="container-fluid">
           <h1 id="title">{{ this.$store.state.userid }}님, 반갑습니다!</h1>
           <router-link
-            :to="`/users/${this.$store.state.userid}`"
+            to="/resign"
             class="btn btn-primary btn-sm px-4 me-sm-3"
             id="head"
             >회원 탈퇴</router-link
           >
 
           <router-link
-            :to="`/users/${user_id}`"
+            to="/reset-password"
             class="btn btn-primary btn-sm px-4 me-sm-3"
             id="head"
             >비밀번호 변경</router-link
@@ -69,9 +69,14 @@ export default {
   },
   methods: {
     async showUserInfo () {
+      var username = this.$store.state.userid
       try {
-        const res = await api.showUserCompetition()
-        this.problemList = res.data
+        const res1 = await api.showUserCompetition(username)
+        const res2 = await api.showUserCompetition(username)
+        this.problemList = res1.data
+        this.heatmapValues = res2.data
+        console.log(res1.data)
+        console.log(res2.data)
         for (var i = 0; i < this.problemList.length; i++) {
           var time = this.problemList[i].competition_end_time
           var year = time.slice(0, 4)

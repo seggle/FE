@@ -131,7 +131,7 @@ export default {
           title: this.problemTitle,
           description: this.problemInfo.description,
           created_user: this.$store.state.userid,
-          data: this.dataInfo.dataFile,
+          // data: this.dataInfo.dataFile,
           data_description: this.dataInfo.description
         }
         if (this.problemType === 'general') {
