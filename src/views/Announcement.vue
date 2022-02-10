@@ -2,7 +2,7 @@
   <div class="container">
     <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">공지사항</h1>
-      <div class="">
+      <div class="keyword">
       <form>
           <input
             class="form-control"
@@ -15,22 +15,23 @@
       </div>
     </div>
     <div class="table-div">
-      <table class="table py-3">
+      <table class="table">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th class="col-lg-1 col-md-2 tableId" scope="col">#</th>
             <th scope="col">제목</th>
-            <th scope="col">작성일</th>
-            <th scope="col">마지막 수정일</th>
+            <th class="col-lg-2 col-md-3" scope="col">작성일</th>
+            <th class="col-lg-1 col-md-2" scope="col">작성자</th>
           </tr>
         </thead>
         <tbody>
           <tr
             :loading="loading"
-            v-for="announce in announcementList"
+            v-for="announce in announcementImportantList"
             :key="announce"
+            style="background-color: rgb(223 223 223)"
           >
-            <th scope="row">{{ announce.id }}</th>
+            <th class="tableId" style="font-weight: bold" scope="row">중요</th>
             <td>
               <router-link
                 :to="`/announcements/${announce.id}`"
@@ -39,7 +40,23 @@
               >
             </td>
             <td>{{ announce.created_time }}</td>
-            <td>{{ announce.last_modified }}</td>
+            <td>관리자</td>
+          </tr>
+          <tr
+            :loading="loading"
+            v-for="announce in announcementList"
+            :key="announce"
+          >
+            <td class="tableId" scope="row">{{ announce.id }}</td>
+            <td>
+              <router-link
+                :to="`/announcements/${announce.id}`"
+                class="title"
+                >{{ announce.title }}</router-link
+              >
+            </td>
+            <td>{{ announce.created_time }}</td>
+            <td>관리자</td>
           </tr>
         </tbody>
       </table>
@@ -81,6 +98,7 @@ export default {
   data: () => {
     return {
       announcementList: [],
+      announcementImportantList: [],
       keyword: '',
       loading: false,
       total: 0,
@@ -98,23 +116,23 @@ export default {
       try {
         this.loading = true
         this.currentPage = page
+        this.announcementList = []
+        this.announcementImportantList = []
         const res = await api.getAnnouncement(page, this.keyword)
         this.loading = false
         if (res.data.count !== 0) {
           this.total = parseInt((res.data.count - 1) / 15) + 1
         }
-        this.announcementList = res.data.results
-        console.log(res.data)
-        for (var i = 0; i < this.announcementList.length; i++) {
-          this.announcementList[i].created_time =
-            this.announcementList[i].created_time.slice(0, 10) +
-            ' ' +
-            this.announcementList[i].created_time.slice(11, 19)
-          this.announcementList[i].last_modified =
-            this.announcementList[i].last_modified.slice(0, 10) +
-            ' ' +
-            this.announcementList[i].last_modified.slice(11, 19)
+        const tmp = res.data.results
+        for (var i = 0; i < tmp.length; i++) {
+          tmp[i].created_time = tmp[i].created_time.slice(0, 10)
+          if (tmp[i].important) {
+            this.announcementImportantList.push(tmp[i])
+          } else {
+            this.announcementList.push(tmp[i])
+          }
         }
+        this.announcementList.reverse()
       } catch (error) {
         console.log(error)
       }
@@ -134,6 +152,10 @@ h1 {
   font-weight: bold;
   text-align: left;
 }
+div.keyword {
+  margin-top: 50px;
+  padding: 0px 4rem;
+}
 .map {
   background-color: gainsboro;
 }
@@ -144,5 +166,26 @@ h1 {
 }
 .btnRightWrap .btnSearch {
   color: white;
+}
+div.table-div {
+  padding: 0 4rem;
+}
+.table {
+  text-align: left;
+  th.tableId {
+    text-align: center;
+  }
+  td.tableId {
+    text-align: center;
+  }
+  tr {
+    a.title {
+      font-weight: normal;
+    }
+  }
+  a {
+  color: black;
+  text-decoration: none;
+}
 }
 </style>

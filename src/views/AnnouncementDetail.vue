@@ -18,6 +18,10 @@
           <td>{{ content.title }}</td>
         </tr>
         <tr>
+          <th>작성일</th>
+          <td>{{ content.created_time }}</td>
+        </tr>
+        <tr>
           <th>내용</th>
           <td v-html="this.content.context"></td>
         </tr>
@@ -41,19 +45,23 @@ export default {
   name: 'AnnouncementDetail',
   data: () => {
     return {
-      content: {}
+      content: {
+        title: '',
+        created_time: '',
+        context: ''
+      }
     }
   },
   created () {
-    this.getContent(1)
+    this.getContent()
   },
   methods: {
-    async getContent (announcementId) {
+    async getContent () {
       try {
-        const res = await api.getAnnouncementDetail(announcementId)
+        const res = await api.getAnnouncementDetail(this.$route.params.id)
         this.content = res.data
+        this.content.created_time = res.data.created_time.slice(0, 10)
         this.content.context = converter.makeHtml(this.content.context)
-        console.log(this.content)
       } catch (error) {
         console.log(error)
       }

@@ -7,26 +7,26 @@
           <router-link
             to="/proposals/create"
             @click="write"
-            class="btn btn-primary btn-sm px-4 me-sm-3"
+            class="btn btn-primary btn-md px-4"
             id="head"
             >글쓰기</router-link
           >
         </div>
       </nav>
     </div>
-    <div>
+    <div class="table-div">
       <table class="table py-3">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th class="col-1 tableId" scope="col">#</th>
             <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">작성일</th>
+            <th class="col-2" scope="col">작성자</th>
+            <th class="col-2" scope="col">작성일</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="proposals in proList" :key="proposals">
-            <td>{{ proposals.id }}</td>
+            <td class="tableId">{{ proposals.id }}</td>
             <td>
               <router-link :to="`/proposals/${proposals.id}`" class="title">{{
                 proposals.title
@@ -87,6 +87,7 @@ export default {
       try {
         const res = await api.getProposal(page)
         this.proList = res.data.results
+        this.proList.reverse()
         console.log(res.data.results)
       } catch (error) {
         console.log(error)
@@ -109,5 +110,32 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+div.table-div {
+  padding: 0 4rem;
+}
+
+.btn {
+  margin-top: 50px;
+  margin-right: 4rem;
+}
+
+.table {
+  text-align: left;
+  th.tableId {
+    text-align: center;
+  }
+  td.tableId {
+    text-align: center;
+  }
+  tr {
+    a.title {
+      font-weight: normal;
+    }
+  }
+  a {
+  color: black;
+  text-decoration: none;
+}
 }
 </style>

@@ -13,7 +13,7 @@
             aria-expanded="false"
             :aria-controls="`collapse${faqs.id}`"
           >
-            {{ faqs.id }}. {{ faqs.question }}
+            Q. {{ faqs.question }}
           </button>
         </h2>
         <div
@@ -23,7 +23,7 @@
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            {{ faqs.answer }}
+            <span v-html="faqs.answer"></span>
           </div>
         </div>
       </div>
@@ -42,6 +42,8 @@ h1 {
 </style>
 <script>
 import api from '@/api/index.js'
+var showdown = require('showdown')
+var converter = new showdown.Converter()
 export default {
   name: 'FAQ',
   data: () => {
@@ -57,6 +59,9 @@ export default {
       try {
         const res = await api.getFAQ()
         this.faqList = res.data
+        for (var i = 0; i < this.faqList.length; i++) {
+          this.faqList[i].answer = converter.makeHtml(this.faqList[i].answer)
+        }
         console.log(res.data)
       } catch (error) {
         console.log(error)
@@ -65,3 +70,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+div.accordion-body {
+  text-align: left;
+}
+</style>
