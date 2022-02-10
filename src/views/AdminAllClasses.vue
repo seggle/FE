@@ -13,31 +13,25 @@
             />
             </form>
       </div>
-      <div>
-        <button class="btn btn-dark" id="class-create" @click="openProblem()">+ 수업 생성</button>
-      </div>
     </div>
     <div class="table-div">
     <table class="table">
     <thead>
       <tr>
-        <th scope="col" prop="id">#</th>
-        <th scope="col">수업학기</th>
+        <th class="col-1" scope="col" prop="id">#</th>
+        <th class="col-1" scope="col">연도</th>
+        <th class="col-1" scope="col">학기</th>
         <th scope="col">수업이름</th>
         <th scope="col">수업 생성자</th>
-        <th scope="col">옵션</th>
       </tr>
     </thead>
     <tbody>
-      <tr :loading="loading" v-for="Class in ClassList" :key="Class">
+      <tr :loading="loading" v-for="Class in ClassList" :key="Class" @click="goClass(Class.id)">
         <th scope="row">{{ Class.id }}</th>
+        <td>{{ Class.year}}</td>
         <td>{{ Class.semester}}</td>
         <td>{{ Class.name }}</td>
         <td>{{ Class.created_user }}</td>
-        <td scope="row">
-          <a class="ghost-button" @click="openProblem(Class.id)">편집</a> |
-          <a class="ghost-button" @click="deleteClass(Class.id)">삭제</a>
-        </td>
       </tr>
     </tbody>
   </table>
@@ -98,19 +92,11 @@ export default {
         console.log(error)
       }
     },
-    async deleteProblem (classID) {
-      try {
-        if (confirm('삭제하시겠습니까?')) {
-          const res = await api.deleteClass(classID)
-          console.log(res.data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async openProblem (problemID) {
-    },
-    async submitAnnouncement () {
+    goClass (classID) {
+      this.$router.push({
+        name: 'Class',
+        params: { classID: classID }
+      })
     }
   },
   watch: {
@@ -143,5 +129,15 @@ a {
 
 .modal-dialog {
     max-width: 80%;
+}
+
+.table {
+  text-align: left;
+  tbody {
+    tr:hover {
+      background-color: #F4F4F8;
+      cursor: pointer;
+    }
+  }
 }
 </style>

@@ -16,10 +16,10 @@
             <div class="row">
               <table v-for="contest in contestList" :key="contest">
                 <tr>
-                  <td>{{ contest.contestTitle }}</td>
-                  <td><button @click="onEdit(contest.contestID)">🖋</button></td>
+                  <td>{{ contest.name }}</td>
+                  <td><button @click="onEdit(contest.id)">🖋</button></td>
                   <td>
-                    <button @click="onRemove(contest.contestID)">❌</button>
+                    <button @click="onRemove(contest.id)">❌</button>
                   </td>
                 </tr>
               </table>
@@ -36,32 +36,31 @@
 </template>
 
 <script>
+import api from '@/api/index.js'
+
 export default {
   name: 'ModalProblemList',
   data () {
     return {
-      contestList: [
-        // api로 받아와야될 부분
-        {
-          contestID: '1',
-          contestTitle: '분류 실습1'
-        },
-        {
-          contestID: '2',
-          contestTitle: '분류 실습2'
-        },
-        {
-          contestID: '3',
-          contestTitle: '분류 실습3'
-        },
-        {
-          contestID: '4',
-          contestTitle: '중간고사'
-        }
-      ]
+      classID: this.$route.params.classID,
+      contestList: []
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.getContestList()
+    },
+    async getContestList () {
+      try {
+        const res = await api.getContestList(this.classID)
+        this.contestList = res.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
     onEdit (contestID) {
       var id = contestID
       if (confirm('저장하시겠습니까?')) {

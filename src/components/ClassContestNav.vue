@@ -8,8 +8,8 @@
       </div>
       <ul class="navbar-nav px-3">
         <li class="nav-item" v-for="contest in contestList" :key="contest">
-          <a class="nav-link" @click="goContest(contest.contestID)">{{
-            contest.contestTitle
+          <a v-if="contest.visible" class="nav-link" @click="goContest(contest.id)">{{
+            contest.name
           }}</a>
         </li>
       </ul>
@@ -28,6 +28,8 @@
 <script>
 import ModalContestList from '@/components/ModalContestList.vue'
 import ModalProblemList from '@/components/ModalProblemList.vue'
+import api from '@/api/index.js'
+
 export default {
   name: 'ClassContestNav',
   components: {
@@ -36,30 +38,27 @@ export default {
   },
   data () {
     return {
-      contestList: [
-        // api로 받아와야될 부분
-        {
-          contestID: '1',
-          contestTitle: '분류 실습1'
-        },
-        {
-          contestID: '2',
-          contestTitle: '분류 실습2'
-        },
-        {
-          contestID: '3',
-          contestTitle: '분류 실습3'
-        },
-        {
-          contestID: '4',
-          contestTitle: '중간고사'
-        }
-      ],
+      classID: this.$route.params.classID,
+      contestList: [],
       showModal: false,
-      problemModal: false
+      problemModal: true
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.getContestList()
+    },
+    async getContestList () {
+      try {
+        const res = await api.getContestList(this.classID)
+        this.contestList = res.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
     goContest (contestID) {
       this.$router.push({
         name: 'ClassContestList',

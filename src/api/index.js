@@ -133,11 +133,15 @@ function getClassLeaderboard (contestProblemID) {
 }
 
 function getClassUserList (classID) {
-  return instance.get(`/class/${classID}/users/`)
+  return instance.get(`/class/${classID}/users`)
 }
 
-function createContest (classID) {
-  return instance.post(`/class/${classID}/contests/`)
+function createContest (classID, data) {
+  return instance.post(`/class/${classID}/contests`, data)
+}
+
+function getContestList (classID) {
+  return instance.get(`/class/${classID}/contests`)
 }
 
 function getFAQList () {
@@ -308,6 +312,14 @@ function createClassProblem (data) {
   return instance.post('/problems/', data)
 }
 
+function submitClassStudentList (classID, data) {
+  return instance.post(`/class/${classID}/std`, data)
+}
+
+function submitClassTAList (classID, data) {
+  return instance.post(`/class/${classID}/ta`, data)
+}
+
 export default {
   registerUser,
   loginUser,
@@ -330,11 +342,14 @@ export default {
   editClass,
   removeClass,
   getClassList,
+  submitClassStudentList,
+  submitClassTAList,
   editClassList,
   getClassProblem,
   getClassLeaderboard,
   getClassUserList,
   createContest,
+  getContestList,
   deleteClass,
   getAdminClassList,
   getAdminProblemList,
