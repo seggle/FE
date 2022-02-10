@@ -1,105 +1,15 @@
 <template>
-  <div class="container">
-    <form class="create-problem-form" @submit.prevent="submitForm">
-      <div class="problem-header">
-        <input type="text"
-              class="form-control"
-              v-model="problemTitle"
-              placeholder="문제 이름을 입력하세요."
-              required>
-        <button class="btn" type="submit">문제 생성</button>
-      </div>
-      <div class="problem-content row">
-      <!-- 세로 메뉴 탭 -->
-        <div class="problem-tab col-2">
-          <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active"
-              data-bs-toggle="list" role="tab"
-              id="list-info-list"
-              href="#list-info"
-              aria-controls="list-info">문제 설명</a>
-            <a class="list-group-item list-group-item-action"
-              data-bs-toggle="list" role="tab"
-              id="list-data-list"
-              href="#list-data"
-              aria-controls="list-data">데이터</a>
-          </div>
-        </div>
-        <!-- 탭 내용 -->
-        <div class="problem-tab-content col-10">
-          <div class="tab-content" id="nav-tabContent">
-            <!-- 문제 설명 -->
-            <div class="tab-pane fade show active"
-                  role="tabpanel"
-                  id="list-info"
-                  aria-labelledby="list-info-list"
-                  :key="problemInfo">
-              <h5 class="list-title">문제 설명</h5>
-              <textarea id="problem-description"
-                          class="form-control"
-                          v-model="problemInfo.description"
-                          placeholder="문제 설명을 입력하세요."></textarea>
-              <div class="form-option">
-                <div class="form-metrics col-3">
-                  <label class="form-label">평가 지표</label>
-                  <select class="form-select">
-                    <option v-for="item in problemInfo.metrics" :key="item">{{ item }}</option>
-                  </select>
-                </div>
-
-                <div class="form-start-time col-3">
-                  <label class="form-label">시작 시간</label>
-                  <Datepicker v-model="problemInfo.startTime" placeholder="시작 시간" textInput />
-                </div>
-
-                <div class="form-end-time col-3">
-                  <label class="form-label">종료 시간</label>
-                  <Datepicker v-model="problemInfo.endTime" placeholder="종료 시간" textInput />
-                </div>
-
-                <div v-if="this.problemType == 'class' " class="form-check form-switch">
-                  <label class="form-label">전체 공개</label>
-                  <input v-model="problemInfo.public"
-                        class="form-check-input"
-                        id="publicSwitch"
-                        type="checkbox"
-                        role="switch">
-                </div>
-              </div>
-            </div>
-            <!-- 데이터 -->
-            <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list" :key="dataInfo">
-              <h5 class="list-title">데이터 설명</h5>
-              <textarea id="data-description"
-                        class="form-control"
-                        v-model="dataInfo.description"
-                        placeholder="문제 설명을 입력하세요."></textarea>
-              <div class="form-option">
-                <div class="data-file col-5">
-                  <label class="form-label">데이터 파일 업로드</label>
-                  <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <input id="data-file-input" type="file" accept=".zip" required @change="uploadFile">
-                  <div class="upload-file-name">{{ dataInfo.dataFile.name }}</div>
-                </div>
-                <div class="solution-file col-5">
-                  <label class="form-label">정답 파일 업로드</label>
-                  <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <input id="solution-file-input" type="file" accept=".csv" required @change="uploadFile">
-                  <div class="upload-file-name">{{ dataInfo.solutionFile.name }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
+  <ProblemForm :mode="'create'" />
 </template>
 
 <script>
 import api from '@/api/index.js'
+import ProblemForm from '@/components/ProblemForm.vue'
 export default {
   name: 'CreateProblem',
+  components: {
+    ProblemForm
+  },
   data () {
     return {
       problemType: '',

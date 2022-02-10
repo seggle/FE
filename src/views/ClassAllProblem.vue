@@ -126,7 +126,7 @@ export default {
         } else {
           console.log(problemID)
           this.$router.push({
-            name: 'Problem',
+            name: 'EditProblem',
             params: {
               problemType: 'class',
               problemID: problemID

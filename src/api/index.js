@@ -140,6 +140,10 @@ function createContest (classID) {
   return instance.post(`/class/${classID}/contests/`)
 }
 
+function changeContestPublic (classID, contestID) {
+  return instance.patch(`/class/${classID}/contests/${contestID}/check`)
+}
+
 function getFAQList () {
   return instance.get('/admin/faqs/')
 }
@@ -296,6 +300,16 @@ function getProblemList (page, keyword) {
   return instance.get('/problems', { params: params })
 }
 
+function getProblem (id) {
+  return instance.get(`/problems/${id}`)
+}
+
+function editProblem (id, data) {
+  // instance.headers['Content-Type'] = 'multipart/form-data'
+  console.log(instance)
+  return instance.put(`/problems/${id}/`, data)
+}
+
 function deleteProblem (id) {
   return instance.delete(`/problems/${id}`)
 }
@@ -335,6 +349,7 @@ export default {
   getClassLeaderboard,
   getClassUserList,
   createContest,
+  changeContestPublic,
   deleteClass,
   getAdminClassList,
   getAdminProblemList,
@@ -367,6 +382,8 @@ export default {
   editProposal,
   deleteProposal,
   getProblemList,
+  getProblem,
+  editProblem,
   deleteProblem,
   changeProblemSwitch,
   createClassProblem

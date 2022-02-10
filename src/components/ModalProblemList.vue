@@ -17,7 +17,18 @@
               <table v-for="contest in contestList" :key="contest">
                 <tr>
                   <td>{{ contest.contestTitle }}</td>
-                  <td><button @click="onEdit(contest.contestID)">🖋</button></td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input"
+                            id="publicSwitch"
+                            type="checkbox" role="switch"
+                            @change="changePublic(contest.contestID)">
+                    </div>
+                  </td>
+                  <td>
+                    <button @click="showModal = true">🖋</button>
+                    <ModalContestList v-if="showModal" @close="showModal = false" />
+                  </td>
                   <td>
                     <button @click="onRemove(contest.contestID)">❌</button>
                   </td>
@@ -36,10 +47,16 @@
 </template>
 
 <script>
+import ModalContestList from '@/components/ModalContestList.vue'
+import api from '@/api/index'
 export default {
   name: 'ModalProblemList',
+  components: {
+    ModalContestList
+  },
   data () {
     return {
+      classID: Number(this.$route.params.classID),
       contestList: [
         // api로 받아와야될 부분
         {
@@ -58,7 +75,8 @@ export default {
           contestID: '4',
           contestTitle: '중간고사'
         }
-      ]
+      ],
+      showModal: false
     }
   },
   methods: {
@@ -74,6 +92,14 @@ export default {
       if (confirm('삭제하시겠습니까?')) {
         alert(id + ' 삭제 완료')
       } else {
+      }
+    },
+    async changePublic (contestID) {
+      try {
+        const res = await api.changeContestPublic(this.classID, contestID)
+        console.log(res)
+      } catch (err) {
+        console.log(err)
       }
     }
   }
