@@ -30,8 +30,16 @@
                 </div>
                 <div class="row exam-checkbox">
                   <div class="col-4">
-                    <label class="form-label">시험 모드</label>
-                    <input type="checkbox" v-model="contestInfo.checkedExam">
+                  <p style="float:left">시험모드 </p>
+                  <span class="form-check form-switch" style="float:left; margin-left:10px">
+                    <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" v-model="contestInfo.checkedExam" checked>
+                  </span>
+                  </div>
+                  <div class="col-4">
+                  <p style="float:left">공개 </p>
+                  <span class="form-check form-switch" style="float:left; margin-left:10px">
+                    <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" v-model="contestInfo.checkedVisible" checked>
+                  </span>
                   </div>
                 </div>
               </div>
@@ -56,7 +64,8 @@ export default {
         title: '',
         startTime: '',
         endTime: '',
-        checkedExam: false
+        checkedExam: false,
+        checkedVisible: true
       }
     }
   },
@@ -68,11 +77,11 @@ export default {
           start_time: this.contestInfo.startTime.toISOString(),
           end_time: this.contestInfo.endTime.toISOString(),
           is_exam: this.contestInfo.checkedExam,
-          visible: true
+          visible: this.contestInfo.checkedVisible
         }
         const res = await api.createContest(this.classID, data)
         console.log(res)
-        alert(`${this.contestInfo.title}이 등록되었습니다.`)
+        alert(`${this.contestInfo.title}이(가) 등록되었습니다.`)
         this.$router.go({ name: 'ClassProblem' })
       } catch (err) {
         console.log(err)

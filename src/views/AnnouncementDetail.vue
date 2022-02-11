@@ -70,4 +70,7 @@ h1 {
   padding: 0px 5rem;
   margin-top: 100px;
 }
+td {
+  text-align: left;
+}
 </style>

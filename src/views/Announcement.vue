@@ -1,22 +1,18 @@
 <template>
-  <div class="container px-5">
-    <div class="class-nav-bar">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <h1 id="title">공지사항</h1>
-        </div>
-      </nav>
-    </div>
-    <div class="searchWrap">
+  <div class="container">
+    <div class="d-flex mb-2 mt-3">
+      <h1 class="me-auto">공지사항</h1>
+      <div class="">
       <form>
-        <input
-          type="search"
-          class="form-control"
-          placeholder="검색"
-          aria-label="검색"
-          v-model="keyword"
-        />
-      </form>
+          <input
+            class="form-control"
+            type="search"
+            placeholder="검색"
+            aria-label="검색"
+            v-model="keyword"
+          />
+        </form>
+      </div>
     </div>
     <div class="table-div">
       <table class="table py-3">

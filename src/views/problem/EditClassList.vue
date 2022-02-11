@@ -129,9 +129,10 @@ export default {
   .table {
     text-align: left;
     tbody {
-      tr:hover {
-        background-color: #F4F4F8;
-        cursor: pointer;
+      td {
+        a {
+          cursor: pointer;
+        }
       }
     }
   }
