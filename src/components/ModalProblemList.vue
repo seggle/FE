@@ -14,25 +14,39 @@
 
           <div class="modal-body">
             <div class="row">
-              <table v-for="contest in contestList" :key="contest">
-                <tr>
-                  <td>{{ contest.name }}</td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input"
-                            id="publicSwitch"
-                            type="checkbox" role="switch"
-                            @change="changePublic(contest.contestID)">
-                    </div>
-                  </td>
-                  <td>
-                    <button @click="showModal = true">🖋</button>
-                    <ModalContestList v-if="showModal" @close="showModal = false" />
-                  </td>
-                  <td>
-                    <button @click="onRemove(contest.id)">❌</button>
-                  </td>
-                </tr>
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">제목</th>
+                    <th scope="col">공개</th>
+                    <th scope="col">편집</th>
+                    <th scope="col">삭제</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(contest, i) in contestList" :key="contest">
+                    <td>{{ contest.name }}</td>
+                    <td>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input"
+                              id="publicSwitch"
+                              type="checkbox" role="switch"
+                              v-model="contest.visible"
+                              @change="changePublic(contest.id)">
+                      </div>
+                    </td>
+                    <td>
+                      <button @click="showModal = true; rowIndex = i">🖋</button>
+                      <ModalContestList v-if="showModal"
+                                        @close="showModal = false"
+                                        :editContestInfo="contestList[rowIndex]"
+                                        :mode="'edit'" />
+                    </td>
+                    <td>
+                      <button @click="onRemove(contest.id)">❌</button>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -58,7 +72,9 @@ export default {
   data () {
     return {
       classID: this.$route.params.classID,
-      contestList: []
+      contestList: [],
+      showModal: false,
+      rowIndex: ''
     }
   },
   mounted () {

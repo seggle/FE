@@ -41,7 +41,7 @@ export default {
       classID: this.$route.params.classID,
       contestList: [],
       showModal: false,
-      problemModal: true
+      problemModal: false
     }
   },
   mounted () {

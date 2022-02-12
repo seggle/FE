@@ -5,7 +5,7 @@
           <form class="modal-container" @submit.prevent="submitForm">
 
               <div class="modal-header">
-                <h5>문제 생성</h5>
+                <h5>{{ this.modalHeader }}</h5>
                 <button type="button" class="btn-close" @click="$emit('close')"></button>
               </div>
 
@@ -57,19 +57,45 @@
 import api from '@/api/index.js'
 export default {
   name: 'ModalContestList',
+  props: {
+    editContestInfo: {
+      type: Object
+    },
+    mode: {
+      type: String
+    }
+  },
   data () {
     return {
       classID: this.$route.params.classID,
       contestInfo: {
+        id: '',
         title: '',
         startTime: '',
         endTime: '',
         checkedExam: false,
         checkedVisible: true
-      }
+      },
+      modalHeader: ''
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      if (this.mode === 'create') {
+        this.modalHeader = '문제 생성'
+      } else if (this.mode === 'edit') {
+        this.modalHeader = '문제 편집'
+        this.contestInfo.id = this.editContestInfo.id
+        this.contestInfo.title = this.editContestInfo.name
+        this.contestInfo.startTime = this.editContestInfo.start_time
+        this.contestInfo.endTime = this.editContestInfo.end_time
+        this.contestInfo.checkedExam = this.editContestInfo.is_exam
+        this.contestInfo.checkedVisible = this.editContestInfo.visible
+      }
+    },
     async submitForm () {
       try {
         const data = {
@@ -79,8 +105,11 @@ export default {
           is_exam: this.contestInfo.checkedExam,
           visible: this.contestInfo.checkedVisible
         }
-        const res = await api.createContest(this.classID, data)
-        console.log(res)
+        if (this.mode === 'create') {
+          await api.createContest(this.classID, data)
+        } else if (this.mode === 'edit') {
+          await api.editContest(this.classID, this.contestInfo.id, data)
+        }
         alert(`${this.contestInfo.title}이(가) 등록되었습니다.`)
         this.$router.go({ name: 'ClassProblem' })
       } catch (err) {
