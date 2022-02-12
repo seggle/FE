@@ -46,17 +46,17 @@
                     <option v-for="item in problemInfo.metrics" :key="item">{{ item }}</option>
                   </select>
                 </div>
-
-                <div class="form-start-time col-3">
+              <div class="form-time col-5">
+                <div class="form-start-time">
                   <label class="form-label">시작 시간</label>
                   <Datepicker v-model="problemInfo.startTime" placeholder="시작 시간" textInput />
                 </div>
 
-                <div class="form-end-time col-3">
+                <div class="form-end-time">
                   <label class="form-label">종료 시간</label>
                   <Datepicker v-model="problemInfo.endTime" placeholder="종료 시간" textInput />
                 </div>
-
+              </div>
                 <div v-if="this.problemType == 'class' " class="form-check form-switch">
                   <label class="form-label">전체 공개</label>
                   <input v-model="problemInfo.public"
@@ -74,20 +74,20 @@
                         class="form-control"
                         v-model="dataInfo.description"
                         placeholder="문제 설명을 입력하세요."></textarea>
-              <!-- <div class="form-option">
+              <div class="form-option">
                 <div class="data-file col-5">
                   <label class="form-label">데이터 파일 업로드</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
                   <input id="data-file-input" type="file" accept=".zip" required @change="uploadFile">
-                  <div class="upload-file-name">{{ dataInfo.dataFile.name }}</div>
+                  <!-- <div class="upload-file-name">{{ dataInfo.dataFile.name }}</div> -->
                 </div>
                 <div class="solution-file col-5">
                   <label class="form-label">정답 파일 업로드</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
                   <input id="solution-file-input" type="file" accept=".csv" required @change="uploadFile">
-                  <div class="upload-file-name">{{ dataInfo.solutionFile.name }}</div>
+                  <!-- <div class="upload-file-name">{{ dataInfo.solutionFile.name }}</div> -->
                 </div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default {
       },
       dataInfo: {
         description: '',
-        dataFile: '',
+        dataFile: null,
         solutionFile: null
       },
       placeholder: ''
@@ -155,28 +155,34 @@ export default {
     },
     async submitForm () {
       try {
+        const formData = new FormData()
+        formData.append('data', this.dataInfo.dataFile)
+        formData.append('solution', this.dataInfo.solutionFile)
+
         const data = {
           title: this.problemTitle,
           description: this.problemInfo.description,
-          data: this.dataInfo.dataFile,
-          data_description: this.dataInfo.description,
-          solution: this.dataInfo.solutionFile
+          data_description: this.dataInfo.description
         }
+
         if (this.problemType === 'general') {
           data.start_time = this.problemInfo.startTime
           data.end_time = this.problemInfo.endTime
-          console.log(data)
-          await api.createGeneralProblem(data)
+          formData.append('problemInfo', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+          await api.createGeneralProblem(formData)
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'GeneralList' })
         }
         if (this.problemType === 'class') {
           data.pubilc = this.problemInfo.public
-          console.log(data)
+          formData.append('problemInfo', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+          for (const value of formData.values()) {
+            console.log(value)
+          }
           if (this.mode === 'create') {
-            await api.createClassProblem(data)
+            await api.createClassProblem(formData)
           } else if (this.mode === 'edit') {
-            await api.editProblem(this.problemID, data)
+            await api.editProblem(this.problemID, formData)
           }
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'ClassList' })
@@ -188,7 +194,6 @@ export default {
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
       const id = e.target.id
-      console.log(id)
       if (id === 'data-file-input') {
         this.dataInfo.dataFile = files[0]
       } else {
@@ -256,6 +261,9 @@ export default {
       justify-content: space-evenly;
       align-items: center;
       padding: 1rem 0rem;
+    }
+    .form-time {
+      display: flex;
     }
     .form-label {
       // display: block;

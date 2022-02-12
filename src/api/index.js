@@ -1,20 +1,18 @@
 import axios from 'axios'
 import { setInterceptors } from './interceptors'
 
-function createInstance () {
+function createInstance (formData) {
   const instance = axios.create({
-    headers: {
-      'Content-Type': 'application/json'
-    },
     proxy: {
       target: 'http://3.37.186.158:8000',
       changeOrigin: true
     }
   })
-  return setInterceptors(instance)
+  return setInterceptors(instance, formData)
 }
 
-const instance = createInstance()
+const instance = createInstance(false)
+const formDataInstance = createInstance(true)
 
 function registerUser (data) {
   return instance.post('/users/', data)
@@ -138,6 +136,10 @@ function getClassUserList (classID) {
 
 function createContest (classID, data) {
   return instance.post(`/class/${classID}/contests`, data)
+}
+
+function editContest (classID, contestID, data) {
+  return instance.patch(`/class/${classID}/contests/${contestID}`, data)
 }
 
 function getContestList (classID) {
@@ -309,9 +311,7 @@ function getProblem (id) {
 }
 
 function editProblem (id, data) {
-  // instance.headers['Content-Type'] = 'multipart/form-data'
-  console.log(instance)
-  return instance.put(`/problems/${id}/`, data)
+  return formDataInstance.put(`/problems/${id}/`, data)
 }
 
 function deleteProblem (id) {
@@ -323,7 +323,7 @@ function changeProblemSwitch (id) {
 }
 
 function createClassProblem (data) {
-  return instance.post('/problems/', data)
+  return formDataInstance.post('/problems/', data)
 }
 
 function submitClassStudentList (classID, data) {
@@ -363,6 +363,7 @@ export default {
   getClassLeaderboard,
   getClassUserList,
   createContest,
+  editContest,
   changeContestPublic,
   getContestList,
   deleteClass,
