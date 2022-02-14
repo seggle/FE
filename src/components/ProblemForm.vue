@@ -166,19 +166,25 @@ export default {
         }
 
         if (this.problemType === 'general') {
-          data.start_time = this.problemInfo.startTime
-          data.end_time = this.problemInfo.endTime
-          formData.append('problemInfo', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+          const startTime = this.problemInfo.startTime.toISOString()
+          const endTime = this.problemInfo.endTime.toISOString()
+          data.start_time = startTime.slice(0, 10) + ' ' + startTime.slice(11, 19)
+          data.end_time = endTime.slice(0, 10) + ' ' + endTime.slice(11, 19)
+          for (const key in data) {
+            formData.append(`${key}`, data[key])
+          }
           await api.createGeneralProblem(formData)
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'GeneralList' })
         }
         if (this.problemType === 'class') {
           data.pubilc = this.problemInfo.public
-          formData.append('problemInfo', new Blob([JSON.stringify(data)], { type: 'application/json' }))
-          for (const value of formData.values()) {
-            console.log(value)
+          for (const key in data) {
+            formData.append(`${key}`, data[key])
           }
+          // for (const value of formData.values()) {
+          //   console.log(value)
+          // }
           if (this.mode === 'create') {
             await api.createClassProblem(formData)
           } else if (this.mode === 'edit') {
