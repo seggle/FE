@@ -5,18 +5,21 @@
         :key="formResetPassword"
         :class="{ 'was-validated': validated }"
         @submit.prevent="handleResetPassword" novalidate>
+    <!--현재 비밀번호-->
     <div class="current-password-form">
       <label for="current-password">현재 비밀번호</label>
       <input v-model="formResetPassword.currentPassword"
             type="password"
             id="current-password"
             class="form-control"
-            @blur="checkCurrentPassword" @focus="invalid.currentPassword = false"
+            :class="{'is-invalid': invalid.currentPassword }"
+            @focus="invalid.currentPassword = false"
             required>
       <div class="invalid-feedback">
         {{ this.feedback.currentPassword }}
       </div>
     </div>
+    <!--새로운 비밀번호-->
     <div class="new-password-form">
       <label for="new-password">새로운 비밀번호</label>
       <input v-model="formResetPassword.newPassword"
@@ -28,6 +31,7 @@
         {{ this.feedback.newPassword }}
       </div>
     </div>
+    <!--새로운 비밀번호 확인-->
     <div class="new-password-again-form">
       <label for="new-password-again">새로운 비밀번호 확인</label>
       <input v-model="formResetPassword.newPasswordAgain"
@@ -41,7 +45,7 @@
         {{ this.feedback.newPasswordAgain }}
       </div>
     </div>
-    <button class="btn" type="submit">비밀번호 변경</button>
+    <button class="btn" type="submit">비밀번호변경</button>
   </form>
 </div>
 </template>
@@ -76,16 +80,18 @@ export default {
       try {
         const data = {
           current_password: this.formResetPassword.currentPassword,
-          new_password: this.formResetPassword.newPassword
+          new_password: this.formResetPassword.newPassword,
+          new_password2: this.formResetPassword.newPasswordAgain
         }
         const res = await api.resetPassword(this.userID, data)
         console.log(res)
+        alert('비밀번호가 변경되었습니다.')
+        this.$router.push('/')
       } catch (err) {
-        console.log(err)
+        console.log(err.response.data.error)
+        this.invalid.currentPassword = true
+        this.feedback.currentPassword = '현재 비밀번호가 일치하지 않습니다.'
       }
-    },
-    checkCurrentPassword () {
-      // 기존 비밀번호와 일치하는지
     },
     checkNewPasswordAgain () {
       if (this.formResetPassword.newPassword !== this.formResetPassword.newPasswordAgain) {
@@ -94,7 +100,7 @@ export default {
       }
     },
     checkFormValid () {
-      if (Object.values(this.formResetPassword).includes('') || Object.values(this.invalid).includes(false)) {
+      if (Object.values(this.formResetPassword).includes('') || Object.values(this.invalid).includes(true)) {
         return false
       } else {
         return true
