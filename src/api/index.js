@@ -326,6 +326,10 @@ function createClassProblem (data) {
   return formDataInstance.post('/problems/', data)
 }
 
+function createGeneralProblem (data) {
+  return instance.post('/competitions/', data)
+}
+
 function submitClassStudentList (classID, data) {
   return instance.post(`/class/${classID}/std`, data)
 }
@@ -402,5 +406,6 @@ export default {
   editProblem,
   deleteProblem,
   changeProblemSwitch,
-  createClassProblem
+  createClassProblem,
+  createGeneralProblem
 }
