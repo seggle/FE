@@ -37,6 +37,7 @@
         data-bs-toggle="modal"
         data-bs-target="#proposalModal
         "
+        v-show="this.$store.state.userid === content.created_user"
       >
         편집
       </button>

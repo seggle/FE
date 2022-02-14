@@ -13,8 +13,9 @@ import ClassAllProblem from '@/views/ClassAllProblem.vue'
 import ClassStudentManage from '@/views/ClassStudentManage.vue'
 import ClassExamManage from '@/views/ClassExamManage.vue'
 import ClassProblem from '@/views/ClassProblem.vue'
-import ClassContestList from '@/views/ClassContestList.vue'
-import ClassContestListEdit from '@/views/ClassContestListEdit.vue'
+import ClassContestProblemList from '@/views/ClassContestProblemList.vue'
+import ClassContestProblemListEdit from '@/views/ClassContestProblemListEdit.vue'
+import ContestProblemDetail from '@/views/ContestProblemDetail.vue'
 
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
@@ -123,14 +124,19 @@ const routes = [{
     meta: { isAdmin: true },
     children: [{
       path: ':contestID',
-      name: 'ClassContestList',
-      component: ClassContestList,
-      meta: { isAdmin: true }
+      name: 'ClassContestProblemList',
+      component: ClassContestProblemList,
+      meta: { isAdmin: true },
+      children: [{
+        path: ':problemID',
+        name: 'ContestProblemDetail',
+        component: ContestProblemDetail
+      }]
     },
     {
       path: ':contestID/edit-list',
-      name: 'ClassContestListEdit',
-      component: ClassContestListEdit,
+      name: 'ClassContestProblemListEdit',
+      component: ClassContestProblemListEdit,
       meta: { isAdmin: true }
     }
     ]

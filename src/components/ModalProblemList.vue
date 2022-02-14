@@ -17,9 +17,9 @@
               <table v-for="contest in contestList" :key="contest">
                 <tr>
                   <td>{{ contest.name }}</td>
-                  <td><button @click="onEdit(contest.id)">🖋</button></td>
+                  <td><button @click="editContest(contest.id)">🖋</button></td>
                   <td>
-                    <button @click="onRemove(contest.id)">❌</button>
+                    <button @click="deleteContest(contest.id)">❌</button>
                   </td>
                 </tr>
               </table>
@@ -46,7 +46,7 @@ export default {
       contestList: []
     }
   },
-  mounted () {
+  created () {
     this.init()
   },
   methods: {
@@ -61,17 +61,19 @@ export default {
         console.log(error)
       }
     },
-    onEdit (contestID) {
+    editContest (contestID) {
       var id = contestID
       if (confirm('저장하시겠습니까?')) {
         alert(id + ' 저장 완료')
       } else {
       }
     },
-    onRemove (contestID) {
-      var id = contestID
+    async deleteContest (contestID) {
+      var classID = this.$route.params.classID
       if (confirm('삭제하시겠습니까?')) {
-        alert(id + ' 삭제 완료')
+        const res = await api.deleteContest(classID, contestID)
+        console.log(res.data)
+        alert(contestID + ' 삭제 완료')
       } else {
       }
     }

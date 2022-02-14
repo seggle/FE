@@ -2,11 +2,11 @@
   <div class="container">
     <h1 id="title">비밀번호 확인</h1>
     <form
-      id="reset-password-form"
+      id="resign-form"
       class="row"
       :key="formResign"
       :class="{ 'was-validated': validated }"
-      @submit.prevent="handleResetPassword"
+      @submit.prevent="handleResignPassword"
       novalidate
     >
       <div class="current-password-form">
@@ -51,8 +51,11 @@ export default {
   methods: {
     async submitForm () {
       try {
-        const res = await api.resignUser(this.userID)
-        console.log(res.data)
+        if (confirm('정말 탈퇴하시겠습니까?')) {
+          const res = await api.resignUser(this.userID)
+          console.log(res.data)
+          console.log('탈퇴 완료')
+        }
         this.$router.push('/login')
       } catch (err) {
         console.log(err)
@@ -71,7 +74,7 @@ export default {
         return true
       }
     },
-    handleResetPassword () {
+    handleResignPassword () {
       if (this.checkFormValid()) {
         this.submitForm()
       } else {

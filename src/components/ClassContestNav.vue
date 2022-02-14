@@ -8,9 +8,12 @@
       </div>
       <ul class="navbar-nav px-3">
         <li class="nav-item" v-for="contest in contestList" :key="contest">
-          <a v-if="contest.visible" class="nav-link" @click="goContest(contest.id)">{{
-            contest.name
-          }}</a>
+          <a
+            v-if="contest.visible"
+            class="nav-link"
+            @click="goContest(contest.id)"
+            >{{ contest.name }}</a
+          >
         </li>
       </ul>
     </nav>
@@ -55,13 +58,15 @@ export default {
       try {
         const res = await api.getContestList(this.classID)
         this.contestList = res.data
+        console.log(res.data)
       } catch (error) {
         console.log(error)
       }
     },
     goContest (contestID) {
+      this.contestID = contestID
       this.$router.push({
-        name: 'ClassContestList',
+        name: 'ClassContestProblemList',
         params: { contestID: contestID }
       })
     }

@@ -144,6 +144,22 @@ function getContestList (classID) {
   return instance.get(`/class/${classID}/contests`)
 }
 
+function deleteContest (classID, contestID) {
+  return instance.delete(`/class/${classID}/contests/${contestID}`)
+}
+
+function getContestProblemList (classID, contestID) {
+  return instance.get(`/class/${classID}/contests/${contestID}`)
+}
+
+function selectContestProblem (classID, contestID, data) {
+  return instance.post(`/class/${classID}/contests/${contestID}`, data)
+}
+
+function editContestProblem (classID, contestID, data) {
+  return instance.patch(`/class/${classID}/contests/${contestID}/title`, data)
+}
+
 function getFAQList () {
   return instance.get('/admin/faqs/')
 }
@@ -350,6 +366,10 @@ export default {
   getClassUserList,
   createContest,
   getContestList,
+  getContestProblemList,
+  selectContestProblem,
+  editContestProblem,
+  deleteContest,
   deleteClass,
   getAdminClassList,
   getAdminProblemList,

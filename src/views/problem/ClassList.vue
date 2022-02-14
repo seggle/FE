@@ -1,35 +1,43 @@
 <template>
-<div class="container">
-  <header>
-    <h1 id="title">수업 및 시험</h1>
-    <div class="button-group">
-      <button class="btn" @click="goEdit">편집</button>
-      <button class="btn" id="show-modal" @click="showModal = true">수업 생성</button>
-      <ModalClassList v-if="showModal"
-                      @close="showModal = false"
-                      mode="수업 생성"/>
-    </div>
-  </header>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="col-1" scope="col">#</th>
-        <th class="col-1" scope="col">연도</th>
-        <th class="col-1" scope="col">학기</th>
-        <th scope="col">제목</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for=" classes in classList" :key="classes" @click="goClass(classes.id)">
-        <th scope="row">{{ classes.id }}</th>
-        <td>{{ classes.year }}</td>
-        <td>{{ classes.semester }}</td>
-        <td>{{ classes.name }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <Pagination/>
-</div>
+  <div class="container">
+    <header>
+      <h1 id="title">수업 및 시험</h1>
+      <div class="button-group">
+        <button class="btn" @click="goEdit">편집</button>
+        <button class="btn" id="show-modal" @click="showModal = true">
+          수업 생성
+        </button>
+        <ModalClassList
+          v-if="showModal"
+          @close="showModal = false"
+          mode="수업 생성"
+        />
+      </div>
+    </header>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="col-1" scope="col">#</th>
+          <th class="col-1" scope="col">연도</th>
+          <th class="col-1" scope="col">학기</th>
+          <th scope="col">제목</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="classes in classList"
+          :key="classes"
+          @click="goClass(classes.id)"
+        >
+          <th scope="row">{{ classes.id }}</th>
+          <td>{{ classes.year }}</td>
+          <td>{{ classes.semester }}</td>
+          <td>{{ classes.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <Pagination />
+  </div>
 </template>
 
 <script>
@@ -71,6 +79,8 @@ export default {
             this.classList.push(res.data[i])
           }
         }
+        console.log(this.classList)
+        console.log(typeof this.classList)
       } catch (err) {
         console.log(err)
       }
@@ -97,7 +107,7 @@ export default {
     text-align: left;
     tbody {
       tr:hover {
-        background-color: #F4F4F8;
+        background-color: #f4f4f8;
         cursor: pointer;
       }
     }
