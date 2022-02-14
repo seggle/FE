@@ -110,7 +110,7 @@ export default {
     async deleteProblem (problemID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          const res = await api.deleteProblem(problemID)
+          const res = await api.deleteAdminProblem(problemID)
           console.log(res.data)
         }
       } catch (error) {

@@ -2,7 +2,7 @@
   <div class="class-nav-bar py-5">
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <h1 id="title">기계학습</h1>
+        <h1 id="title">{{ this.className }}</h1>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <div class="icon">☰</div>
         </button>
@@ -28,8 +28,14 @@
 </template>
 
 <script>
+
 export default {
   name: 'ClassNavBar',
+  props: {
+    className: {
+      type: String
+    }
+  },
   methods: {
     handleRoute (route) {
       // a태그의 id와 router index.js의 name과 동일해야함

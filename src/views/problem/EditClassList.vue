@@ -27,9 +27,10 @@
         <ModalClassList v-if="showModal"
                         @close="showModal = false"
                         mode="수업 편집"
+                        :classID="classList[rowIndex].id"
                         :semester="classList[rowIndex].semester"
                         :title="classList[rowIndex].name"/>
-        <td>삭제</td>
+        <td><a @click="removeClass(classes.id)">삭제</a></td>
       </tr>
     </tbody>
   </table>
@@ -59,7 +60,7 @@ export default {
   methods: {
     async getClassList () {
       try {
-        const res = await api.getClassList(this.userID)
+        const res = await api.getClassList()
         console.log(res)
         this.classList = res.data
         this.alreadyChecked()
@@ -87,10 +88,22 @@ export default {
           item.class_id = this.checkList[i]
           data.push(item)
         }
-        const res = await api.editClassList(this.userID, data)
+        const res = await api.editClassList(data)
         console.log(res)
         alert('변경사항이 저장되었습니다.')
         this.$router.push({ name: 'ClassList' })
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async removeClass (classID) {
+      try {
+        if (confirm('삭제하시겠습니까?')) {
+          const res = await api.removeClass(classID)
+          console.log(res)
+          alert('변경사항이 저장되었습니다.')
+          this.$router.push({ name: 'ClassList' })
+        }
       } catch (err) {
         console.log(err)
       }
@@ -116,9 +129,10 @@ export default {
   .table {
     text-align: left;
     tbody {
-      tr:hover {
-        background-color: #F4F4F8;
-        cursor: pointer;
+      td {
+        a {
+          cursor: pointer;
+        }
       }
     }
   }

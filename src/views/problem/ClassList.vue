@@ -13,14 +13,16 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">수강학기</th>
+        <th class="col-1" scope="col">#</th>
+        <th class="col-1" scope="col">연도</th>
+        <th class="col-1" scope="col">학기</th>
         <th scope="col">제목</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for=" classes in classList" :key="classes" @click="goClass(classes.id)">
         <th scope="row">{{ classes.id }}</th>
+        <td>{{ classes.year }}</td>
         <td>{{ classes.semester }}</td>
         <td>{{ classes.name }}</td>
       </tr>
@@ -63,8 +65,12 @@ export default {
     },
     async getClassList () {
       try {
-        const res = await api.getClassList(this.userID)
-        this.classList = res.data
+        const res = await api.getClassList()
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].is_show) {
+            this.classList.push(res.data[i])
+          }
+        }
       } catch (err) {
         console.log(err)
       }

@@ -48,6 +48,10 @@ function resetPassword (username, data) {
   return instance.patch(`users/${username}/`, data)
 }
 
+function resignUser (username) {
+  return instance.delete(`users/${username}`)
+}
+
 function getCompetitionList () {
   return instance.get('/competitions/')
 }
@@ -94,17 +98,29 @@ function createClass (data) {
   return instance.post('/class/', data)
 }
 
-function getClassList (userID) {
-  return instance.get(`users/${userID}/class/`)
+function getClass (classID) {
+  return instance.get(`/class/${classID}`)
 }
 
-function editClassList (userID, data) {
-  return instance.patch(`users/${userID}/class/`, data)
+function editClass (data, classID) {
+  return instance.patch(`/class/${classID}`, data)
+}
+
+function removeClass (classID) {
+  return instance.delete(`/class/${classID}`)
+}
+
+function getClassList () {
+  return instance.get('/users/class')
+}
+
+function editClassList (data) {
+  return instance.patch('/users/class', data)
 }
 
 function getClassProblem (classID, contestID, contestProblemID) {
   return instance.get(
-    `class/${classID}/contests/${contestID}/${contestProblemID}/`
+        `class/${classID}/contests/${contestID}/${contestProblemID}/`
   )
 }
 
@@ -117,11 +133,15 @@ function getClassLeaderboard (contestProblemID) {
 }
 
 function getClassUserList (classID) {
-  return instance.get(`/class/${classID}/users/`)
+  return instance.get(`/class/${classID}/users`)
 }
 
-function createContest (classID) {
-  return instance.post(`/class/${classID}/contests/`)
+function createContest (classID, data) {
+  return instance.post(`/class/${classID}/contests`, data)
+}
+
+function getContestList (classID) {
+  return instance.get(`/class/${classID}/contests`)
 }
 
 function getFAQList () {
@@ -207,7 +227,7 @@ function getAdminProblemList (page, keyword) {
   return instance.get('/admin/problems', { params: params })
 }
 
-function deleteProblem (problemID) {
+function deleteAdminProblem (problemID) {
   return instance.delete('/admin/problems/' + problemID)
 }
 
@@ -227,12 +247,12 @@ function deleteClass (classID) {
   return instance.delete('/admin/class/' + classID)
 }
 
-function showUserCompetition () {
-  return instance.get('user-competition')
+function showUserCompetition (username) {
+  return instance.get(`/users/${username}/competitions`)
 }
 
-function showUserHeatmap () {
-  return instance.get('user-heatmap')
+function showUserHeatmap (username) {
+  return instance.get(`/users/${username}/contributions`)
 }
 
 function getFAQ () {
@@ -244,32 +264,60 @@ function getAnnouncement (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('announcements', { params: params })
+  return instance.get('/announcements', { params: params })
 }
 
 function getAnnouncementDetail (id) {
-  return instance.get('announcements/' + id)
+  return instance.get('/announcements/' + id)
 }
 
 function getProposal (page) {
   const params = { page }
-  return instance.get('proposals', { params: params })
+  return instance.get('/proposals', { params: params })
 }
 
 function getProposalDetail (id) {
-  return instance.get('proposals/' + id)
+  return instance.get('/proposals/' + id)
 }
 
-function createProposal (id, data) {
-  return instance.post('proposals/' + id, data)
+function createProposal (data) {
+  return instance.post('/proposals/', data)
 }
 
 function editProposal (id, data) {
-  return instance.patch('proposals/' + id, data)
+  return instance.patch('/proposals/' + id, data)
 }
 
 function deleteProposal (id) {
-  return instance.delete('proposals/' + id)
+  return instance.delete('/proposals/' + id)
+}
+
+function getProblemList (page, keyword) {
+  const params = { page }
+  if (keyword) {
+    params.keyword = keyword
+  }
+  return instance.get('/problems', { params: params })
+}
+
+function deleteProblem (id) {
+  return instance.delete(`/problems/${id}`)
+}
+
+function changeProblemSwitch (id) {
+  return instance.post(`/problems/${id}/check`)
+}
+
+function createClassProblem (data) {
+  return instance.post('/problems/', data)
+}
+
+function submitClassStudentList (classID, data) {
+  return instance.post(`/class/${classID}/std`, data)
+}
+
+function submitClassTAList (classID, data) {
+  return instance.post(`/class/${classID}/ta`, data)
 }
 
 export default {
@@ -281,6 +329,7 @@ export default {
   checkUserIDorEmail,
   findPassword,
   resetPassword,
+  resignUser,
   getCompetitionList,
   getUserCompetitionList,
   joinCompetition,
@@ -289,17 +338,23 @@ export default {
   getUserSubmissions,
   selectFile,
   createClass,
+  getClass,
+  editClass,
+  removeClass,
   getClassList,
+  submitClassStudentList,
+  submitClassTAList,
   editClassList,
   getClassProblem,
   getClassLeaderboard,
   getClassUserList,
   createContest,
+  getContestList,
   deleteClass,
   getAdminClassList,
   getAdminProblemList,
   changeAdminProblemSwitch,
-  deleteProblem,
+  deleteAdminProblem,
   deleteUser,
   submitUser,
   editUser,
@@ -325,5 +380,9 @@ export default {
   getProposalDetail,
   createProposal,
   editProposal,
-  deleteProposal
+  deleteProposal,
+  getProblemList,
+  deleteProblem,
+  changeProblemSwitch,
+  createClassProblem
 }

@@ -16,10 +16,18 @@ import ClassProblem from '@/views/ClassProblem.vue'
 import ClassContestList from '@/views/ClassContestList.vue'
 import ClassContestListEdit from '@/views/ClassContestListEdit.vue'
 
+<<<<<<< HEAD
 import Login from '@/views/users/Login.vue'
 import Register from '@/views/users/Register.vue'
 import FindPassword from '@/views/users/FindPassword.vue'
 import ResetPassword from '@/views/users/ResetPassword.vue'
+=======
+import Login from '@/views/Login.vue'
+import Register from '@/views/Register.vue'
+import FindPassword from '@/views/FindPassword.vue'
+import ResetPassword from '@/views/ResetPassword.vue'
+import Resign from '@/views/Resign.vue'
+>>>>>>> ef78e6286214d12f030ebc7a21ada0c29724af77
 
 import Home from '../views/Home.vue'
 import User from '../views/User.vue'
@@ -188,6 +196,11 @@ const routes = [{
   path: '/reset-password',
   name: 'ResetPassword',
   component: ResetPassword
+},
+{
+  path: '/resign',
+  name: 'Resign',
+  component: Resign
 },
 {
   path: '/problem/general',

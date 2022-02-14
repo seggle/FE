@@ -47,23 +47,28 @@
             <a class="nav-link" href="/faqs">FAQ</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
         <!-- 로그인 했을 때 -->
         <template v-if="isUserLogin">
-          <p> {{ this.$store.state.userid }} </p>
-          <button type="button" class="btn btn-dark" id="logout" @click="logout">로그아웃</button>
+          <router-link to="/users" class="users">
+            {{ this.$store.state.userid }}
+          </router-link>
+          <button
+            type="button"
+            class="btn btn-dark"
+            id="logout"
+            @click="logout"
+          >
+            로그아웃
+          </button>
         </template>
         <!-- 로그인 안했을 때 -->
         <template v-else>
-          <button type="button" class="btn btn-dark" id="login"><a href="/login">로그인</a></button>
+          <button type="button" class="btn btn-dark" id="login">
+            <a href="/login">로그인</a>
+          </button>
+          <button type="button" class="btn btn-dark" id="login">
+            <a href="/register">회원가입</a>
+          </button>
         </template>
       </div>
     </div>
@@ -86,7 +91,7 @@ export default {
     async logout () {
       try {
         const res = await api.logoutUser({
-          refresh_token: this.$store.state.refreshToken
+          refresh: this.$store.state.refreshToken
         })
         console.log(res)
         this.$store.commit('clearToken')
@@ -148,5 +153,27 @@ nav {
 }
 .btn:hover {
   color: white;
+  background: #536292;
+}
+.users {
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 0px 7px;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+a.users:hover {
+  color: black;
+  text-decoration: underline;
+}
+a.nav-link:hover {
+  font-weight: bold;
 }
 </style>
