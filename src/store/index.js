@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie } from '@/utils/cookies'
+import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie, saveAccessToCookie } from '@/utils/cookies'
 import { saveUserType, getUsertype } from '@/utils/jwt'
 import api from '@/api/index.js'
 
@@ -61,7 +61,8 @@ export default createStore({
         const res = await api.refreshAccessToken({
           refresh: this.state.refreshToken
         })
-        this.commit('setUserid', res.data.access)
+        this.commit('setAccessToken', res.data.access)
+        saveAccessToCookie(res.data.access)
       } catch (err) {
         console.log('refreshAccessToekn error: ', err)
       }
