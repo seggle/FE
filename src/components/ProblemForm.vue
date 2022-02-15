@@ -46,7 +46,7 @@
                     <option v-for="item in problemInfo.metrics" :key="item">{{ item }}</option>
                   </select>
                 </div>
-              <div class="form-time col-5">
+              <div v-if="this.problemType == 'general'" class="form-time col-5">
                 <div class="form-start-time">
                   <label class="form-label">시작 시간</label>
                   <Datepicker v-model="problemInfo.startTime" placeholder="시작 시간" textInput />
@@ -79,13 +79,13 @@
                   <label class="form-label">데이터 파일 업로드</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
                   <input id="data-file-input" type="file" accept=".zip" required @change="uploadFile">
-                  <!-- <div class="upload-file-name">{{ dataInfo.dataFile.name }}</div> -->
+                  <div class="upload-file-name" v-if="dataInfo.dataFile">{{ dataInfo.dataFile.name }}</div>
                 </div>
                 <div class="solution-file col-5">
                   <label class="form-label">정답 파일 업로드</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
                   <input id="solution-file-input" type="file" accept=".csv" required @change="uploadFile">
-                  <!-- <div class="upload-file-name">{{ dataInfo.solutionFile.name }}</div> -->
+                  <div class="upload-file-name" v-if="dataInfo.solutionFile">{{ dataInfo.solutionFile.name }}</div>
                 </div>
               </div>
             </div>
