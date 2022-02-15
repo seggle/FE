@@ -239,7 +239,13 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  if (store.state.accessToken === '' && store.state.refreshToken !== '') {
+    await store.dispatch('refreshAccessToken')
+  }
+  if (store.state.accessToken !== '') {
+    return next()
+  }
   if (to.meta.auth && !store.getters.isLogin) {
     alert('로그인이 필요합니다')
     next({ name: 'Login' })
