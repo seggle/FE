@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
-import Admin from '../views/Admin.vue'
-import AdminAllProblems from '../views/AdminAllProblems.vue'
-import AdminAnnouncment from '../views/AdminAnnouncement.vue'
-import AdminFaq from '../views/AdminFaq.vue'
-import AdminUserManagement from '../views/AdminUserManagement.vue'
-import AdminAllClasses from '../views/AdminAllClasses.vue'
+import Admin from '../views/admin/Admin.vue'
+import AdminAllProblems from '../views/admin/AdminAllProblems.vue'
+import AdminAnnouncment from '../views/admin/AdminAnnouncement.vue'
+import AdminFaq from '../views/admin/AdminFaq.vue'
+import AdminUserManagement from '../views/admin/AdminUserManagement.vue'
+import AdminAllClasses from '../views/admin/AdminAllClasses.vue'
 
 import Class from '@/views/Class.vue'
 import ClassAllProblem from '@/views/ClassAllProblem.vue'
@@ -239,7 +239,13 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  if (store.state.accessToken === '' && store.state.refreshToken !== '') {
+    await store.dispatch('refreshAccessToken')
+  }
+  if (store.state.accessToken !== '') {
+    return next()
+  }
   if (to.meta.auth && !store.getters.isLogin) {
     alert('로그인이 필요합니다')
     next({ name: 'Login' })

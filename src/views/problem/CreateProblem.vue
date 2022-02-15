@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form class="create-problem-form" @submit.prevent="submitForm">
+    <form class="create-problem-form" @submit.prevent="submitForm" enctype="multipart/form-data">
       <div class="problem-header">
         <input type="text"
               class="form-control"
@@ -131,13 +131,15 @@ export default {
           title: this.problemTitle,
           description: this.problemInfo.description,
           created_user: this.$store.state.userid,
-          // data: this.dataInfo.dataFile,
-          data_description: this.dataInfo.description
+          data: this.dataInfo.dataFile,
+          solution: this.dataInfo.solutionFile,
+          data_description: this.dataInfo.description,
+          public: true
         }
         if (this.problemType === 'general') {
-          data.start_time = this.problemInfo.startTime
-          data.end_time = this.problemInfo.endTime
           console.log(data)
+          data.start_time = this.problemInfo.startTime.toISOString()
+          data.end_time = this.problemInfo.endTime.toISOString()
           await api.createGeneralProblem(data)
           alert('문제가 생성되었습니다.')
           this.$router.push({ name: 'GeneralList' })
@@ -158,7 +160,9 @@ export default {
       const id = e.target.id
       console.log(id)
       if (id === 'data-file-input') {
+        console.log(files)
         this.dataInfo.dataFile = files[0]
+        console.log(this.dataInfo.dataFile)
       } else {
         this.dataInfo.solutionFile = files[0]
       }
