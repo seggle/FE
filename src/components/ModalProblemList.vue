@@ -4,7 +4,7 @@
       <div class="modal-wrapper">
         <form class="modal-container" @submit.prevent="submitForm">
           <div class="modal-header">
-            <h5>문제 편집</h5>
+            <h5>목록 편집</h5>
             <button
               type="button"
               class="btn-close"
@@ -51,9 +51,9 @@
             </div>
           </div>
 
-          <div class="modal-footer">
+          <!-- <div class="modal-footer">
             <button class="btn" type="submit">저장</button>
-          </div>
+          </div> -->
         </form>
       </div>
     </div>
@@ -92,24 +92,27 @@ export default {
         console.log(error)
       }
     },
-    onEdit (contestID) {
-      var id = contestID
-      if (confirm('저장하시겠습니까?')) {
-        alert(id + ' 저장 완료')
-      } else {
-      }
-    },
+    // onEdit (contestID) {
+    //   var id = contestID
+    //   if (confirm('저장하시겠습니까?')) {
+    //     alert(id + ' 저장 완료')
+    //   } else {
+    //   }
+    // },
     onRemove (contestID) {
       var id = contestID
       if (confirm('삭제하시겠습니까?')) {
+        // contest 삭제 api
         alert(id + ' 삭제 완료')
-      } else {
+        this.$router.go(this.$router.currentRoute)
       }
     },
     async changePublic (contestID) {
       try {
         const res = await api.changeContestPublic(this.classID, contestID)
         console.log(res)
+        alert('공개 설정 완료')
+        this.$router.go(this.$router.currentRoute)
       } catch (err) {
         console.log(err)
       }
