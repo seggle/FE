@@ -4,7 +4,7 @@
       <div class="nav-header px-1 py-2">
         <span id="title">문제</span>
         <a class="icon" @click="showModal = true">+</a>
-        <ModalContestList v-if="showModal" @close="showModal = false" />
+        <ModalContestList v-if="showModal" @close="showModal = false" :mode="'create'"/>
       </div>
       <ul class="navbar-nav px-3">
         <li class="nav-item" v-for="contest in contestList" :key="contest">
