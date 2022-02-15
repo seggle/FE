@@ -1,14 +1,15 @@
 <template>
   <div class="container">
-    <h1 id="title">비밀번호 확인</h1>
+    <h1 id="title">회원탈퇴</h1>
     <form
       id="resign-form"
       class="row"
       :key="formResign"
       :class="{ 'was-validated': validated }"
-      @submit.prevent="handleResignPassword"
+      @submit.prevent="handleResign"
       novalidate
     >
+      <!--현재 비밀번호-->
       <div class="current-password-form">
         <label for="current-password">현재 비밀번호</label>
         <input
@@ -16,21 +17,23 @@
           type="password"
           id="current-password"
           class="form-control"
-          @blur="checkCurrentPassword"
+          :class="{ 'is-invalid': invalid.currentPassword }"
           @focus="invalid.currentPassword = false"
+          autocomplete="off"
           required
         />
         <div class="invalid-feedback">
           {{ this.feedback.currentPassword }}
         </div>
       </div>
-      <button @click="submitForm" class="btn" type="submit">회원 탈퇴</button>
+      <button class="btn" type="submit">회원탈퇴</button>
     </form>
   </div>
 </template>
 
 <script>
 import api from '@/api/index.js'
+import { deleteCookie } from '@/utils/cookies.js'
 export default {
   name: 'Resign',
   data () {
@@ -51,32 +54,53 @@ export default {
   methods: {
     async submitForm () {
       try {
-        if (confirm('정말 탈퇴하시겠습니까?')) {
-          const res = await api.resignUser(this.userID)
-          console.log(res.data)
-          console.log('탈퇴 완료')
+        const data = {
+          password: this.formResign.currentPassword
         }
-        this.$router.push('/login')
+        if (confirm('정말 탈퇴하시겠습니까?')) {
+          console.log(data)
+          const res = await api.resignUser(this.userID, data)
+          console.log(res)
+          alert('탈퇴 완료')
+        }
       } catch (err) {
         console.log(err)
+        console.log(this.formResign.currentPassword)
+        this.invalid.currentPassword = true
+        this.feedback = '현재 비밀번호가 일치하지 않습니다.'
       }
-    },
-    checkCurrentPassword () {
-      // 기존 비밀번호와 일치하는지
     },
     checkFormValid () {
       if (
         Object.values(this.formResign).includes('') ||
-        Object.values(this.invalid).includes(false)
+        Object.values(this.invalid).includes(true)
       ) {
         return false
       } else {
         return true
       }
     },
-    handleResignPassword () {
+    async logout () {
+      try {
+        const res = await api.logoutUser({
+          refresh: this.$store.state.refreshToken
+        })
+        console.log(res)
+        this.$store.commit('clearToken')
+        this.$store.commit('clearUserid')
+        this.$store.commit('clearUserType')
+        deleteCookie('til_user')
+        deleteCookie('til_access')
+        deleteCookie('til_refresh')
+        this.$router.push('/login')
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    handleResign () {
       if (this.checkFormValid()) {
         this.submitForm()
+        this.logout()
       } else {
         this.validated = true
       }

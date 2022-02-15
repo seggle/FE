@@ -46,13 +46,7 @@ export default {
       contestList: []
     }
   },
-  created () {
-    this.init()
-  },
   methods: {
-    init () {
-      this.getContestList()
-    },
     async getContestList () {
       try {
         const res = await api.getContestList(this.classID)

@@ -80,7 +80,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import api from '@/api/index.js'
 import { deleteCookie } from '@/utils/cookies.js'
-
 export default {
   data () {
     return {

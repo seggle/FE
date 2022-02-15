@@ -48,8 +48,8 @@ function resetPassword (username, data) {
   return instance.patch(`users/${username}/`, data)
 }
 
-function resignUser (username) {
-  return instance.delete(`users/${username}`)
+function resignUser (username, data) {
+  return instance.delete(`users/${username}/`, data)
 }
 
 function getCompetitionList () {
