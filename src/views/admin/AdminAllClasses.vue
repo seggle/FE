@@ -42,7 +42,7 @@
 
 <script>
 import api from '@/api/index.js'
-import Pagination from '../components/Pagination.vue'
+import Pagination from '../../components/Pagination.vue'
 
 export default {
   components: { Pagination },
