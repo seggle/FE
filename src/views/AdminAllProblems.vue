@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="d-flex mb-2 mt-3">
+    <div class="d-flex flex-wrap mb-2 mt-3">
       <h1 class="me-auto">전체 문제</h1>
       <div>
         <form>
@@ -158,7 +158,4 @@ a {
   cursor: pointer;
 }
 
-.modal-dialog {
-    max-width: 80%;
-}
 </style>

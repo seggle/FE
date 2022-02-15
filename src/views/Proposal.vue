@@ -38,41 +38,22 @@
         </tbody>
       </table>
     </div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled" v-if="currentPage == 1">
-          <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getProposal(currentPage - 1)">이전</a>
-        </li>
-        <div v-for="page in total" :key="page">
-          <li class="page-item active" v-if="page == currentPage">
-            <a class="page-link" @click="getProposal(page)">{{ page }}</a>
-          </li>
-          <li class="page-item" v-else>
-            <a class="page-link" @click="getProposal(page)">{{ page }}</a>
-          </li>
-        </div>
-        <li class="page-item disabled" v-if="currentPage == total">
-          <a class="page-link" href="#">다음</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getProposal(currentPage + 1)">다음</a>
-        </li>
-      </ul>
-    </nav>
+    <Pagination :pagination="PageValue" @get-page="getPage"/>
   </div>
 </template>
 <script>
 import api from '@/api/index.js'
+import Pagination from '@/components/Pagination.vue'
+
 export default {
   name: 'Proposal',
-
+  components: {
+    Pagination
+  },
   data: () => {
     return {
       proList: [],
-      total: 0,
+      PageValue: [],
       currentPage: 1
     }
   },
@@ -83,12 +64,17 @@ export default {
     init () {
       this.getProposal(1)
     },
+    getPage (page) {
+      this.getProposal(page)
+    },
     async getProposal (page) {
       try {
+        this.currentPage = page
+        this.PageValue = []
         const res = await api.getProposal(page)
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.proList = res.data.results
         this.proList.reverse()
-        console.log(res.data.results)
       } catch (error) {
         console.log(error)
       }

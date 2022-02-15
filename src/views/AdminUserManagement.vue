@@ -120,38 +120,19 @@
         </tbody>
       </table>
     </div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled" v-if="currentPage == 1">
-          <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getUserList(currentPage - 1)">이전</a>
-        </li>
-        <div v-for="page in total" :key="page">
-          <li class="page-item active" v-if="page == currentPage">
-            <a class="page-link" @click="getUserList(page)">{{ page }}</a>
-          </li>
-          <li class="page-item" v-else>
-            <a class="page-link" @click="getUserList(page)">{{ page }}</a>
-          </li>
-        </div>
-        <li class="page-item disabled" v-if="currentPage == total">
-          <a class="page-link" href="#">다음</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getUserList(currentPage + 1)">다음</a>
-        </li>
-      </ul>
-    </nav>
+    <Pagination :pagination="PageValue" @get-page="getPage"/>
   </div>
 </template>
 
 <script>
 import api from '@/api/index.js'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'AdminUser',
+  components: {
+    Pagination
+  },
   data () {
     return {
       currentid: '',
@@ -159,11 +140,11 @@ export default {
       selected: '',
       loading: false,
       keyword: '',
-      total: 0,
       currentPage: 1,
       Name: '',
       userEmail: '',
-      userName: ''
+      userName: '',
+      PageValue: []
     }
   },
   mounted () {
@@ -173,17 +154,18 @@ export default {
     init () {
       this.getUserList(1)
     },
+    getPage (page) {
+      this.getUserList(page)
+    },
     async getUserList (page) {
       try {
         this.loading = true
         this.currentPage = page
+        this.PageValue = []
         const res = await api.getUserList(page, this.keyword)
         this.loading = false
-        if (res.data.count !== 0) {
-          this.total = parseInt((res.data.count - 1) / 15) + 1
-        }
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.userList = res.data.results
-        console.log(res.data.results)
         for (var i = 0; i < this.userList.length; i++) {
           this.userList[i].date_joined =
             this.userList[i].date_joined.slice(0, 10) +

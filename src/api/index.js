@@ -308,6 +308,10 @@ function changeProblemSwitch (id) {
   return instance.post(`/problems/${id}/check`)
 }
 
+function createGeneralProblem (data) {
+  return instance.post('/competitions/', data)
+}
+
 function createClassProblem (data) {
   return instance.post('/problems/', data)
 }
@@ -384,5 +388,6 @@ export default {
   getProblemList,
   deleteProblem,
   changeProblemSwitch,
-  createClassProblem
+  createClassProblem,
+  createGeneralProblem
 }
