@@ -116,7 +116,7 @@ function editClassList (data) {
   return instance.patch('/users/class', data)
 }
 
-function getClassProblem (classID, contestID, contestProblemID) {
+function getContestProblem (classID, contestID, contestProblemID) {
   return instance.get(
         `class/${classID}/contests/${contestID}/${contestProblemID}/`
   )
@@ -363,7 +363,7 @@ export default {
   submitClassStudentList,
   submitClassTAList,
   editClassList,
-  getClassProblem,
+  getContestProblem,
   getClassLeaderboard,
   getClassUserList,
   createContest,
