@@ -1,211 +1,21 @@
 <template>
-  <div class="hello">
-    <header class="bg-dark py-5">
-      <div class="container px-5">
-        <div class="row gx-5 align-items-center justify-content-center">
-          <div class="col-lg-8 col-xl-7 col-xxl-6">
-            <div class="my-5 text-center text-xl-start">
-              <h1 class="display-5 fw-bolder text-white mb-2">
-                {{ msg }}
-              </h1>
-              <p class="lead fw-normal text-white-50 mb-4">
-                세종인을 위한 대회에 참가해보세요!
-              </p>
-              <div
-                class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start"
-              >
-                <a
-                  class="btn btn-primary btn-lg px-4 me-sm-3"
-                  href="#features"
-                  id="head"
-                  >Get Started</a
-                >
-                <a class="btn btn-outline-light btn-lg px-4" href="#!" id="head"
-                  >Learn More</a
-                >
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
-            <img
-              class="img-fluid rounded-3 my-5"
-              src="https://dummyimage.com/600x400/343a40/6c757d"
-              alt="..."
-            />
-          </div>
+  <div>
+    <section>
+      <h1>Welcome to Seggle!</h1>
+      <p class="description">세종인을 위한 AI 대회가 시작되었어요!</p>
+      <canvas id="pixie"></canvas>
+    </section>
+    <section class="horizontal">
+      <div class="pin-wrap">
+        <div class="animation-wrap to-right">
+          <div class="item">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus, temporibus esse magni illum eos natus ipsum minus? Quis excepturi voluptates atque dolorum minus eligendi! Omnis minima magni recusandae ex dignissimos.</div>
+          <div class="item">Eaque ullam illum nobis deleniti mollitia unde, sed, nemo ipsa ratione ex, dicta aliquam voluptates! Odio vitae eum nobis dignissimos sunt ipsum repellendus totam optio distinctio. Laborum suscipit quia aperiam.</div>
+          <div class="item">Animi, porro molestias? Reiciendis dolor aspernatur ab quos nulla impedit, dolores ullam hic commodi nobis nam. Dolorem expedita laudantium dignissimos nobis a. Dolorem, unde quidem. Tempora et a quibusdam inventore!</div>
+          <div class="item">Labore, unde amet! Alias delectus hic laboriosam et dolorum? Saepe, dicta eaque? Veniam eos blanditiis neque. Officia et nostrum, tempore modi quo praesentium aspernatur vero dolor, ipsa unde perspiciatis minima.</div>
+          <div class="item">Quaerat error dolorem aspernatur magni dicta ut consequuntur maxime tempore. Animi odio eos quod culpa nulla consectetur? Aperiam ipsam ducimus delectus reprehenderit unde, non laborum voluptate laboriosam, officiis at ea!</div>
         </div>
-      </div>
-    </header>
-    <section class="py-5" id="features">
-      <div class="container px-5 my-5">
-        <div class="row gx-5 justify-content-center">
-          <div class="col-lg-8 col-xl-6">
-            <div class="text-center">
-              <h2 class="fw-bolder">Seggle에서 진행 중인 문제</h2>
-              <p class="lead fw-normal text-muted mb-5">
-                연습용 예제부터 시작해서 실전 대회에 참여해보세요!
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="row gx-5">
-          <div class="col-lg-4 mb-5">
-            <div class="card h-100 shadow border-0">
-              <img
-                class="card-img-top"
-                src="https://dummyimage.com/600x350/ced4da/6c757d"
-                alt="..."
-              />
-              <div class="card-body p-4">
-                <div class="badge bg-primary bg-gradient rounded-pill mb-2">
-                  대회
-                </div>
-                <a
-                  class="text-decoration-none link-dark stretched-link"
-                  href="#!"
-                  ><h5 class="card-title mb-3">따릉이 대여량 예측하기</h5></a
-                >
-                <p class="card-text mb-0">
-                  서울시 따릉이 대여량을 예측해보세요.
-                </p>
-              </div>
-              <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                <div class="d-flex align-items-end justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <img
-                      class="rounded-circle me-3"
-                      src="https://dummyimage.com/40x40/ced4da/6c757d"
-                      alt="..."
-                    />
-                    <div class="small">
-                      <div class="fw-bold">AI Challenge</div>
-                      <div class="text-muted">
-                        2021-12-04 &middot; <br />
-                        정형 | MSE
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-5">
-            <div class="card h-100 shadow border-0">
-              <img
-                class="card-img-top"
-                src="https://dummyimage.com/600x350/adb5bd/495057"
-                alt="..."
-              />
-              <div class="card-body p-4">
-                <div class="badge bg-primary bg-gradient rounded-pill mb-2">
-                  일반
-                </div>
-                <a
-                  class="text-decoration-none link-dark stretched-link"
-                  href="#!"
-                  ><h5 class="card-title mb-3">
-                    기상환경에 따른 농산물 가격예측
-                  </h5></a
-                >
-                <p class="card-text mb-0">
-                  농산물 가격을 예측하는 모형을 개발해보세요.
-                </p>
-              </div>
-              <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                <div class="d-flex align-items-end justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <img
-                      class="rounded-circle me-3"
-                      src="https://dummyimage.com/40x40/ced4da/6c757d"
-                      alt="..."
-                    />
-                    <div class="small">
-                      <div class="fw-bold">기계학습</div>
-                      <div class="text-muted">
-                        2021-12-03 &middot; 농산물 | MAE
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-5">
-            <div class="card h-100 shadow border-0">
-              <img
-                class="card-img-top"
-                src="https://dummyimage.com/600x350/6c757d/343a40"
-                alt="..."
-              />
-              <div class="card-body p-4">
-                <div class="badge bg-primary bg-gradient rounded-pill mb-2">
-                  일반
-                </div>
-                <a
-                  class="text-decoration-none link-dark stretched-link"
-                  href="#!"
-                  ><h5 class="card-title mb-3">가스공급량 수요예측</h5></a
-                >
-                <p class="card-text mb-0">
-                  한국가스공사가 보유한 데이터를 기반으로 미래 공급량을 예측하는
-                  모델을 만들어주세요.
-                </p>
-              </div>
-              <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                <div class="d-flex align-items-end justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <img
-                      class="rounded-circle me-3"
-                      src="https://dummyimage.com/40x40/ced4da/6c757d"
-                      alt="..."
-                    />
-                    <div class="small">
-                      <div class="fw-bold">인공지능</div>
-                      <div class="text-muted">2022-01-05 &middot; 수요예측</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Call to action-->
-        <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
-          <div
-            class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start"
-          >
-            <div class="mb-4 mb-xl-0">
-              <div class="fs-3 fw-bold text-white">
-                지금 Seggle에 가입하세요!
-              </div>
-              <div class="text-white-50">Sign up for Seggle.</div>
-            </div>
-            <div class="ms-xl-4">
-              <div class="input-group mb-2">
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Email address..."
-                  aria-label="Email address..."
-                  aria-describedby="button-newsletter"
-                />
-                <button
-                  class="btn btn-outline-light"
-                  id="button-newsletter"
-                  type="button"
-                >
-                  Sign up
-                </button>
-              </div>
-              <div class="small text-white-50">
-                We care about privacy, and will never share your data.
-              </div>
-            </div>
-          </div>
-        </aside>
       </div>
     </section>
-    <!-- Footer-->
     <footer class="bg-dark py-4 mt-auto">
       <div class="container px-5">
         <div
@@ -213,7 +23,7 @@
         >
           <div class="col-auto">
             <div class="small m-0 text-white">
-              Copyright &copy; Your Website 2021
+              Copyright &copy; Seggle
             </div>
           </div>
           <div class="col-auto">
@@ -230,37 +40,240 @@
 </template>
 
 <script>
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  mounted () {
+    this.animation()
+  },
+  methods: {
+    animation () {
+      const horizontalSections = gsap.utils.toArray('section.horizontal')
+      console.log(horizontalSections)
+      horizontalSections.forEach(function (sec, i) {
+        var thisPinWrap = sec.querySelector('.pin-wrap')
+        var thisAnimWrap = thisPinWrap.querySelector('.animation-wrap')
+        var getToValue = () => -(thisAnimWrap.scrollWidth - window.innerWidth)
+        console.log(thisAnimWrap.scrollWidth)
+        console.log(window.innerWidth)
+        gsap.fromTo(thisAnimWrap, {
+          x: () => thisAnimWrap.classList.contains('to-right') ? 0 : getToValue()
+        }, {
+          x: () => thisAnimWrap.classList.contains('to-right') ? getToValue() : 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sec,
+            start: 'top top',
+            end: () => '+=' + (thisAnimWrap.scrollWidth - window.innerWidth),
+            pin: thisPinWrap,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+            // anticipatePin: 1,
+            scrub: true
+            // markers: true,
+          }
+        })
+      })
+      // 여기서부터는 별
+      var canvas = document.querySelector('#pixie')
+      var WIDTH = window.innerWidth
+      var HEIGHT = canvas.offsetHeight
+      var MAX_PARTICLES = (WIDTH * HEIGHT) / 20000
+      var DRAW_INTERVAL = 60
+      var context = canvas.getContext('2d')
+      var gradient = null
+      var pixies = []
+      canvas.width = WIDTH
+      canvas.height = HEIGHT
+
+      function Circle () {
+        this.settings = { ttl: 8000, xmax: 5, ymax: 2, rmin: 8, rmax: 15, drt: 1 }
+        this.reset = function () {
+          this.x = WIDTH * Math.random() // X 위치 랜덤 (0 ~ WIDTH)
+          this.y = HEIGHT * Math.random() // Y 위치 랜덤 (0 ~ HEIGHT)
+          this.r = ((this.settings.rmax - 1) * Math.random()) + 1 // 반지름 크기 랜덤 (1 ~ rmax)
+          this.dx = (Math.random() * this.settings.xmax) * (Math.random() < 0.5 ? -1 : 1) // X 이동거리 랜덤 (-xmax ~ xmax)
+          this.dy = (Math.random() * this.settings.ymax) * (Math.random() < 0.5 ? -1 : 1) // Y 이동거리 랜덤 (-ymax ~ ymax)
+          this.hl = (this.settings.ttl / DRAW_INTERVAL) * (this.r / this.settings.rmax) // 총 생존 시간 (반지름 크기에 비례)
+          this.rt = 0 // 현재 생존 시간 (0 -> hl -> 0)
+          this.settings.drt = Math.random() + 1 // 노화 속도 (1 ~ 2)
+          this.stop = Math.random() * 0.2 + 0.4 // 음영 범위 (0.4 ~ 0.6)
+        }
+        this.fade = function () {
+          this.rt += this.settings.drt // 노화 진행
+          if (this.rt >= this.hl) {
+            this.rt = this.hl
+            this.settings.drt = this.settings.drt * -1
+          } else if (this.rt < 0) {
+            this.reset() // 수명이 다하면 새로운 위치에 생성
+          }
+        }
+
+        this.draw = function () {
+          var newo = (this.rt / this.hl)
+          context.beginPath()
+          context.arc(this.x, this.y, this.r, 0, Math.PI * 2, true) // (x, y) 좌표에 반지름 r 크기의 원 그림
+          context.closePath()
+
+          var cr = this.r * newo // 밝기에 따른 반지름
+          gradient = context.createRadialGradient(this.x, this.y, 0, this.x, this.y, (cr < this.settings.rmin) ? this.settings.rmin : cr)
+          gradient.addColorStop(0.0, 'rgba(255,255,255,' + newo + ')')
+          gradient.addColorStop(this.stop, 'rgba(77,101,181,' + (newo * 0.6) + ')')
+          gradient.addColorStop(1.0, 'rgba(77,101,181,0)')
+          context.fillStyle = gradient
+          context.fill()
+        }
+
+        this.move = function () {
+          this.x += (1 - this.rt / this.hl) * this.dx
+          this.y += (1 - this.rt / this.hl) * this.dy
+          if (this.x > WIDTH || this.x < 0) this.dx *= -1
+          if (this.y > HEIGHT || this.y < 0) this.dy *= -1
+        }
+      }
+      function draw () {
+        context.clearRect(0, 0, WIDTH, HEIGHT)
+
+        for (var i = pixies.length; i < MAX_PARTICLES; i++) {
+          pixies.push(new Circle())
+          pixies[i].reset()
+        }
+        for (var j = 0; j < MAX_PARTICLES; j++) {
+          pixies[j].fade()
+          pixies[j].move()
+          pixies[j].draw()
+        }
+      }
+      setInterval(draw, DRAW_INTERVAL)
+      function setDimensions (e) {
+        WIDTH = window.innerWidth
+        HEIGHT = canvas.offsetHeight
+        MAX_PARTICLES = (WIDTH * HEIGHT) / 20000
+        canvas.width = WIDTH
+        canvas.height = HEIGHT
+      }
+      window.addEventListener('resize', setDimensions)
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+@import url('https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap');
+
+html, body, section.horizontal {
+  overflow-x: hidden;
 }
-ul {
-  list-style-type: none;
+
+#pixie {
+  width: 100%;
+  height: 20rem;
+  z-index:1;
+  background: linear-gradient(rgb(0, 0, 0) 50%, rgb(25, 19, 39)80%, rgb(43, 32, 72));
+}
+
+body {
+  font-family: "Signika Negative", sans-serif;
+  font-weight: 300;
+  margin: 0;
   padding: 0;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+h1 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -100%);
+  z-index: 2;
+  font-weight: bold;
+  margin: 0;
 }
-a {
-  color: gray;
+p.description {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 100%);
+  padding: 0;
 }
-#head {
+p {
+  margin: 0;
+  padding: 50px 0 50px 50px;
+}
+section {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+section.blank {
+  height: 20rem;
+}
+section:nth-of-type(odd) {
   color: white;
 }
-.problem {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 4px;
-  background-color: gainsboro;
+section:nth-of-type(even) {
+  background-color: #ffffff;
+}
+section.horizontal {
+  overflow-x: hidden;
+}
+section.horizontal .pin-wrap,
+section.horizontal .animation-wrap {
+  display: flex;
+  position: relative;
+  z-index: 0;
+  height: 100vh;
+}
+section.horizontal .item {
+  position: relative;
+  padding: 150px 80px;
+  flex: 0 0 500px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  line-height: 1.7;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: transparent;
+}
+section.horizontal .item:before {
+  position: absolute;
+  font-size: 100px;
+  opacity: .13;
+  font-weight: bold;
+  z-index: -1;
+  -webkit-transform: translate(-30px, -50px);
+  transform: translate(-30px, -50px);
+  line-height: 1;
+}
+section.horizontal .animation-wrap.to-right {
+  counter-reset: item;
+  float: left;
+}
+section.horizontal .animation-wrap.to-left {
+  counter-reset: item 11;
+  float: right;
+}
+section.horizontal .animation-wrap.to-right .item:before {
+  counter-increment: item;
+  content: counter(item);
+}
+section.horizontal .animation-wrap.to-left .item:before {
+  counter-increment: item -1;
+  content: counter(item);
+}
+section.horizontal .animation-wrap .item:nth-child(2n+2) {
+  align-items: flex-start;
+}
+section.horizontal .animation-wrap .item:nth-child(4n+4) {
+  align-items: flex-end;
 }
 </style>

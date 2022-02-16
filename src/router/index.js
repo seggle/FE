@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
-import Admin from '../views/Admin.vue'
-import AdminAllProblems from '../views/AdminAllProblems.vue'
-import AdminAnnouncment from '../views/AdminAnnouncement.vue'
-import AdminFaq from '../views/AdminFaq.vue'
-import AdminUserManagement from '../views/AdminUserManagement.vue'
-import AdminAllClasses from '../views/AdminAllClasses.vue'
+import Admin from '../views/admin/Admin.vue'
+import AdminAllProblems from '../views/admin/AdminAllProblems.vue'
+import AdminAnnouncment from '../views/admin/AdminAnnouncement.vue'
+import AdminFaq from '../views/admin/AdminFaq.vue'
+import AdminUserManagement from '../views/admin/AdminUserManagement.vue'
+import AdminAllClasses from '../views/admin/AdminAllClasses.vue'
 
 import Class from '@/views/Class.vue'
 import ClassAllProblem from '@/views/ClassAllProblem.vue'

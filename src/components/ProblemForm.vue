@@ -78,13 +78,13 @@
                 <div class="data-file col-5">
                   <label class="form-label">데이터 파일 업로드</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <input id="data-file-input" type="file" accept=".zip" required @change="uploadFile">
+                  <input id="data-file-input" type="file" accept=".zip" @change="uploadFile">
                   <div class="upload-file-name" v-if="dataInfo.dataFile">{{ dataInfo.dataFile.name }}</div>
                 </div>
                 <div class="solution-file col-5">
                   <label class="form-label">정답 파일 업로드</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <input id="solution-file-input" type="file" accept=".csv" required @change="uploadFile">
+                  <input id="solution-file-input" type="file" accept=".csv" @change="uploadFile">
                   <div class="upload-file-name" v-if="dataInfo.solutionFile">{{ dataInfo.solutionFile.name }}</div>
                 </div>
               </div>
@@ -188,6 +188,7 @@ export default {
           if (this.mode === 'create') {
             await api.createClassProblem(formData)
           } else if (this.mode === 'edit') {
+            console.log('edit')
             await api.editProblem(this.problemID, formData)
           }
           alert('저장이 완료되었습니다.')

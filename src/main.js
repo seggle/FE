@@ -4,6 +4,7 @@ import VueCalendarHeatMap from 'vue3-calendar-heatmap'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import jQuery from 'jquery'
 import '@/styles/index.scss'
 
 import Datepicker from 'vue3-date-time-picker'
@@ -35,3 +36,5 @@ app.component('Datepicker', Datepicker)
 
 app.mount('#app')
 app.use(VMdEditor)
+
+global.$ = jQuery

@@ -36,7 +36,7 @@
       </tr>
     </tbody>
   </table>
-  <Pagination/>
+  <Pagination :pagination="PageValue" @get-page="getPage"/>
 </div>
 </template>
 
@@ -53,17 +53,25 @@ export default {
     return {
       problemList: [],
       diffDay: [],
-      progressBar: []
+      progressBar: [],
+      currentPage: 1,
+      PageValue: []
     }
   },
   mounted () {
-    this.getGeneralList()
+    this.getGeneralList(1)
   },
   methods: {
-    async getGeneralList () {
+    getPage (page) {
+      this.getGeneralList(page)
+    },
+    async getGeneralList (page) {
       try {
+        this.currentPage = page
+        this.PageValue = []
         const res = await api.getCompetitionList()
-        this.problemList = res.data
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        this.problemList = res.data.results
         this.setTime()
         this.setProgressBar()
       } catch (err) {

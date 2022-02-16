@@ -47,41 +47,26 @@
     </tbody>
   </table>
   </div>
-  <nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-    <li class="page-item disabled" v-if="currentPage==1">
-      <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
-    </li>
-    <li class="page-item" v-else>
-      <a class="page-link" @click="getProblemList(currentPage-1)">이전</a>
-    </li>
-    <div v-for="page in total" :key="page">
-    <li class="page-item active" v-if="page==currentPage"><a class="page-link" @click="getProblemList(page)">{{ page }}</a></li>
-    <li class="page-item" v-else><a class="page-link" @click="getProblemList(page)">{{ page }}</a></li>
-    </div>
-    <li class="page-item disabled" v-if="currentPage==total">
-      <a class="page-link" href="#">다음</a>
-    </li>
-    <li class="page-item" v-else>
-      <a class="page-link" @click="getProblemList(currentPage+1)">다음</a>
-    </li>
-  </ul>
-</nav>
+  <Pagination :pagination="PageValue" @get-page="getPage"/>
 </div>
 </template>
 
 <script>
 import api from '@/api/index.js'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'ClassAllProblems',
+  components: {
+    Pagination
+  },
   data () {
     return {
       problemList: [],
       loading: false,
       keyword: '',
-      total: 0,
-      currentPage: 1
+      currentPage: 1,
+      PageValue: []
     }
   },
   mounted () {
@@ -91,13 +76,17 @@ export default {
     init () {
       this.getProblemList(1)
     },
+    getPage (page) {
+      this.getProblemList(page)
+    },
     async getProblemList (page) {
       try {
         this.loading = true
         this.currentPage = page
+        this.PageValue = []
         const res = await api.getProblemList(page, this.keyword)
         this.loading = false
-        this.total = parseInt((res.data.count - 1) / 15) + 1
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.problemList = res.data.results
         for (var i = 0; i < this.problemList.length; i++) {
           this.problemList[i].created_time = this.problemList[i].created_time.slice(0, 10) + ' ' + this.problemList[i].created_time.slice(11, 19)

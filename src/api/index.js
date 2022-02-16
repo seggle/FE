@@ -322,12 +322,12 @@ function changeProblemSwitch (id) {
   return instance.post(`/problems/${id}/check`)
 }
 
-function createClassProblem (data) {
-  return formDataInstance.post('/problems/', data)
-}
-
 function createGeneralProblem (data) {
   return instance.post('/competitions/', data)
+}
+
+function createClassProblem (data) {
+  return formDataInstance.post('/problems/', data)
 }
 
 function submitClassStudentList (classID, data) {
