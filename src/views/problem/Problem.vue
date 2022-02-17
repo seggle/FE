@@ -59,11 +59,11 @@
                  v-if="this.problemType == 'general'">
               <h5>시작 시간</h5>
               <p class="list-content">
-                {{ problemInfo.problem_start_time }}
+                {{ problemInfo.start_time }}
               </p>
               <h5>종료 시간</h5>
               <p class="list-content">
-                {{ problemInfo.problem_end_time }}
+                {{ problemInfo.end_time }}
               </p>
             </div>
           </div>
@@ -165,7 +165,6 @@ export default {
       contestID: '', // 수업 사이드바 아이디
       contestProblemID: '', // 수업 사이드바 하위 문제 아이디
       problemInfo: [],
-      dataDescription: '',
       leaderboardList: [],
       submitList: [],
       submitRowIndex: ''
@@ -190,20 +189,20 @@ export default {
       // this.getLeaderboard() -> api 미구현
       // this.getUserSubmissions() -> api 미구현
     },
-    async getUserStatus () {
-      try {
-        const res = await api.getUserCompetitionList(this.userID)
-        const competitionList = res.data
-        for (let i = 0; i < competitionList.length; i++) {
-          if (String(competitionList[i].competition_id) === this.problemID) {
-            this.joinText = '참여중'
-            this.alreadyJoined = true
-          }
-        }
-      } catch (err) {
-        console.log(err.response.data)
-      }
-    },
+    // async getUserStatus () {
+    //   try {
+    //     const res = await api.getUserCompetitionList(this.userID)
+    //     const competitionList = res.data
+    //     for (let i = 0; i < competitionList.length; i++) {
+    //       if (String(competitionList[i].competition_id) === this.problemID) {
+    //         this.joinText = '참여중'
+    //         this.alreadyJoined = true
+    //       }
+    //     }
+    //   } catch (err) {
+    //     console.log(err.response.data)
+    //   }
+    // },
     async getClassUserList () {
       try {
         const res = await api.getClassUserList(this.problemID)

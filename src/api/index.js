@@ -59,7 +59,7 @@ function getUserCompetitionList (userID) {
 }
 
 function joinCompetition (competitionID) {
-  return instance.post(`competitions/${competitionID}/user-engage/`)
+  return instance.post(`/competitions/${competitionID}/participation/`)
 }
 
 function getCompetitions (competitionID) {
