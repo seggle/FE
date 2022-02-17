@@ -145,29 +145,11 @@ nav {
   padding: 15px 25px;
   justify-content: space-between;
 }
-.btn {
-  background: #0e1b49;
-  color: white;
-  border-radius: 50px;
-  margin: 3px;
-}
-.btn:hover {
-  color: white;
-  background: #536292;
-}
 .users {
   color: #000000;
   font-weight: bold;
   font-size: 20px;
   padding: 0px 7px;
-}
-a {
-  text-decoration: none;
-  color: white;
-}
-a:hover {
-  text-decoration: none;
-  color: white;
 }
 a.users:hover {
   color: black;

@@ -1,1 +1,57 @@
 @import "./modal.scss";
+@import "./nav.scss";
+
+//button 
+.btn {
+  background: #0e1b49;
+  color: white;
+  border-radius: 50px;
+  margin: 3px;
+
+  &:hover {
+    color: white;
+    background:#536292;
+  }
+}
+
+// a tag
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+// GeneralList, ClassList
+.app-container {
+  padding: 3rem 3rem;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem 0rem;
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    button {
+      width: 6rem;
+    }
+  }
+
+  .table {
+
+    tbody {
+
+      tr:hover {
+        background-color: #F4F4F8;
+        cursor: pointer;
+      }
+    }
+  }
+}
