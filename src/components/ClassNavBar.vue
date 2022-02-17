@@ -51,23 +51,36 @@ export default {
 h1 {
   padding: 0px 4rem;
   margin-bottom: 0rem;
+
+  display: block;
+  width: 400px;
+  overflow: hidden; // 100px 넘으면 hidden
+  text-overflow: ellipsis; // 100px 넘으면 생략 부호
+  white-space: nowrap;
+
+  @media (max-width: 1200px) {
+    width: 300px;
+  }
+
+  @media (max-width: 992px) {
+    padding: 0rem;
+  }
 }
 .navbar-toggler {
-    &:focus {
+  &:focus {
     box-shadow: 0 0 0 0rem;
   }
 }
 
 #navbarNav {
   justify-content: space-evenly;
+  font-weight: bold;
   .nav-item {
-    padding: 10px 40px;
+    padding: 0.5rem 2rem;
+
     &:hover {
       background-color: var(--bs-light);
-      font-weight: bold;
-    }
-    .nav-link {
-      color: black;
+      // font-weight: bold;
     }
   }
 }

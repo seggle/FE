@@ -23,7 +23,7 @@
                 v-model="checkList"></th>
         <td>{{ classes.semester }}</td>
         <td>{{ classes.name }}</td>
-        <td><a @click="clickModal(i)">편집</a></td>
+        <td><a @click="showModal = true; rowIndex = i">편집</a></td>
         <ModalClassList v-if="showModal"
                         @close="showModal = false"
                         mode="수업 편집"
@@ -75,10 +75,6 @@ export default {
           this.checkList.push(this.classList[i].id)
         }
       }
-    },
-    clickModal (i) {
-      this.showModal = true
-      this.rowIndex = i
     },
     async editClassList () {
       try {

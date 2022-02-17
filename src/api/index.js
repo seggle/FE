@@ -1,20 +1,18 @@
 import axios from 'axios'
 import { setInterceptors } from './interceptors'
 
-function createInstance () {
+function createInstance (formData) {
   const instance = axios.create({
-    headers: {
-      'Content-Type': 'application/json'
-    },
     proxy: {
       target: 'http://3.37.186.158:8000',
       changeOrigin: true
     }
   })
-  return setInterceptors(instance)
+  return setInterceptors(instance, formData)
 }
 
-const instance = createInstance()
+const instance = createInstance(false)
+const formDataInstance = createInstance(true)
 
 function registerUser (data) {
   return instance.post('/users/', data)
@@ -65,11 +63,7 @@ function joinCompetition (competitionID) {
 }
 
 function getCompetitions (competitionID) {
-  return instance.get('competitions', {
-    params: {
-      competition_id: competitionID
-    }
-  })
+  return instance.get(`/competitions/${competitionID}/`)
 }
 
 function getCompetitionsLeaderboard (competitionID) {
@@ -118,7 +112,7 @@ function editClassList (data) {
   return instance.patch('/users/class', data)
 }
 
-function getClassProblem (classID, contestID, contestProblemID) {
+function getContestProblem (classID, contestID, contestProblemID) {
   return instance.get(
         `class/${classID}/contests/${contestID}/${contestProblemID}/`
   )
@@ -140,8 +134,16 @@ function createContest (classID, data) {
   return instance.post(`/class/${classID}/contests`, data)
 }
 
+function editContest (classID, contestID, data) {
+  return instance.patch(`/class/${classID}/contests/${contestID}`, data)
+}
+
 function getContestList (classID) {
   return instance.get(`/class/${classID}/contests`)
+}
+
+function changeContestPublic (classID, contestID) {
+  return instance.patch(`/class/${classID}/contests/${contestID}/check`)
 }
 
 function getFAQList () {
@@ -300,6 +302,14 @@ function getProblemList (page, keyword) {
   return instance.get('/problems', { params: params })
 }
 
+function getProblem (id) {
+  return instance.get(`/problems/${id}`)
+}
+
+function editProblem (id, data) {
+  return formDataInstance.put(`/problems/${id}/`, data)
+}
+
 function deleteProblem (id) {
   return instance.delete(`/problems/${id}`)
 }
@@ -313,7 +323,7 @@ function createGeneralProblem (data) {
 }
 
 function createClassProblem (data) {
-  return instance.post('/problems/', data)
+  return formDataInstance.post('/problems/', data)
 }
 
 function submitClassStudentList (classID, data) {
@@ -349,10 +359,12 @@ export default {
   submitClassStudentList,
   submitClassTAList,
   editClassList,
-  getClassProblem,
+  getContestProblem,
   getClassLeaderboard,
   getClassUserList,
   createContest,
+  editContest,
+  changeContestPublic,
   getContestList,
   deleteClass,
   getAdminClassList,
@@ -386,6 +398,8 @@ export default {
   editProposal,
   deleteProposal,
   getProblemList,
+  getProblem,
+  editProblem,
   deleteProblem,
   changeProblemSwitch,
   createClassProblem,

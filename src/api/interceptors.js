@@ -1,8 +1,13 @@
 import store from '@/store'
 import axios from 'axios'
 
-export function setInterceptors (instance) {
+export function setInterceptors (instance, formData) {
   instance.interceptors.request.use(function (config) {
+    if (formData) {
+      config.headers['Content-Type'] = 'multipart/form-data'
+    } else {
+      config.headers['Content-Type'] = 'application/json'
+    }
     config.headers.Authorization = store.state.accessToken ? `Bearer ${store.state.accessToken}` : store.state.accessToken
     config.headers.get['Cache-Control'] = 'no-cache'
     return config

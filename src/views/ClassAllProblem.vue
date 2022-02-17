@@ -31,7 +31,7 @@
     <tbody>
       <tr :loading="loading" v-for="problem in problemList" :key="problem">
         <th scope="row">{{ problem.id }}</th>
-        <td>{{ problem.title}}</td>
+        <td><a @click="goProblem(problem.id)">{{ problem.title }}</a></td>
         <td>{{ problem.created_time }}</td>
         <td>{{ problem.created_user }}</td>
         <td>
@@ -95,6 +95,12 @@ export default {
         console.log(error)
       }
     },
+    goProblem (problemID) {
+      this.$router.push({
+        name: 'Problem',
+        params: { problemType: 'class', problemID: problemID }
+      })
+    },
     async deleteProblem (problemID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
@@ -115,7 +121,7 @@ export default {
         } else {
           console.log(problemID)
           this.$router.push({
-            name: 'Problem',
+            name: 'EditProblem',
             params: {
               problemType: 'class',
               problemID: problemID
