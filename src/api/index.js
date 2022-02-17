@@ -63,11 +63,7 @@ function joinCompetition (competitionID) {
 }
 
 function getCompetitions (competitionID) {
-  return instance.get('competitions', {
-    params: {
-      competition_id: competitionID
-    }
-  })
+  return instance.get(`/competitions/${competitionID}/`)
 }
 
 function getCompetitionsLeaderboard (competitionID) {

@@ -42,7 +42,8 @@
               <div class="form-option">
                 <div class="form-metrics col-3">
                   <label class="form-label">평가 지표</label>
-                  <select class="form-select">
+                  <select class="form-select" v-model="problemInfo.evaluation">
+                    <option disabled value="">평가 지표</option>
                     <option v-for="item in problemInfo.metrics" :key="item">{{ item }}</option>
                   </select>
                 </div>
@@ -115,6 +116,7 @@ export default {
       problemInfo: {
         description: '',
         metrics: ['RSME', 'MSE', 'Accuracy'],
+        evaluation: '',
         startTime: '',
         endTime: '',
         public: true
@@ -162,6 +164,7 @@ export default {
         const data = {
           title: this.problemTitle,
           description: this.problemInfo.description,
+          evaluation: this.problemInfo.evaluation,
           data_description: this.dataInfo.description
         }
 

@@ -179,7 +179,7 @@ export default {
       this.problemType = this.$route.params.problemType
       this.problemID = this.$route.params.problemID
       if (this.problemType === 'general') {
-        this.getUserStatus()
+        // this.getUserStatus() -> api 없이 진행할 예정
       }
       if (this.problemType === 'class') {
         this.contestID = this.$route.params.contestID
@@ -334,7 +334,7 @@ export default {
     border-color: #fff;
   }
   .tab-content {
-    background-color: var(--colorBg10);
+    background-color: #fff;
     // border: 0.0625rem solid #D7E2EB;
     margin-top: 1.5rem;
     border-radius: 0.75rem;
