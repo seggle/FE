@@ -22,17 +22,25 @@
           <tr>
             <th scope="col" class="col-md-1">#</th>
             <th scope="col">제목</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="problems in problemList" :key="problems">
             <th scope="row">{{ problems.id }}</th>
             <td>
-              <router-link
-                :to="`class/${classID}/contests/${contestID}/${problems.id}`"
-                >{{ problems.title }}</router-link
+              <a
+                @click="
+                  goContestProblem(
+                    problems.id,
+                    problems.start_time,
+                    problems.end_time
+                  )
+                "
+                >{{ problems.title }}</a
               >
             </td>
+            <td><a>삭제</a></td>
           </tr>
         </tbody>
       </table>
@@ -81,11 +89,26 @@ export default {
           this.contestID
         )
         this.problemList = res2.data
+        this.problemList.sort(function (a, b) {
+          return a.order - b.order
+        })
         console.log(typeof this.problemList)
         console.log(this.problemList)
       } catch (error) {
-        console.log(typeof this.classID, typeof this.contestID)
         console.log(error)
+      }
+    },
+    async goContestProblem (problemID, start, end) {
+      var today = new Date()
+      const startTime = new Date(start)
+      const endTime = new Date(end)
+      if (
+        today.getTime() >= startTime.getTime() &&
+        today.getTime() <= endTime.getTime()
+      ) {
+        console.log('router push 로 이동하기' + problemID)
+      } else {
+        alert('접근 시간이 아닙니다!')
       }
     }
   }

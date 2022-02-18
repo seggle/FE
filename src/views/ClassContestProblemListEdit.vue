@@ -31,10 +31,20 @@
           <tr :loading="loading" v-for="problem in problemList" :key="problem">
             <th scope="row">
               <input
+                v-if="alreadyExist(problem.id) === true"
                 class="form-check-input"
                 type="checkbox"
                 :value="problem.id"
                 v-model="checkList"
+                disabled
+              />
+              <input
+                v-else
+                class="form-check-input"
+                type="checkbox"
+                :value="problem.id"
+                v-model="checkList"
+                checked
               />
             </th>
             <td>{{ problem.title }}</td>
@@ -80,10 +90,7 @@
     <div class="table-div">
       <table class="table">
         <thead>
-          <tr>
-            <th scope="col">✅</th>
-            <th scope="col">제목</th>
-          </tr>
+          <div class="detail">* 드래그하여 순서를 변경할 수 있습니다</div>
         </thead>
         <tbody>
           <draggable
@@ -96,14 +103,7 @@
               v-for="problem in contestProblemList"
               :key="problem"
             >
-              <th scope="row">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  :value="problem"
-                  v-model="checkTitleList"
-                />
-              </th>
+              <th scope="row">{{ problem.problem_id }}</th>
               <td>
                 <input type="text" v-model="problem.title" />
               </td>
@@ -129,11 +129,11 @@ export default defineComponent({
       classID: this.$route.params.classID,
       contestID: this.$route.params.contestID,
       problemList: [],
+      alreadyList: [],
       contestProblemList: [],
       checkList: [],
       selectedProblem: [],
-      checkTitleList: [],
-      selectedTitle: [],
+      changedList: [],
       loading: false,
       keyword: '',
       total: 0,
@@ -159,9 +159,30 @@ export default defineComponent({
         this.loading = false
         this.total = parseInt(res.data.count / 15) + 1
         this.problemList = res.data.results
+        console.log(this.problemList)
       } catch (error) {
         console.log(error)
       }
+      try {
+        const res = await api.getContestProblemList(
+          this.classID,
+          this.contestID
+        )
+        this.alreadyList = res.data
+        console.log(this.alreadyList)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    alreadyExist (problemID) {
+      var flag = 0
+      for (var i = 0; i < this.alreadyList.length; i++) {
+        if (problemID === this.alreadyList[i].problem_id) {
+          flag = 1
+        }
+      }
+      if (flag === 1) return true
+      else return false
     },
     async selectProblem () {
       try {
@@ -170,6 +191,7 @@ export default defineComponent({
           item.problem_id = this.checkList[i]
           this.selectedProblem.push(item)
         }
+        console.log('체크리스트: ', this.checkList)
         console.log(this.selectedProblem)
         const res = await api.selectContestProblem(
           this.classID,
@@ -185,6 +207,7 @@ export default defineComponent({
         console.log(err)
       }
     },
+
     async getProblem () {
       try {
         const res = await api.getContestProblemList(
@@ -197,28 +220,48 @@ export default defineComponent({
         console.log(error)
       }
     },
+
+    // 문제제목 중복체크
+    checkTitle () {
+      var k = 0
+      for (var i = 0; i < this.changedList.length;) {
+        var item = this.changedList[i]
+        for (var j = 0; j < i; j++) {
+          if (item.title === this.changedList[j].title) {
+            k = 1
+            break
+          }
+        }
+        if (k === 0) i += 1
+      }
+      if (k === 0) return true
+      else return false
+    },
     async editProblem () {
       try {
-        for (let i = 0; i < this.checkTitleList.length; i++) {
+        for (let i = 0; i < this.contestProblemList.length; i++) {
           const item = {}
-          item.id = this.checkTitleList[i].id
-          item.title = this.checkTitleList[i].title
-          item.problem_id = this.checkTitleList[i].problem_id
-          this.selectedTitle.push(item)
+          item.id = this.contestProblemList[i].id
+          item.title = this.contestProblemList[i].title
+          item.order = i + 1
+          this.changedList.push(item)
         }
-        console.log(this.checkTitleList)
-        console.log(this.selectedTitle)
-        const res = await api.editContestProblem(
-          this.classID,
-          this.contestID,
-          this.selectedTitle
-        )
-        console.log(res)
-        alert('변경사항이 저장되었습니다.')
-        this.firstPage = true
-        this.$router.push({ name: 'ClassContestProblemList' })
+        console.log(this.changedList)
+        if (this.checkTitle()) {
+          const res = await api.editContestProblem(
+            this.classID,
+            this.contestID,
+            this.changedList
+          )
+          console.log(res)
+          alert('변경사항이 저장되었습니다.')
+          this.firstPage = true
+          this.$router.push({ name: 'ClassContestProblemList' })
+        } else {
+          alert('중복된 제목이 존재합니다')
+        }
       } catch (err) {
-        console.log(this.checkTitleList)
+        console.log(this.changedList)
         console.log(err)
       }
     }
@@ -275,5 +318,9 @@ a {
 .list-group-item {
   display: flex;
   justify-content: space-around;
+}
+.detail {
+  font-size: 8px;
+  color: gray;
 }
 </style>

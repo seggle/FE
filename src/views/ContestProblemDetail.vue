@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="container"
-    :key="problemInfo"
-    v-if="isClassUser || this.problemType == 'class'"
-  >
+  <div class="container" :key="problemInfo" v-if="this.problemType == 'class'">
     <div class="problem-header">
       <h1 id="title">{{ problemInfo.problem_title }}</h1>
       <button
@@ -187,13 +183,13 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'Problem',
+  name: 'ContestProblemDetail',
   data () {
     return {
       userID: this.$store.state.userid,
       joinText: '참여하기',
       alreadyJoined: false,
-      isClassUser: false,
+      isClassUser: true,
       problemType: '',
       problemID: '', // 대회 문제 아이디, 수업 아이디
       contestID: '', // 수업 사이드바 아이디

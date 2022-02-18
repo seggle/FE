@@ -19,7 +19,6 @@
           class="form-control"
           :class="{ 'is-invalid': invalid.currentPassword }"
           @focus="invalid.currentPassword = false"
-          autocomplete="off"
           required
         />
         <div class="invalid-feedback">
@@ -55,19 +54,22 @@ export default {
     async submitForm () {
       try {
         const data = {
-          password: this.formResign.currentPassword
+          password2: this.formResign.currentPassword
         }
         if (confirm('정말 탈퇴하시겠습니까?')) {
           console.log(data)
-          const res = await api.resignUser(this.userID, data)
+          console.log(JSON.stringify(data))
+          const res = await api.resignUser(this.userID, JSON.stringify(data))
           console.log(res)
           alert('탈퇴 완료')
+          this.logout()
         }
       } catch (err) {
         console.log(err)
+        console.log(err.response.data.error)
         console.log(this.formResign.currentPassword)
         this.invalid.currentPassword = true
-        this.feedback = '현재 비밀번호가 일치하지 않습니다.'
+        this.feedback.currentPassword = '현재 비밀번호가 일치하지 않습니다.'
       }
     },
     checkFormValid () {
@@ -100,7 +102,6 @@ export default {
     handleResign () {
       if (this.checkFormValid()) {
         this.submitForm()
-        this.logout()
       } else {
         this.validated = true
       }

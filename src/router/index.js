@@ -15,13 +15,12 @@ import ClassExamManage from '@/views/ClassExamManage.vue'
 import ClassProblem from '@/views/ClassProblem.vue'
 import ClassContestProblemList from '@/views/ClassContestProblemList.vue'
 import ClassContestProblemListEdit from '@/views/ClassContestProblemListEdit.vue'
-import ContestProblemDetail from '@/views/ContestProblemDetail.vue'
 
 import Login from '@/views/users/Login.vue'
 import Register from '@/views/users/Register.vue'
 import FindPassword from '@/views/users/FindPassword.vue'
 import ResetPassword from '@/views/users/ResetPassword.vue'
-import Resign from '@/views/Resign.vue'
+import Resign from '@/views/users/Resign.vue'
 
 import Home from '../views/Home.vue'
 import User from '../views/User.vue'
@@ -29,9 +28,9 @@ import User from '../views/User.vue'
 import FAQ from '../views/FAQ.vue'
 import Announcement from '../views/Announcement.vue'
 import AnnouncementDetail from '../views/AnnouncementDetail.vue'
-import Proposal from '../views/Proposal.vue'
-import ProposalDetail from '../views/ProposalDetail.vue'
-import ProposalCreate from '../views/ProposalCreate.vue'
+import Proposal from '../views/proposal/Proposal.vue'
+import ProposalDetail from '../views/proposal/ProposalDetail.vue'
+import ProposalCreate from '../views/proposal/ProposalCreate.vue'
 import ExamSubmission from '../views/ExamSubmission.vue'
 
 import GeneralList from '@/views/problem/GeneralList.vue'
@@ -126,12 +125,7 @@ const routes = [{
       path: ':contestID',
       name: 'ClassContestProblemList',
       component: ClassContestProblemList,
-      meta: { isAdmin: true },
-      children: [{
-        path: ':problemID',
-        name: 'ContestProblemDetail',
-        component: ContestProblemDetail
-      }]
+      meta: { isAdmin: true }
     },
     {
       path: ':contestID/edit-list',

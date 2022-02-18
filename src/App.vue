@@ -49,9 +49,20 @@
         </ul>
         <!-- 로그인 했을 때 -->
         <template v-if="isUserLogin">
-          <router-link to="/users" class="users">
+          <router-link
+            v-if="
+              this.$store.state.usertype === 2 ||
+              this.$store.state.userid === 'seggle'
+            "
+            to="/admin"
+            class="admin"
+          >
             {{ this.$store.state.userid }}
           </router-link>
+          <router-link v-else to="/users" class="users">
+            {{ this.$store.state.userid }}
+          </router-link>
+
           <button
             type="button"
             class="btn btn-dark"
@@ -155,6 +166,12 @@ nav {
   background: #536292;
 }
 .users {
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 0px 7px;
+}
+.admin {
   color: #000000;
   font-weight: bold;
   font-size: 20px;

@@ -19,7 +19,9 @@
                   <td>{{ contest.name }}</td>
                   <td><button @click="editContest(contest.id)">🖋</button></td>
                   <td>
-                    <button @click="deleteContest(contest.id)">❌</button>
+                    <button @click="deleteContest(contest.id, contest.name)">
+                      ❌
+                    </button>
                   </td>
                 </tr>
               </table>
@@ -46,7 +48,13 @@ export default {
       contestList: []
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.getContestList()
+    },
     async getContestList () {
       try {
         const res = await api.getContestList(this.classID)
@@ -62,12 +70,13 @@ export default {
       } else {
       }
     },
-    async deleteContest (contestID) {
+    async deleteContest (contestID, contestName) {
       var classID = this.$route.params.classID
       if (confirm('삭제하시겠습니까?')) {
         const res = await api.deleteContest(classID, contestID)
         console.log(res.data)
-        alert(contestID + ' 삭제 완료')
+        alert(contestName + '이(가) 삭제되었습니다.')
+        this.$router.go({ name: 'ClassProblem' })
       } else {
       }
     }

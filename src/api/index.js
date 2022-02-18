@@ -160,6 +160,12 @@ function editContestProblem (classID, contestID, data) {
   return instance.patch(`/class/${classID}/contests/${contestID}/title`, data)
 }
 
+function deleteContestProblem (classID, contestID, problemID) {
+  return instance.delete(
+        `/class/${classID}/contests/${contestID}/${problemID}`
+  )
+}
+
 function getFAQList () {
   return instance.get('/admin/faqs/')
 }
@@ -373,6 +379,7 @@ export default {
   getContestProblemList,
   selectContestProblem,
   editContestProblem,
+  deleteContestProblem,
   deleteContest,
   deleteClass,
   getAdminClassList,
