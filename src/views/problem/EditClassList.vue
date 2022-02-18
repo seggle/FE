@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="container">
     <header>
       <h1 id="title">수업 및 시험</h1>
@@ -40,6 +41,44 @@
       </tbody>
     </table>
   </div>
+=======
+<div class="container">
+  <header>
+    <h1 id="title">수업 및 시험</h1>
+    <button class="btn" @click="editClassList">저장</button>
+  </header>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">수강학기</th>
+        <th scope="col">제목</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for=" (classes, i) in classList" :key="i">
+        <th scope="row">
+          <input class="form-check-input"
+                type="checkbox"
+                :value="classes.id"
+                v-model="checkList"></th>
+        <td>{{ classes.semester }}</td>
+        <td>{{ classes.name }}</td>
+        <td><a @click="showModal = true; rowIndex = i">편집</a></td>
+        <ModalClassList v-if="showModal"
+                        @close="showModal = false"
+                        mode="수업 편집"
+                        :classID="classList[rowIndex].id"
+                        :semester="classList[rowIndex].semester"
+                        :title="classList[rowIndex].name"/>
+        <td><a @click="removeClass(classes.id)">삭제</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+>>>>>>> 0486d70c3a2f68e738f8bba3e987a840e1b94f60
 </template>
 
 <script>
@@ -80,10 +119,6 @@ export default {
           this.checkList.push(this.classList[i].id)
         }
       }
-    },
-    clickModal (i) {
-      this.showModal = true
-      this.rowIndex = i
     },
     async editClassList () {
       try {

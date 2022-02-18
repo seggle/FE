@@ -87,41 +87,41 @@
   <router-view />
 </template>
 <script>
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
-import api from '@/api/index.js'
-import { deleteCookie } from '@/utils/cookies.js'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+import api from "@/api/index.js";
+import { deleteCookie } from "@/utils/cookies.js";
 export default {
-  data () {
+  data() {
     return {
-      userid: this.$store.state.userid
-    }
+      userid: this.$store.state.userid,
+    };
   },
   methods: {
-    async logout () {
+    async logout() {
       try {
         const res = await api.logoutUser({
-          refresh: this.$store.state.refreshToken
-        })
-        console.log(res)
-        this.$store.commit('clearToken')
-        this.$store.commit('clearUserid')
-        this.$store.commit('clearUserType')
-        deleteCookie('til_user')
-        deleteCookie('til_access')
-        deleteCookie('til_refresh')
-        this.$router.push('/login')
+          refresh: this.$store.state.refreshToken,
+        });
+        console.log(res);
+        this.$store.commit("clearToken");
+        this.$store.commit("clearUserid");
+        this.$store.commit("clearUserType");
+        deleteCookie("til_user");
+        deleteCookie("til_access");
+        deleteCookie("til_refresh");
+        this.$router.push("/login");
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
+    },
   },
   computed: {
-    isUserLogin () {
-      return this.$store.getters.isLogin
-    }
-  }
-}
+    isUserLogin() {
+      return this.$store.getters.isLogin;
+    },
+  },
+};
 </script>
 
 <style>
@@ -155,16 +155,6 @@ nav {
   padding: 15px 25px;
   justify-content: space-between;
 }
-.btn {
-  background: #0e1b49;
-  color: white;
-  border-radius: 50px;
-  margin: 3px;
-}
-.btn:hover {
-  color: white;
-  background: #536292;
-}
 .users {
   color: #000000;
   font-weight: bold;
@@ -186,7 +176,7 @@ a:hover {
   color: white;
 }
 a.users:hover {
-  color: black;
+  color: rgb(5, 1, 1);
   text-decoration: underline;
 }
 a.nav-link:hover {

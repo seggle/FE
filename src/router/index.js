@@ -38,6 +38,7 @@ import ClassList from '@/views/problem/ClassList.vue'
 import EditClassList from '@/views/problem/EditClassList.vue'
 import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
+import EditProblem from '@/views/problem/EditProblem.vue'
 
 const requireAuth = () => (to, from, next) => {
   if (to.meta.isSuperAdmin && store.getters.isSuperAdmin) {
@@ -225,6 +226,11 @@ const routes = [{
   name: 'CreateProblem',
   component: CreateProblem
   // meta: { isAdmin: true }
+},
+{
+  path: '/:problemType/:problemID/edit-problem',
+  name: 'EditProblem',
+  component: EditProblem
 }
 ]
 

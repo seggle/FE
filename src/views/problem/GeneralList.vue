@@ -16,9 +16,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(problem, i) in problemList" :key="problem" @click="goProblem(problem.competition_id)">
-        <th scope="row">{{ problem.competition_id }}</th>
-        <td>{{ problem.title }}</td>
+      <tr v-for="(problem, i) in problemList" :key="problem" @click="goProblem(problem.id)">
+        <th scope="row">{{ problem.id }}</th>
+        <td>{{ problem.problem.title }}</td>
         <td>D-{{ this.diffDay[i] }}</td>
         <td>{{ problem.start_time }}</td>
         <td>
