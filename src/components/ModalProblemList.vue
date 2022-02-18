@@ -73,35 +73,35 @@
 </template>
 
 <script>
-import ModalContestList from "@/components/ModalContestList.vue";
-import api from "@/api/index.js";
+import ModalContestList from '@/components/ModalContestList.vue'
+import api from '@/api/index.js'
 
 export default {
-  name: "ModalProblemList",
+  name: 'ModalProblemList',
   components: {
-    ModalContestList,
+    ModalContestList
   },
-  data() {
+  data () {
     return {
       classID: this.$route.params.classID,
       contestList: [],
       showModal: false,
-      rowIndex: "",
-    };
+      rowIndex: ''
+    }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
   methods: {
-    init() {
-      this.getContestList();
+    init () {
+      this.getContestList()
     },
-    async getContestList() {
+    async getContestList () {
       try {
-        const res = await api.getContestList(this.classID);
-        this.contestList = res.data;
+        const res = await api.getContestList(this.classID)
+        this.contestList = res.data
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
     // onEdit (contestID) {
@@ -111,26 +111,26 @@ export default {
     //   } else {
     //   }
     // },
-    onRemove(contestID) {
-      var id = contestID;
-      if (confirm("삭제하시겠습니까?")) {
+    onRemove (contestID) {
+      var id = contestID
+      if (confirm('삭제하시겠습니까?')) {
         // contest 삭제 api
-        alert(id + " 삭제 완료");
-        this.$router.go(this.$router.currentRoute);
+        alert(id + ' 삭제 완료')
+        this.$router.go(this.$router.currentRoute)
       }
     },
-    async changePublic(contestID) {
+    async changePublic (contestID) {
       try {
-        const res = await api.changeContestPublic(this.classID, contestID);
-        console.log(res);
-        alert("공개 설정 완료");
-        this.$router.go(this.$router.currentRoute);
+        const res = await api.changeContestPublic(this.classID, contestID)
+        console.log(res)
+        alert('공개 설정 완료')
+        this.$router.go(this.$router.currentRoute)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style></style>

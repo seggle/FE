@@ -53,49 +53,49 @@
 </template>
 
 <script>
-import ModalContestList from "@/components/ModalContestList.vue";
-import ModalProblemList from "@/components/ModalProblemList.vue";
-import api from "@/api/index.js";
+import ModalContestList from '@/components/ModalContestList.vue'
+import ModalProblemList from '@/components/ModalProblemList.vue'
+import api from '@/api/index.js'
 
 export default {
-  name: "ClassContestNav",
+  name: 'ClassContestNav',
   components: {
     ModalContestList,
-    ModalProblemList,
+    ModalProblemList
   },
-  data() {
+  data () {
     return {
       classID: this.$route.params.classID,
       contestList: [],
       showModal: false,
-      problemModal: false,
-    };
+      problemModal: false
+    }
   },
-  mounted() {
-    this.init();
+  mounted () {
+    this.init()
   },
   methods: {
-    init() {
-      this.getContestList();
+    init () {
+      this.getContestList()
     },
-    async getContestList() {
+    async getContestList () {
       try {
-        const res = await api.getContestList(this.classID);
-        this.contestList = res.data;
-        console.log(res.data);
+        const res = await api.getContestList(this.classID)
+        this.contestList = res.data
+        console.log(res.data)
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
-    goContest(contestID) {
-      this.contestID = contestID;
+    goContest (contestID) {
+      this.contestID = contestID
       this.$router.push({
-        name: "ClassContestProblemList",
-        params: { contestID: contestID },
-      });
-    },
-  },
-};
+        name: 'ClassContestProblemList',
+        params: { contestID: contestID }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
