@@ -28,19 +28,31 @@
                     <td>{{ contest.name }}</td>
                     <td>
                       <div class="form-check form-switch">
-                        <input class="form-check-input"
-                              id="publicSwitch"
-                              type="checkbox" role="switch"
-                              v-model="contest.visible"
-                              @change="changePublic(contest.id)">
+                        <input
+                          class="form-check-input"
+                          id="publicSwitch"
+                          type="checkbox"
+                          role="switch"
+                          v-model="contest.visible"
+                          @change="changePublic(contest.id)"
+                        />
                       </div>
                     </td>
                     <td>
-                      <button @click="showModal = true; rowIndex = i">🖋</button>
-                      <ModalContestList v-if="showModal"
-                                        @close="showModal = false"
-                                        :editContestInfo="contestList[rowIndex]"
-                                        :mode="'edit'" />
+                      <button
+                        @click="
+                          showModal = true;
+                          rowIndex = i;
+                        "
+                      >
+                        🖋
+                      </button>
+                      <ModalContestList
+                        v-if="showModal"
+                        @close="showModal = false"
+                        :editContestInfo="contestList[rowIndex]"
+                        :mode="'edit'"
+                      />
                     </td>
                     <td>
                       <button @click="onRemove(contest.id)">❌</button>
@@ -77,7 +89,7 @@ export default {
       rowIndex: ''
     }
   },
-  mounted () {
+  created () {
     this.init()
   },
   methods: {

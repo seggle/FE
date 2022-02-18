@@ -3,27 +3,41 @@
     <nav class="nav flex-column px-4 py-4">
       <div class="nav-header px-1 py-2">
         <span id="title">문제</span>
-        <span id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">+</span>
+        <span
+          id="dropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          >+</span
+        >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li>
-            <a class="dropdown-item"
-               @click="showModal = true">문제 생성</a>
+            <a class="dropdown-item" @click="showModal = true">문제 생성</a>
           </li>
           <li>
-            <a class="dropdown-item"
-               v-if="this.$store.getters.isAdmin"
-               @click="problemModal = true">문제 목록 편집</a>
+            <a
+              class="dropdown-item"
+              v-if="this.$store.getters.isAdmin"
+              @click="problemModal = true"
+              >문제 목록 편집</a
+            >
           </li>
         </ul>
         <!-- <a class="icon" @click="showModal = true">&#8942;</a> -->
         <ModalContestList
-          v-if="showModal" @close="showModal = false"
-          :mode="'create'"/>
+          v-if="showModal"
+          @close="showModal = false"
+          :mode="'create'"
+        />
       </div>
       <ul class="navbar-nav px-3">
         <li class="nav-item" v-for="contest in contestList" :key="contest">
-          <a v-if="contest.visible" class="nav-link" @click="goContest(contest.id)">
-            {{ contest.name }}</a>
+          <a
+            v-if="contest.visible"
+            class="nav-link"
+            @click="goContest(contest.id)"
+          >
+            {{ contest.name }}</a
+          >
         </li>
       </ul>
     </nav>
@@ -68,13 +82,15 @@ export default {
       try {
         const res = await api.getContestList(this.classID)
         this.contestList = res.data
+        console.log(res.data)
       } catch (error) {
         console.log(error)
       }
     },
     goContest (contestID) {
+      this.contestID = contestID
       this.$router.push({
-        name: 'ClassContestList',
+        name: 'ClassContestProblemList',
         params: { contestID: contestID }
       })
     }
@@ -99,7 +115,7 @@ nav {
   width: 12rem;
 
   background-color: #fff;
-  border: 0.025rem solid #D7E2EB;
+  border: 0.025rem solid #d7e2eb;
   margin-top: 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
@@ -128,7 +144,7 @@ nav {
       color: white;
     }
     .dropdown-menu {
-      border: 0.025rem solid #D7E2EB;
+      border: 0.025rem solid #d7e2eb;
     }
     .dropdown-item {
       &:hover {

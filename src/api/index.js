@@ -46,8 +46,8 @@ function resetPassword (username, data) {
   return instance.patch(`users/${username}/`, data)
 }
 
-function resignUser (username) {
-  return instance.delete(`users/${username}`)
+function resignUser (username, data) {
+  return instance.delete(`users/${username}/`, data)
 }
 
 function getCompetitionList () {
@@ -140,6 +140,28 @@ function editContest (classID, contestID, data) {
 
 function getContestList (classID) {
   return instance.get(`/class/${classID}/contests`)
+}
+
+function deleteContest (classID, contestID) {
+  return instance.delete(`/class/${classID}/contests/${contestID}`)
+}
+
+function getContestProblemList (classID, contestID) {
+  return instance.get(`/class/${classID}/contests/${contestID}`)
+}
+
+function selectContestProblem (classID, contestID, data) {
+  return instance.post(`/class/${classID}/contests/${contestID}`, data)
+}
+
+function editContestProblem (classID, contestID, data) {
+  return instance.patch(`/class/${classID}/contests/${contestID}/title`, data)
+}
+
+function deleteContestProblem (classID, contestID, problemID) {
+  return instance.delete(
+        `/class/${classID}/contests/${contestID}/${problemID}`
+  )
 }
 
 function changeContestPublic (classID, contestID) {
@@ -366,6 +388,11 @@ export default {
   editContest,
   changeContestPublic,
   getContestList,
+  getContestProblemList,
+  selectContestProblem,
+  editContestProblem,
+  deleteContestProblem,
+  deleteContest,
   deleteClass,
   getAdminClassList,
   getAdminProblemList,

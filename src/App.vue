@@ -49,9 +49,20 @@
         </ul>
         <!-- 로그인 했을 때 -->
         <template v-if="isUserLogin">
-          <router-link to="/users" class="users">
+          <router-link
+            v-if="
+              this.$store.state.usertype === 2 ||
+              this.$store.state.userid === 'seggle'
+            "
+            to="/admin"
+            class="admin"
+          >
             {{ this.$store.state.userid }}
           </router-link>
+          <router-link v-else to="/users" class="users">
+            {{ this.$store.state.userid }}
+          </router-link>
+
           <button
             type="button"
             class="btn btn-dark"
@@ -80,7 +91,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import api from '@/api/index.js'
 import { deleteCookie } from '@/utils/cookies.js'
-
 export default {
   data () {
     return {
@@ -151,8 +161,22 @@ nav {
   font-size: 20px;
   padding: 0px 7px;
 }
+.admin {
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 0px 7px;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  text-decoration: none;
+  color: white;
+}
 a.users:hover {
-  color: black;
+  color: rgb(5, 1, 1);
   text-decoration: underline;
 }
 a.nav-link:hover {
