@@ -8,6 +8,11 @@ export default {
   name: 'CreateProblem',
   components: {
     ProblemForm
+  },
+  props: {
+    classID: {
+      type: String
+    }
   }
 }
 </script>
