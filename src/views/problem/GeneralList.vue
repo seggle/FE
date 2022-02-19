@@ -4,30 +4,31 @@
     <h1 id="title">일반 대회</h1>
     <button class="btn" @click="goCreateProblem">문제 생성</button>
   </header>
+  <div class="table-div">
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">문제 제목</th>
-        <th scope="col">디데이</th>
-        <th scope="col">시작 날짜</th>
-        <th scope="col">프로그레스 바</th>
-        <th scope="col">마감날짜</th>
+        <th scope="col" class="col-1">#</th>
+        <th scope="col" class="col-3">문제 제목</th>
+        <th scope="col" class="col-2 col-sm-0"></th>
+        <th scope="col" class="col-2">시작날짜</th>
+        <th scope="col" class="col-2"></th>
+        <th scope="col" class="col-2">마감날짜</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(problem, i) in problemList" :key="problem" @click="goProblem(problem.id)">
-        <th scope="row">{{ problem.id }}</th>
-        <td>{{ problem.problem.title }}</td>
-        <td>D-{{ this.diffDay[i] }}</td>
+        <th scope="row">{{ i + 1 }}</th>
+        <td class="col-3 probtitle">{{ problem.problem.title }}</td>
+        <td>{{ problem.dday }}</td>
         <td>{{ problem.start_time }}</td>
         <td>
           <div class="progress">
             <div class="progress-bar"
-                :class="this.progressBar[i].type"
+                :class="this.problemList[i].progressBar.type"
                 role="progressbar"
-                :style="{ width: this.progressBar[i].value + '%' }"
-                :aria-valuenow="this.progressBar[i].value"
+                :style="{ width: this.problemList[i].progressBar.value + '%' }"
+                :aria-valuenow="this.problemList[i].progressBar.value"
                 aria-valuemin="0"
                 aria-valuemax="100"></div>
           </div>
@@ -36,6 +37,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
   <Pagination :pagination="PageValue" @get-page="getPage"/>
 </div>
 </template>
@@ -52,8 +54,6 @@ export default {
   data () {
     return {
       problemList: [],
-      diffDay: [],
-      progressBar: [],
       currentPage: 1,
       PageValue: []
     }
@@ -72,8 +72,21 @@ export default {
         const res = await api.getCompetitionList()
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.problemList = res.data.results
+        this.problemList.reverse()
+        console.log(this.problemList)
         this.setTime()
         this.setProgressBar()
+        this.problemList.sort((a, b) => {
+          if (a.astart_end < b.astart_end) return 1
+          else if (a.astart_end > b.astart_end) return -1
+        })
+        this.problemList.sort((a, b) => {
+          if (a.astart_end >= 0 & b.astart_end >= 0) {
+            if (a.diffDay > b.diffDay) return 1
+            else if (a.diffDay < b.diffDay) return -1
+          }
+        })
+        console.log(this.problemList)
       } catch (err) {
         console.log(err)
       }
@@ -87,29 +100,57 @@ export default {
         // D-Day 설정
         const startDate = new Date(startTime.replace(/-/g, '/'))
         const endDate = new Date(endTime.replace(/-/g, '/'))
-        let interval = endDate.getTime() - startDate.getTime()
-        interval = Math.floor(interval / (1000 * 60 * 60 * 24))
-        this.diffDay.push(interval)
+        const today = new Date()
+        endDate.setHours(23, 59, 59, 0)
+        today.setHours(0, 0, 0, 0)
+        let starttoend = endDate.getTime() - startDate.getTime()
+        starttoend = Math.floor(starttoend / (1000 * 60 * 60 * 24)) + 1
+        if (startDate > today) {
+          let interval = startDate.getTime() - today.getTime()
+          interval = Math.floor(interval / (1000 * 60 * 60 * 24))
+          this.problemList[i].dday = 'OPEN D - ' + interval
+          this.problemList[i].astart_end = -1
+          this.problemList[i].diffDay = -1
+        } else if (startDate <= today & endDate >= today) {
+          this.problemList[i].astart_end = starttoend
+          let interval = endDate.getTime() - today.getTime()
+          interval = Math.floor(interval / (1000 * 60 * 60 * 24))
+          if (interval === 0) {
+            this.problemList[i].dday = 'D - Day'
+            this.problemList[i].diffDay = 0
+          } else {
+            this.problemList[i].dday = 'D - ' + interval
+            this.problemList[i].diffDay = interval
+          }
+        } else {
+          this.problemList[i].astart_end = -2
+          this.problemList[i].dday = '종료'
+          this.problemList[i].diffDay = -1
+        }
       }
     },
     setProgressBar () {
       for (let i = 0; i < this.problemList.length; i++) {
         const progress = {}
-        progress.value = 100 - this.diffDay[i]
-        if (progress.value < 0) {
+        if (this.problemList[i].astart_end === -1) {
           progress.value = 0
-        }
-
-        if (this.diffDay[i] <= 0) {
           progress.type = 'bg-secondary'
-        } else if (this.diffDay[i] <= 3) {
-          progress.type = 'bg-danger'
-        } else if (this.diffDay[i] <= 7) {
-          progress.type = 'bg-warning'
+        } else if (this.problemList[i].astart_end === -2) {
+          progress.value = 100
+          progress.type = 'bg-secondary'
         } else {
-          progress.type = 'bg-success'
+          progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].astart_end) * 100)
+          if (progress.value <= 50) {
+            progress.type = 'bg-info'
+          } else if (progress.value <= 70) {
+            progress.type = 'bg-warning'
+          } else if (progress.value === 100) {
+            progress.type = 'bg-success'
+          } else {
+            progress.type = 'bg-danger'
+          }
         }
-        this.progressBar.push(progress)
+        this.problemList[i].progressBar = progress
       }
     },
     goCreateProblem () {
@@ -139,11 +180,24 @@ export default {
       margin-bottom: 0;
     }
   }
+  .table-div {
+    overflow-x: auto;
+  }
   .table {
+    table-layout: fixed;
+    min-width: 700px;
+    width: 100%;
+    white-space: nowrap;
+    border-collapse:collapse;
     tbody {
       tr:hover {
         background-color: #F4F4F8;
         cursor: pointer;
+      }
+      td.probtitle {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
   }

@@ -178,7 +178,7 @@ function getAnnouncementList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/admin/announcements', { params: params })
+  return instance.get('/admin/announcements/', { params: params })
 }
 
 function deleteAnnouncement (announcementID) {
@@ -206,7 +206,7 @@ function getUserList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/admin/users', { params: params })
+  return instance.get('/admin/users/', { params: params })
 }
 
 function editUser (username) {
