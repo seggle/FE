@@ -55,28 +55,28 @@ export default {
   data () {
     return {
       classID: this.$route.params.classID,
-      contestID: this.$route.params.contestID,
+      contestID: this.$route.params.classID,
       contestTitle: '',
       problemList: [],
       contestList: [],
       problemID: ''
     }
   },
-  mounted () {
-    this.getProblemList()
+  created () {
+    this.getProblemList(this.$route.params.contestID)
   },
   methods: {
     goEditContest () {},
     goEdit () {
       this.$router.push({ name: 'ClassContestProblemListEdit' })
     },
-    async getProblemList () {
+    async getProblemList (contestID) {
       try {
         const res1 = await api.getContestList(this.classID)
         this.contestList = res1.data
-        console.log(parseInt(this.contestID))
+        console.log(parseInt(contestID))
         for (var i = 0; i < this.contestList.length; i++) {
-          if (this.contestList[i].id === parseInt(this.contestID)) {
+          if (this.contestList[i].id === parseInt(contestID)) {
             this.contestTitle = this.contestList[i].name
           }
         }
@@ -84,10 +84,7 @@ export default {
         console.log(error)
       }
       try {
-        const res2 = await api.getContestProblemList(
-          this.classID,
-          this.contestID
-        )
+        const res2 = await api.getContestProblemList(this.classID, contestID)
         this.problemList = res2.data
         this.problemList.sort(function (a, b) {
           return a.order - b.order
@@ -109,6 +106,15 @@ export default {
         console.log('router push 로 이동하기' + problemID)
       } else {
         alert('접근 시간이 아닙니다!')
+      }
+    }
+  },
+  watch: {
+    $route (to, from) {
+      if (to.path !== from.path) {
+        if (this.$route.params.contestID !== null) {
+          this.getProblemList(this.$route.params.contestID)
+        }
       }
     }
   }
