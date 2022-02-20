@@ -3,11 +3,19 @@
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <h1 id="title">{{ this.className }}</h1>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <div class="icon">☰</div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav" @click="handleRoute">
+          <ul class="navbar-nav items" @click="handleRoute">
             <li class="nav-item">
               <a class="nav-link" id="ClassAllProblem">전체 문제</a>
             </li>
@@ -28,14 +36,19 @@
 </template>
 
 <script>
-
 export default {
   name: 'ClassNavBar',
+  data: () => {
+    return {
+      navBar: document.querySelector('.navbar-nav items')
+    }
+  },
   props: {
     className: {
       type: String
     }
   },
+  mounted () {},
   methods: {
     handleRoute (route) {
       // a태그의 id와 router index.js의 name과 동일해야함
@@ -84,5 +97,7 @@ h1 {
     }
   }
 }
-
+.navbar-nav li.selected {
+  background-color: gray;
+}
 </style>
