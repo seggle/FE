@@ -89,8 +89,6 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
-import api from '@/api/index.js'
-import { deleteCookie } from '@/utils/cookies.js'
 export default {
   data () {
     return {
@@ -100,16 +98,7 @@ export default {
   methods: {
     async logout () {
       try {
-        const res = await api.logoutUser({
-          refresh: this.$store.state.refreshToken
-        })
-        console.log(res)
-        this.$store.commit('clearToken')
-        this.$store.commit('clearUserid')
-        this.$store.commit('clearUserInfo')
-        deleteCookie('til_user')
-        deleteCookie('til_access')
-        deleteCookie('til_refresh')
+        this.$store.dispatch('Logout')
         this.$router.push('/login')
       } catch (err) {
         console.log(err)
