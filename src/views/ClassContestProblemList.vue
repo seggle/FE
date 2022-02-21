@@ -64,6 +64,7 @@ export default {
   },
   created () {
     this.getProblemList(this.$route.params.contestID)
+    console.log(this.$store.state.usertype)
   },
   methods: {
     goEditContest () {},

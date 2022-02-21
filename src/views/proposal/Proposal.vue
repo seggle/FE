@@ -1,18 +1,10 @@
 <template>
   <div class="container px-5">
-    <div class="class-nav-bar">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <h1 id="title">건의게시판</h1>
-          <router-link
-            to="/proposals/create"
-            @click="write"
-            class="btn btn-primary btn-md px-4"
-            id="head"
-            >글쓰기</router-link
-          >
-        </div>
-      </nav>
+    <div class="d-flex mb-2 mt-3">
+      <h1 class="me-auto">건의게시판</h1>
+      <div class="button-group">
+        <button @click="goCreate" class="btn" id="head">글쓰기</button>
+      </div>
     </div>
     <div class="table-div">
       <table class="table py-3">
@@ -38,7 +30,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage"/>
+    <Pagination :pagination="PageValue" @get-page="getPage" />
   </div>
 </template>
 <script>
@@ -67,12 +59,20 @@ export default {
     getPage (page) {
       this.getProposal(page)
     },
+    goCreate () {
+      this.$router.push({
+        name: 'ProposalCreate'
+      })
+    },
     async getProposal (page) {
       try {
         this.currentPage = page
         this.PageValue = []
         const res = await api.getProposal(page)
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        this.PageValue.push({
+          count: res.data.count,
+          currentPage: this.currentPage
+        })
         this.proList = res.data.results
         this.proList.reverse()
       } catch (error) {
@@ -120,8 +120,8 @@ div.table-div {
     }
   }
   a {
-  color: black;
-  text-decoration: none;
-}
+    color: black;
+    text-decoration: none;
+  }
 }
 </style>
