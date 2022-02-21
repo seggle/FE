@@ -51,7 +51,7 @@
         Label"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h5
@@ -174,8 +174,12 @@ export default {
         }
         const proposalId = this.$route.params.id
         console.log(proposalId)
-        const res = await api.editProposal(proposalId, data)
-        console.log(res.data)
+        if (confirm('저장하시겠습니까?')) {
+          const res = await api.editProposal(proposalId, data)
+          console.log(res.data)
+          alert('저장 완료')
+          this.$router.go()
+        }
       } catch (error) {
         console.log(error)
       }

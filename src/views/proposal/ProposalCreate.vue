@@ -1,17 +1,10 @@
 <template>
   <div class="container px-5">
-    <div class="class-nav-bar">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <h1 id="title">글 등록</h1>
-          <router-link
-            to="/proposals"
-            class="btn btn-primary btn-md px-4"
-            id="head"
-            >목록</router-link
-          >
-        </div>
-      </nav>
+    <div class="d-flex mb-2 mt-3">
+      <h1 class="me-auto">글 등록</h1>
+      <div class="button-group">
+        <button @click="goList" class="btn" id="head">목록</button>
+      </div>
     </div>
     <div class="container">
       <div class="form-group">
@@ -57,6 +50,11 @@ export default {
     }
   },
   methods: {
+    goList () {
+      this.$router.push({
+        name: 'Proposal'
+      })
+    },
     async submitProposal () {
       try {
         const data = {
@@ -85,5 +83,9 @@ h1 {
   font-weight: bold;
   text-align: left;
   margin: 10px;
+}
+.btn {
+  margin-top: 50px;
+  margin-right: 4rem;
 }
 </style>

@@ -1,24 +1,15 @@
 <template>
-  <div class="container px-5">
-    <div class="class-nav-bar">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <h1 id="title">{{ this.$store.state.userid }}님, 반갑습니다!</h1>
-          <router-link
-            to="/resign"
-            class="btn btn-primary btn-sm px-4 me-sm-3"
-            id="head"
-            >회원 탈퇴</router-link
-          >
-
-          <router-link
-            to="/reset-password"
-            class="btn btn-primary btn-sm px-4 me-sm-3"
-            id="head"
-            >비밀번호 변경</router-link
-          >
-        </div>
-      </nav>
+  <div class="container">
+    <div class="header">
+      <h1 id="title">{{ this.$store.state.userid }}님, 반갑습니다!</h1>
+      <div class="button-group">
+        <button class="btn btn-primary" type="button" @click="goResign">
+          회원탈퇴
+        </button>
+        <button class="btn btn-primary" type="button" @click="goResetPW">
+          비밀번호 변경
+        </button>
+      </div>
     </div>
     <table class="table py-3">
       <thead>
@@ -68,6 +59,16 @@ export default {
     this.showUserInfo()
   },
   methods: {
+    goResign () {
+      this.$router.push({
+        name: 'Resign'
+      })
+    },
+    goResetPW () {
+      this.$router.push({
+        name: 'ResetPassword'
+      })
+    },
     async showUserInfo () {
       var username = this.$store.state.userid
       try {
@@ -100,12 +101,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-h1 {
-  padding: 0px 4rem;
-  margin-top: 50px;
-  font-weight: bold;
-  text-align: left;
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 3rem 0rem;
+
+  h1 {
+    margin-bottom: 0;
+    font-weight: bold;
+  }
 }
+
 .map {
   background-color: gainsboro;
 }

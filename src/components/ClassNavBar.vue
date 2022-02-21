@@ -1,7 +1,7 @@
 <template>
   <div class="class-nav-bar py-5">
     <nav class="navbar navbar-expand-lg">
-      <div class="container-fluid">
+      <div class="container">
         <h1 id="title">{{ this.className }}</h1>
         <button
           class="navbar-toggler"
@@ -12,23 +12,53 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <div class="icon">☰</div>
+          <div class="navbar-toggler-icon">☰</div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav items" @click="handleRoute">
+          <!-- Pills navs -->
+          <ul
+            class="nav nav-pills me-auto mb-2 mb-lg-0"
+            role="tablist"
+            @click="handleRoute"
+          >
             <li class="nav-item">
-              <a class="nav-link" id="ClassAllProblem">전체 문제</a>
+              <a
+                class="nav-link"
+                id="ClassAllProblem"
+                data-bs-toggle="pill"
+                role="tab"
+                >전체 문제</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="ClassStudentManage">수강생 및 TA 관리</a>
+              <a
+                class="nav-link"
+                id="ClassStudentManage"
+                data-bs-toggle="pill"
+                role="tab"
+                >수강생 및 TA 관리</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="ClassExamManage">시험 관리</a>
+              <a
+                class="nav-link"
+                id="ClassExamManage"
+                data-bs-toggle="pill"
+                role="tab"
+                >시험 관리</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="ClassProblem">문제</a>
+              <a
+                class="nav-link"
+                id="ClassProblem"
+                data-bs-toggle="pill"
+                role="tab"
+                >문제</a
+              >
             </li>
           </ul>
+          <!-- Pills navs -->
         </div>
       </div>
     </nav>
@@ -38,11 +68,6 @@
 <script>
 export default {
   name: 'ClassNavBar',
-  data: () => {
-    return {
-      navBar: document.querySelector('.navbar-nav items')
-    }
-  },
   props: {
     className: {
       type: String
@@ -52,6 +77,7 @@ export default {
   methods: {
     handleRoute (route) {
       // a태그의 id와 router index.js의 name과 동일해야함
+      console.log(route.path)
       this.$router.push({
         name: route.path[0].id
       })
@@ -96,8 +122,5 @@ h1 {
       // font-weight: bold;
     }
   }
-}
-.navbar-nav li.selected {
-  background-color: gray;
 }
 </style>
