@@ -101,17 +101,10 @@
 import api from '@/api/index.js'
 export default {
   name: 'ProblemForm',
-  props: {
-    mode: {
-      type: String
-    },
-    problemID: {
-      type: Number
-    }
-  },
+  props: ['mode', 'problemID', 'classID'],
   data () {
     return {
-      problemType: '', // class or general
+      problemType: this.$route.params.problemType, // class or general
       problemTitle: '',
       problemInfo: {
         description: '',
@@ -134,7 +127,6 @@ export default {
   },
   methods: {
     init () {
-      this.problemType = this.$route.params.problemType
       if (this.mode === 'create') {
         this.placeholder = '문제 이름을 입력하세요.'
       } else if (this.mode === 'edit') {
@@ -144,7 +136,13 @@ export default {
     },
     async getProblem () {
       try {
-        const res = await api.getProblem(this.problemID)
+        let res
+        if (this.problemType === 'general') {
+          res = await api.getCompetitions(this.problemID)
+        }
+        if (this.problemType === 'class') {
+          res = await api.getProblem(this.problemID)
+        }
         const data = res.data
         this.problemTitle = data.title
         this.problemInfo.description = data.description
@@ -189,9 +187,9 @@ export default {
           //   console.log(value)
           // }
           if (this.mode === 'create') {
+            formData.append('class_id', this.classID)
             await api.createClassProblem(formData)
           } else if (this.mode === 'edit') {
-            console.log('edit')
             await api.editProblem(this.problemID, formData)
           }
           alert('저장이 완료되었습니다.')

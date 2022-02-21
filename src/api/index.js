@@ -113,9 +113,7 @@ function editClassList (data) {
 }
 
 function getContestProblem (classID, contestID, contestProblemID) {
-  return instance.get(
-        `class/${classID}/contests/${contestID}/${contestProblemID}/`
-  )
+  return instance.get(`/class/${classID}/contests/${contestID}/${contestProblemID}`)
 }
 
 function getClassLeaderboard (contestProblemID) {
@@ -325,7 +323,7 @@ function getProblemList (page, keyword) {
 }
 
 function getProblem (id) {
-  return instance.get(`/problems/${id}`)
+  return instance.get(`/problems/${id}/`)
 }
 
 function editProblem (id, data) {

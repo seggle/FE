@@ -114,9 +114,13 @@ export default {
     openProblem (problemID) {
       try {
         if (typeof problemID === 'undefined') {
+          console.log(this.$route.params.classID)
           this.$router.push({
             name: 'CreateProblem',
-            params: { problemType: 'class', props: { classID: this.$route.params.classID } }
+            params: {
+              problemType: 'class',
+              classID: this.$route.params.classID
+            }
           })
         } else {
           console.log(problemID)

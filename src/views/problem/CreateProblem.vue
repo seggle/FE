@@ -1,5 +1,5 @@
 <template>
-  <ProblemForm :mode="'create'" />
+  <ProblemForm :mode="'create'" :classID="classID" />
 </template>
 
 <script>
@@ -9,9 +9,9 @@ export default {
   components: {
     ProblemForm
   },
-  props: {
-    classID: {
-      type: String
+  data () {
+    return {
+      classID: this.$route.params.classID
     }
   }
 }
