@@ -62,4 +62,58 @@
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+.nav-link {
+  color: black;
+}
+
+.btn {
+  background: #0e1b49;
+  color: white;
+  border-radius: 50px;
+  margin: 3px;
+}
+
+.btn:hover {
+  color: white;
+  background: #536292;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.app-container {
+  padding: 3rem 3rem;
+}
+
+.app-container header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 3rem 0rem;
+}
+
+.app-container header h1 {
+  margin-bottom: 0;
+}
+
+.app-container header button {
+  width: 6rem;
+}
+
+.app-container .table tbody tr:hover {
+  background-color: #F4F4F8;
+  cursor: pointer;
+}
 /*# sourceMappingURL=index.css.map */

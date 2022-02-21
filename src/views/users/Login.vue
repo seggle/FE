@@ -38,12 +38,6 @@
 </template>
 
 <script>
-import api from '@/api/index.js'
-import {
-  saveAccessToCookie,
-  saveRefreshToCookie,
-  saveUserToCookie
-} from '@/utils/cookies.js'
 export default {
   name: 'Login',
   data () {
@@ -60,15 +54,7 @@ export default {
           username: this.userID,
           password: this.password
         }
-        const res = await api.loginUser(data)
-        this.$store.commit('setAccessToken', res.data.access)
-        this.$store.commit('setRefreshToken', res.data.refresh)
-        this.$store.commit('setUserid', this.userID)
-        this.$store.dispatch('getUserType', this.userID)
-        saveAccessToCookie(res.data.access)
-        saveRefreshToCookie(res.data.refresh)
-        saveUserToCookie(this.userID)
-        this.$store.dispatch('getUserType')
+        this.$store.dispatch('Login', data)
         this.$router.push('/')
       } catch (err) {
         console.log(err)

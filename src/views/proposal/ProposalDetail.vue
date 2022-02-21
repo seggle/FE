@@ -51,7 +51,7 @@
         Label"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h5
@@ -79,7 +79,7 @@
                     <th>제목</th>
                     <td>
                       <!-- v-model 양뱡향데이터전송으로 상세 데이터 넣어준다 -->
-                      <input type="text" v-model="title" />
+                      <input type="text" v-model="title" style="width: 350px" />
                     </td>
                   </tr>
                   <tr>
@@ -174,8 +174,12 @@ export default {
         }
         const proposalId = this.$route.params.id
         console.log(proposalId)
-        const res = await api.editProposal(proposalId, data)
-        console.log(res.data)
+        if (confirm('저장하시겠습니까?')) {
+          const res = await api.editProposal(proposalId, data)
+          console.log(res.data)
+          alert('저장 완료')
+          this.$router.go()
+        }
       } catch (error) {
         console.log(error)
       }
@@ -202,5 +206,9 @@ h1 {
 .AddWrap {
   padding: 0px 5rem;
   margin-top: 100px;
+}
+textarea {
+  width: 350px;
+  height: 100px;
 }
 </style>

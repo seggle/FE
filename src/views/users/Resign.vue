@@ -54,15 +54,14 @@ export default {
     async submitForm () {
       try {
         const data = {
-          password2: this.formResign.currentPassword
+          password: this.formResign.currentPassword
         }
         if (confirm('정말 탈퇴하시겠습니까?')) {
-          console.log(data)
-          console.log(JSON.stringify(data))
-          const res = await api.resignUser(this.userID, JSON.stringify(data))
+          const res = await api.resignUser(this.userID, data)
           console.log(res)
           alert('탈퇴 완료')
           this.logout()
+          this.$router.push('/')
         }
       } catch (err) {
         console.log(err)
@@ -82,22 +81,13 @@ export default {
         return true
       }
     },
-    async logout () {
-      try {
-        const res = await api.logoutUser({
-          refresh: this.$store.state.refreshToken
-        })
-        console.log(res)
-        this.$store.commit('clearToken')
-        this.$store.commit('clearUserid')
-        this.$store.commit('clearUserType')
-        deleteCookie('til_user')
-        deleteCookie('til_access')
-        deleteCookie('til_refresh')
-        this.$router.push('/login')
-      } catch (err) {
-        console.log(err)
-      }
+    logout () {
+      this.$store.commit('clearToken')
+      this.$store.commit('clearUserid')
+      this.$store.commit('clearUserInfo')
+      deleteCookie('til_user')
+      deleteCookie('til_access')
+      deleteCookie('til_refresh')
     },
     handleResign () {
       if (this.checkFormValid()) {

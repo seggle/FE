@@ -35,6 +35,7 @@
             v-if="contest.visible"
             class="nav-link"
             @click="goContest(contest.id)"
+            data-bs-toggle="pill"
           >
             {{ contest.name }}</a
           >
