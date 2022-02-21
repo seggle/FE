@@ -79,7 +79,7 @@
                     <th>제목</th>
                     <td>
                       <!-- v-model 양뱡향데이터전송으로 상세 데이터 넣어준다 -->
-                      <input type="text" v-model="title" />
+                      <input type="text" v-model="title" style="width: 350px" />
                     </td>
                   </tr>
                   <tr>
@@ -206,5 +206,9 @@ h1 {
 .AddWrap {
   padding: 0px 5rem;
   margin-top: 100px;
+}
+textarea {
+  width: 350px;
+  height: 100px;
 }
 </style>

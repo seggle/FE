@@ -54,12 +54,12 @@ export default {
     async submitForm () {
       try {
         const data = {
-          password2: this.formResign.currentPassword
+          password: this.formResign.currentPassword
         }
         if (confirm('정말 탈퇴하시겠습니까?')) {
           console.log(data)
           console.log(JSON.stringify(data))
-          const res = await api.resignUser(this.userID, JSON.stringify(data))
+          const res = await api.resignUser(this.userID, data)
           console.log(res)
           alert('탈퇴 완료')
           this.logout()
