@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie, saveAccessToCookie, saveRefreshToCookie, saveUserToCookie } from '@/utils/cookies'
+import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie, saveAccessToCookie, saveRefreshToCookie, saveUserToCookie, deleteCookie } from '@/utils/cookies'
 import { getUserType, getUserClasses, getUserCompetitions, saveUserInfo } from '@/utils/jwt'
 import api from '@/api/index.js'
 
@@ -83,6 +83,17 @@ export default createStore({
       } catch (err) {
         console.log('getUserInfo error: ', err)
       }
+    },
+    async Logout ({ state, commit }) {
+      await api.logoutUser({
+        refresh: state.refreshToken
+      })
+      commit('clearToken')
+      commit('clearUserid')
+      commit('clearUserInfo')
+      deleteCookie('til_user')
+      deleteCookie('til_access')
+      deleteCookie('til_refresh')
     },
     async refreshAccessToken ({ commit }) {
       try {
