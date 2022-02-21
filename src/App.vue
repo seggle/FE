@@ -106,7 +106,7 @@ export default {
         console.log(res)
         this.$store.commit('clearToken')
         this.$store.commit('clearUserid')
-        this.$store.commit('clearUserType')
+        this.$store.commit('clearUserInfo')
         deleteCookie('til_user')
         deleteCookie('til_access')
         deleteCookie('til_refresh')

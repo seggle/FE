@@ -1,42 +1,24 @@
-const ACCESS_TOKEN = 'access'
-const REFRESH_TOKEN = 'refresh'
-
-function getAccessToken () {
-  return window.localStorage.getItem(ACCESS_TOKEN)
-}
-
-function getRefreshToken () {
-  return window.localStorage.getItem(REFRESH_TOKEN)
-}
-
-function saveAcessToken (token) {
-  window.localStorage.setItem(ACCESS_TOKEN, token)
-}
-
-function saveRefreshToken (token) {
-  window.localStorage.setItem(REFRESH_TOKEN, token)
-}
-
-function saveUserType (usertype) {
-  window.localStorage.setItem('UserType', usertype)
-}
-
-function getUsertype () {
+function getUserType () {
   return window.localStorage.getItem('UserType')
 }
 
-function destroyToken () {
-  window.localStorage.removeItem(ACCESS_TOKEN)
-  window.localStorage.removeItem(REFRESH_TOKEN)
-  window.localStorage.removeItem('UserType')
+function getUserClasses () {
+  return JSON.parse(window.localStorage.getItem('Classes'))
+}
+
+function getUserCompetitions () {
+  return JSON.parse(window.localStorage.getItem('Competitions'))
+}
+
+function saveUserInfo (usertype, classes, competitions) {
+  window.localStorage.setItem('UserType', usertype)
+  window.localStorage.setItem('Classes', classes)
+  window.localStorage.setItem('Competitions', competitions)
 }
 
 export {
-  getAccessToken,
-  getRefreshToken,
-  saveAcessToken,
-  saveRefreshToken,
-  destroyToken,
-  saveUserType,
-  getUsertype
+  getUserType,
+  getUserClasses,
+  getUserCompetitions,
+  saveUserInfo
 }
