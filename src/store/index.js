@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
-import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie, saveAccessToCookie } from '@/utils/cookies'
-import { saveUserType, getUsertype } from '@/utils/jwt'
+import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie, saveAccessToCookie, saveRefreshToCookie, saveUserToCookie } from '@/utils/cookies'
+import { getUserType, getUserClasses, getUserCompetitions, saveUserInfo } from '@/utils/jwt'
 import api from '@/api/index.js'
 
 export default createStore({
@@ -8,7 +8,9 @@ export default createStore({
     userid: getUserFromCookie() || '',
     accessToken: getAccessFromCookie() || '',
     refreshToken: getRefreshFromCookie() || '',
-    usertype: getUsertype() || ''
+    usertype: getUserType() || '',
+    classes: getUserClasses() || [],
+    competitions: getUserCompetitions() || []
   },
   getters: {
     isLogin (state) {
@@ -41,27 +43,53 @@ export default createStore({
     setUserType (state, usertype) {
       state.usertype = usertype
     },
-    clearUserType (state) {
+    setClasses (state, classes) {
+      state.classes = classes
+    },
+    setCompetitions (state, competitions) {
+      state.competitions = competitions
+    },
+    clearUserInfo (state) {
       state.usertype = ''
+      state.classes = ''
+      state.competitions = ''
     }
   },
   actions: {
-    async getUserType () {
+    async Login ({ commit, dispatch }, data) {
+      const res = await api.loginUser(data)
+      commit('setAccessToken', res.data.access)
+      commit('setRefreshToken', res.data.refresh)
+      commit('setUserid', data.username)
+
+      saveAccessToCookie(res.data.access)
+      saveRefreshToCookie(res.data.refresh)
+      saveUserToCookie(data.username)
+
+      dispatch('getUserInfo')
+    },
+    async getUserInfo ({ commit }) {
       try {
         const res = await api.getUserInfo(this.state.userid)
-        console.log('getUserType: ', res)
-        this.commit('setUserType', res.data.privilege)
-        saveUserType(res.data.privilege)
+        const usertype = res.data.privilege
+        const classes = JSON.stringify(res.data.classes)
+        const competitions = JSON.stringify(res.data.competition)
+
+        commit('setUserType', usertype)
+        commit('setClasses', classes)
+        commit('setCompetitions', competitions)
+
+        saveUserInfo(usertype, classes, competitions)
       } catch (err) {
-        console.log('getUserType error: ', err)
+        console.log('getUserInfo error: ', err)
       }
     },
-    async refreshAccessToken () {
+    async refreshAccessToken ({ commit }) {
       try {
         const res = await api.refreshAccessToken({
           refresh: this.state.refreshToken
         })
-        this.commit('setAccessToken', res.data.access)
+        commit('setAccessToken', res.data.access)
         saveAccessToCookie(res.data.access)
       } catch (err) {
         console.log('refreshAccessToekn error: ', err)
