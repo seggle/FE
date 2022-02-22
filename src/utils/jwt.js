@@ -17,9 +17,9 @@ function saveUserInfo (usertype, classes, competitions) {
 }
 
 function deleteUserInfo () {
-  window.localStorage.setItem('UserType', '')
-  window.localStorage.setItem('Classes', '')
-  window.localStorage.setItem('Competitions', '')
+  window.localStorage.removeItem('UserType')
+  window.localStorage.removeItem('Classes')
+  window.localStorage.removeItem('Competitions')
 }
 
 export {
