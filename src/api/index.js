@@ -47,7 +47,8 @@ function resetPassword (username, data) {
 }
 
 function resignUser (username, data) {
-  return instance.delete(`users/${username}/`, data)
+  console.log({ data })
+  return instance.delete(`users/${username}/`, { data })
 }
 
 function getCompetitionList () {
