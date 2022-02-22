@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import { getAccessFromCookie, getRefreshFromCookie, getUserFromCookie, saveAccessToCookie, saveRefreshToCookie, saveUserToCookie, deleteCookie } from '@/utils/cookies'
-import { getUserType, getUserClasses, getUserCompetitions, saveUserInfo } from '@/utils/jwt'
+import { getUserType, getUserClasses, getUserCompetitions, saveUserInfo, deleteUserInfo } from '@/utils/jwt'
 import api from '@/api/index.js'
 
 export default createStore({
@@ -71,7 +71,7 @@ export default createStore({
     async getUserInfo ({ commit }) {
       try {
         const res = await api.getUserInfo(this.state.userid)
-        const usertype = res.data.privilege
+        const usertype = String(res.data.privilege)
         const classes = JSON.stringify(res.data.classes)
         const competitions = JSON.stringify(res.data.competition)
 
@@ -88,9 +88,11 @@ export default createStore({
       await api.logoutUser({
         refresh: state.refreshToken
       })
-      commit('clearToken')
       commit('clearUserid')
+      commit('clearToken')
       commit('clearUserInfo')
+
+      deleteUserInfo()
       deleteCookie('til_user')
       deleteCookie('til_access')
       deleteCookie('til_refresh')
