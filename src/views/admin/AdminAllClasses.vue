@@ -75,7 +75,6 @@ export default {
         this.loading = false
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.ClassList = res.data.results
-        console.log(res.data.results)
       } catch (error) {
         console.log(error)
       }
