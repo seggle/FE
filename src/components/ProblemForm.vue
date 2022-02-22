@@ -295,7 +295,7 @@ export default {
     //   border: 0.2rem solid #dde4eb;
       padding: 2rem;
       margin-bottom: 1rem;
-      line-height: 10;
+      height: 20rem;
       resize: none;
     }
     // .form-control::file-selector-button {

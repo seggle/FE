@@ -55,13 +55,10 @@ export default {
   methods: {
     animation () {
       const horizontalSections = gsap.utils.toArray('section.horizontal')
-      console.log(horizontalSections)
       horizontalSections.forEach(function (sec, i) {
         var thisPinWrap = sec.querySelector('.pin-wrap')
         var thisAnimWrap = thisPinWrap.querySelector('.animation-wrap')
         var getToValue = () => -(thisAnimWrap.scrollWidth - window.innerWidth)
-        console.log(thisAnimWrap.scrollWidth)
-        console.log(window.innerWidth)
         gsap.fromTo(thisAnimWrap, {
           x: () => thisAnimWrap.classList.contains('to-right') ? 0 : getToValue()
         }, {

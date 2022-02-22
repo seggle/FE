@@ -126,9 +126,9 @@ export default {
     async getAnnouncementList (page) {
       try {
         this.loading = true
+        const res = await api.getAnnouncementList(page, this.keyword)
         this.currentPage = page
         this.PageValue = []
-        const res = await api.getAnnouncementList(page, this.keyword)
         this.loading = false
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.announcementList = res.data.results
@@ -144,6 +144,10 @@ export default {
       try {
         if (confirm('삭제하시겠습니까?')) {
           await api.deleteAnnouncement(announcementID)
+          const res = await api.getAnnouncementList(1, this.keyword)
+          if (res.data.count / 15 < this.currentPage) {
+            this.currentPage = this.currentPage - 1
+          }
           this.getAnnouncementList(this.currentPage)
         }
       } catch (error) {
@@ -228,6 +232,11 @@ export default {
 a {
   color:black;
   cursor: pointer;
+}
+
+a.ghost-button:hover {
+  color:black;
+  text-decoration: underline;
 }
 
 .modal-dialog {
