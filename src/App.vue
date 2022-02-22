@@ -164,6 +164,10 @@ a:hover {
   text-decoration: none;
   color: white;
 }
+a.admin:hover {
+  text-decoration: underline;
+  color:black;
+}
 a.users:hover {
   color: rgb(5, 1, 1);
   text-decoration: underline;
