@@ -62,7 +62,6 @@ export default {
         for (var i = 0; i < this.faqList.length; i++) {
           this.faqList[i].answer = converter.makeHtml(this.faqList[i].answer)
         }
-        console.log(res.data)
       } catch (error) {
         console.log(error)
       }

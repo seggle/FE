@@ -93,7 +93,6 @@ export default {
     async getFAQList () {
       try {
         const res = await api.getFAQList()
-        console.log(res.data)
         this.faqList = res.data
         for (var i = 0; i < this.faqList.length; i++) {
           this.faqList[i].created_time = this.faqList[i].created_time.slice(0, 10) + ' ' + this.faqList[i].created_time.slice(11, 19)
@@ -115,7 +114,6 @@ export default {
     },
     async openFAQ (faqID) {
       try {
-        console.log(faqID)
         if (typeof faqID === 'undefined') {
           this.createMode = true
           this.currentFaqID = ''
@@ -142,16 +140,14 @@ export default {
             answer: this.faqAnswer,
             visible: this.faqVisible
           }
-          const res = await api.submitFAQ(data)
-          console.log(res.data)
+          await api.submitFAQ(data)
         } else {
           const data = {
             question: this.faqQuestion,
             answer: this.faqAnswer,
             visible: this.faqVisible
           }
-          const res = await api.submitEditFAQ(this.currentFaqID, data)
-          console.log(res.data)
+          await api.submitEditFAQ(this.currentFaqID, data)
         }
         this.getFAQList()
       } catch (error) {
@@ -160,8 +156,7 @@ export default {
     },
     async changeSwitch (faqID) {
       try {
-        const res = await api.changeFAQSwitch(faqID)
-        console.log(res.data)
+        await api.changeFAQSwitch(faqID)
       } catch (error) {
         console.log(error)
       }
@@ -190,7 +185,12 @@ a {
   cursor: pointer;
 }
 
+a.ghost-button:hover {
+  color:black;
+  text-decoration: underline;
+}
+
 .modal-dialog {
-    max-width: 80%;
+    max-width: 100%;
 }
 </style>

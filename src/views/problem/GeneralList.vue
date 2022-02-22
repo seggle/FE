@@ -10,7 +10,7 @@
       <tr>
         <th scope="col" class="col-1">#</th>
         <th scope="col" class="col-3">문제 제목</th>
-        <th scope="col" class="col-2 col-sm-0"></th>
+        <th scope="col" class="col-2"></th>
         <th scope="col" class="col-2">시작날짜</th>
         <th scope="col" class="col-2"></th>
         <th scope="col" class="col-2">마감날짜</th>
@@ -73,7 +73,6 @@ export default {
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.problemList = res.data.results
         this.problemList.reverse()
-        console.log(this.problemList)
         this.setTime()
         this.setProgressBar()
         this.problemList.sort((a, b) => {
@@ -86,7 +85,6 @@ export default {
             else if (a.diffDay < b.diffDay) return -1
           }
         })
-        console.log(this.problemList)
       } catch (err) {
         console.log(err)
       }
@@ -200,6 +198,12 @@ export default {
         white-space: nowrap;
       }
     }
+  }
+  a.ghost-button {
+    color: black;
+  }
+  a.ghost_button:hover {
+    text-decoration: underline;
   }
 }
 </style>

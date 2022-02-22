@@ -187,7 +187,6 @@ export default {
       try {
         this.currentName = userName
         const res = await api.editUser(userName)
-        console.log(res.data.privilege)
         if (res.data.privilege === 0) {
           this.selected = 'student'
         } else if (res.data.privilege === 1) {
@@ -223,9 +222,12 @@ export default {
     async deleteUser (userName) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          const res = await api.deleteUser(userName)
-          console.log(res.data)
-          this.getUserList(1)
+          await api.deleteUser(userName)
+          const res = await api.getUserList(1, this.keyword)
+          if (res.data.count / 15 < this.currentPage) {
+            this.currentPage = this.currentPage - 1
+          }
+          this.getUserList(this.currentPage)
         }
       } catch (error) {
         console.log(error)
@@ -263,5 +265,9 @@ export default {
 a {
   color: black;
   cursor: pointer;
+}
+a.ghost-button:hover {
+  color:black;
+  text-decoration: underline;
 }
 </style>

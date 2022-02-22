@@ -157,7 +157,7 @@ export default {
   data () {
     return {
       userID: this.$store.state.userid,
-      joinText: '참여하기',
+      joinText: '참여',
       alreadyJoined: false,
       isClassUser: false,
       problemType: '',
@@ -184,6 +184,11 @@ export default {
         this.contestID = this.$route.params.contestID
         this.contestProblemID = this.$route.params.contestProblemID
         this.getClassUserList()
+      }
+      if (this.alreadyjoined) {
+        this.joinText = '참여중'
+      } else {
+        this.joinText = '참여하기'
       }
       this.getProblem()
       // this.getLeaderboard() -> api 미구현
