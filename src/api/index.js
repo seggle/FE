@@ -342,6 +342,10 @@ function createGeneralProblem (data) {
   return instance.post('/competitions/', data)
 }
 
+function editGeneralProblem (competitionID, data) {
+  return instance.put(`/competitions/${competitionID}/`, data)
+}
+
 function createClassProblem (data) {
   return formDataInstance.post('/problems/', data)
 }
@@ -428,5 +432,6 @@ export default {
   deleteProblem,
   changeProblemSwitch,
   createClassProblem,
-  createGeneralProblem
+  createGeneralProblem,
+  editGeneralProblem
 }

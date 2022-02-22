@@ -128,7 +128,8 @@ export default {
             name: 'EditProblem',
             params: {
               problemType: 'class',
-              problemID: problemID
+              problemID: problemID,
+              classID: this.$route.params.classID
             }
           })
         }

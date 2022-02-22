@@ -7,7 +7,10 @@
               v-model="problemTitle"
               :placeholder="this.placeholder"
               required>
-        <button class="btn" type="submit">저장</button>
+        <div class="button">
+          <button class="btn" type="submit" @click="saveMode = 'save'">저장</button>
+          <button v-if="this.problemType == 'class'" class="btn" type="submit" @click="saveMode = 'new-save'">새로 저장</button>
+        </div>
       </div>
       <div class="problem-content row">
       <!-- 세로 메뉴 탭 -->
@@ -119,7 +122,8 @@ export default {
         dataFile: null,
         solutionFile: null
       },
-      placeholder: ''
+      placeholder: '',
+      saveMode: ''
     }
   },
   mounted () {
@@ -139,6 +143,8 @@ export default {
         let res
         if (this.problemType === 'general') {
           res = await api.getCompetitions(this.problemID)
+          this.problemInfo.startTime = res.data.start_time
+          this.problemInfo.endTime = res.data.end_time
         }
         if (this.problemType === 'class') {
           res = await api.getProblem(this.problemID)
@@ -149,6 +155,7 @@ export default {
         this.problemInfo.public = data.public
         this.dataInfo.description = data.data_description
         this.dataInfo.dataFile = data.data
+        this.dataInfo.solutionFile = data.solution
       } catch (err) {
         console.log(err)
       }
@@ -167,30 +174,37 @@ export default {
         }
 
         if (this.problemType === 'general') {
-          const startTime = this.problemInfo.startTime.toISOString()
-          const endTime = this.problemInfo.endTime.toISOString()
-          data.start_time = startTime.slice(0, 10) + ' ' + startTime.slice(11, 19)
-          data.end_time = endTime.slice(0, 10) + ' ' + endTime.slice(11, 19)
+          data.start_time = this.changeTimeFormat(this.problemInfo.startTime)
+          data.end_time = this.changeTimeFormat(this.problemInfo.endTime)
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
-          await api.createGeneralProblem(formData)
+          if (this.mode === 'create') {
+            await api.createGeneralProblem(formData)
+          } else if (this.mode === 'edit') {
+            await api.editGeneralProblem(this.problemID, formData)
+          }
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'GeneralList' })
         }
+
         if (this.problemType === 'class') {
-          data.pubilc = this.problemInfo.public
+          data.public = this.problemInfo.public
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
           // for (const value of formData.values()) {
           //   console.log(value)
           // }
+          formData.append('class_id', this.classID)
           if (this.mode === 'create') {
-            formData.append('class_id', this.classID)
             await api.createClassProblem(formData)
           } else if (this.mode === 'edit') {
-            await api.editProblem(this.problemID, formData)
+            if (this.saveMode === 'save') {
+              await api.editProblem(this.problemID, formData)
+            } else if (this.saveMode === 'new-save') {
+              await api.createClassProblem(formData)
+            }
           }
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'ClassList' })
@@ -198,6 +212,13 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    changeTimeFormat (time) {
+      if (time instanceof Date) {
+        time = time.toISOString()
+      }
+      const changedTime = time.slice(0, 10) + ' ' + time.slice(11, 19)
+      return changedTime
     },
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
