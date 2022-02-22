@@ -2,7 +2,7 @@
   <div class="container">
     <header>
       <h1 id="title">수업 및 시험</h1>
-      <div class="button-group">
+      <div class="button-group" v-if="this.$store.getters.isAdmin">
         <button class="btn" @click="goEdit">편집</button>
         <button class="btn" id="show-modal" @click="showModal = true">
           수업 생성

@@ -215,7 +215,6 @@ const routes = [{
   path: '/problem/:problemType/:problemID',
   name: 'Problem',
   component: Problem,
-  meta: { auth: true },
   children: [{
     path: ':contestID/:contestProblemID',
     component: Problem

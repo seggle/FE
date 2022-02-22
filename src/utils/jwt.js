@@ -16,9 +16,16 @@ function saveUserInfo (usertype, classes, competitions) {
   window.localStorage.setItem('Competitions', competitions)
 }
 
+function deleteUserInfo () {
+  window.localStorage.removeItem('UserType')
+  window.localStorage.removeItem('Classes')
+  window.localStorage.removeItem('Competitions')
+}
+
 export {
   getUserType,
   getUserClasses,
   getUserCompetitions,
-  saveUserInfo
+  saveUserInfo,
+  deleteUserInfo
 }
