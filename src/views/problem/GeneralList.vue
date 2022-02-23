@@ -2,7 +2,10 @@
 <div class="container">
   <header>
     <h1 id="title">일반 대회</h1>
-    <button class="btn" @click="goCreateProblem">문제 생성</button>
+    <div v-if="this.$store.getters.isAdmin">
+      <button class="btn" @click="goCreateProblem">문제 관리</button>
+      <button class="btn" @click="goCreateProblem">문제 생성</button>
+    </div>
   </header>
   <div class="table-div">
   <table class="table">
@@ -108,10 +111,10 @@ export default {
           let interval = startDate.getTime() - today.getTime()
           interval = Math.floor(interval / (1000 * 60 * 60 * 24))
           this.problemList[i].dday = 'OPEN D - ' + interval
-          this.problemList[i].astart_end = -1
+          this.problemList[i].start_end = -1
           this.problemList[i].diffDay = -1
         } else if (startDate <= today & endDate >= today) {
-          this.problemList[i].astart_end = starttoend
+          this.problemList[i].start_end = starttoend
           let interval = endDate.getTime() - today.getTime()
           interval = Math.floor(interval / (1000 * 60 * 60 * 24))
           if (interval === 0) {
@@ -122,7 +125,7 @@ export default {
             this.problemList[i].diffDay = interval
           }
         } else {
-          this.problemList[i].astart_end = -2
+          this.problemList[i].start_end = -2
           this.problemList[i].dday = '종료'
           this.problemList[i].diffDay = -1
         }
@@ -131,10 +134,10 @@ export default {
     setProgressBar () {
       for (let i = 0; i < this.problemList.length; i++) {
         const progress = {}
-        if (this.problemList[i].astart_end === -1) {
+        if (this.problemList[i].start_end === -1) {
           progress.value = 0
           progress.type = 'bg-secondary'
-        } else if (this.problemList[i].astart_end === -2) {
+        } else if (this.problemList[i].start_end === -2) {
           progress.value = 100
           progress.type = 'bg-secondary'
         } else {
