@@ -28,6 +28,7 @@
         />
         <div class="invalid-feedback">비밀번호를 입력하세요.</div>
       </div>
+      <p v-if="invalid" class="error-message">아이디 또는 비밀번호를 잘못 입력했습니다.</p>
       <button class="btn" type="submit">로그인</button>
     </form>
     <div class="info-link">
@@ -44,7 +45,8 @@ export default {
     return {
       userID: '',
       password: '',
-      validated: false
+      validated: false,
+      invalid: false
     }
   },
   methods: {
@@ -54,8 +56,15 @@ export default {
           username: this.userID,
           password: this.password
         }
-        this.$store.dispatch('Login', data)
-        this.$router.push('/')
+        const res = await this.$store.dispatch('Login', data)
+        if (res === 401) {
+          this.invalid = true
+          this.userID = ''
+          this.password = ''
+          this.validated = false
+        } else {
+          this.$router.push('/')
+        }
       } catch (err) {
         console.log(err)
       }
@@ -94,15 +103,21 @@ export default {
       border-top-right-radius: 0;
     }
     .password-form {
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
     }
     .btn {
       padding: 0.5rem 1rem;
       margin-bottom: 20px;
       color: white;
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 800;
     }
+  }
+
+  .error-message {
+   color: var(--bs-danger);
+   font-size: .875em;
+   margin-bottom: .875em;
   }
 
   a {
