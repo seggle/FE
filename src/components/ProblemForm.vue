@@ -254,10 +254,10 @@ export default {
 
     .btn {
       padding: 0.5rem 2rem;
-      font-size: calc(1.2rem + 0.3vw);
+      font-size: calc(0.8rem + 0.5vw);
       font-weight: bold;
       @media (max-width: 768px) {
-        padding: 0.4rem 1.6rem;
+        padding: 0.3rem 1.2rem;
       }
 
       &:hover {
@@ -276,7 +276,7 @@ export default {
   .list-group-item {
     border: none;
     padding: 1rem 0rem;
-    font-size: calc(1.175rem + 0.2vw);
+    font-size: calc(0.8rem + 0.5vw);
     border-radius: 0.75rem;
     margin-bottom: 1rem;
   }
@@ -298,11 +298,13 @@ export default {
     border-radius: 0.75rem;
     box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
     padding: 2rem 1rem;
+
     .list-title {
       padding: 0.5rem 2rem;
       margin-top: 1.5rem;
       font-weight: bold;
     }
+
     .form-option {
       display: flex;
       justify-content: space-evenly;
@@ -333,11 +335,13 @@ export default {
       font-weight: bold;
       font-size: 1rem;
     }
+
     .form-check-input {
         width: 5em;
         height: 2em;
         margin: 0em 1em;
     }
+
     .btn {
       float: right;
       padding: 0.5rem 1.5rem;
@@ -345,6 +349,7 @@ export default {
       font-size: 16px;
       margin-bottom: 2rem;
     }
+
     .form-control {
     //   background-color: #F4F4F8;
     //   border: 0.2rem solid #dde4eb;
@@ -353,6 +358,7 @@ export default {
       height: 20rem;
       resize: none;
     }
+
     // .form-control::file-selector-button {
     //     color: transparent;
     //     background-color: transparent;
@@ -366,6 +372,7 @@ export default {
       overflow: hidden;
       border: 0;
     }
+
     .file-upload-btn {
       display: inline-block;
       padding: 5px 20px;

@@ -308,27 +308,46 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 5rem 0rem;
+  @media (max-width: 414px) {
+    width: 360px;
+  }
+
   .problem-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     padding: 3rem 0;
+
     .btn {
       padding: 0.5rem 2rem;
-      font-size: 22px;
+      font-size: calc(1.2rem + 0.3vw);
       font-weight: bold;
-    }
-    button:hover {
-      background: white;
-      color: #0e1b49;
+      @media (max-width: 768px) {
+        padding: 0.4rem 1.6rem;
+      }
+
+      &:hover {
+        background: white;
+        color: #0e1b49;
+      }
     }
   }
+
+  .problem-tab {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
   .list-group-item {
     border: none;
     padding: 1rem 0rem;
-    font-size: 20px;
+    font-size: calc(1.175rem + 0.2vw);
     border-radius: 0.75rem;
     margin-bottom: 1rem;
+    @media (max-width: 768px) {
+      font-size: 18px;
+    }
   }
   .list-group-item.active {
     z-index: 2;
@@ -337,6 +356,11 @@ export default {
     background-color: #F4F4F8;
     border-color: #fff;
   }
+  .problem-tab-content {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
   .tab-content {
     background-color: #fff;
     // border: 0.0625rem solid #D7E2EB;
@@ -344,6 +368,7 @@ export default {
     border-radius: 0.75rem;
     box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
     padding: 2rem 1rem;
+
     .list-title {
       padding: 0.5rem 2rem;
       margin-top: 1.5rem;
@@ -352,6 +377,10 @@ export default {
     .period {
       display: flex;
       justify-content: center;
+
+      @media (max-width: 768px) {
+        display: block;
+      }
       h5 {
         padding: 0rem 1rem;
         font-weight: bold;

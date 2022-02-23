@@ -14,6 +14,23 @@
   }
 }
 
+// table
+.table-div {
+  overflow-x: auto;
+}
+.table {
+  min-width: 700px;
+  width: 100%;
+  white-space: nowrap;
+  border-collapse: collapse;
+  tbody {
+    tr:hover {
+      background-color: #f4f4f8;
+      cursor: pointer;
+    }
+  }
+}
+
 // a tag
 a {
   text-decoration: none;
