@@ -77,7 +77,6 @@ export default {
     },
     async getGeneralList (page) {
       try {
-        console.log(this.$store.state.competitions)
         this.currentPage = page
         this.PageValue = []
         const res = await api.getCompetitionList()
