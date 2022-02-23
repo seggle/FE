@@ -148,6 +148,9 @@ export default {
         a {
           cursor: pointer;
         }
+        a:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
