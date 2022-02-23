@@ -11,13 +11,13 @@
 
           <div class="modal-body">
             <div class="row">
-              <div class="col-4">
+              <div class="col-5">
                 <label class="form-label">연도</label>
                 <select class="form-select" disabled>
                   <option>{{ this.classYear }}</option>
                 </select>
               </div>
-              <div class="col-4">
+              <div class="col-5">
                 <label class="form-label">학기</label>
                 <select class="form-select" v-model="classSemester" required>
                   <option disabled value="">선택</option>
@@ -132,15 +132,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
+.row {
+  overflow-x: auto;
 }
 </style>
