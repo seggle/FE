@@ -14,7 +14,7 @@
         </form>
       </div>
       <div>
-        <button class="btn btn-dark" id="problem-create" @click="selectProblem">
+        <button class="btn" id="problem-create" @click="selectProblem">
           다음
         </button>
       </div>
@@ -23,7 +23,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">✅</th>
+            <th scope="col"><font-awesome-icon icon="check" /></th>
             <th scope="col">제목</th>
           </tr>
         </thead>
@@ -82,7 +82,7 @@
     <div class="d-flex mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 순서 및 제목 수정</h2>
       <div>
-        <button class="btn btn-dark" id="problem-create" @click="editProblem">
+        <button class="btn" id="problem-create" @click="editProblem">
           저장
         </button>
       </div>
@@ -301,11 +301,6 @@ select {
   width: 100%;
   white-space: nowrap;
   border-collapse: collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color: black;
