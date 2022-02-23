@@ -11,7 +11,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" class="col-1">#</th>
+        <!-- <th scope="col" class="col-1">#</th> -->
         <th scope="col" class="col-3">문제 제목</th>
         <th scope="col" class="col-2"></th>
         <th scope="col" class="col-2">시작날짜</th>
@@ -20,8 +20,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(problem, i) in problemList" :key="problem" @click="goProblem(problem.id)">
-        <th scope="row">{{ i + 1 }}</th>
+      <tr v-for="(problem, i) in problemList" :key="problem"
+          @click="goProblem(problem.id)">
+        <!-- <th scope="row">{{ i + 1 }}</th> -->
         <td class="col-3 probtitle">{{ problem.problem.title }}</td>
         <td>{{ problem.dday }}</td>
         <td>{{ problem.start_time }}</td>
@@ -181,20 +182,9 @@ export default {
       margin-bottom: 0;
     }
   }
-  .table-div {
-    overflow-x: auto;
-  }
   .table {
     table-layout: fixed;
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
     tbody {
-      tr:hover {
-        background-color: #F4F4F8;
-        cursor: pointer;
-      }
       td.probtitle {
         text-overflow: ellipsis;
         overflow: hidden;

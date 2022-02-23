@@ -4,7 +4,7 @@
       <div class="modal-wrapper">
         <form class="modal-container" @submit.prevent="submitForm">
           <div class="modal-header">
-            <h5>문제 생성</h5>
+            <h5>{{ this.modalHeader }}</h5>
             <button
               type="button"
               class="btn-close"
@@ -31,25 +31,17 @@
                   placeholder="시작 시간"
                   textInput
                 />
-                <div class="modal-header">
-                  <h5>{{ this.modalHeader }}</h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    @click="$emit('close')"
-                  ></button>
-                </div>
-                <div class="col-5" data-backdrop="static">
-                  <label class="form-label">종료시간</label>
-                  <Datepicker
+              </div>
+              <div class="col-5" data-backdrop="static">
+                <label class="form-label">종료시간</label>
+                <Datepicker
                     v-model="contestInfo.endTime"
                     placeholder="종료 시간"
                     textInput
-                  />
-                </div>
+                />
               </div>
               <div class="row exam-checkbox">
-                <div class="col-4">
+                <div class="col-5">
                   <p style="float: left">시험모드</p>
                   <span
                     class="form-check form-switch"
@@ -64,7 +56,7 @@
                     />
                   </span>
                 </div>
-                <div class="col-4">
+                <div class="col-5">
                   <p style="float: left">공개</p>
                   <span
                     class="form-check form-switch"
@@ -94,15 +86,13 @@
 
 <script>
 import api from '@/api/index.js'
+import { GMTtoLocale } from '@/utils/time.js'
+
 export default {
   name: 'ModalContestList',
   props: {
-    editContestInfo: {
-      type: Object
-    },
-    mode: {
-      type: String
-    }
+    editContestInfo: Object,
+    mode: String
   },
   data () {
     return {
@@ -137,12 +127,10 @@ export default {
     },
     async submitForm () {
       try {
-        const startTime = this.contestInfo.startTime.toISOString()
-        const endTime = this.contestInfo.endTime.toISOString()
         const data = {
           name: this.contestInfo.title,
-          start_time: startTime.slice(0, 10) + ' ' + startTime.slice(11, 19),
-          end_time: endTime.slice(0, 10) + ' ' + endTime.slice(11, 19),
+          start_time: GMTtoLocale(this.contestInfo.startTime),
+          end_time: GMTtoLocale(this.contestInfo.endTime),
           is_exam: this.contestInfo.checkedExam,
           visible: this.contestInfo.checkedVisible
         }

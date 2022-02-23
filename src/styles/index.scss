@@ -1,16 +1,42 @@
 @import "./modal.scss";
 @import "./nav.scss";
+@import "./button.scss";
 
 //button 
 .btn {
-  background: #0e1b49;
-  color: white;
+  background: #060c20;
+  // color: #fe3b57;
+  color:white;
   border-radius: 50px;
   margin: 3px;
+  font-weight: bold;
+  // border: none;
 
   &:hover {
     color: white;
     background:#536292;
+  }
+}
+
+// table
+.table-div {
+  overflow-x: auto;
+}
+.table {
+  min-width: 700px;
+  width: 100%;
+  white-space: nowrap;
+  border-collapse: collapse;
+  thead {
+    // background-color: #060c20;
+    // color: white;
+  }
+
+  tbody {
+    tr:hover {
+      background-color: #f4f4f8;
+      cursor: pointer;
+    }
   }
 }
 
@@ -41,17 +67,6 @@ a {
 
     button {
       width: 6rem;
-    }
-  }
-
-  .table {
-
-    tbody {
-
-      tr:hover {
-        background-color: #F4F4F8;
-        cursor: pointer;
-      }
     }
   }
 }

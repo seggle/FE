@@ -1,6 +1,7 @@
 <template>
   <ProblemForm :mode="'edit'"
-                :problemID="problemID" />
+               :problemID="problemID"
+               :classID="classID" />
 </template>
 
 <script>
@@ -12,7 +13,8 @@ export default {
   },
   data () {
     return {
-      problemID: Number(this.$route.params.problemID)
+      problemID: Number(this.$route.params.problemID),
+      classID: this.$route.params.classID
     }
   }
 }

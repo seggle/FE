@@ -4,12 +4,12 @@
       <form class="class-student-form col-md-4">
         <label for="class-student" class="p-2 fs-4">수강생</label>
         <textarea id="class-student" class="form-control mb-3 p-3" cols="30" rows="15" v-model="studentlist" placeholder="내용을 입력하세요"></textarea>
-        <button class="btn btn-dark" type="submit" v-on:click="submitStudentForm">등록</button>
+        <button class="btn" type="submit" v-on:click="submitStudentForm">등록</button>
       </form>
       <form class="class-TA-form col-md-4">
         <label for="class-TA" class="p-2 fs-4">TA</label>
         <textarea id="class-TA" class="form-control mb-3 p-3" cols="30" rows="15" v-model="talist" placeholder="내용을 입력하세요"></textarea>
-        <button class="btn btn-dark" type="submit" v-on:click="submitTAForm">등록</button>
+        <button class="btn" type="submit" v-on:click="submitTAForm">등록</button>
       </form>
     </div>
   </div>

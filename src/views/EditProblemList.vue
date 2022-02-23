@@ -84,11 +84,6 @@ export default {
   white-space: nowrap;
   border-collapse: collapse;
 }
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
-}
 a {
   color: black;
   cursor: pointer;

@@ -14,7 +14,7 @@
         </form>
       </div>
       <div>
-        <button class="btn btn-dark" id="announce-create" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement()">+ 글쓰기</button>
+        <button class="btn" id="announce-create" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement()">+ 글쓰기</button>
         <div class="modal fade" id="announceModal" tabindex="-1" aria-labelledby="announceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -223,11 +223,6 @@ export default {
     width: 100%;
     white-space: nowrap;
     border-collapse:collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color:black;

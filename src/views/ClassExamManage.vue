@@ -1,4 +1,5 @@
 <template>
+<div class="table-div">
   <table class="table">
     <thead>
       <tr>
@@ -21,6 +22,7 @@
       </tr>
     </tbody>
   </table>
+</div>
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
       <li class="page-item disabled" v-if="currentPage == 1">

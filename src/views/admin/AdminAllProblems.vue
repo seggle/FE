@@ -14,7 +14,7 @@
             </form>
       </div>
       <div>
-        <button class="btn btn-dark" id="problem-create" @click="openProblem()">+ 문제 생성</button>
+        <button class="btn" id="problem-create" @click="openProblem()">+ 문제 생성</button>
       </div>
     </div>
     <div class="table-div">
@@ -147,11 +147,6 @@ export default {
     width: 100%;
     white-space: nowrap;
     border-collapse:collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color:black;
