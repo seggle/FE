@@ -3,7 +3,11 @@
   <header>
     <h1 id="title">일반 대회</h1>
     <div v-if="this.$store.getters.isAdmin">
-      <button class="btn" @click="goCreateProblem">문제 관리</button>
+      <button class="btn" @click="showModal = true">문제 관리</button>
+      <ModalCompetitionAdmin
+        v-if="showModal"
+        @close="showModal = false"
+      />
       <button class="btn" @click="goCreateProblem">문제 생성</button>
     </div>
   </header>
@@ -48,17 +52,20 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
+import ModalCompetitionAdmin from '@/components/ModalCompetitionAdmin.vue'
 
 export default {
   name: 'GeneralList',
   components: {
-    Pagination
+    Pagination,
+    ModalCompetitionAdmin
   },
   data () {
     return {
       problemList: [],
       currentPage: 1,
-      PageValue: []
+      PageValue: [],
+      showModal: false
     }
   },
   mounted () {
@@ -70,6 +77,7 @@ export default {
     },
     async getGeneralList (page) {
       try {
+        console.log(this.$store.state.competitions)
         this.currentPage = page
         this.PageValue = []
         const res = await api.getCompetitionList()
@@ -79,11 +87,11 @@ export default {
         this.setTime()
         this.setProgressBar()
         this.problemList.sort((a, b) => {
-          if (a.astart_end < b.astart_end) return 1
-          else if (a.astart_end > b.astart_end) return -1
+          if (a.start_end < b.start_end) return 1
+          else if (a.start_end > b.start_end) return -1
         })
         this.problemList.sort((a, b) => {
-          if (a.astart_end >= 0 & b.astart_end >= 0) {
+          if (a.start_end >= 0 & b.start_end >= 0) {
             if (a.diffDay > b.diffDay) return 1
             else if (a.diffDay < b.diffDay) return -1
           }
@@ -140,7 +148,7 @@ export default {
           progress.value = 100
           progress.type = 'bg-secondary'
         } else {
-          progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].astart_end) * 100)
+          progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].start_end) * 100)
           if (progress.value <= 50) {
             progress.type = 'bg-info'
           } else if (progress.value <= 70) {
@@ -165,6 +173,15 @@ export default {
         name: 'Problem',
         params: { problemType: 'general', problemID: problemID }
       })
+    },
+    async deleteCompetition (problemID) {
+      try {
+        if (confirm('삭제하시겠습니까?')) {
+          await api.deleteCompetition(problemID)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }

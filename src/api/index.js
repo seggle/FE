@@ -66,6 +66,18 @@ function getCompetitions (competitionID) {
   return instance.get(`/competitions/${competitionID}/`)
 }
 
+function deleteCompetition (competitionID) {
+  return instance.delete(`/competitions/${competitionID}/`)
+}
+
+function getCompetitionTAList (competitionID) {
+  return instance.get(`/competitions/${competitionID}/participation`)
+}
+
+function submitCompetitionTAList (competitionID, data) {
+  return instance.post(`/competitions/${competitionID}/participation/ta`, data)
+}
+
 function getCompetitionsLeaderboard (competitionID) {
   return instance.get('leaderboards/competition', {
     params: {
@@ -370,6 +382,9 @@ export default {
   getUserCompetitionList,
   joinCompetition,
   getCompetitions,
+  deleteCompetition,
+  getCompetitionTAList,
+  submitCompetitionTAList,
   getCompetitionsLeaderboard,
   getUserSubmissions,
   selectFile,
