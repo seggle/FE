@@ -139,27 +139,6 @@ export default {
 
   td {
     padding: 0.5rem 1rem;
-
-    .edit-btn,
-    .delete-btn {
-      background-color: #F8F9FA;
-      color: #333;
-      border: none;
-      border-radius: 18px 17px;
-      padding: 5px 10px;
-
-      &:hover {
-        background-color: #333;
-        color: #eee;
-      }
-    }
-
-    .delete-btn {
-      &:hover {
-        background-color: var(--bs-red);
-        color: #eee;
-      }
-    }
   }
 }
 

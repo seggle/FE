@@ -4,49 +4,54 @@
       <h1 id="title">수업 및 시험</h1>
       <button class="btn" @click="editClassList">저장</button>
     </header>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">수강학기</th>
-          <th scope="col">제목</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(classes, i) in classList" :key="i">
-          <th scope="row">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              :value="classes.id"
-              v-model="checkList"
-            />
-          </th>
-          <td>{{ classes.semester }}</td>
-          <td>{{ classes.name }}</td>
-          <td>
-            <a
-              @click="
-                showModal = true;
-                rowIndex = i;
-              "
-              >편집</a
-            >
-          </td>
-          <ModalClassList
-            v-if="showModal"
-            @close="showModal = false"
-            mode="수업 편집"
-            :classID="classList[rowIndex].id"
-            :semester="classList[rowIndex].semester"
-            :title="classList[rowIndex].name"
-          />
-          <td><a @click="removeClass(classes.id)">삭제</a></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-div">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"><font-awesome-icon icon="check" /></th>
+            <th scope="col">수강학기</th>
+            <th scope="col">제목</th>
+            <th scope="col">편집</th>
+            <th scope="col">삭제</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(classes, i) in classList" :key="i">
+            <th scope="row">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                :value="classes.id"
+                v-model="checkList"
+              />
+            </th>
+            <td>{{ classes.semester }}</td>
+            <td>{{ classes.name }}</td>
+            <td>
+              <button class="edit-btn"
+                      @click="showModal = true;
+                              rowIndex = i;">
+                <font-awesome-icon icon="pen" />
+              </button>
+              <ModalClassList
+                v-if="showModal"
+                @close="showModal = false"
+                mode="수업 편집"
+                :classID="classList[rowIndex].id"
+                :semester="classList[rowIndex].semester"
+                :title="classList[rowIndex].name"
+              />
+            </td>
+            <td>
+              <button class="delete-btn"
+                      @click="removeClass(classes.id)">
+                <font-awesome-icon icon="trash-can" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -137,7 +142,7 @@ export default {
     }
   }
   .table {
-    text-align: left;
+    // text-align: left;
     tbody {
       td {
         a {
