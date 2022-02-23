@@ -14,7 +14,7 @@
 
           <div class="modal-body">
             <div class="row">
-              <table class = "table" frame = void>
+              <table class = "modal-table" frame = void>
                 <thead>
                   <tr>
                     <th class="col-6 competition-title" scope="col">제목</th>
@@ -116,7 +116,7 @@ export default {
 .ghost-button:hover {
   text-decoration: underline;
 }
-.table {
+.modal-table {
   width: 100%;
   border-collapse: collapse;
   white-space: nowrap;
@@ -128,11 +128,15 @@ export default {
     overflow: hidden;
     white-space: nowrap;
   }
+  tr {
+    border: 1px solid black;
+  }
 }
-tr {
-  border: 1px solid black;
-  padding: 1rem;
+
+tbody, td, tfoot, th, thead, tr {
+  padding: 0.5rem;
 }
+
 .modal-container {
   @media (max-width: 383px) {
     width: 100%;
