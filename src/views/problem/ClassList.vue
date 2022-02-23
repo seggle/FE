@@ -18,7 +18,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="col-1" scope="col">#</th>
+            <!-- <th class="col-1" scope="col">#</th> -->
             <th class="col-1" scope="col">연도</th>
             <th class="col-1" scope="col">학기</th>
             <th scope="col">제목</th>
@@ -30,7 +30,7 @@
             :key="classes"
             @click="goClass(classes.id)"
           >
-            <th scope="row">{{ classes.id }}</th>
+            <!-- <th scope="row">{{ classes.id }}</th> -->
             <td>{{ classes.year }}</td>
             <td>{{ classes.semester }}</td>
             <td>{{ classes.name }}</td>
@@ -108,7 +108,7 @@ export default {
     }
   }
   .table {
-    text-align: left;
+    // text-align: left;
   }
 }
 </style>

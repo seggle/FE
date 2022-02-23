@@ -8,7 +8,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" class="col-1">#</th>
+        <!-- <th scope="col" class="col-1">#</th> -->
         <th scope="col" class="col-3">문제 제목</th>
         <th scope="col" class="col-2"></th>
         <th scope="col" class="col-2">시작날짜</th>
@@ -17,15 +17,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(problem, i) in problemList" :key="problem" @click="goProblem(problem.id)">
-        <th scope="row">{{ i + 1 }}</th>
+      <tr v-for="(problem, i) in problemList" :key="problem"
+          @click="goProblem(problem.id)"
+          :style="{ color: `var(--bs-${this.problemList[i].progressBar.type})` }">
+        <!-- <th scope="row">{{ i + 1 }}</th> -->
         <td class="col-3 probtitle">{{ problem.problem.title }}</td>
         <td>{{ problem.dday }}</td>
         <td>{{ problem.start_time }}</td>
         <td>
           <div class="progress">
             <div class="progress-bar"
-                :class="this.problemList[i].progressBar.type"
+                :class="`bg-${this.problemList[i].progressBar.type}`"
                 role="progressbar"
                 :style="{ width: this.problemList[i].progressBar.value + '%' }"
                 :aria-valuenow="this.problemList[i].progressBar.value"
@@ -132,20 +134,20 @@ export default {
         const progress = {}
         if (this.problemList[i].astart_end === -1) {
           progress.value = 0
-          progress.type = 'bg-secondary'
+          progress.type = 'secondary'
         } else if (this.problemList[i].astart_end === -2) {
           progress.value = 100
-          progress.type = 'bg-secondary'
+          progress.type = 'secondary'
         } else {
           progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].astart_end) * 100)
           if (progress.value <= 50) {
-            progress.type = 'bg-info'
+            progress.type = 'info'
           } else if (progress.value <= 70) {
-            progress.type = 'bg-warning'
+            progress.type = 'warning'
           } else if (progress.value === 100) {
-            progress.type = 'bg-success'
+            progress.type = 'success'
           } else {
-            progress.type = 'bg-danger'
+            progress.type = 'danger'
           }
         }
         this.problemList[i].progressBar = progress
@@ -178,20 +180,10 @@ export default {
       margin-bottom: 0;
     }
   }
-  .table-div {
-    overflow-x: auto;
-  }
   .table {
     table-layout: fixed;
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
+    font-weight: 500;
     tbody {
-      tr:hover {
-        background-color: #F4F4F8;
-        cursor: pointer;
-      }
       td.probtitle {
         text-overflow: ellipsis;
         overflow: hidden;
