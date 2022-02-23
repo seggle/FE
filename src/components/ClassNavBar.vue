@@ -17,7 +17,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Pills navs -->
           <ul
-            class="nav nav-pills me-auto mb-2 mb-lg-0"
+            class="nav nav-pills mb-2 mb-lg-0"
             role="tablist"
             @click="handleRoute"
           >
@@ -90,16 +90,13 @@ h1 {
   margin-bottom: 0rem;
 
   display: block;
-  width: 400px;
-  overflow: hidden; // 100px 넘으면 hidden
-  text-overflow: ellipsis; // 100px 넘으면 생략 부호
+  width: 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 
-  @media (max-width: 1200px) {
-    width: 300px;
-  }
-
   @media (max-width: 992px) {
+    width: 40%;
     padding: 0rem;
   }
 }
@@ -112,12 +109,19 @@ h1 {
 #navbarNav {
   justify-content: space-evenly;
   font-weight: bold;
+
+  ul {
+    @media (max-width: 992px) {
+      margin-top: 20px;
+      display: block;
+    }
+  }
+
   .nav-item {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1.5rem;
 
     &:hover {
       background-color: var(--bs-light);
-      // font-weight: bold;
     }
   }
 }

@@ -18,8 +18,7 @@
     </thead>
     <tbody>
       <tr v-for="(problem, i) in problemList" :key="problem"
-          @click="goProblem(problem.id)"
-          :style="{ color: `var(--bs-${this.problemList[i].progressBar.type})` }">
+          @click="goProblem(problem.id)">
         <!-- <th scope="row">{{ i + 1 }}</th> -->
         <td class="col-3 probtitle">{{ problem.problem.title }}</td>
         <td>{{ problem.dday }}</td>
@@ -27,7 +26,7 @@
         <td>
           <div class="progress">
             <div class="progress-bar"
-                :class="`bg-${this.problemList[i].progressBar.type}`"
+                :class="this.problemList[i].progressBar.type"
                 role="progressbar"
                 :style="{ width: this.problemList[i].progressBar.value + '%' }"
                 :aria-valuenow="this.problemList[i].progressBar.value"
@@ -134,20 +133,20 @@ export default {
         const progress = {}
         if (this.problemList[i].astart_end === -1) {
           progress.value = 0
-          progress.type = 'secondary'
+          progress.type = 'bg-secondary'
         } else if (this.problemList[i].astart_end === -2) {
           progress.value = 100
-          progress.type = 'secondary'
+          progress.type = 'bg-secondary'
         } else {
           progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].astart_end) * 100)
           if (progress.value <= 50) {
-            progress.type = 'info'
+            progress.type = 'bg-info'
           } else if (progress.value <= 70) {
-            progress.type = 'warning'
+            progress.type = 'bg-warning'
           } else if (progress.value === 100) {
-            progress.type = 'success'
+            progress.type = 'bg-success'
           } else {
-            progress.type = 'danger'
+            progress.type = 'bg-danger'
           }
         }
         this.problemList[i].progressBar = progress
@@ -182,7 +181,6 @@ export default {
   }
   .table {
     table-layout: fixed;
-    font-weight: 500;
     tbody {
       td.probtitle {
         text-overflow: ellipsis;

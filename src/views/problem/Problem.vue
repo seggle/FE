@@ -116,31 +116,32 @@
                      accept=".ipynb">
               <button class="btn" @click="submitFile">파일 제출</button>
             </div>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">선택</th>
-                  <th scope="col">csv 파일 이름</th>
-                  <th scope="col">ipynb 파일 이름</th>
-                  <th scope="col">점수</th>
-                  <th scope="col">제출 날짜</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(submit, i) in submitList" :key="i">
-                  <th scope="row">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           @select="this.submitRowIndex = i">
-                  </th>
-                  <td>{{ submit.submission_csv }}</td>
-                  <td>{{ submit.submission_ipynb }}</td>
-                  <td>{{ submit.submission_score }}</td>
-                  <td>{{ submit.submission_time }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-div">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">선택</th>
+                    <th scope="col">csv 파일 이름</th>
+                    <th scope="col">ipynb 파일 이름</th>
+                    <th scope="col">점수</th>
+                    <th scope="col">제출 날짜</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(submit, i) in submitList" :key="i">
+                    <th scope="row">
+                      <input class="form-check-input"
+                            type="checkbox"
+                            @select="this.submitRowIndex = i">
+                    </th>
+                    <td>{{ submit.submission_csv }}</td>
+                    <td>{{ submit.submission_ipynb }}</td>
+                    <td>{{ submit.submission_score }}</td>
+                    <td>{{ submit.submission_time }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <button class="btn" @click="totalSubmit()">제출</button>
           </div>
         </div>
