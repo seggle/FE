@@ -159,6 +159,7 @@ export default {
         this.problemTitle = data.title
         this.problemInfo.description = data.description
         this.problemInfo.public = data.public
+        this.problemInfo.evaluation = data.evaluation
         this.dataInfo.description = data.data_description
         this.dataInfo.dataFile = data.data
         this.dataInfo.solutionFile = data.solution
