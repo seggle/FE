@@ -102,6 +102,8 @@
 
 <script>
 import api from '@/api/index.js'
+import { GMTtoLocale } from '@/utils/time.js'
+
 export default {
   name: 'ProblemForm',
   props: ['mode', 'problemID', 'classID'],
@@ -174,8 +176,8 @@ export default {
         }
 
         if (this.problemType === 'general') {
-          data.start_time = this.changeTimeFormat(this.problemInfo.startTime)
-          data.end_time = this.changeTimeFormat(this.problemInfo.endTime)
+          data.start_time = GMTtoLocale(this.problemInfo.startTime)
+          data.end_time = GMTtoLocale(this.problemInfo.endTime)
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
@@ -213,13 +215,6 @@ export default {
         console.log(err)
       }
     },
-    changeTimeFormat (time) {
-      if (time instanceof Date) {
-        time = time.toISOString()
-      }
-      const changedTime = time.slice(0, 10) + ' ' + time.slice(11, 19)
-      return changedTime
-    },
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
       const id = e.target.id
@@ -236,34 +231,52 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 5rem 0rem;
+  @media (max-width: 414px) {
+    width: 360px;
+  }
+
   .form-control::placeholder {
     color: #ced4da;
     font-weight: 800;
    }
+
   .problem-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     padding: 3rem 0;
+
     .form-control {
       width: 50%;
-      font-size: 2.5rem;
+      font-size: calc(1.375rem + 1.5vw);
       font-weight: 800;
     }
+
     .btn {
       padding: 0.5rem 2rem;
-      font-size: 22px;
+      font-size: calc(1.2rem + 0.3vw);
       font-weight: bold;
-    }
-    button:hover {
-      background: white;
-      color: #0e1b49;
+      @media (max-width: 768px) {
+        padding: 0.4rem 1.6rem;
+      }
+
+      &:hover {
+        background: white;
+        color: #0e1b49;
+      }
     }
   }
+
+  .problem-tab {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
   .list-group-item {
     border: none;
     padding: 1rem 0rem;
-    font-size: 20px;
+    font-size: calc(1.175rem + 0.2vw);
     border-radius: 0.75rem;
     margin-bottom: 1rem;
   }
@@ -273,6 +286,11 @@ export default {
     font-weight: bold;
     background-color: #F4F4F8;
     border-color: #fff;
+  }
+  .problem-tab-content {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
   .tab-content {
     // border: 0.0625rem solid #D7E2EB;
@@ -290,10 +308,26 @@ export default {
       justify-content: space-evenly;
       align-items: center;
       padding: 1rem 0rem;
+      @media (max-width: 768px) {
+        display: block;
+      }
+
+      .form-time {
+        display: flex;
+      }
+
+      .form-metrics,
+      .form-time,
+      .data-file,
+      .solution-file {
+        @media (max-width: 768px) {
+          display: block;
+          width: 100%;
+          margin-bottom: 12px;
+        }
+      }
     }
-    .form-time {
-      display: flex;
-    }
+
     .form-label {
       // display: block;
       font-weight: bold;

@@ -94,6 +94,8 @@
 
 <script>
 import api from '@/api/index.js'
+import { GMTtoLocale } from '@/utils/time.js'
+
 export default {
   name: 'ModalContestList',
   props: {
@@ -137,12 +139,10 @@ export default {
     },
     async submitForm () {
       try {
-        const startTime = this.contestInfo.startTime.toISOString()
-        const endTime = this.contestInfo.endTime.toISOString()
         const data = {
           name: this.contestInfo.title,
-          start_time: startTime.slice(0, 10) + ' ' + startTime.slice(11, 19),
-          end_time: endTime.slice(0, 10) + ' ' + endTime.slice(11, 19),
+          start_time: GMTtoLocale(this.contestInfo.startTime),
+          end_time: GMTtoLocale(this.contestInfo.endTime),
           is_exam: this.contestInfo.checkedExam,
           visible: this.contestInfo.checkedVisible
         }
