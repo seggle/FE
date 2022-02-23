@@ -50,18 +50,10 @@ import api from '@/api/index.js'
 export default {
   name: 'ModalClassList',
   props: {
-    mode: {
-      type: String
-    },
-    classID: {
-      type: Number
-    },
-    semester: {
-      type: Number
-    },
-    title: {
-      type: String
-    }
+    mode: String,
+    classID: Number,
+    semester: Number,
+    title: String
   },
   data () {
     return {

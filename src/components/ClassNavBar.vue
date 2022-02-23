@@ -69,9 +69,7 @@
 export default {
   name: 'ClassNavBar',
   props: {
-    className: {
-      type: String
-    }
+    className: String
   },
   mounted () {},
   methods: {

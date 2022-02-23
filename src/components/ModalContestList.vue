@@ -91,12 +91,8 @@ import { GMTtoLocale } from '@/utils/time.js'
 export default {
   name: 'ModalContestList',
   props: {
-    editContestInfo: {
-      type: Object
-    },
-    mode: {
-      type: String
-    }
+    editContestInfo: Object,
+    mode: String
   },
   data () {
     return {

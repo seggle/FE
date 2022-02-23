@@ -106,7 +106,11 @@ import { GMTtoLocale } from '@/utils/time.js'
 
 export default {
   name: 'ProblemForm',
-  props: ['mode', 'problemID', 'classID'],
+  props: {
+    mode: String,
+    problemID: Number,
+    classID: Number
+  },
   data () {
     return {
       problemType: this.$route.params.problemType, // class or general
