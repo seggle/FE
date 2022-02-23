@@ -3,7 +3,7 @@
     <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">FAQ</h1>
       <div>
-        <button class="btn btn-dark" id="faq-create" data-bs-toggle="modal" data-bs-target="#faqModal" @click="openFAQ()">+ 글쓰기</button>
+        <button class="btn" id="faq-create" data-bs-toggle="modal" data-bs-target="#faqModal" @click="openFAQ()">+ 글쓰기</button>
         <div class="modal fade" id="faqModal" tabindex="-1" aria-labelledby="faqModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -174,11 +174,6 @@ export default {
     width: 100%;
     white-space: nowrap;
     border-collapse:collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color:black;

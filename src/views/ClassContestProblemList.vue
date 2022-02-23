@@ -6,7 +6,7 @@
         <button
           v-if="this.$store.state.usertype !== 0"
           type="button"
-          class="btn btn-primary btn-sm px-4 me-sm-3"
+          class="btn btn-sm px-4 me-sm-3"
           data-bs-toggle="modal"
           data-bs-target="#problemModal
         "
@@ -137,11 +137,6 @@ export default {
       cursor: pointer;
     }
   }
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color: black;

@@ -65,7 +65,7 @@
 
           <button
             type="button"
-            class="btn btn-dark"
+            class="btn"
             id="logout"
             @click="logout"
           >
@@ -74,10 +74,10 @@
         </template>
         <!-- 로그인 안했을 때 -->
         <template v-else>
-          <button type="button" class="btn btn-dark" id="login">
+          <button type="button" class="btn" id="login">
             <a href="/login">로그인</a>
           </button>
-          <button type="button" class="btn btn-dark" id="login">
+          <button type="button" class="btn" id="login">
             <a href="/register">회원가입</a>
           </button>
         </template>
