@@ -433,7 +433,4 @@ export default {
     }
   }
 }
-.table-div {
-  overflow-x: auto;
-}
 </style>

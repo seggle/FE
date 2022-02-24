@@ -58,7 +58,8 @@
         <th scope="col">마지막 수정일</th>
         <th scope="col">공개</th>
         <th scope="col">중요</th>
-        <th scope="col">옵션</th>
+        <th scope="col">편집</th>
+        <th scope="col">삭제</th>
       </tr>
     </thead>
     <tbody>
@@ -69,17 +70,27 @@
         <td>{{ announcement.last_modified }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.visible" @change="changeSwitch(announcement.id, announcement.visible, announcement.important)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+              v-model="announcement.visible" @change="changeSwitch(announcement.id, announcement.visible, announcement.important)">
           </div>
         </td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="announcement.important" @change="changeSwitch(announcement.id, announcement.visible, announcement.important)">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+              v-model="announcement.important" @change="changeSwitch(announcement.id, announcement.visible, announcement.important)">
           </div>
         </td>
         <td scope="row">
-          <a class="ghost-button" data-bs-toggle="modal" data-bs-target="#announceModal" @click="openAnnouncement(announcement.id)">편집</a> |
-          <a class="ghost-button" @click="deleteAnnouncement(announcement.id)">삭제</a>
+          <button class="edit-btn"
+                  @click="openAnnouncement(announcement.id)">
+            <font-awesome-icon icon="pen" />
+          </button>
+        </td>
+        <td scope="row">
+          <button class="delete-btn"
+                  @click="deleteAnnouncement(announcement.id)">
+            <font-awesome-icon icon="trash-can" />
+          </button>
         </td>
       </tr>
     </tbody>
@@ -145,7 +156,7 @@ export default {
         if (confirm('삭제하시겠습니까?')) {
           await api.deleteAnnouncement(announcementID)
           const res = await api.getAnnouncementList(1, this.keyword)
-          if (res.data.count / 15 < this.currentPage) {
+          if (this.currentPage !== 1 && res.data.count / 15 < this.currentPage) {
             this.currentPage = this.currentPage - 1
           }
           this.getAnnouncementList(this.currentPage)
@@ -215,15 +226,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-div {
-    overflow-x: auto;
-}
-.table {
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
-}
 a {
   color:black;
   cursor: pointer;

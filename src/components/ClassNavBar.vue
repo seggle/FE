@@ -75,7 +75,6 @@ export default {
   methods: {
     handleRoute (route) {
       // a태그의 id와 router index.js의 name과 동일해야함
-      console.log(route.path)
       this.$router.push({
         name: route.path[0].id
       })

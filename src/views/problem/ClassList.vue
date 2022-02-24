@@ -38,20 +38,17 @@
         </tbody>
     </table>
     </div>
-    <Pagination />
   </div>
 </template>
 
 <script>
 import ModalClassList from '@/components/ModalClassList.vue'
-import Pagination from '@/components/Pagination.vue'
 import api from '@/api/index.js'
 
 export default {
   name: 'ClassList',
   components: {
-    ModalClassList,
-    Pagination
+    ModalClassList
   },
   data () {
     return {
@@ -81,8 +78,6 @@ export default {
             this.classList.push(res.data[i])
           }
         }
-        console.log(this.classList)
-        console.log(typeof this.classList)
       } catch (err) {
         console.log(err)
       }
@@ -106,9 +101,6 @@ export default {
     .btn {
       width: 6rem;
     }
-  }
-  .table {
-    // text-align: left;
   }
 }
 </style>
