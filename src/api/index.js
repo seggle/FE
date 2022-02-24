@@ -86,18 +86,18 @@ function getCompetitionsLeaderboard (competitionID) {
   })
 }
 
-function getUserSubmissions (userID, competitionID, contestProblemID) {
-  return instance.get('submissions', {
+function getUserClassSubmissions (page, username, contestProblemID) {
+  return instance.get('/submissions/', {
     params: {
-      uid: userID,
-      cid: competitionID,
+      page: page,
+      username: username,
       cpid: contestProblemID
     }
   })
 }
 
-function selectFile (competitionID, userID, data) {
-  return instance.post(`submissions/${competitionID}/${userID}/`, data)
+function selectProblemSubmission (classID, contestID, cpID, data) {
+  return instance.patch(`/class/${classID}/contests/${contestID}/${cpID}/check`, data)
 }
 
 function createClass (data) {
@@ -350,6 +350,10 @@ function changeProblemSwitch (id) {
   return instance.post(`/problems/${id}/check`)
 }
 
+function submitFileProblem (classID, contestID, cpID, username, data) {
+  return formDataInstance.post(`/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
+}
+
 function createGeneralProblem (data) {
   return instance.post('/competitions/', data)
 }
@@ -388,8 +392,8 @@ export default {
   getCompetitionTAList,
   submitCompetitionTAList,
   getCompetitionsLeaderboard,
-  getUserSubmissions,
-  selectFile,
+  getUserClassSubmissions,
+  selectProblemSubmission,
   createClass,
   getClass,
   editClass,
@@ -446,6 +450,7 @@ export default {
   editProblem,
   deleteProblem,
   changeProblemSwitch,
+  submitFileProblem,
   createClassProblem,
   createGeneralProblem,
   editGeneralProblem

@@ -105,24 +105,28 @@
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
-              <input type="file"
+              <input id="csv-file-input"
+                     type="file"
                      class="form-control"
                      accept=".csv"
-                     placeholder="첨부파일">
+                     @change="uploadFile">
 
               <h5 class="list-title">ipynb 파일 제출</h5>
-              <input type="file"
+              <input id="ipynb-file-input"
+                     type="file"
                      class="form-control"
-                     accept=".ipynb">
+                     accept=".ipynb"
+                     @change="uploadFile">
               <button class="btn" @click="submitFile">파일 제출</button>
             </div>
             <div class="table-div">
+              <h5 class="list-title">제출 내역</h5>
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">선택</th>
-                    <th scope="col">csv 파일 이름</th>
-                    <th scope="col">ipynb 파일 이름</th>
+                    <th scope="col"><font-awesome-icon icon="check" /></th>
+                    <th scope="col">csv 파일</th>
+                    <th scope="col">ipynb 파일</th>
                     <th scope="col">점수</th>
                     <th scope="col">제출 날짜</th>
                   </tr>
@@ -132,17 +136,20 @@
                     <th scope="row">
                       <input class="form-check-input"
                             type="checkbox"
-                            @select="this.submitRowIndex = i">
+                            v-model="submitRowIndex"
+                            :true-value="submit.id"
+                      />
                     </th>
-                    <td>{{ submit.submission_csv }}</td>
-                    <td>{{ submit.submission_ipynb }}</td>
-                    <td>{{ submit.submission_score }}</td>
-                    <td>{{ submit.submission_time }}</td>
+                    <td>{{ submit.csv }}</td>
+                    <td>{{ submit.ipynb }}</td>
+                    <td>{{ submit.score }}</td>
+                    <td>{{ submit.created_time }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <button class="btn" @click="totalSubmit()">제출</button>
+            <Pagination :pagination="PageValue" @get-page="getPage" />
+            <button class="btn" @click="selectSubmission">제출</button>
           </div>
         </div>
       </div>
@@ -152,23 +159,35 @@
 
 <script>
 import api from '@/api/index.js'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'Problem',
+  components: {
+    Pagination
+  },
   data () {
     return {
       userID: this.$store.state.userid,
       joinText: '참여',
       alreadyJoined: false,
       isClassUser: false,
-      problemType: '',
-      problemID: '', // 대회 문제 아이디, 수업 아이디
-      contestID: '', // 수업 사이드바 아이디
-      contestProblemID: '', // 수업 사이드바 하위 문제 아이디
+
+      problemType: this.$route.params.problemType,
+      problemID: this.$route.params.problemID, // 대회 문제 아이디, 수업 아이디
+      contestID: this.$route.params.contestID, // 수업 사이드바 아이디
+      contestProblemID: this.$route.params.contestProblemID, // 수업 사이드바 하위 문제 아이디
+
       problemInfo: [],
       leaderboardList: [],
+
       submitList: [],
-      submitRowIndex: ''
+      submitRowIndex: '',
+      csv: '',
+      ipynb: '',
+
+      PageValue: [],
+      currentPage: 1
     }
   },
   mounted () {
@@ -176,14 +195,10 @@ export default {
   },
   methods: {
     init () {
-      this.problemType = this.$route.params.problemType
-      this.problemID = this.$route.params.problemID
       if (this.problemType === 'general') {
         // this.getUserStatus() -> api 없이 진행할 예정
       }
       if (this.problemType === 'class') {
-        this.contestID = this.$route.params.contestID
-        this.contestProblemID = this.$route.params.contestProblemID
         this.getClassUserList()
       }
       if (this.alreadyjoined) {
@@ -193,7 +208,7 @@ export default {
       }
       this.getProblem()
       // this.getLeaderboard() -> api 미구현
-      // this.getUserSubmissions() -> api 미구현
+      this.getUserSubmissions(1)
     },
     // async getUserStatus () {
     //   try {
@@ -260,35 +275,93 @@ export default {
         console.log(err)
       }
     },
-    async getUserSubmissions () { // api 미구현
+    getPage (page) {
+      this.getUserSubmissions(page)
+    },
+    alreadyChecked () {
+      // is_show이면 체크되어있어야함
+      for (let i = 0; i < this.submitList.length; i++) {
+        if (this.submitList[i].on_leaderboard) {
+          this.submitRowIndex = this.submitList[i].id
+        }
+      }
+    },
+    changeSubmissionListName () {
+      for (let i = 0; i < this.submitList.length; i++) {
+        const csvName = this.submitList[i].csv
+        const ipynbName = this.submitList[i].ipynb
+        const submitDate = this.submitList[i].created_time
+
+        this.submitList[i].csv = csvName.split('/').pop()
+        this.submitList[i].ipynb = ipynbName.split('/').pop()
+        this.submitList[i].created_time = submitDate.slice(0, 10) + ' ' + submitDate.slice(11, 19)
+      }
+    },
+    async getUserSubmissions (page) {
       try {
-        const res = await api.getUserSubmissions(this.userID, this.problemID)
-        this.submitList = res.data
+        this.currentPage = page
+        this.PageValue = []
+
+        const res = await api.getUserClassSubmissions(page, this.userID, this.contestProblemID)
+        this.submitList = res.data.results
+        this.alreadyChecked()
+        this.changeSubmissionListName()
+
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        if (res.data.count !== 0) {
+          this.total = parseInt((res.data.count - 1) / 15) + 1
+        }
       } catch (err) {
         console.log(err)
       }
     },
-    async submitFile () { // api 미구현
+    async submitFile () {
       try {
-        // const data = {
-        //   submission_csv:
-        //   submission_ipynb:
-        // }
-        // const res = await api.submitFile(this.problemID, this.userID, data)
-        // console.log(res)
-        // this.getUserSubmissions() // 제출 후 아래 제출 내역 리로드
+        const formData = new FormData()
+        formData.append('csv', this.csv)
+        formData.append('ipynb', this.ipynb)
+        formData.append('ip_address', '123.123.1.12') // ip는 우선 static으로
+
+        if (this.problemType === 'general') {
+          // general
+        } else if (this.problemType === 'class') {
+          await api.submitFileProblem(
+            this.problemID,
+            this.contestID,
+            this.contestProblemID,
+            this.userID,
+            formData)
+        }
+        alert('파일 제출이 완료되었습니다.')
+        this.getUserSubmissions(1)
       } catch (err) {
         console.log(err)
       }
     },
-    async selectFile (i) { // api 미구현
+    uploadFile (e) {
+      const files = e.target.files || e.dataTransfer.files
+      const id = e.target.id
+      if (id === 'csv-file-input') {
+        this.csv = files[0]
+      } else {
+        this.ipynb = files[0]
+      }
+    },
+    async selectSubmission () {
       try {
-        // const data = {
-        //   submission_csv: // 체크박스에 선택된 csv 파일
-        //   submission_ipynb: // 체크박스에 선택된 ipynb 파일
-        // }
-        // const res = await api.selectFile(this.problemID, this.userID, data)
-        // console.log(res)
+        const data = {
+          id: this.submitRowIndex
+        }
+        if (this.problemType === 'general') {
+          // general
+        } else if (this.problemType === 'class') {
+          await api.selectProblemSubmission(
+            this.problemID,
+            this.contestID,
+            this.contestProblemID,
+            data)
+          alert('제출이 완료되었습니다.')
+        }
       } catch (err) {
         console.log(err)
       }
@@ -391,7 +464,8 @@ export default {
       }
     }
     .btn {
-      float: right;
+      display: block;
+      margin-left: auto;
       padding: 0.5rem 1.5rem;
       font-weight: bold;
       font-size: 16px;
