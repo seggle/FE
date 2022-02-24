@@ -79,24 +79,36 @@
             </p>
           </div>
         <!-- 리더보드 -->
-          <div class="tab-pane fade" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
+          <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
             <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">이름</th>
                 <th scope="col">점수</th>
-                <th scope="col">제출 횟수</th>
                 <th scope="col">제출 날짜</th>
+                <th v-if="privilege" scope="col">코드(.ipynb)</th>
+                <th v-if="privilege" scope="col">답안(.csv)</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="users in leaderboardList" :key="users">
-                <th scope="row">{{ users.submission_id }}</th>
-                <td>{{ users.user_name }}</td>
-                <td>{{ users.submission_score }}</td>
-                <td>{{ users.userSubmitCount }}</td>
-                <td>{{ users.submission_time }}</td>
+              <tr v-for="(users, i) in leaderboardList" :key="users">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ users.username }}</td>
+                <td>{{ users.score }}</td>
+                <td>{{ users.created_time.slice(0, 10) + ' ' + users.created_time.slice(11, 19)}}</td>
+                <td v-if="privilege">
+                  <button class="download-btn"
+                    @click="download(users.ipynb)">
+                    <font-awesome-icon icon="file-arrow-down" />
+                  </button>
+                </td>
+                <td v-if="privilege">
+                  <button class="download-btn"
+                    @click="download(users.csv)">
+                    <font-awesome-icon icon="file-arrow-down" />
+                  </button>
+                </td>
               </tr>
             </tbody>
             </table>
@@ -168,7 +180,8 @@ export default {
       problemInfo: [],
       leaderboardList: [],
       submitList: [],
-      submitRowIndex: ''
+      submitRowIndex: '',
+      privilege: false
     }
   },
   mounted () {
@@ -183,7 +196,7 @@ export default {
       }
       if (this.problemType === 'class') {
         this.contestID = this.$route.params.contestID
-        this.contestProblemID = this.$route.params.contestProblemID
+        this.contestProblemID = this.$route.params.problemID
         this.getClassUserList()
       }
       if (this.alreadyjoined) {
@@ -192,7 +205,7 @@ export default {
         this.joinText = '참여하기'
       }
       this.getProblem()
-      // this.getLeaderboard() -> api 미구현
+      this.getLeaderboard()
       // this.getUserSubmissions() -> api 미구현
     },
     // async getUserStatus () {
@@ -213,10 +226,14 @@ export default {
       try {
         const res = await api.getClassUserList(this.problemID)
         const userList = res.data
+        console.log(userList)
         for (let i = 0; i < userList.length; i++) {
           if (String(userList[i].username) === this.userID) {
             this.isClassUser = true
             this.alreadyJoined = true
+            if (userList[i].privilege > 0) {
+              this.privilege = true
+            }
           }
         }
       } catch (err) {
@@ -242,16 +259,22 @@ export default {
         console.log(err)
       }
     },
-    async getLeaderboard () { // api 미구현
+    async getLeaderboard () {
       try {
-        let res = await api.getCompetitionsLeaderboard(this.problemID)
         if (this.problemType === 'class') {
-          res = await api.getClassLeaderboard(this.contestProblemID)
+          const res = await api.getClassLeaderboard(this.contestProblemID)
+          this.leaderboardList = res.data
+          console.log(res.data)
+        } else {
+          const res2 = await api.getCompetitionsLeaderboard(this.problemID)
+          this.leaderboardList = res2.data
         }
-        this.leaderboardList = res.data
       } catch (err) {
         console.log(err)
       }
+    },
+    download (url) {
+      location.href = url
     },
     async joinCompetition () {
       try {
@@ -409,5 +432,8 @@ export default {
         background-color: #F4F4F8;
     }
   }
+}
+.table-div {
+  overflow-x: auto;
 }
 </style>

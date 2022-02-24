@@ -104,7 +104,10 @@ export default {
         today.getTime() >= startTime.getTime() &&
         today.getTime() <= endTime.getTime()
       ) {
-        console.log('router push 로 이동하기' + problemID)
+        this.$router.push({
+          name: 'Problem',
+          params: { problemType: 'class', problemID: problemID }
+        })
       } else {
         alert('접근 시간이 아닙니다!')
       }
@@ -113,7 +116,7 @@ export default {
   watch: {
     $route (to, from) {
       if (to.path !== from.path) {
-        if (this.$route.params.contestID !== null) {
+        if (this.$route.params.contestID !== undefined) {
           this.getProblemList(this.$route.params.contestID)
         }
       }
