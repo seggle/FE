@@ -92,7 +92,8 @@
             <th scope="col">이메일</th>
             <th scope="col">가입날짜</th>
             <th scope="col">권한</th>
-            <th scope="col">옵션</th>
+            <th scope="col">편집</th>
+            <th scope="col">삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -104,17 +105,18 @@
             <td>{{ user.date_joined }}</td>
             <td>{{ user.privilege }}</td>
             <td scope="row">
-              <a
-                class="ghost-button"
-                data-bs-toggle="modal"
-                data-bs-target="#userModal"
-                @click="openUser(user.username)"
-                >편집</a
-              >
-              |
-              <a class="ghost-button" @click="deleteUser(user.username)"
-                >삭제</a
-              >
+              <button class="edit-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#userModal"
+                      @click="openUser(user.username)">
+                <font-awesome-icon icon="pen" />
+              </button>
+            </td>
+            <td scope="row">
+              <button class="delete-btn"
+                      @click="deleteUser(user.username)">
+                <font-awesome-icon icon="trash-can" />
+              </button>
             </td>
           </tr>
         </tbody>
@@ -224,7 +226,7 @@ export default {
         if (confirm('삭제하시겠습니까?')) {
           await api.deleteUser(userName)
           const res = await api.getUserList(1, this.keyword)
-          if (res.data.count / 15 < this.currentPage) {
+          if (this.currentPage !== 1 && res.data.count / 15 < this.currentPage) {
             this.currentPage = this.currentPage - 1
           }
           this.getUserList(this.currentPage)
@@ -243,30 +245,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-div {
-  overflow-x: auto;
-}
-.table {
-  min-width: 700px;
-  width: 100%;
-  white-space: nowrap;
-  border-collapse: collapse;
-}
 .btn-toggle {
   border-width: thin;
   text-align: center;
   background-color: transparent;
 }
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
-}
 a {
   color: black;
   cursor: pointer;
 }
-a.ghost-button:hover {
+.ghost-button:hover {
   color:black;
   text-decoration: underline;
 }

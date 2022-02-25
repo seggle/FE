@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import AdminSideBar from '@/components/AdminSideBar.vue'
 
 export default {
@@ -20,5 +19,5 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style>
 </style>

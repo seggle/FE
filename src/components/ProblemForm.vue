@@ -7,7 +7,10 @@
               v-model="problemTitle"
               :placeholder="this.placeholder"
               required>
-        <button class="btn" type="submit">저장</button>
+        <div class="button">
+          <button class="btn" type="submit" @click="saveMode = 'save'">저장</button>
+          <button v-if="this.problemType == 'class'" class="btn" type="submit" @click="saveMode = 'new-save'">새로 저장</button>
+        </div>
       </div>
       <div class="problem-content row">
       <!-- 세로 메뉴 탭 -->
@@ -99,19 +102,18 @@
 
 <script>
 import api from '@/api/index.js'
+import { GMTtoLocale } from '@/utils/time.js'
+
 export default {
   name: 'ProblemForm',
   props: {
-    mode: {
-      type: String
-    },
-    problemID: {
-      type: Number
-    }
+    mode: String,
+    problemID: Number,
+    classID: Number
   },
   data () {
     return {
-      problemType: '', // class or general
+      problemType: this.$route.params.problemType, // class or general
       problemTitle: '',
       problemInfo: {
         description: '',
@@ -126,7 +128,8 @@ export default {
         dataFile: null,
         solutionFile: null
       },
-      placeholder: ''
+      placeholder: '',
+      saveMode: ''
     }
   },
   mounted () {
@@ -134,7 +137,6 @@ export default {
   },
   methods: {
     init () {
-      this.problemType = this.$route.params.problemType
       if (this.mode === 'create') {
         this.placeholder = '문제 이름을 입력하세요.'
       } else if (this.mode === 'edit') {
@@ -144,13 +146,23 @@ export default {
     },
     async getProblem () {
       try {
-        const res = await api.getProblem(this.problemID)
+        let res
+        if (this.problemType === 'general') {
+          res = await api.getCompetitions(this.problemID)
+          this.problemInfo.startTime = res.data.start_time
+          this.problemInfo.endTime = res.data.end_time
+        }
+        if (this.problemType === 'class') {
+          res = await api.getProblem(this.problemID)
+        }
         const data = res.data
         this.problemTitle = data.title
         this.problemInfo.description = data.description
         this.problemInfo.public = data.public
+        this.problemInfo.evaluation = data.evaluation
         this.dataInfo.description = data.data_description
         this.dataInfo.dataFile = data.data
+        this.dataInfo.solutionFile = data.solution
       } catch (err) {
         console.log(err)
       }
@@ -169,30 +181,37 @@ export default {
         }
 
         if (this.problemType === 'general') {
-          const startTime = this.problemInfo.startTime.toISOString()
-          const endTime = this.problemInfo.endTime.toISOString()
-          data.start_time = startTime.slice(0, 10) + ' ' + startTime.slice(11, 19)
-          data.end_time = endTime.slice(0, 10) + ' ' + endTime.slice(11, 19)
+          data.start_time = GMTtoLocale(this.problemInfo.startTime)
+          data.end_time = GMTtoLocale(this.problemInfo.endTime)
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
-          await api.createGeneralProblem(formData)
+          if (this.mode === 'create') {
+            await api.createGeneralProblem(formData)
+          } else if (this.mode === 'edit') {
+            await api.editGeneralProblem(this.problemID, formData)
+          }
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'GeneralList' })
         }
+
         if (this.problemType === 'class') {
-          data.pubilc = this.problemInfo.public
+          data.public = this.problemInfo.public
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
           // for (const value of formData.values()) {
           //   console.log(value)
           // }
+          formData.append('class_id', this.classID)
           if (this.mode === 'create') {
             await api.createClassProblem(formData)
           } else if (this.mode === 'edit') {
-            console.log('edit')
-            await api.editProblem(this.problemID, formData)
+            if (this.saveMode === 'save') {
+              await api.editProblem(this.problemID, formData)
+            } else if (this.saveMode === 'new-save') {
+              await api.createClassProblem(formData)
+            }
           }
           alert('저장이 완료되었습니다.')
           this.$router.push({ name: 'ClassList' })
@@ -217,34 +236,52 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 5rem 0rem;
+  @media (max-width: 414px) {
+    width: 360px;
+  }
+
   .form-control::placeholder {
     color: #ced4da;
     font-weight: 800;
    }
+
   .problem-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     padding: 3rem 0;
+
     .form-control {
       width: 50%;
-      font-size: 2.5rem;
+      font-size: calc(1.375rem + 1.5vw);
       font-weight: 800;
     }
+
     .btn {
       padding: 0.5rem 2rem;
-      font-size: 22px;
+      font-size: calc(0.8rem + 0.5vw);
       font-weight: bold;
-    }
-    button:hover {
-      background: white;
-      color: #0e1b49;
+      @media (max-width: 768px) {
+        padding: 0.3rem 1.2rem;
+      }
+
+      &:hover {
+        background: white;
+        color: #0e1b49;
+      }
     }
   }
+
+  .problem-tab {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
   .list-group-item {
     border: none;
     padding: 1rem 0rem;
-    font-size: 20px;
+    font-size: calc(0.8rem + 0.5vw);
     border-radius: 0.75rem;
     margin-bottom: 1rem;
   }
@@ -255,36 +292,61 @@ export default {
     background-color: #F4F4F8;
     border-color: #fff;
   }
+  .problem-tab-content {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
   .tab-content {
     // border: 0.0625rem solid #D7E2EB;
     margin-top: 1.5rem;
     border-radius: 0.75rem;
     box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
     padding: 2rem 1rem;
+
     .list-title {
       padding: 0.5rem 2rem;
       margin-top: 1.5rem;
       font-weight: bold;
     }
+
     .form-option {
       display: flex;
       justify-content: space-evenly;
       align-items: center;
       padding: 1rem 0rem;
+      @media (max-width: 768px) {
+        display: block;
+      }
+
+      .form-time {
+        display: flex;
+      }
+
+      .form-metrics,
+      .form-time,
+      .data-file,
+      .solution-file {
+        @media (max-width: 768px) {
+          display: block;
+          width: 100%;
+          margin-bottom: 12px;
+        }
+      }
     }
-    .form-time {
-      display: flex;
-    }
+
     .form-label {
       // display: block;
       font-weight: bold;
       font-size: 1rem;
     }
+
     .form-check-input {
         width: 5em;
         height: 2em;
         margin: 0em 1em;
     }
+
     .btn {
       float: right;
       padding: 0.5rem 1.5rem;
@@ -292,6 +354,7 @@ export default {
       font-size: 16px;
       margin-bottom: 2rem;
     }
+
     .form-control {
     //   background-color: #F4F4F8;
     //   border: 0.2rem solid #dde4eb;
@@ -300,6 +363,7 @@ export default {
       height: 20rem;
       resize: none;
     }
+
     // .form-control::file-selector-button {
     //     color: transparent;
     //     background-color: transparent;
@@ -313,6 +377,7 @@ export default {
       overflow: hidden;
       border: 0;
     }
+
     .file-upload-btn {
       display: inline-block;
       padding: 5px 20px;

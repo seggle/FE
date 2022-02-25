@@ -66,12 +66,20 @@ function getCompetitions (competitionID) {
   return instance.get(`/competitions/${competitionID}/`)
 }
 
+function deleteCompetition (competitionID) {
+  return instance.delete(`/competitions/${competitionID}/`)
+}
+
+function getCompetitionTAList (competitionID) {
+  return instance.get(`/competitions/${competitionID}/participation`)
+}
+
+function submitCompetitionTAList (competitionID, data) {
+  return instance.post(`/competitions/${competitionID}/participation/ta`, data)
+}
+
 function getCompetitionsLeaderboard (competitionID) {
-  return instance.get('leaderboards/competition', {
-    params: {
-      competition_id: competitionID
-    }
-  })
+  return instance.get(`/leaderboards/competition/${competitionID}`)
 }
 
 function getUserSubmissions (userID, competitionID, contestProblemID) {
@@ -114,16 +122,12 @@ function editClassList (data) {
 
 function getContestProblem (classID, contestID, contestProblemID) {
   return instance.get(
-        `class/${classID}/contests/${contestID}/${contestProblemID}/`
+        `/class/${classID}/contests/${contestID}/${contestProblemID}`
   )
 }
 
 function getClassLeaderboard (contestProblemID) {
-  return instance.get('leaderboards/contest-problem/', {
-    params: {
-      cp_id: contestProblemID
-    }
-  })
+  return instance.get(`/leaderboards/contest-problem/${contestProblemID}`)
 }
 
 function getClassUserList (classID) {
@@ -325,7 +329,7 @@ function getProblemList (page, keyword) {
 }
 
 function getProblem (id) {
-  return instance.get(`/problems/${id}`)
+  return instance.get(`/problems/${id}/`)
 }
 
 function editProblem (id, data) {
@@ -342,6 +346,10 @@ function changeProblemSwitch (id) {
 
 function createGeneralProblem (data) {
   return instance.post('/competitions/', data)
+}
+
+function editGeneralProblem (competitionID, data) {
+  return instance.put(`/competitions/${competitionID}/`, data)
 }
 
 function createClassProblem (data) {
@@ -377,6 +385,9 @@ export default {
   getUserCompetitionList,
   joinCompetition,
   getCompetitions,
+  deleteCompetition,
+  getCompetitionTAList,
+  submitCompetitionTAList,
   getCompetitionsLeaderboard,
   getUserSubmissions,
   selectFile,
@@ -439,5 +450,6 @@ export default {
   createClassProblem,
   createGeneralProblem,
   examStart,
-  examInfo
+  examInfo,
+  editGeneralProblem
 }

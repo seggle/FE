@@ -13,7 +13,7 @@
             </form>
       </div>
       <div>
-        <button class="btn btn-dark" id="problem-create" @click="openProblem()">+ 문제 생성</button>
+        <button class="btn" id="problem-create" @click="openProblem()">+ 문제 생성</button>
       </div>
     </div>
     <div class="table-div">
@@ -25,7 +25,9 @@
         <th scope="col">작성일</th>
         <th scope="col">작성자</th>
         <th scope="col">공개</th>
-        <th scope="col">옵션</th>
+        <!-- <th scope="col">옵션</th> -->
+        <th scope="col">편집</th>
+        <th scope="col">삭제</th>
       </tr>
     </thead>
     <tbody>
@@ -40,8 +42,18 @@
           </div>
         </td>
         <td scope="row">
-          <a class="ghost-button" @click="openProblem(problem.id)">편집</a> |
-          <a class="ghost-button" @click="deleteProblem(problem.id)">삭제</a>
+          <button class="edit-btn"
+                  @click="openProblem(problem.id)">
+            <font-awesome-icon icon="pen" />
+          </button>
+          <!-- <a class="ghost-button" @click="openProblem(problem.id)">편집</a> | -->
+          <!-- <a class="ghost-button" @click="deleteProblem(problem.id)">삭제</a> -->
+        </td>
+        <td scope="row">
+          <button class="delete-btn"
+                  @click="deleteProblem(problem.id)">
+            <font-awesome-icon icon="trash-can" />
+          </button>
         </td>
       </tr>
     </tbody>
@@ -116,15 +128,18 @@ export default {
         if (typeof problemID === 'undefined') {
           this.$router.push({
             name: 'CreateProblem',
-            params: { problemType: 'class' }
+            params: {
+              problemType: 'class',
+              classID: this.$route.params.classID
+            }
           })
         } else {
-          console.log(problemID)
           this.$router.push({
             name: 'EditProblem',
             params: {
               problemType: 'class',
-              problemID: problemID
+              problemID: problemID,
+              classID: this.$route.params.classID
             }
           })
         }
@@ -134,9 +149,8 @@ export default {
     },
     async changeSwitch (problemID) {
       try {
-        const res = await api.changeProblemSwitch(problemID)
+        await api.changeProblemSwitch(problemID)
         this.getProblemList(this.currentPage)
-        console.log(res.data)
       } catch (error) {
         console.log(error)
       }
@@ -156,20 +170,6 @@ h5 {
 }
 select {
     height:100%
-}
-.table-div {
-    overflow-x: auto;
-}
-.table {
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color:black;

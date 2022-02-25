@@ -57,16 +57,21 @@ export default createStore({
   },
   actions: {
     async Login ({ commit, dispatch }, data) {
-      const res = await api.loginUser(data)
-      commit('setAccessToken', res.data.access)
-      commit('setRefreshToken', res.data.refresh)
-      commit('setUserid', data.username)
+      try {
+        const res = await api.loginUser(data)
 
-      saveAccessToCookie(res.data.access)
-      saveRefreshToCookie(res.data.refresh)
-      saveUserToCookie(data.username)
+        commit('setAccessToken', res.data.access)
+        commit('setRefreshToken', res.data.refresh)
+        commit('setUserid', data.username)
 
-      dispatch('getUserInfo')
+        saveAccessToCookie(res.data.access)
+        saveRefreshToCookie(res.data.refresh)
+        saveUserToCookie(data.username)
+
+        dispatch('getUserInfo')
+      } catch (error) {
+        return error.response.status
+      }
     },
     async getUserInfo ({ commit }) {
       try {
@@ -85,17 +90,21 @@ export default createStore({
       }
     },
     async Logout ({ state, commit }) {
-      await api.logoutUser({
-        refresh: state.refreshToken
-      })
-      commit('clearUserid')
-      commit('clearToken')
-      commit('clearUserInfo')
+      try {
+        await api.logoutUser({
+          refresh: state.refreshToken
+        })
+        commit('clearUserid')
+        commit('clearToken')
+        commit('clearUserInfo')
 
-      deleteUserInfo()
-      deleteCookie('til_user')
-      deleteCookie('til_access')
-      deleteCookie('til_refresh')
+        deleteUserInfo()
+        deleteCookie('til_user')
+        deleteCookie('til_access')
+        deleteCookie('til_refresh')
+      } catch (err) {
+        console.log('Logout error: ', err)
+      }
     },
     async refreshAccessToken ({ commit }) {
       try {

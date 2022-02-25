@@ -39,13 +39,10 @@
                       </div>
                     </td>
                     <td>
-                      <button
-                        @click="
-                          showModal = true;
-                          rowIndex = i;
-                        "
-                      >
-                        🖋
+                      <button class="edit-btn"
+                              @click="showModal = true;
+                                      rowIndex = i;">
+                        <font-awesome-icon icon="pen" />
                       </button>
                       <ModalContestList
                         v-if="showModal"
@@ -55,7 +52,10 @@
                       />
                     </td>
                     <td>
-                      <button @click="onRemove(contest.id)">❌</button>
+                      <button class="delete-btn"
+                              @click="onRemove(contest.id)">
+                        <font-awesome-icon icon="trash-can" />
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -133,4 +133,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.row {
+  overflow-x: auto;
+
+  td {
+    padding: 0.5rem 1rem;
+  }
+}
+
+</style>

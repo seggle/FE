@@ -75,20 +75,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-div {
-  overflow-x: auto;
-}
-.table {
-  min-width: 700px;
-  width: 100%;
-  white-space: nowrap;
-  border-collapse: collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
-}
 a {
   color: black;
   cursor: pointer;

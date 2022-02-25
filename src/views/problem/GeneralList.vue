@@ -1,89 +1,85 @@
 <template>
-<div class="container">
-  <header>
-    <h1 id="title">일반 대회</h1>
-    <div v-if="this.$store.getters.isAdmin">
-      <button class="btn" @click="goCreateProblem">문제 관리</button>
-      <button class="btn" @click="goCreateProblem">문제 생성</button>
+  <div class="container">
+    <header>
+      <h1 id="title">일반 대회</h1>
+      <div v-if="this.$store.getters.isAdmin">
+        <button class="btn" @click="showModal = true">대회 관리</button>
+        <ModalCompetitionAdmin
+          v-if="showModal"
+          @close="showModal = false"
+        />
+        <button class="btn" @click="goCreateProblem">대회 생성</button>
+      </div>
+    </header>
+    <div class="table-div">
+      <table class="table">
+        <thead>
+          <tr>
+            <!-- <th scope="col" class="col-1">#</th> -->
+            <th scope="col" class="col-3">대회 제목</th>
+            <th scope="col" class="col-2"></th>
+            <th scope="col" class="col-2">시작날짜</th>
+            <th scope="col" class="col-2"></th>
+            <th scope="col" class="col-2">마감날짜</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(problem, i) in problemList" :key="problem"
+              @click="goProblem(problem.id)">
+            <!-- <th scope="row">{{ i + 1 }}</th> -->
+            <td class="col-3 probtitle">{{ problem.problem.title }}</td>
+            <td>{{ problem.dday }}</td>
+            <td>{{ problem.start_time }}</td>
+            <td>
+              <div class="progress">
+                <div class="progress-bar"
+                    :class="this.problemList[i].progressBar.type"
+                    role="progressbar"
+                    :style="{ width: this.problemList[i].progressBar.value + '%' }"
+                    :aria-valuenow="this.problemList[i].progressBar.value"
+                    aria-valuemin="0"
+                    aria-valuemax="100"></div>
+              </div>
+            </td>
+            <td>{{ problem.end_time }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </header>
-  <div class="table-div">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col" class="col-1">#</th>
-        <th scope="col" class="col-3">문제 제목</th>
-        <th scope="col" class="col-2"></th>
-        <th scope="col" class="col-2">시작날짜</th>
-        <th scope="col" class="col-2"></th>
-        <th scope="col" class="col-2">마감날짜</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(problem, i) in problemList" :key="problem" @click="goProblem(problem.id)">
-        <th scope="row">{{ i + 1 }}</th>
-        <td class="col-3 probtitle">{{ problem.problem.title }}</td>
-        <td>{{ problem.dday }}</td>
-        <td>{{ problem.start_time }}</td>
-        <td>
-          <div class="progress">
-            <div class="progress-bar"
-                :class="this.problemList[i].progressBar.type"
-                role="progressbar"
-                :style="{ width: this.problemList[i].progressBar.value + '%' }"
-                :aria-valuenow="this.problemList[i].progressBar.value"
-                aria-valuemin="0"
-                aria-valuemax="100"></div>
-          </div>
-        </td>
-        <td>{{ problem.end_time }}</td>
-      </tr>
-    </tbody>
-  </table>
   </div>
-  <Pagination :pagination="PageValue" @get-page="getPage"/>
-</div>
 </template>
 
 <script>
 import api from '@/api/index.js'
-import Pagination from '@/components/Pagination.vue'
+import ModalCompetitionAdmin from '@/components/ModalCompetitionAdmin.vue'
 
 export default {
   name: 'GeneralList',
   components: {
-    Pagination
+    ModalCompetitionAdmin
   },
   data () {
     return {
       problemList: [],
-      currentPage: 1,
-      PageValue: []
+      showModal: false
     }
   },
   mounted () {
-    this.getGeneralList(1)
+    this.getGeneralList()
   },
   methods: {
-    getPage (page) {
-      this.getGeneralList(page)
-    },
-    async getGeneralList (page) {
+    async getGeneralList () {
       try {
-        this.currentPage = page
-        this.PageValue = []
         const res = await api.getCompetitionList()
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
-        this.problemList = res.data.results
-        this.problemList.reverse()
+        this.problemList = res.data.reverse()
         this.setTime()
         this.setProgressBar()
         this.problemList.sort((a, b) => {
-          if (a.astart_end < b.astart_end) return 1
-          else if (a.astart_end > b.astart_end) return -1
+          if (a.start_end < b.start_end) return 1
+          else if (a.start_end > b.start_end) return -1
         })
         this.problemList.sort((a, b) => {
-          if (a.astart_end >= 0 & b.astart_end >= 0) {
+          if (a.start_end >= 0 & b.start_end >= 0) {
             if (a.diffDay > b.diffDay) return 1
             else if (a.diffDay < b.diffDay) return -1
           }
@@ -140,7 +136,7 @@ export default {
           progress.value = 100
           progress.type = 'bg-secondary'
         } else {
-          progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].astart_end) * 100)
+          progress.value = 100 - ((this.problemList[i].diffDay / this.problemList[i].start_end) * 100)
           if (progress.value <= 50) {
             progress.type = 'bg-info'
           } else if (progress.value <= 70) {
@@ -180,33 +176,6 @@ export default {
     h1 {
       margin-bottom: 0;
     }
-  }
-  .table-div {
-    overflow-x: auto;
-  }
-  .table {
-    table-layout: fixed;
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
-    tbody {
-      tr:hover {
-        background-color: #F4F4F8;
-        cursor: pointer;
-      }
-      td.probtitle {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-    }
-  }
-  a.ghost-button {
-    color: black;
-  }
-  a.ghost_button:hover {
-    text-decoration: underline;
   }
 }
 </style>

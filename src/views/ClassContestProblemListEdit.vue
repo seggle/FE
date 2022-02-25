@@ -14,7 +14,7 @@
         </form>
       </div>
       <div>
-        <button class="btn btn-dark" id="problem-create" @click="selectProblem">
+        <button class="btn" id="problem-create" @click="selectProblem">
           다음
         </button>
       </div>
@@ -23,7 +23,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">✅</th>
+            <th scope="col"><font-awesome-icon icon="check" /></th>
             <th scope="col">제목</th>
           </tr>
         </thead>
@@ -82,7 +82,7 @@
     <div class="d-flex mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 순서 및 제목 수정</h2>
       <div>
-        <button class="btn btn-dark" id="problem-create" @click="editProblem">
+        <button class="btn" id="problem-create" @click="editProblem">
           저장
         </button>
       </div>
@@ -159,7 +159,6 @@ export default defineComponent({
         this.loading = false
         this.total = parseInt(res.data.count / 15) + 1
         this.problemList = res.data.results
-        console.log(this.problemList)
       } catch (error) {
         console.log(error)
       }
@@ -169,7 +168,6 @@ export default defineComponent({
           this.contestID
         )
         this.alreadyList = res.data
-        console.log(this.alreadyList)
       } catch (error) {
         console.log(error)
       }
@@ -191,8 +189,6 @@ export default defineComponent({
           item.problem_id = this.checkList[i]
           this.selectedProblem.push(item)
         }
-        console.log('체크리스트: ', this.checkList)
-        console.log(this.selectedProblem)
         const res = await api.selectContestProblem(
           this.classID,
           this.contestID,
@@ -203,7 +199,6 @@ export default defineComponent({
         this.firstPage = false
         this.getProblem()
       } catch (err) {
-        console.log(this.checkList)
         console.log(err)
       }
     },
@@ -215,7 +210,6 @@ export default defineComponent({
           this.contestID
         )
         this.contestProblemList = res.data
-        console.log(this.contestProblemList)
       } catch (error) {
         console.log(error)
       }
@@ -246,7 +240,6 @@ export default defineComponent({
           item.order = i + 1
           this.changedList.push(item)
         }
-        console.log(this.changedList)
         if (this.checkTitle()) {
           const res = await api.editContestProblem(
             this.classID,
@@ -261,7 +254,6 @@ export default defineComponent({
           alert('중복된 제목이 존재합니다')
         }
       } catch (err) {
-        console.log(this.changedList)
         console.log(err)
       }
     }
@@ -292,20 +284,6 @@ h5 {
 }
 select {
   height: 100%;
-}
-.table-div {
-  overflow-x: auto;
-}
-.table {
-  min-width: 700px;
-  width: 100%;
-  white-space: nowrap;
-  border-collapse: collapse;
-}
-.btn {
-  background: #0e1b49;
-  border-radius: 50px;
-  margin: 3px;
 }
 a {
   color: black;

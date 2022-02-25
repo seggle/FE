@@ -79,24 +79,36 @@
             </p>
           </div>
         <!-- 리더보드 -->
-          <div class="tab-pane fade" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
+          <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
             <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">이름</th>
                 <th scope="col">점수</th>
-                <th scope="col">제출 횟수</th>
                 <th scope="col">제출 날짜</th>
+                <th v-if="privilege" scope="col">코드(.ipynb)</th>
+                <th v-if="privilege" scope="col">답안(.csv)</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="users in leaderboardList" :key="users">
-                <th scope="row">{{ users.submission_id }}</th>
-                <td>{{ users.user_name }}</td>
-                <td>{{ users.submission_score }}</td>
-                <td>{{ users.userSubmitCount }}</td>
-                <td>{{ users.submission_time }}</td>
+              <tr v-for="(users, i) in leaderboardList" :key="users">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ users.username }}</td>
+                <td>{{ users.score }}</td>
+                <td>{{ users.created_time.slice(0, 10) + ' ' + users.created_time.slice(11, 19)}}</td>
+                <td v-if="privilege">
+                  <button class="download-btn"
+                    @click="download(users.ipynb)">
+                    <font-awesome-icon icon="file-arrow-down" />
+                  </button>
+                </td>
+                <td v-if="privilege">
+                  <button class="download-btn"
+                    @click="download(users.csv)">
+                    <font-awesome-icon icon="file-arrow-down" />
+                  </button>
+                </td>
               </tr>
             </tbody>
             </table>
@@ -116,31 +128,32 @@
                      accept=".ipynb">
               <button class="btn" @click="submitFile">파일 제출</button>
             </div>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">선택</th>
-                  <th scope="col">csv 파일 이름</th>
-                  <th scope="col">ipynb 파일 이름</th>
-                  <th scope="col">점수</th>
-                  <th scope="col">제출 날짜</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(submit, i) in submitList" :key="i">
-                  <th scope="row">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           @select="this.submitRowIndex = i">
-                  </th>
-                  <td>{{ submit.submission_csv }}</td>
-                  <td>{{ submit.submission_ipynb }}</td>
-                  <td>{{ submit.submission_score }}</td>
-                  <td>{{ submit.submission_time }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-div">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">선택</th>
+                    <th scope="col">csv 파일 이름</th>
+                    <th scope="col">ipynb 파일 이름</th>
+                    <th scope="col">점수</th>
+                    <th scope="col">제출 날짜</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(submit, i) in submitList" :key="i">
+                    <th scope="row">
+                      <input class="form-check-input"
+                            type="checkbox"
+                            @select="this.submitRowIndex = i">
+                    </th>
+                    <td>{{ submit.submission_csv }}</td>
+                    <td>{{ submit.submission_ipynb }}</td>
+                    <td>{{ submit.submission_score }}</td>
+                    <td>{{ submit.submission_time }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <button class="btn" @click="totalSubmit()">제출</button>
           </div>
         </div>
@@ -167,7 +180,8 @@ export default {
       problemInfo: [],
       leaderboardList: [],
       submitList: [],
-      submitRowIndex: ''
+      submitRowIndex: '',
+      privilege: false
     }
   },
   mounted () {
@@ -182,7 +196,7 @@ export default {
       }
       if (this.problemType === 'class') {
         this.contestID = this.$route.params.contestID
-        this.contestProblemID = this.$route.params.contestProblemID
+        this.contestProblemID = this.$route.params.problemID
         this.getClassUserList()
       }
       if (this.alreadyjoined) {
@@ -191,7 +205,7 @@ export default {
         this.joinText = '참여하기'
       }
       this.getProblem()
-      // this.getLeaderboard() -> api 미구현
+      this.getLeaderboard()
       // this.getUserSubmissions() -> api 미구현
     },
     // async getUserStatus () {
@@ -212,10 +226,14 @@ export default {
       try {
         const res = await api.getClassUserList(this.problemID)
         const userList = res.data
+        console.log(userList)
         for (let i = 0; i < userList.length; i++) {
           if (String(userList[i].username) === this.userID) {
             this.isClassUser = true
             this.alreadyJoined = true
+            if (userList[i].privilege > 0) {
+              this.privilege = true
+            }
           }
         }
       } catch (err) {
@@ -241,16 +259,22 @@ export default {
         console.log(err)
       }
     },
-    async getLeaderboard () { // api 미구현
+    async getLeaderboard () {
       try {
-        let res = await api.getCompetitionsLeaderboard(this.problemID)
         if (this.problemType === 'class') {
-          res = await api.getClassLeaderboard(this.contestProblemID)
+          const res = await api.getClassLeaderboard(this.contestProblemID)
+          this.leaderboardList = res.data
+          console.log(res.data)
+        } else {
+          const res2 = await api.getCompetitionsLeaderboard(this.problemID)
+          this.leaderboardList = res2.data
         }
-        this.leaderboardList = res.data
       } catch (err) {
         console.log(err)
       }
+    },
+    download (url) {
+      location.href = url
     },
     async joinCompetition () {
       try {
@@ -308,27 +332,46 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 5rem 0rem;
+  @media (max-width: 414px) {
+    width: 360px;
+  }
+
   .problem-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     padding: 3rem 0;
+
     .btn {
       padding: 0.5rem 2rem;
-      font-size: 22px;
+      font-size: calc(1.2rem + 0.3vw);
       font-weight: bold;
-    }
-    button:hover {
-      background: white;
-      color: #0e1b49;
+      @media (max-width: 768px) {
+        padding: 0.4rem 1.6rem;
+      }
+
+      &:hover {
+        background: white;
+        color: #0e1b49;
+      }
     }
   }
+
+  .problem-tab {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
   .list-group-item {
     border: none;
     padding: 1rem 0rem;
-    font-size: 20px;
+    font-size: calc(1.175rem + 0.2vw);
     border-radius: 0.75rem;
     margin-bottom: 1rem;
+    @media (max-width: 768px) {
+      font-size: 18px;
+    }
   }
   .list-group-item.active {
     z-index: 2;
@@ -337,6 +380,11 @@ export default {
     background-color: #F4F4F8;
     border-color: #fff;
   }
+  .problem-tab-content {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
   .tab-content {
     background-color: #fff;
     // border: 0.0625rem solid #D7E2EB;
@@ -344,6 +392,7 @@ export default {
     border-radius: 0.75rem;
     box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
     padding: 2rem 1rem;
+
     .list-title {
       padding: 0.5rem 2rem;
       margin-top: 1.5rem;
@@ -352,6 +401,10 @@ export default {
     .period {
       display: flex;
       justify-content: center;
+
+      @media (max-width: 768px) {
+        display: block;
+      }
       h5 {
         padding: 0rem 1rem;
         font-weight: bold;

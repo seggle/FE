@@ -103,14 +103,14 @@
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Close
+                취소
               </button>
               <button
                 type="button"
                 @click="editProposal"
                 class="btn btn-primary"
               >
-                Save changes
+                저장
               </button>
             </div>
           </div>
@@ -120,6 +120,7 @@
       <button
         @click="deleteProposal"
         class="btn btn-primary btn-sm px-4 me-sm-3"
+        v-show="this.$store.state.userid === content.created_user || this.$store.getters.isSuperAdmin"
       >
         삭제
       </button>
