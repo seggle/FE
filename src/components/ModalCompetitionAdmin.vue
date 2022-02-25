@@ -85,9 +85,9 @@ export default {
         for (var i = 0; i < this.$store.state.competitions.length; i++) {
           this.userCompetitionList.push(this.$store.state.competitions[i].competition_id)
         }
-        for (i = 0; i < res.data.results.length; i++) {
-          if (this.userCompetitionList.includes(res.data.results[i].id)) {
-            this.competitionList.push(res.data.results[i])
+        for (i = 0; i < res.data.length; i++) {
+          if (this.userCompetitionList.includes(res.data[i].id)) {
+            this.competitionList.push(res.data[i])
           }
         }
         this.competitionList.reverse()
