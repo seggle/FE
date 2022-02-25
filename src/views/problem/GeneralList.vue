@@ -3,12 +3,12 @@
     <header>
       <h1 id="title">일반 대회</h1>
       <div v-if="this.$store.getters.isAdmin">
-        <button class="btn" @click="showModal = true">문제 관리</button>
+        <button class="btn" @click="showModal = true">대회 관리</button>
         <ModalCompetitionAdmin
           v-if="showModal"
           @close="showModal = false"
         />
-        <button class="btn" @click="goCreateProblem">문제 생성</button>
+        <button class="btn" @click="goCreateProblem">대회 생성</button>
       </div>
     </header>
     <div class="table-div">
@@ -16,7 +16,7 @@
         <thead>
           <tr>
             <!-- <th scope="col" class="col-1">#</th> -->
-            <th scope="col" class="col-3">문제 제목</th>
+            <th scope="col" class="col-3">대회 제목</th>
             <th scope="col" class="col-2"></th>
             <th scope="col" class="col-2">시작날짜</th>
             <th scope="col" class="col-2"></th>
@@ -71,7 +71,7 @@ export default {
     async getGeneralList () {
       try {
         const res = await api.getCompetitionList()
-        this.problemList = res.data.results.reverse()
+        this.problemList = res.data.reverse()
         this.setTime()
         this.setProgressBar()
         this.problemList.sort((a, b) => {
