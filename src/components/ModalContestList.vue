@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" data-backdrop="static">
+  <transition name="modal" appear>
     <div class="modal-mask">
       <div class="modal-wrapper">
         <form class="modal-container" @submit.prevent="submitForm">
@@ -24,61 +24,61 @@
               />
             </div>
             <div class="row">
-              <div class="col-5" data-backdrop="static">
-                <label class="form-label">시작시간</label>
-                <Datepicker
-                  v-model="contestInfo.startTime"
-                  placeholder="시작 시간"
-                  textInput
-                />
-                <div class="modal-header">
-                  <h5>{{ this.modalHeader }}</h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    @click="$emit('close')"
-                  ></button>
-                </div>
-                <div class="col-5" data-backdrop="static">
-                  <label class="form-label">종료시간</label>
-                  <Datepicker
-                    v-model="contestInfo.endTime"
-                    placeholder="종료 시간"
-                    textInput
+              <table class="table">
+                <tr>
+                  <td>
+                    <div data-bs-backdrop="static">
+                      <label class="form-label">시작시간</label>
+                      <Datepicker
+                        v-model="contestInfo.startTime"
+                        placeholder="시작 시간"
+                        textInput
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div data-bs-backdrop="static">
+                      <label class="form-label">종료시간</label>
+                      <Datepicker
+                        v-model="contestInfo.endTime"
+                        placeholder="종료 시간"
+                        textInput
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="row exam-checkbox">
+              <div class="col-4">
+                <p style="float: left">시험모드</p>
+                <span
+                  class="form-check form-switch"
+                  style="float: left; margin-left: 10px"
+                >
+                  <input
+                    class="form-check-input"
+                    id="flexSwitchCheckChecked"
+                    type="checkbox"
+                    v-model="contestInfo.checkedExam"
+                    checked
                   />
-                </div>
+                </span>
               </div>
-              <div class="row exam-checkbox">
-                <div class="col-4">
-                  <p style="float: left">시험모드</p>
-                  <span
-                    class="form-check form-switch"
-                    style="float: left; margin-left: 10px"
-                  >
-                    <input
-                      class="form-check-input"
-                      id="flexSwitchCheckChecked"
-                      type="checkbox"
-                      v-model="contestInfo.checkedExam"
-                      checked
-                    />
-                  </span>
-                </div>
-                <div class="col-4">
-                  <p style="float: left">공개</p>
-                  <span
-                    class="form-check form-switch"
-                    style="float: left; margin-left: 10px"
-                  >
-                    <input
-                      class="form-check-input"
-                      id="flexSwitchCheckChecked"
-                      type="checkbox"
-                      v-model="contestInfo.checkedVisible"
-                      checked
-                    />
-                  </span>
-                </div>
+              <div class="col-4">
+                <p style="float: left">공개</p>
+                <span
+                  class="form-check form-switch"
+                  style="float: left; margin-left: 10px"
+                >
+                  <input
+                    class="form-check-input"
+                    id="flexSwitchCheckChecked"
+                    type="checkbox"
+                    v-model="contestInfo.checkedVisible"
+                    checked
+                  />
+                </span>
               </div>
             </div>
           </div>

@@ -14,10 +14,10 @@
       <tr v-for="users in userList" :key="users">
         <th scope="row">{{ users._id }}</th>
         <td>{{ users.username }}</td>
-        <td>{{ users.userIP }}</td>
-        <td>{{ users.userStartTime }}</td>
+        <td>{{ users.ip_address }}</td>
+        <td>{{ users.start_time }}</td>
         <td><a href="#" @click="resetIP">RESET</a></td>
-        <td>EXCEPTION</td>
+        <td><a href="#" @click="except">EXCEPTION</a></td>
       </tr>
     </tbody>
   </table>
@@ -48,31 +48,55 @@
 </template>
 
 <script>
+import api from '@/api/index.js'
 export default {
   name: 'ClassExamManage',
   data () {
     return {
-      userList: [
-        // api로 받아와야될 부분
-        {
-          _id: '1',
-          username: 'user1',
-          userIP: 'userIP1',
-          userStartTime: '2022-01-08-17:08'
-        },
-        {
-          _id: '2',
-          username: 'user2',
-          userIP: 'userIP2',
-          userStartTime: '2022-01-08-17:09'
-        }
-      ]
+      classID: this.$route.params.classID,
+      contestList: [],
+      examList: [],
+      userList: []
     }
   },
+  mounted () {
+    this.getUserList()
+  },
   methods: {
+    /* is_exam인 contest들의 contestID 추출 */
+    async getUserList () {
+      try {
+        const res1 = await api.getContestList(this.classID)
+        this.contestList = res1.data
+        for (var i = 0; i < this.contestList.length; i++) {
+          if (this.contestList[i].is_exam === true) {
+            this.examList.push(this.contestList[i])
+          }
+        }
+        console.log(this.testMode)
+      } catch (error) {
+        console.log(error)
+      }
+      try {
+        for (var j = 0; j < this.examList.length; j++) {
+          var contestID = this.examList[i].id
+          const res2 = await api.examInfo(this.classID, contestID)
+          this.userList.concat(res2)
+        }
+        console.log(this.userList)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     resetIP () {
       if (confirm('리셋하시겠습니까?')) {
         alert('리셋 완료')
+      } else {
+      }
+    },
+    except () {
+      if (confirm('예외처리하시겠습니까?')) {
+        alert('예외처리 완료')
       } else {
       }
     }

@@ -356,6 +356,13 @@ function submitClassTAList (classID, data) {
   return instance.post(`/class/${classID}/ta`, data)
 }
 
+function examStart (classID, contestID) {
+  return instance.post(`/class/${classID}/contests/${contestID}/exam/`)
+}
+
+function examInfo (classID, contestID) {
+  return instance.get(`/class/${classID}/contests/${contestID}/exam`)
+}
 export default {
   registerUser,
   loginUser,
@@ -430,5 +437,7 @@ export default {
   deleteProblem,
   changeProblemSwitch,
   createClassProblem,
-  createGeneralProblem
+  createGeneralProblem,
+  examStart,
+  examInfo
 }
