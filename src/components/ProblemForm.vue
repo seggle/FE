@@ -82,12 +82,14 @@
                 <div class="data-file col-5">
                   <label class="form-label">데이터 파일 업로드</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
+                  <a class="file-download-btn" :href="dataInfo.dataFile">다운로드</a>
                   <input id="data-file-input" type="file" accept=".zip" @change="uploadFile">
                   <div class="upload-file-name" v-if="dataInfo.dataFile">{{ dataInfo.dataFile.name }}</div>
                 </div>
                 <div class="solution-file col-5">
                   <label class="form-label">정답 파일 업로드</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
+                  <a class="file-download-btn" :href="dataInfo.solutionFile">다운로드</a>
                   <input id="solution-file-input" type="file" accept=".csv" @change="uploadFile">
                   <div class="upload-file-name" v-if="dataInfo.solutionFile">{{ dataInfo.solutionFile.name }}</div>
                 </div>
@@ -161,8 +163,8 @@ export default {
         this.problemInfo.public = data.public
         this.problemInfo.evaluation = data.evaluation
         this.dataInfo.description = data.data_description
-        // this.dataInfo.dataFile = data.data
-        // this.dataInfo.solutionFile = data.solution
+        this.dataInfo.dataFile = data.data
+        this.dataInfo.solutionFile = data.solution
       } catch (err) {
         console.log(err)
       }
@@ -378,7 +380,8 @@ export default {
       border: 0;
     }
 
-    .file-upload-btn {
+    .file-upload-btn,
+    .file-download-btn {
       display: inline-block;
       padding: 5px 20px;
       background: #0e1b49;
