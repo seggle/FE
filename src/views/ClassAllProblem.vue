@@ -126,7 +126,6 @@ export default {
     openProblem (problemID) {
       try {
         if (typeof problemID === 'undefined') {
-          console.log(this.$route.params.classID)
           this.$router.push({
             name: 'CreateProblem',
             params: {
@@ -135,7 +134,6 @@ export default {
             }
           })
         } else {
-          console.log(problemID)
           this.$router.push({
             name: 'EditProblem',
             params: {
@@ -151,9 +149,8 @@ export default {
     },
     async changeSwitch (problemID) {
       try {
-        const res = await api.changeProblemSwitch(problemID)
+        await api.changeProblemSwitch(problemID)
         this.getProblemList(this.currentPage)
-        console.log(res.data)
       } catch (error) {
         console.log(error)
       }
@@ -173,15 +170,6 @@ h5 {
 }
 select {
     height:100%
-}
-.table-div {
-    overflow-x: auto;
-}
-.table {
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
 }
 a {
   color:black;

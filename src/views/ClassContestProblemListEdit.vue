@@ -159,7 +159,6 @@ export default defineComponent({
         this.loading = false
         this.total = parseInt(res.data.count / 15) + 1
         this.problemList = res.data.results
-        console.log(this.problemList)
       } catch (error) {
         console.log(error)
       }
@@ -169,7 +168,6 @@ export default defineComponent({
           this.contestID
         )
         this.alreadyList = res.data
-        console.log(this.alreadyList)
       } catch (error) {
         console.log(error)
       }
@@ -191,8 +189,6 @@ export default defineComponent({
           item.problem_id = this.checkList[i]
           this.selectedProblem.push(item)
         }
-        console.log('체크리스트: ', this.checkList)
-        console.log(this.selectedProblem)
         const res = await api.selectContestProblem(
           this.classID,
           this.contestID,
@@ -203,7 +199,6 @@ export default defineComponent({
         this.firstPage = false
         this.getProblem()
       } catch (err) {
-        console.log(this.checkList)
         console.log(err)
       }
     },
@@ -215,7 +210,6 @@ export default defineComponent({
           this.contestID
         )
         this.contestProblemList = res.data
-        console.log(this.contestProblemList)
       } catch (error) {
         console.log(error)
       }
@@ -246,7 +240,6 @@ export default defineComponent({
           item.order = i + 1
           this.changedList.push(item)
         }
-        console.log(this.changedList)
         if (this.checkTitle()) {
           const res = await api.editContestProblem(
             this.classID,
@@ -261,7 +254,6 @@ export default defineComponent({
           alert('중복된 제목이 존재합니다')
         }
       } catch (err) {
-        console.log(this.changedList)
         console.log(err)
       }
     }
@@ -292,15 +284,6 @@ h5 {
 }
 select {
   height: 100%;
-}
-.table-div {
-  overflow-x: auto;
-}
-.table {
-  min-width: 700px;
-  width: 100%;
-  white-space: nowrap;
-  border-collapse: collapse;
 }
 a {
   color: black;

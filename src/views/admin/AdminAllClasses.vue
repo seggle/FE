@@ -4,40 +4,40 @@
       <h1 class="me-auto">전체 수업</h1>
       <div>
         <form>
-            <input
-                class="form-control"
-                type="search"
-                placeholder="검색"
-                aria-label="검색"
-                v-model="keyword"
-            />
-            </form>
+          <input
+              class="form-control"
+              type="search"
+              placeholder="검색"
+              aria-label="검색"
+              v-model="keyword"
+          />
+        </form>
       </div>
     </div>
     <div class="table-div">
-    <table class="table">
-    <thead>
-      <tr>
-        <th class="col-1" scope="col" prop="id">#</th>
-        <th class="col-1" scope="col">연도</th>
-        <th class="col-1" scope="col">학기</th>
-        <th scope="col">수업이름</th>
-        <th scope="col">수업 생성자</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr :loading="loading" v-for="Class in ClassList" :key="Class" @click="goClass(Class.id)">
-        <th scope="row">{{ Class.id }}</th>
-        <td>{{ Class.year}}</td>
-        <td>{{ Class.semester}}</td>
-        <td>{{ Class.name }}</td>
-        <td>{{ Class.created_user }}</td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-1" scope="col" prop="id">#</th>
+            <th class="col-1" scope="col">연도</th>
+            <th class="col-1" scope="col">학기</th>
+            <th scope="col">수업이름</th>
+            <th scope="col">수업 생성자</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr :loading="loading" v-for="Class in ClassList" :key="Class" @click="goClass(Class.id)">
+            <th scope="row">{{ Class.id }}</th>
+            <td>{{ Class.year}}</td>
+            <td>{{ Class.semester}}</td>
+            <td>{{ Class.name }}</td>
+            <td>{{ Class.created_user }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <Pagination :pagination="PageValue" @get-page="getPage"/>
   </div>
-  <Pagination :pagination="PageValue" @get-page="getPage"/>
-</div>
 </template>
 
 <script>
@@ -95,32 +95,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-div {
-    overflow-x: auto;
-}
-.table {
-    min-width: 700px;
-    width: 100%;
-    white-space: nowrap;
-    border-collapse:collapse;
-}
-
-a {
-  color:black;
-  cursor: pointer;
-}
-
-.modal-dialog {
-    max-width: 80%;
-}
-
 .table {
   text-align: left;
-  tbody {
-    tr:hover {
-      background-color: #F4F4F8;
-      cursor: pointer;
-    }
-  }
 }
 </style>

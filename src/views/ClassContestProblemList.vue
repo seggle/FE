@@ -64,7 +64,6 @@ export default {
   },
   created () {
     this.getProblemList(this.$route.params.contestID)
-    console.log(this.$store.state.usertype)
   },
   methods: {
     goEditContest () {},
@@ -75,7 +74,6 @@ export default {
       try {
         const res1 = await api.getContestList(this.classID)
         this.contestList = res1.data
-        console.log(parseInt(contestID))
         for (var i = 0; i < this.contestList.length; i++) {
           if (this.contestList[i].id === parseInt(contestID)) {
             this.contestTitle = this.contestList[i].name
@@ -90,8 +88,6 @@ export default {
         this.problemList.sort(function (a, b) {
           return a.order - b.order
         })
-        console.log(typeof this.problemList)
-        console.log(this.problemList)
       } catch (error) {
         console.log(error)
       }
@@ -122,7 +118,7 @@ export default {
   watch: {
     $route (to, from) {
       if (to.path !== from.path) {
-        if (this.$route.params.contestID !== null) {
+        if (this.$route.params.contestID !== undefined) {
           this.getProblemList(this.$route.params.contestID)
         }
       }
@@ -132,21 +128,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-div {
-  overflow-x: auto;
-}
-.table {
-  min-width: 700px;
-  width: 100%;
-  white-space: nowrap;
-  border-collapse: collapse;
-  tbody {
-    tr:hover {
-      background-color: #f4f4f8;
-      cursor: pointer;
-    }
-  }
-}
 a {
   color: black;
   cursor: pointer;

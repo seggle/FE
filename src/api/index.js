@@ -79,11 +79,7 @@ function submitCompetitionTAList (competitionID, data) {
 }
 
 function getCompetitionsLeaderboard (competitionID) {
-  return instance.get('leaderboards/competition', {
-    params: {
-      competition_id: competitionID
-    }
-  })
+  return instance.get(`/leaderboards/competition/${competitionID}`)
 }
 
 function getUserProblemSubmissions (page, username, contestProblemID) {
@@ -140,11 +136,7 @@ function getContestProblem (classID, contestID, contestProblemID) {
 }
 
 function getClassLeaderboard (contestProblemID) {
-  return instance.get('leaderboards/contest-problem/', {
-    params: {
-      cp_id: contestProblemID
-    }
-  })
+  return instance.get(`/leaderboards/contest-problem/${contestProblemID}`)
 }
 
 function getClassUserList (classID) {

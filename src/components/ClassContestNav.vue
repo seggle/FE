@@ -83,7 +83,6 @@ export default {
       try {
         const res = await api.getContestList(this.classID)
         this.contestList = res.data
-        console.log(res.data)
       } catch (error) {
         console.log(error)
       }
