@@ -38,7 +38,7 @@
             id="list-submit-list"
             href="#list-submit"
             aria-controls="list-submit"
-            :disabled="alreadyJoined == false">제출
+            >제출
           </a>
         </div>
       </div>
@@ -160,6 +160,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
+import { GMTtoLocale } from '@/utils/time.js'
 
 export default {
   name: 'Problem',
@@ -252,27 +253,29 @@ export default {
             res = await api.getContestProblem(this.problemID, this.contestID, this.contestProblemID)
           }
         }
+        res.data.start_time = GMTtoLocale(res.data.start_time)
+        res.data.end_time = GMTtoLocale(res.data.end_time)
         this.problemInfo = res.data
       } catch (err) {
         console.log(err)
       }
     },
-    async getLeaderboard () { // api 미구현
-      try {
-        let res = await api.getCompetitionsLeaderboard(this.problemID)
-        if (this.problemType === 'class') {
-          res = await api.getClassLeaderboard(this.contestProblemID)
-        }
-        this.leaderboardList = res.data
-      } catch (err) {
-        console.log(err)
-      }
-    },
+    // async getLeaderboard () { // api 미구현
+    //   try {
+    //     let res = await api.getCompetitionsLeaderboard(this.problemID)
+    //     if (this.problemType === 'class') {
+    //       res = await api.getClassLeaderboard(this.contestProblemID)
+    //     }
+    //     this.leaderboardList = res.data
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // },
     async joinCompetition () {
       try {
         await api.joinCompetition(this.problemID)
       } catch (err) {
-        console.log(err)
+        alert(err.response.data.error)
       }
     },
     getPage (page) {
@@ -294,16 +297,21 @@ export default {
 
         this.submitList[i].csv = csvName.split('/').pop()
         this.submitList[i].ipynb = ipynbName.split('/').pop()
-        this.submitList[i].created_time = submitDate.slice(0, 10) + ' ' + submitDate.slice(11, 19)
+        this.submitList[i].created_time = GMTtoLocale(submitDate)
       }
     },
     async getUserSubmissions (page) {
       try {
         this.currentPage = page
         this.PageValue = []
-
-        const res = await api.getUserClassSubmissions(page, this.userID, this.contestProblemID)
-        this.submitList = res.data.results
+        let res
+        if (this.problemType === 'general') {
+          res = await api.getUserCompetitionSubmissions(this.problemID, this.userID)
+          this.submitList = res.data
+        } else if (this.problemType === 'class') {
+          res = await api.getUserProblemSubmissions(page, this.userID, this.contestProblemID)
+          this.submitList = res.data.results
+        }
         this.alreadyChecked()
         this.changeSubmissionListName()
 
@@ -323,7 +331,11 @@ export default {
         formData.append('ip_address', '123.123.1.12') // ip는 우선 static으로
 
         if (this.problemType === 'general') {
-          // general
+          await api.submitFileCompetition(
+            this.problemID,
+            this.userID,
+            formData
+          )
         } else if (this.problemType === 'class') {
           await api.submitFileProblem(
             this.problemID,
@@ -353,24 +365,15 @@ export default {
           id: this.submitRowIndex
         }
         if (this.problemType === 'general') {
-          // general
+          await api.selectCompetitionSubmission(this.problemID, data)
         } else if (this.problemType === 'class') {
           await api.selectProblemSubmission(
             this.problemID,
             this.contestID,
             this.contestProblemID,
             data)
-          alert('제출이 완료되었습니다.')
         }
-      } catch (err) {
-        console.log(err)
-      }
-    },
-    async totalSubmit () { // api 미구현
-      try {
-        // const data = {
-        // submitRowIndex의 값을 데이터로 전송
-        // }
+        alert('제출이 완료되었습니다.')
       } catch (err) {
         console.log(err)
       }
