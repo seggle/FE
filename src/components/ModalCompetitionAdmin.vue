@@ -18,7 +18,7 @@
                 <thead>
                   <tr>
                     <th class="col-6 competition-title" scope="col">제목</th>
-                    <th class="col-5" scope="col">옵션</th>
+                    <th class="col-5" scope="col">관리자 등록 | 삭제</th>
                     <th scope="col">편집</th>
                   </tr>
                 </thead>
@@ -26,17 +26,30 @@
                   <tr v-for="(competition) in competitionList" :key="competition">
                     <td class="competition-title">{{ competition.problem.title }}</td>
                     <td scope="row" v-if="competition.problem.created_user === this.$store.state.userid">
-                      <a class="ghost-button" @click="showModal = true; competition_id = competition.id">관리자 등록</a> |
+                      <button class="edit-btn"
+                              @click="showModal = true;
+                                      competition_id = competition.id">
+                        <font-awesome-icon icon="user-plus" />
+                      </button> |
+                      <!-- <a class="ghost-button" @click="showModal = true; competition_id = competition.id">관리자 등록</a> | -->
                       <ModalCompetitionTA
                         v-if="showModal"
                         @close="showModal = false"
                         :competition_id="competition_id"
                       />
-                      <a class="ghost-button" @click="deleteCompetition(competition.id)">삭제</a>
+                      <button class="delete-btn"
+                              @click="deleteCompetition(competition.id)">
+                        <font-awesome-icon icon="trash-can" />
+                      </button>
+                      <!-- <a class="ghost-button" @click="deleteCompetition(competition.id)">삭제</a> -->
                     </td>
                     <td v-else></td>
                     <td>
-                      <a class="ghost-button">편집</a>
+                      <button class="edit-btn"
+                              @click="goEditCompetition(competition.id)">
+                        <font-awesome-icon icon="pen" />
+                      </button>
+                      <!-- <a class="ghost-button" @click="goEditCompetition(competition.id)">편집</a> -->
                     </td>
                   </tr>
                 </tbody>
@@ -104,6 +117,15 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    goEditCompetition (competitionID) {
+      this.$router.push({
+        name: 'EditProblem',
+        params: {
+          problemType: 'general',
+          problemID: competitionID
+        }
+      })
     }
   }
 }
@@ -121,7 +143,7 @@ export default {
   border-collapse: collapse;
   white-space: nowrap;
   .competition-title {
-    text-align: left;
+    // text-align: left;
   }
   td.competition-title {
     text-overflow: ellipsis;

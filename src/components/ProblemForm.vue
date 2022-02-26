@@ -125,8 +125,8 @@ export default {
       },
       dataInfo: {
         description: '',
-        dataFile: null,
-        solutionFile: null
+        dataFile: '',
+        solutionFile: ''
       },
       placeholder: '',
       saveMode: ''
@@ -161,8 +161,8 @@ export default {
         this.problemInfo.public = data.public
         this.problemInfo.evaluation = data.evaluation
         this.dataInfo.description = data.data_description
-        this.dataInfo.dataFile = data.data
-        this.dataInfo.solutionFile = data.solution
+        // this.dataInfo.dataFile = data.data
+        // this.dataInfo.solutionFile = data.solution
       } catch (err) {
         console.log(err)
       }
