@@ -60,3 +60,17 @@
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
   }
+
+  .modal-dialog {
+    @media (max-width: 767px) {
+      max-width: 100%;
+    }
+    max-width: 70%;
+  }
+
+  .modal-dialog.admin-user {
+    @media (max-width: 767px) {
+      max-width: 100%;
+    }
+    max-width: 50%;
+  }

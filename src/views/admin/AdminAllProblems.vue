@@ -143,5 +143,9 @@ a {
   color:black;
   cursor: pointer;
 }
-
+h1 {
+  width: 40%;
+  text-align: left;
+  font-size: calc(1rem + 2vw);
+}
 </style>

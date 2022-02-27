@@ -52,20 +52,20 @@
     <table class="table">
     <thead>
       <tr>
-        <th scope="col" prop="id">#</th>
+        <th class="col-1" scope="col" prop="id">#</th>
         <th scope="col">제목</th>
         <th scope="col">작성일</th>
         <th scope="col">마지막 수정일</th>
-        <th scope="col">공개</th>
-        <th scope="col">중요</th>
-        <th scope="col">편집</th>
-        <th scope="col">삭제</th>
+        <th class="col-1" scope="col">공개</th>
+        <th class="col-1" scope="col">중요</th>
+        <th class="col-1" scope="col">편집</th>
+        <th class="col-1" scope="col">삭제</th>
       </tr>
     </thead>
     <tbody>
       <tr :loading="loading" v-for="announcement in announcementList" :key="announcement">
         <th scope="row">{{ announcement.id }}</th>
-        <td>{{ announcement.title}}</td>
+        <td class="title">{{ announcement.title}}</td>
         <td>{{ announcement.created_time }}</td>
         <td>{{ announcement.last_modified }}</td>
         <td>
@@ -82,6 +82,8 @@
         </td>
         <td scope="row">
           <button class="edit-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#announceModal"
                   @click="openAnnouncement(announcement.id)">
             <font-awesome-icon icon="pen" />
           </button>
@@ -178,6 +180,7 @@ export default {
           this.currentAnnouncementID = announcementID
           this.createMode = false
           const res = await api.editAnnouncement(announcementID)
+          console.log(res)
           this.announcementTitle = res.data.title
           this.announcementContext = res.data.context
           this.announcementVisible = res.data.visible
@@ -226,21 +229,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a {
-  color:black;
-  cursor: pointer;
+.table {
+  min-width:950px;
+  table-layout: fixed;
+  tbody {
+    tr:hover {
+      cursor: default;
+    }
+    td.title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
 }
-
-a.ghost-button:hover {
-  color:black;
-  text-decoration: underline;
+h1 {
+  font-weight: bold;
+  width: 50%;
+  text-align: left;
+  @media (max-width: 420px) {
+    font-size: calc(1.2rem + 2vw);
+  }
 }
-
-.modal-dialog {
-  max-width: 100%;
-}
-
-.page-item:active {
-  background-color: pink;
+.btn {
+  @media (max-width: 767px) {
+    font-size: calc(0.5rem + 2vw);
+  }
 }
 </style>

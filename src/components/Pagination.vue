@@ -71,6 +71,9 @@ nav {
   a {
     color: black;
     cursor: pointer;
+    @media (max-width: 420px) {
+    font-size: calc(0.5rem + 2vw);
+  }
   }
   a:hover {
     color: black;

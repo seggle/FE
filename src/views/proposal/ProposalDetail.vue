@@ -1,9 +1,8 @@
 <template>
-  <div class="container px-5">
+  <div class="container">
     <div class="d-flex mb-2 mt-3">
-      <h1 class="me-auto"></h1>
       <div class="button-group">
-        <button @click="goList" class="btn" id="head">목록</button>
+        <button @click="goList" class="btn" id="head"><font-awesome-icon icon="angle-left" /> 목록</button>
       </div>
     </div>
     <div class="table-div">
@@ -11,7 +10,7 @@
         <tbody>
           <tr>
             <td><h5>제목</h5></td>
-            <td colspan="3">{{ content.title }}</td>
+            <td class="title" colspan="3">{{ content.title }}</td>
           </tr>
           <tr>
             <td><h5>작성자</h5></td>
@@ -203,15 +202,6 @@ h1 {
   font-weight: bold;
   text-align: left;
 }
-tr {
-  td {
-    text-align: left;
-  }
-  h5 {
-    text-align: center;
-    font-weight: bold;
-  }
-}
 .context {
   height: 300px;
 }
@@ -219,8 +209,50 @@ textarea {
   width: 350px;
   height: 100px;
 }
+
+.table {
+  min-width: 0px;
+  text-align: left;
+  white-space: normal;
+  table-layout: fixed;
+  tbody {
+    tr:hover {
+      background-color: transparent;
+      cursor: default;
+    }
+  }
+  tr {
+    td {
+      text-align: left;
+      @media (max-width: 420px) {
+        font-size: calc(0.55rem + 2vw);
+      }
+    }
+    h5 {
+      text-align: center;
+      font-weight: bold;
+      @media (max-width: 420px) {
+        font-size: calc(0.7rem + 2vw);
+      }
+    }
+  }
+  td.title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.button-group {
+  margin-left: auto;
+}
+
 .btn {
-  margin-top: 30px;
-  margin-right: 4rem;
+  @media (max-width: 767px) {
+    margin-right: 0px;
+    font-size: calc(0.5rem + 2vw);
+  }
+  margin-top: 50px;
+  margin-right: 0px;
 }
 </style>
