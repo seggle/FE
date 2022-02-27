@@ -63,12 +63,7 @@
             {{ this.$store.state.userid }}
           </router-link>
 
-          <button
-            type="button"
-            class="btn"
-            id="logout"
-            @click="logout"
-          >
+          <button type="button" class="btn" id="logout" @click="logout">
             로그아웃
           </button>
         </template>
@@ -99,6 +94,7 @@ export default {
     async logout () {
       try {
         this.$store.dispatch('Logout')
+        localStorage.removeItem('test')
         this.$router.push('/login')
       } catch (err) {
         console.log(err)
@@ -166,7 +162,7 @@ a:hover {
 }
 a.admin:hover {
   text-decoration: underline;
-  color:black;
+  color: black;
 }
 a.users:hover {
   color: rgb(5, 1, 1);

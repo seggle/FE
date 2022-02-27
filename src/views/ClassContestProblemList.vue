@@ -1,11 +1,7 @@
+<!--시험모드인 contest이면서 학생인 경우--->
 <template>
-  <!--시험모드인 contest이면서 학생인 경우--->
   <div
-    v-if="
-      testMode === true &&
-      testShow === false &&
-      this.$store.state.usertype === '0'
-    "
+    v-if="testMode && testStart === null && this.$store.state.usertype === '0'"
     class="container"
   >
     <div class="d-flex">
@@ -41,6 +37,7 @@
           <tr>
             <th scope="col" class="col-md-1">#</th>
             <th scope="col">제목</th>
+            <th scope="col">마감기한</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -59,7 +56,12 @@
                 >{{ problems.title }}</a
               >
             </td>
-            <td><a>삭제</a></td>
+            <td>{{ problems.end_time.slice(0, 10) }}</td>
+            <td scope="row">
+              <button class="delete-btn" @click="deleteProblem(problems.id)">
+                <font-awesome-icon icon="trash-can" />
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -80,8 +82,9 @@ export default {
       contestList: [],
       problemID: '',
       testMode: false,
-      testShow: false,
-      date: new Date()
+      testStart: localStorage.getItem('test'),
+      date: new Date(),
+      examUser: []
     }
   },
   created () {
@@ -118,7 +121,7 @@ export default {
         })
         console.log(typeof this.problemList)
         console.log(this.problemList)
-        console.log(this.testMode, this.testShow, this.$store.state.usertype)
+        console.log(this.testMode, this.testStart, this.$store.state.usertype)
       } catch (error) {
         console.log(error)
       }
@@ -139,19 +142,58 @@ export default {
         alert('접근 시간이 아닙니다!')
       }
     },
+    async alreadyExist (username) {
+      try {
+        var flag = false
+        console.log(username)
+        const res = await api.examInfo(this.classID, this.contestID)
+        this.examUser = res.data.results
+        console.log(this.examUser)
+        for (var i = 0; i < this.examUser.length; i++) {
+          if (this.examUser[i].username === username) {
+            flag = true
+          }
+        }
+        if (flag === true) return true
+        else return false
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async examStart () {
       if (confirm('시작하시겠습니까?')) {
         try {
-          const res = await api.examStart(this.classID, this.contestID)
+          const data = {
+            ip_address: '123.123.123.001'
+          }
+          const res = await api.examStart(this.classID, this.contestID, data)
           console.log(res.data)
-          this.testShow = true
-          this.$router.go(this.$router.currentRoute)
+          if (this.alreadyExist(this.$store.state.userid)) {
+            localStorage.setItem('test', 'on')
+          }
+          alert('시험이 시작되었습니다.')
+          this.$router.go()
         } catch (err) {
           console.log(err)
           console.log(err.response.data.error)
+          alert(err.response.data.error)
         }
-        alert('시험이 시작되었습니다.')
       } else {
+      }
+    },
+    async deleteProblem (problemID) {
+      try {
+        if (confirm(problemID + '번 문제를 삭제하시겠습니까?')) {
+          await api.deleteContestProblem(
+            this.classID,
+            this.contestID,
+            problemID
+          )
+          alert('삭제 완료')
+          this.$router.go(this.$router.currentRoute)
+        }
+      } catch (error) {
+        console.log(error)
       }
     }
   },

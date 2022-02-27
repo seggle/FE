@@ -364,8 +364,8 @@ function submitClassTAList (classID, data) {
   return instance.post(`/class/${classID}/ta`, data)
 }
 
-function examStart (classID, contestID) {
-  return instance.post(`/class/${classID}/contests/${contestID}/exam/`)
+function examStart (classID, contestID, data) {
+  return instance.post(`/class/${classID}/contests/${contestID}/exam/`, data)
 }
 
 function examInfo (classID, contestID) {

@@ -39,9 +39,13 @@
                       </div>
                     </td>
                     <td>
-                      <button class="edit-btn"
-                              @click="showModal = true;
-                                      rowIndex = i;">
+                      <button
+                        class="edit-btn"
+                        @click="
+                          showModal = true;
+                          rowIndex = i;
+                        "
+                      >
                         <font-awesome-icon icon="pen" />
                       </button>
                       <ModalContestList
@@ -52,8 +56,7 @@
                       />
                     </td>
                     <td>
-                      <button class="delete-btn"
-                              @click="onRemove(contest.id)">
+                      <button class="delete-btn" @click="onRemove(contest.id)">
                         <font-awesome-icon icon="trash-can" />
                       </button>
                     </td>
@@ -111,10 +114,12 @@ export default {
     //   } else {
     //   }
     // },
-    onRemove (contestID) {
+    async onRemove (contestID) {
       var id = contestID
       if (confirm('삭제하시겠습니까?')) {
         // contest 삭제 api
+        const res = await api.deleteContest(this.classID, contestID)
+        console.log(res.data)
         alert(id + ' 삭제 완료')
         this.$router.go(this.$router.currentRoute)
       }
@@ -141,5 +146,4 @@ export default {
     padding: 0.5rem 1rem;
   }
 }
-
 </style>
