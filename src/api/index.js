@@ -132,7 +132,9 @@ function editClassList (data) {
 }
 
 function getContestProblem (classID, contestID, contestProblemID) {
-  return instance.get(`/class/${classID}/contests/${contestID}/${contestProblemID}`)
+  return instance.get(
+        `/class/${classID}/contests/${contestID}/${contestProblemID}`
+  )
 }
 
 function getClassLeaderboard (contestProblemID) {
@@ -381,6 +383,13 @@ function submitClassTAList (classID, data) {
   return instance.post(`/class/${classID}/ta`, data)
 }
 
+function examStart (classID, contestID, data) {
+  return instance.post(`/class/${classID}/contests/${contestID}/exam/`, data)
+}
+
+function examInfo (classID, contestID) {
+  return instance.get(`/class/${classID}/contests/${contestID}/exam`)
+}
 export default {
   registerUser,
   loginUser,
@@ -463,5 +472,7 @@ export default {
   submitFileCompetition,
   createClassProblem,
   createGeneralProblem,
+  examStart,
+  examInfo,
   editGeneralProblem
 }

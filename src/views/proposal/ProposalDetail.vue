@@ -1,35 +1,32 @@
 <template>
   <div class="container px-5">
-    <div class="class-nav-bar">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <h1 id="title"></h1>
-        </div>
-      </nav>
+    <div class="d-flex mb-2 mt-3">
+      <h1 class="me-auto"></h1>
+      <div class="button-group">
+        <button @click="goList" class="btn" id="head">목록</button>
+      </div>
     </div>
-    <div class="AddWrap">
-      <table class="table table-bordered py-5">
-        <colgroup>
-          <col width="15%" />
-          <col width="*" />
-        </colgroup>
-        <tr>
-          <th>제목</th>
-          <td>{{ content.title }}</td>
-        </tr>
-        <tr>
-          <th>작성자</th>
-          <td>{{ content.created_user }}</td>
-          <th>작성일</th>
-          <td>{{ content.created_time.slice(0, 10) }}</td>
-        </tr>
-        <tr>
-          <th>내용</th>
-          <td rowspan="4">{{ content.context }}</td>
-        </tr>
+    <div class="table-div">
+      <table class="table py-3">
+        <tbody>
+          <tr>
+            <td><h5>제목</h5></td>
+            <td colspan="3">{{ content.title }}</td>
+          </tr>
+          <tr>
+            <td><h5>작성자</h5></td>
+            <td>{{ content.created_user }}</td>
+            <td><h5>작성일</h5></td>
+            <td>{{ content.created_time }}</td>
+          </tr>
+          <tr>
+            <td><h5>내용</h5></td>
+            <td colspan="3" class="context">{{ content.context }}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
-    <footer>
+    <div class="container">
       <!-- Button trigger modal -->
       <button
         type="button"
@@ -120,18 +117,14 @@
       <button
         @click="deleteProposal"
         class="btn btn-primary btn-sm px-4 me-sm-3"
-        v-show="this.$store.state.userid === content.created_user || this.$store.getters.isSuperAdmin"
+        v-show="
+          this.$store.state.userid === content.created_user ||
+          this.$store.getters.isSuperAdmin
+        "
       >
         삭제
       </button>
-
-      <router-link
-        to="/proposals"
-        class="btn btn-primary btn-sm px-4 me-sm-3"
-        id="head"
-        >목록</router-link
-      >
-    </footer>
+    </div>
   </div>
 </template>
 <script>
@@ -155,6 +148,11 @@ export default {
     this.getContent()
   },
   methods: {
+    goList () {
+      this.$router.push({
+        name: 'Proposal'
+      })
+    },
     async deleteProposal () {
       try {
         const proposalId = this.$route.params.id
@@ -190,6 +188,7 @@ export default {
         const proposalId = this.$route.params.id
         const res = await api.getProposalDetail(proposalId)
         this.content = res.data
+        this.content.created_time = res.data.created_time.slice(0, 10)
         this.title = res.data.title
         this.context = res.data.context
       } catch (error) {
@@ -204,12 +203,24 @@ h1 {
   font-weight: bold;
   text-align: left;
 }
-.AddWrap {
-  padding: 0px 5rem;
-  margin-top: 100px;
+tr {
+  td {
+    text-align: left;
+  }
+  h5 {
+    text-align: center;
+    font-weight: bold;
+  }
+}
+.context {
+  height: 300px;
 }
 textarea {
   width: 350px;
   height: 100px;
+}
+.btn {
+  margin-top: 30px;
+  margin-right: 4rem;
 }
 </style>

@@ -31,7 +31,6 @@ import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 import Proposal from '../views/proposal/Proposal.vue'
 import ProposalDetail from '../views/proposal/ProposalDetail.vue'
 import ProposalCreate from '../views/proposal/ProposalCreate.vue'
-import ExamSubmission from '../views/ExamSubmission.vue'
 
 import GeneralList from '@/views/problem/GeneralList.vue'
 import ClassList from '@/views/problem/ClassList.vue'
@@ -89,11 +88,6 @@ const routes = [{
   name: 'ProposalCreate',
   component: ProposalCreate,
   meta: { auth: true } // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
-},
-{
-  path: '/test',
-  name: ExamSubmission,
-  component: ExamSubmission
 },
 {
   // 수업
