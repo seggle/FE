@@ -223,7 +223,6 @@ export default {
       this.getProblem()
       this.getUserSubmissions(1)
       this.getLeaderboard()
-      // this.getUserSubmissions() -> api 미구현
     },
     // async getUserStatus () {
     //   try {
@@ -331,11 +330,10 @@ export default {
         let res
         if (this.problemType === 'general') {
           res = await api.getUserCompetitionSubmissions(this.problemID, this.userID)
-          this.submitList = res.data
         } else if (this.problemType === 'class') {
           res = await api.getUserProblemSubmissions(page, this.userID, this.contestProblemID)
-          this.submitList = res.data.results
         }
+        this.submitList = res.data.results
         this.alreadyChecked()
         this.changeSubmissionListName()
 
