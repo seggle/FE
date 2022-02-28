@@ -79,7 +79,6 @@ export default {
     async getClassList () {
       try {
         const res = await api.getClassList()
-        console.log(res)
         this.classList = res.data
         this.alreadyChecked()
       } catch (err) {

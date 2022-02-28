@@ -8,8 +8,15 @@
               :placeholder="this.placeholder"
               required>
         <div class="button">
-          <button class="btn" type="submit" @click="saveMode = 'save'">저장</button>
-          <button v-if="this.problemType == 'class'" class="btn" type="submit" @click="saveMode = 'new-save'">새로 저장</button>
+          <button class="btn"
+                  type="submit"
+                  @click="saveMode = 'save'"
+          >저장</button>
+          <button v-if="this.problemType == 'class'"
+                  class="btn"
+                  type="submit"
+                  @click="saveMode = 'new-save'"
+          >새로 저장</button>
         </div>
       </div>
       <div class="problem-content row">
@@ -82,16 +89,26 @@
                 <div class="data-file col-5">
                   <label class="form-label">데이터 파일 업로드</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <a class="file-download-btn" :href="dataInfo.dataFile">다운로드</a>
-                  <input id="data-file-input" type="file" accept=".zip" @change="uploadFile">
-                  <div class="upload-file-name" v-if="dataInfo.dataFile">{{ dataInfo.dataFile.name }}</div>
+                  <a class="file-download-btn"
+                     :href="dataInfo.dataFile">다운로드</a>
+                  <input id="data-file-input"
+                         type="file"
+                         accept=".zip"
+                         @change="uploadFile">
+                  <div v-if="dataInfo.dataFile"
+                      class="upload-file-name">{{ dataInfo.dataFile.name }}</div>
                 </div>
                 <div class="solution-file col-5">
                   <label class="form-label">정답 파일 업로드</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <a class="file-download-btn" :href="dataInfo.solutionFile">다운로드</a>
-                  <input id="solution-file-input" type="file" accept=".csv" @change="uploadFile">
-                  <div class="upload-file-name" v-if="dataInfo.solutionFile">{{ dataInfo.solutionFile.name }}</div>
+                  <a class="file-download-btn"
+                     :href="dataInfo.solutionFile">다운로드</a>
+                  <input id="solution-file-input"
+                         type="file"
+                         accept=".csv"
+                         @change="uploadFile">
+                  <div v-if="dataInfo.solutionFile"
+                       class="upload-file-name">{{ dataInfo.solutionFile.name }}</div>
                 </div>
               </div>
             </div>
@@ -338,9 +355,11 @@ export default {
     }
 
     .form-label {
-      // display: block;
       font-weight: bold;
       font-size: 1rem;
+      @media (max-width: 420px) {
+        display: block;
+      }
     }
 
     .form-check-input {

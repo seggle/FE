@@ -14,7 +14,6 @@
         />
       </div>
     </header>
-    <div class="table-div">
       <table class="table">
         <thead>
           <tr>
@@ -38,7 +37,6 @@
         </tbody>
     </table>
     </div>
-  </div>
 </template>
 
 <script>
