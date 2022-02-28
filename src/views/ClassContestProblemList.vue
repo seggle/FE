@@ -1,10 +1,25 @@
+<!--시험모드인 contest이면서 학생인 경우--->
 <template>
-  <div class="container">
+  <div
+    v-if="testMode && testStart === null && this.$store.state.usertype === '0'"
+    class="container"
+  >
+    <div class="d-flex">
+      <h1 class="me-auto">{{ contestTitle }}</h1>
+    </div>
+    <div class="test">
+      <h3 class="datetime">{{ time }}</h3>
+      <button class="btn btn-primary px-4 me-sm-3" @click="examStart">
+        Start
+      </button>
+    </div>
+  </div>
+  <div v-else class="container">
     <div class="d-flex">
       <h1 class="me-auto">{{ contestTitle }}</h1>
       <div>
         <button
-          v-if="this.$store.state.usertype !== 0"
+          v-if="this.$store.state.usertype !== '0'"
           type="button"
           class="btn btn-sm px-4 me-sm-3"
           data-bs-toggle="modal"
@@ -22,6 +37,7 @@
           <tr>
             <th scope="col" class="col-md-1">#</th>
             <th scope="col">제목</th>
+            <th scope="col">마감기한</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -40,7 +56,12 @@
                 >{{ problems.title }}</a
               >
             </td>
-            <td><a>삭제</a></td>
+            <td>{{ problems.end_time.slice(0, 10) }}</td>
+            <td scope="row">
+              <button class="delete-btn" @click="deleteProblem(problems.id)">
+                <font-awesome-icon icon="trash-can" />
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -55,18 +76,26 @@ export default {
   data () {
     return {
       classID: this.$route.params.classID,
-      contestID: this.$route.params.classID,
+      contestID: this.$route.params.contestID,
       contestTitle: '',
       problemList: [],
       contestList: [],
-      problemID: ''
+      problemID: '',
+      testMode: false,
+      testStart: localStorage.getItem('test'),
+      date: new Date(),
+      examUser: []
     }
   },
   created () {
     this.getProblemList(this.$route.params.contestID)
+    this.onEverySecond()
   },
   methods: {
-    goEditContest () {},
+    onEverySecond () {
+      this.date = new Date()
+      setTimeout(this.onEverySecond, 1000)
+    },
     goEdit () {
       this.$router.push({ name: 'ClassContestProblemListEdit' })
     },
@@ -77,8 +106,10 @@ export default {
         for (var i = 0; i < this.contestList.length; i++) {
           if (this.contestList[i].id === parseInt(contestID)) {
             this.contestTitle = this.contestList[i].name
+            this.testMode = this.contestList[i].is_exam
           }
         }
+        console.log(this.testMode)
       } catch (error) {
         console.log(error)
       }
@@ -88,6 +119,9 @@ export default {
         this.problemList.sort(function (a, b) {
           return a.order - b.order
         })
+        console.log(typeof this.problemList)
+        console.log(this.problemList)
+        console.log(this.testMode, this.testStart, this.$store.state.usertype)
       } catch (error) {
         console.log(error)
       }
@@ -113,6 +147,65 @@ export default {
       } else {
         alert('접근 시간이 아닙니다!')
       }
+    },
+    async alreadyExist (username) {
+      try {
+        var flag = false
+        console.log(username)
+        const res = await api.examInfo(this.classID, this.contestID)
+        this.examUser = res.data.results
+        console.log(this.examUser)
+        for (var i = 0; i < this.examUser.length; i++) {
+          if (this.examUser[i].username === username) {
+            flag = true
+          }
+        }
+        if (flag === true) return true
+        else return false
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async examStart () {
+      if (confirm('시작하시겠습니까?')) {
+        try {
+          const data = {
+            ip_address: '123.123.123.001'
+          }
+          const res = await api.examStart(this.classID, this.contestID, data)
+          console.log(res.data)
+          if (this.alreadyExist(this.$store.state.userid)) {
+            localStorage.setItem('test', 'on')
+          }
+          alert('시험이 시작되었습니다.')
+          this.$router.go()
+        } catch (err) {
+          console.log(err)
+          console.log(err.response.data.error)
+          alert(err.response.data.error)
+        }
+      } else {
+      }
+    },
+    async deleteProblem (problemID) {
+      try {
+        if (confirm(problemID + '번 문제를 삭제하시겠습니까?')) {
+          await api.deleteContestProblem(
+            this.classID,
+            this.contestID,
+            problemID
+          )
+          alert('삭제 완료')
+          this.$router.go(this.$router.currentRoute)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  },
+  computed: {
+    time () {
+      return `${this.date.toLocaleTimeString()}`
     }
   },
   watch: {
@@ -132,7 +225,7 @@ a {
   color: black;
   cursor: pointer;
 }
-.modal-dialog {
-  max-width: 80%;
+.test {
+  margin: 30px;
 }
 </style>

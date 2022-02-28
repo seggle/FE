@@ -35,9 +35,9 @@
               <div class="col-5" data-backdrop="static">
                 <label class="form-label">종료시간</label>
                 <Datepicker
-                    v-model="contestInfo.endTime"
-                    placeholder="종료 시간"
-                    textInput
+                  v-model="contestInfo.endTime"
+                  placeholder="종료 시간"
+                  textInput
                 />
               </div>
               <div class="row exam-checkbox">
@@ -87,7 +87,6 @@
 <script>
 import api from '@/api/index.js'
 import { GMTtoLocale } from '@/utils/time.js'
-
 export default {
   name: 'ModalContestList',
   props: {

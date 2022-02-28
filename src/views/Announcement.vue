@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="d-flex mb-2 mt-3">
-      <h1 class="me-auto">공지사항</h1>
+      <h1>공지사항</h1>
       <div class="keyword">
       <form>
           <input
@@ -20,7 +20,7 @@
           <tr>
             <th class="col-lg-1 col-md-2 tableId" scope="col">#</th>
             <th scope="col">제목</th>
-            <th class="col-lg-2 col-md-3" scope="col">작성일</th>
+            <th class="col-lg-2" scope="col">작성일</th>
             <th class="col-lg-1 col-md-2" scope="col">작성자</th>
           </tr>
         </thead>
@@ -29,16 +29,10 @@
             :loading="loading"
             v-for="announce in announcementImportantList"
             :key="announce"
-            style="background-color: rgb(223 223 223)"
+            @click="goAnnouncementDetail(announce.id)"
           >
             <th class="tableId" style="font-weight: bold" scope="row">중요</th>
-            <td>
-              <router-link
-                :to="`/announcements/${announce.id}`"
-                class="title"
-                >{{ announce.title }}</router-link
-              >
-            </td>
+            <td class="title">{{ announce.title }}</td>
             <td>{{ announce.created_time }}</td>
             <td>관리자</td>
           </tr>
@@ -46,15 +40,10 @@
             :loading="loading"
             v-for="announce in announcementList"
             :key="announce"
+            @click="goAnnouncementDetail(announce.id)"
           >
             <td class="tableId" scope="row">{{ announce.id }}</td>
-            <td>
-              <router-link
-                :to="`/announcements/${announce.id}`"
-                class="title"
-                >{{ announce.title }}</router-link
-              >
-            </td>
+            <td class="title">{{ announce.title }}</td>
             <td>{{ announce.created_time }}</td>
             <td>관리자</td>
           </tr>
@@ -119,6 +108,12 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    goAnnouncementDetail (announcementID) {
+      this.$router.push({
+        name: 'AnnouncementDetail',
+        params: { id: announcementID }
+      })
     }
   },
   watch: {
@@ -128,19 +123,37 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
+@media (max-width: 420px) {
+  .table tr th:nth-child(3),.table tr th:nth-child(4),
+  .table tr td:nth-child(3),.table tr td:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .table tr th:nth-child(3), .table tr td:nth-child(3) {
+    width: 100px;
+  }
+  .table tr th:nth-child(4), .table tr td:nth-child(4){
+    display: none;
+  }
+}
+
 h1 {
-  padding: 0px 4rem;
+  width: 50%;
+  @media (max-width: 767px) {
+    font-size: calc(1.3rem + 2vw);
+  }
+  padding: 0px;
+  text-align: left;
   margin-top: 50px;
   font-weight: bold;
-  text-align: left;
 }
-div.keyword {
+.keyword {
+  margin-left: auto;
   margin-top: 50px;
-  padding: 0px 4rem;
-}
-.map {
-  background-color: gainsboro;
 }
 .page {
   display: flex;
@@ -150,25 +163,37 @@ div.keyword {
 .btnRightWrap .btnSearch {
   color: white;
 }
-div.table-div {
-  padding: 0 4rem;
-}
 .table {
+  min-width: 0px;
   text-align: left;
+  white-space: normal;
+  table-layout: fixed;
   th.tableId {
+    @media (max-width: 767px) {
+      width: 40px;
+    }
     text-align: center;
   }
   td.tableId {
     text-align: center;
   }
+  td.title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
   tr {
     a.title {
       font-weight: normal;
     }
+    @media (max-width: 420px) {
+      font-size: calc(0.55rem + 2vw);
+      padding: 0px;
+    }
   }
   a {
-  color: black;
-  text-decoration: none;
-}
+    color: black;
+    text-decoration: none;
+  }
 }
 </style>

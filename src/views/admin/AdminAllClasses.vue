@@ -96,6 +96,26 @@ export default {
 
 <style lang="scss" scoped>
 .table {
+  min-width:950px;
+  table-layout: fixed;
   text-align: left;
+  tbody {
+    tr:hover {
+      cursor: default;
+    }
+    td.email {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}
+h1 {
+  font-weight: bold;
+  width: 60%;
+  text-align: left;
+  @media (max-width: 420px) {
+    font-size: calc(1.2rem + 2vw);
+  }
 }
 </style>
