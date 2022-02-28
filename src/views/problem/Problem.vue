@@ -407,8 +407,8 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 5rem 0rem;
-  @media (max-width: 414px) {
-    width: 360px;
+  @media (max-width: 420px) {
+    padding: 0rem 1rem;;
   }
 
   .problem-header {
@@ -419,7 +419,7 @@ export default {
 
     .btn {
       padding: 0.5rem 2rem;
-      font-size: calc(1.2rem + 0.3vw);
+      font-size: calc(1rem + 0.4vw);
       font-weight: bold;
       @media (max-width: 768px) {
         padding: 0.4rem 1.6rem;
@@ -436,76 +436,91 @@ export default {
     @media (max-width: 768px) {
       width: 100%;
     }
-  }
 
-  .list-group-item {
-    border: none;
-    padding: 1rem 0rem;
-    font-size: calc(1.175rem + 0.2vw);
-    border-radius: 0.75rem;
-    margin-bottom: 1rem;
-    @media (max-width: 768px) {
-      font-size: 18px;
+    .list-group-item {
+      border: none;
+      padding: 1rem 0rem;
+      font-size: calc(1.175rem + 0.2vw);
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      @media (max-width: 420px) {
+        font-size: 16px;
+      }
+    }
+
+    .list-group-item.active {
+      z-index: 2;
+      color: black;
+      font-weight: bold;
+      background-color: #F4F4F8;
+      border-color: #fff;
     }
   }
-  .list-group-item.active {
-    z-index: 2;
-    color: black;
-    font-weight: bold;
-    background-color: #F4F4F8;
-    border-color: #fff;
-  }
+
   .problem-tab-content {
     @media (max-width: 768px) {
       width: 100%;
     }
-  }
-  .tab-content {
-    background-color: #fff;
-    // border: 0.0625rem solid #D7E2EB;
-    margin-top: 1.5rem;
-    border-radius: 0.75rem;
-    box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
-    padding: 2rem 1rem;
 
-    .list-title {
-      padding: 0.5rem 2rem;
+    .tab-content {
+      background-color: #fff;
+      // border: 0.0625rem solid #D7E2EB;
       margin-top: 1.5rem;
-      font-weight: bold;
-    }
-    .period {
-      display: flex;
-      justify-content: center;
+      border-radius: 0.75rem;
+      box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
+      padding: 2rem 1rem;
 
-      @media (max-width: 768px) {
-        display: block;
-      }
-      h5 {
-        padding: 0rem 1rem;
+      .list-title {
+        padding: 0.5rem 2rem;
+        margin-top: 1.5rem;
         font-weight: bold;
       }
-      p {
-        margin-right: 10px;
+
+      h5 {
+        font-size: calc(1rem + 0.4vw);
       }
-    }
-    .btn {
-      display: block;
-      margin-left: auto;
-      padding: 0.5rem 1.5rem;
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 2rem;
-    }
-    .form-control {
-      background-color: #F4F4F8;
-      border: none;
-      margin-bottom: 1rem;
-      line-height: 10;
-      color: #98A8B9;
-    }
-    .form-control::file-selector-button {
-        color: transparent;
+
+      .period {
+        display: flex;
+        justify-content: center;
+        @media (max-width: 768px) {
+          display: block;
+        }
+
+        h5 {
+          padding: 0rem 1rem;
+          font-weight: bold;
+        }
+
+        p {
+          margin-right: 10px;
+        }
+      }
+
+      .btn {
+        display: block;
+        margin-left: auto;
+        padding: 0.5rem 1.5rem;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 2rem;
+        @media (max-width: 420px) {
+          font-size: 14px;
+        }
+      }
+
+      .form-control {
         background-color: #F4F4F8;
+        border: none;
+        margin-bottom: 1rem;
+        line-height: 10;
+        color: #98A8B9;
+      }
+
+      .form-control::file-selector-button {
+          color: transparent;
+          background-color: #F4F4F8;
+      }
     }
   }
 }

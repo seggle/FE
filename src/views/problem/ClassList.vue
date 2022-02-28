@@ -2,9 +2,10 @@
   <div class="container">
     <header>
       <h1 id="title">수업 및 시험</h1>
-      <div class="button-group" v-if="this.$store.getters.isAdmin">
+      <div v-if="this.$store.getters.isAdmin"
+           class="button-group">
         <button class="btn" @click="goEdit">편집</button>
-        <button class="btn" id="show-modal" @click="showModal = true">
+        <button class="btn" @click="showModal = true">
           수업 생성
         </button>
         <ModalClassList
@@ -14,29 +15,30 @@
         />
       </div>
     </header>
-      <table class="table">
-        <thead>
-          <tr>
-            <!-- <th class="col-1" scope="col">#</th> -->
-            <th class="col-1" scope="col">연도</th>
-            <th class="col-1" scope="col">학기</th>
-            <th scope="col">제목</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="classes in classList"
-            :key="classes"
-            @click="goClass(classes.id)"
-          >
-            <!-- <th scope="row">{{ classes.id }}</th> -->
-            <td>{{ classes.year }}</td>
-            <td>{{ classes.semester }}</td>
-            <td>{{ classes.name }}</td>
-          </tr>
-        </tbody>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <!-- <th class="col-1" scope="col">#</th> -->
+          <th class="col-1" scope="col">연도</th>
+          <th class="col-3" scope="col">학기</th>
+          <th scope="col">제목</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="classes in classList"
+          :key="classes"
+          @click="goClass(classes.id)"
+        >
+          <!-- <th scope="row">{{ classes.id }}</th> -->
+          <td>{{ classes.year }}</td>
+          <td>{{ classes.semester }}</td>
+          <td><p>{{ classes.name }}</p></td>
+        </tr>
+      </tbody>
     </table>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -87,7 +89,9 @@ export default {
 <style scoped lang="scss">
 .container {
   padding: 3rem 3rem;
-
+  @media (max-width: 420px) {
+    padding: 1rem 1rem;
+  }
   header {
     display: flex;
     justify-content: space-between;
@@ -98,6 +102,22 @@ export default {
 
     .btn {
       width: 6rem;
+      @media (max-width: 420px) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .table {
+    p {
+      margin-bottom: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      @media (max-width: 420px) {
+        display: block;
+        width: 60%;
+      }
     }
   }
 }

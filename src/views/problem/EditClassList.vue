@@ -4,54 +4,57 @@
       <h1 id="title">수업 및 시험</h1>
       <button class="btn" @click="editClassList">저장</button>
     </header>
-    <div class="table-div">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col"><font-awesome-icon icon="check" /></th>
-            <th scope="col">수강학기</th>
-            <th scope="col">제목</th>
-            <th scope="col">편집</th>
-            <th scope="col">삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(classes, i) in classList" :key="i">
-            <th scope="row">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                :value="classes.id"
-                v-model="checkList"
-              />
-            </th>
-            <td>{{ classes.semester }}</td>
-            <td>{{ classes.name }}</td>
-            <td>
-              <button class="edit-btn"
-                      @click="showModal = true;
-                              rowIndex = i;">
-                <font-awesome-icon icon="pen" />
-              </button>
-              <ModalClassList
-                v-if="showModal"
-                @close="showModal = false"
-                mode="수업 편집"
-                :classID="classList[rowIndex].id"
-                :semester="classList[rowIndex].semester"
-                :title="classList[rowIndex].name"
-              />
-            </td>
-            <td>
-              <button class="delete-btn"
-                      @click="removeClass(classes.id)">
-                <font-awesome-icon icon="trash-can" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            <font-awesome-icon icon="check" />
+          </th>
+          <th scope="col">학기</th>
+          <th scope="col">제목</th>
+          <th scope="col">편집</th>
+          <th scope="col">삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(classes, i) in classList" :key="i">
+          <th scope="row">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              :value="classes.id"
+              v-model="checkList"
+            />
+          </th>
+          <td>{{ classes.semester }}</td>
+          <td class="class-name">
+            <p>{{ classes.name }}</p>
+          </td>
+          <td>
+            <button class="edit-btn"
+                    @click="showModal = true;
+                            rowIndex = i;">
+              <font-awesome-icon icon="pen" />
+            </button>
+            <ModalClassList
+              v-if="showModal"
+              @close="showModal = false"
+              mode="수업 편집"
+              :classID="classList[rowIndex].id"
+              :semester="classList[rowIndex].semester"
+              :title="classList[rowIndex].name"
+            />
+          </td>
+          <td>
+            <button class="delete-btn"
+                    @click="removeClass(classes.id)">
+              <font-awesome-icon icon="trash-can" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -101,9 +104,7 @@ export default {
           item.class_id = this.checkList[i]
           data.push(item)
         }
-        console.log(data)
-        const res = await api.editClassList(data)
-        console.log(res)
+        await api.editClassList(data)
         alert('변경사항이 저장되었습니다.')
         this.$router.push({ name: 'ClassList' })
       } catch (err) {
@@ -113,8 +114,7 @@ export default {
     async removeClass (classID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          const res = await api.removeClass(classID)
-          console.log(res)
+          await api.removeClass(classID)
           alert('변경사항이 저장되었습니다.')
           this.$router.push({ name: 'ClassList' })
         }
@@ -129,28 +129,46 @@ export default {
 <style scoped lang="scss">
 .container {
   padding: 3rem 3rem;
+  @media (max-width: 420px) {
+    padding: 1rem 1rem;
+  }
+
   header {
     display: flex;
     justify-content: space-between;
     padding: 3rem 0rem;
+    @media (max-width: 420px) {
+      display: block;
+    }
+
     h1 {
       margin-bottom: 0;
     }
+
     .btn {
       width: 6rem;
+      @media (max-width: 420px) {
+        font-size: 14px;
+      }
     }
   }
   .table {
     // text-align: left;
-    tbody {
-      td {
-        a {
-          cursor: pointer;
-        }
-        a:hover {
-          text-decoration: underline;
-        }
+    p {
+      margin-bottom: 0;
+      @media (max-width: 420px) {
+        display: block;
+        width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
+    }
+  }
+
+  .table > :not(caption) > * > * {
+    @media (max-width: 420px) {
+      padding: 0.5rem 0.25rem;
     }
   }
 }

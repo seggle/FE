@@ -3,14 +3,19 @@
     <header>
       <h1 id="title">일반 대회</h1>
       <div v-if="this.$store.getters.isAdmin">
-        <button class="btn" @click="showModal = true">대회 관리</button>
+        <button class="btn"
+                @click="showModal = true"
+        >대회 관리</button>
         <ModalCompetitionAdmin
           v-if="showModal"
           @close="showModal = false"
         />
-        <button class="btn" @click="goCreateProblem">대회 생성</button>
+        <button class="btn"
+                @click="goCreateProblem"
+        >대회 생성</button>
       </div>
     </header>
+
     <div class="table-div">
       <table class="table">
         <thead>
@@ -38,7 +43,8 @@
                     :style="{ width: this.problemList[i].progressBar.value + '%' }"
                     :aria-valuenow="this.problemList[i].progressBar.value"
                     aria-valuemin="0"
-                    aria-valuemax="100"></div>
+                    aria-valuemax="100">
+                </div>
               </div>
             </td>
             <td>{{ problem.end_time }}</td>
@@ -169,12 +175,22 @@ export default {
 <style scoped lang="scss">
 .container {
   padding: 3rem 3rem;
+  @media (max-width: 420px) {
+    padding: 1rem 1rem;
+  }
+
   header {
     display: flex;
     justify-content: space-between;
     padding: 3rem 0rem;
-    h1 {
-      margin-bottom: 0;
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+
+  .btn {
+    @media (max-width: 420px) {
+      font-size: 14px;
     }
   }
 }

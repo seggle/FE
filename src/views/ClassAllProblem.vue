@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="d-flex mb-2 mt-3 justify-content-end">
+    <div class="search-box mb-2 mt-3 justify-content-end">
       <div>
         <form>
             <input
@@ -13,7 +13,7 @@
             </form>
       </div>
       <div>
-        <button class="btn" id="problem-create" @click="openProblem()">+ 문제 생성</button>
+        <button class="btn" @click="openProblem()">+ 문제 생성</button>
       </div>
     </div>
     <div class="table-div">
@@ -33,12 +33,18 @@
     <tbody>
       <tr :loading="loading" v-for="problem in problemList" :key="problem">
         <th scope="row">{{ problem.id }}</th>
-        <td><a @click="goProblem(problem.id)">{{ problem.title }}</a></td>
+        <td>
+          <a @click="goProblem(problem.id)">{{ problem.title }}</a>
+        </td>
         <td>{{ problem.created_time }}</td>
         <td>{{ problem.created_user }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="problem.public" @change="changeSwitch(problem.id)">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="flexSwitchCheckChecked"
+                   v-model="problem.public"
+                   @change="changeSwitch(problem.id)">
           </div>
         </td>
         <td scope="row">
@@ -165,18 +171,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h5 {
-    margin-top:5px;
-}
-select {
-    height:100%
-}
-a {
-  color:black;
-  cursor: pointer;
+.search-box {
+  display: flex;
+  @media (max-width: 420px) {
+    display: block;
+  }
+
+  .form-control {
+    @media (max-width: 420px) {
+      font-size: 14px;
+    }
+  }
 }
 
-.modal-dialog {
-    max-width: 80%;
+.btn {
+  @media (max-width: 420px) {
+    margin-top: 5px;
+    font-size: 14px;
+  }
 }
+
 </style>

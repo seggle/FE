@@ -1,0 +1,88 @@
+@import "./_modal.scss";
+@import "./_nav.scss";
+@import "./_button.scss";
+@import "./_datepicker.scss";
+
+//button 
+.btn {
+  background: #060c20;
+  // color: #fe3b57;
+  color:white;
+  border-radius: 50px;
+  margin: 3px;
+  font-weight: bold;
+  // border: none;
+
+  &:hover {
+    color: white;
+    background:#536292;
+  }
+}
+
+// table
+.table-div {
+  overflow-x: auto;
+  .table {
+    min-width: 700px;
+    width: 100%;
+    white-space: nowrap;
+    border-collapse: collapse;
+    // thead {
+    //   background-color: #060c20;
+    //   color: white;
+    // }
+  
+    tbody {
+      tr:hover {
+        background-color: #f4f4f8;
+        cursor: pointer;
+      }
+      tr {
+        @media (max-width: 420px) {
+          font-size: calc(0.55rem + 2vw);
+          padding: 0px;
+        }
+      }
+    }
+  }
+}
+
+// @media (max-width: 420px) {
+//   .form-control {
+//     float: right;
+//     width: 80%;
+//     // height: 1.8rem;
+//     font-size: calc(0.55rem + 1.5vw);
+//   }
+// }
+
+// a tag
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+// GeneralList, ClassList
+.app-container {
+  padding: 3rem 3rem;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem 0rem;
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    button {
+      width: 6rem;
+    }
+  }
+}
