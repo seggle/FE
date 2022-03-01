@@ -130,6 +130,12 @@ export default {
   .table tr td:nth-child(3),.table tr td:nth-child(4) {
     display: none;
   }
+  .form-control {
+    float: right;
+    width: 80%;
+    height: 1.8rem;
+    font-size: calc(0.55rem + 1.5vw);
+  }
 }
 
 @media (max-width: 991px) {
