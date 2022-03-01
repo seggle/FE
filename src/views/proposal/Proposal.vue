@@ -57,7 +57,8 @@ export default {
     },
     goCreate () {
       this.$router.push({
-        name: 'ProposalCreate'
+        name: 'ProposalCreate',
+        params: { mode: 'create' }
       })
     },
     async getProposal (page) {

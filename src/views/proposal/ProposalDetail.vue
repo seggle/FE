@@ -26,96 +26,17 @@
       </table>
     </div>
     <div class="container">
-      <!-- Button trigger modal -->
       <button
         type="button"
-        class="btn btn-primary btn-sm px-4 me-sm-3"
-        data-bs-toggle="modal"
-        data-bs-target="#proposalModal
-        "
+        class="btn btn-primary px-4 me-sm-3"
+        @click="goEdit(this.$route.params.id)"
         v-show="this.$store.state.userid === content.created_user"
       >
         편집
       </button>
-
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="proposalModal"
-        tabindex="-1"
-        aria-labelledby="proposalModal
-        Label"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5
-                class="modal-title"
-                id="proposalModal
-              Label"
-              >
-                건의사항 편집
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <table class="tbAdd">
-                  <colgroup>
-                    <col width="15%" />
-                    <col width="*" />
-                  </colgroup>
-                  <tr>
-                    <th>제목</th>
-                    <td>
-                      <!-- v-model 양뱡향데이터전송으로 상세 데이터 넣어준다 -->
-                      <input type="text" v-model="title" style="width: 350px" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>작성자</th>
-                    <td>{{ content.created_user }}</td>
-                  </tr>
-                  <tr>
-                    <th>수정일</th>
-                    <td>{{ date }}</td>
-                  </tr>
-                  <tr>
-                    <th>내용</th>
-                    <td><textarea v-model="context"></textarea></td>
-                  </tr>
-                </table>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                취소
-              </button>
-              <button
-                type="button"
-                @click="editProposal"
-                class="btn btn-primary"
-              >
-                저장
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <button
         @click="deleteProposal"
-        class="btn btn-primary btn-sm px-4 me-sm-3"
+        class="btn btn-primary px-4 me-sm-3"
         v-show="
           this.$store.state.userid === content.created_user ||
           this.$store.getters.isSuperAdmin
@@ -126,6 +47,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import api from '@/api/index.js'
 export default {
@@ -156,27 +78,9 @@ export default {
       try {
         const proposalId = this.$route.params.id
         if (confirm('삭제하시겠습니까?')) {
-          console.log(proposalId)
-          const res = await api.deleteProposal(proposalId)
-          console.log(res.data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async editProposal () {
-      try {
-        const data = {
-          title: this.title,
-          context: this.context
-        }
-        const proposalId = this.$route.params.id
-        console.log(proposalId)
-        if (confirm('저장하시겠습니까?')) {
-          const res = await api.editProposal(proposalId, data)
-          console.log(res.data)
-          alert('저장 완료')
-          this.$router.go()
+          await api.deleteProposal(proposalId)
+          alert('삭제되었습니다.')
+          this.goList()
         }
       } catch (error) {
         console.log(error)
@@ -193,10 +97,18 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    goEdit (proposalID) {
+      this.$router.push({
+        name: 'ProposalCreate',
+        params: { mode: 'edit' },
+        query: { id: proposalID }
+      })
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 h1 {
   font-weight: bold;
