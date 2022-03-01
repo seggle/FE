@@ -36,6 +36,9 @@ nav {
 }
 a {
     color: #000000;
+    @media (max-width: 420px) {
+        font-size: calc(0.55rem + 2vw);
+    }
 }
 .nav-item {
     &:hover {

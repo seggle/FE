@@ -139,9 +139,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media (max-width: 420px) {
+  .form-control {
+    float: right;
+    width: 80%;
+    height: 1.8rem;
+    font-size: calc(0.55rem + 1.5vw);
+  }
+}
 a {
   color:black;
   cursor: pointer;
 }
-
+h1 {
+  width: 40%;
+  text-align: left;
+  font-size: calc(1rem + 2vw);
+}
 </style>

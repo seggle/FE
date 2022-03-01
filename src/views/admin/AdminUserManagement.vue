@@ -21,7 +21,7 @@
           aria-labelledby="userModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-dialog-centered col-md-4">
+          <div class="modal-dialog admin-user modal-dialog-centered col-md-4">
             <div class="modal-content">
               <div class="modal-header">
                 <h5>사용자 정보 수정</h5>
@@ -86,14 +86,14 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col" prop="id">#</th>
-            <th scope="col">ID</th>
-            <th scope="col">이름</th>
+            <th style="width:40px" scope="col" prop="id">#</th>
+            <th class="col-2" scope="col">ID</th>
+            <th class="col-2" scope="col">이름</th>
             <th scope="col">이메일</th>
             <th scope="col">가입날짜</th>
-            <th scope="col">권한</th>
-            <th scope="col">편집</th>
-            <th scope="col">삭제</th>
+            <th class="col-1" scope="col">권한</th>
+            <th class="col-1" scope="col">편집</th>
+            <th class="col-1" scope="col">삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -101,7 +101,7 @@
             <th scope="row">{{ user.id }}</th>
             <td>{{ user.username }}</td>
             <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
+            <td class="email">{{ user.email }}</td>
             <td>{{ user.date_joined }}</td>
             <td>{{ user.privilege }}</td>
             <td scope="row">
@@ -245,17 +245,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media (max-width: 420px) {
+  .form-control {
+    float: right;
+    width: 80%;
+    height: 1.8rem;
+    font-size: calc(0.55rem + 1.5vw);
+  }
+}
 .btn-toggle {
   border-width: thin;
   text-align: center;
   background-color: transparent;
 }
-a {
-  color: black;
-  cursor: pointer;
+.table {
+  min-width:950px;
+  table-layout: fixed;
+  tbody {
+    tr:hover {
+      cursor: default;
+    }
+    td.email {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
 }
-.ghost-button:hover {
-  color:black;
-  text-decoration: underline;
+h1 {
+  font-weight: bold;
+  width: 60%;
+  text-align: left;
+  @media (max-width: 420px) {
+    font-size: calc(1.2rem + 2vw);
+  }
 }
 </style>

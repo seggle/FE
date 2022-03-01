@@ -37,6 +37,12 @@
       background-color: #f4f4f8;
       cursor: pointer;
     }
+    tr {
+      @media (max-width: 420px) {
+        font-size: calc(0.55rem + 2vw);
+        padding: 0px;
+      }
+    }
   }
 }
 
