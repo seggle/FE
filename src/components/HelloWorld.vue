@@ -8,11 +8,52 @@
     <section class="horizontal">
       <div class="pin-wrap">
         <div class="animation-wrap to-right">
-          <div class="item">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus, temporibus esse magni illum eos natus ipsum minus? Quis excepturi voluptates atque dolorum minus eligendi! Omnis minima magni recusandae ex dignissimos.</div>
-          <div class="item">Eaque ullam illum nobis deleniti mollitia unde, sed, nemo ipsa ratione ex, dicta aliquam voluptates! Odio vitae eum nobis dignissimos sunt ipsum repellendus totam optio distinctio. Laborum suscipit quia aperiam.</div>
-          <div class="item">Animi, porro molestias? Reiciendis dolor aspernatur ab quos nulla impedit, dolores ullam hic commodi nobis nam. Dolorem expedita laudantium dignissimos nobis a. Dolorem, unde quidem. Tempora et a quibusdam inventore!</div>
-          <div class="item">Labore, unde amet! Alias delectus hic laboriosam et dolorum? Saepe, dicta eaque? Veniam eos blanditiis neque. Officia et nostrum, tempore modi quo praesentium aspernatur vero dolor, ipsa unde perspiciatis minima.</div>
-          <div class="item">Quaerat error dolorem aspernatur magni dicta ut consequuntur maxime tempore. Animi odio eos quod culpa nulla consectetur? Aperiam ipsam ducimus delectus reprehenderit unde, non laborum voluptate laboriosam, officiis at ea!</div>
+          <div class="item">
+            <h5>Seggle에서 개최하는 다양한 대회를 만나보세요</h5>
+            <br /><strong>✔일반용✔</strong> Seggle 회원이라면 누구든지 참여
+            가능! 특정한 주제에 대한 예측 분석 모델을 만들고 정확도를 측정할 수
+            있어요. 인공지능을 훨씬 더 재밌게 경험하는 방법!
+            <strong>리더보드</strong>에서 여러분의 순위를 확인하고 인공지능
+            역량을 키워보세요⭐
+          </div>
+          <div class="item">
+            <h5>우리 학교 수업 문제를 만날 수 있다고?</h5>
+            <br /><strong>✔세종대학교 학생이라면?✔</strong> 세종대학교에서
+            열리는 '머신러닝/인공지능' 수업에서 대회에 참여할 수 있어요!
+            <span style="color: gray; font-size: 0.8rem"
+              >(해당 수업에서 제공하는 비밀번호를 가진 회원만 해당 대회에
+              참여가능합니다.)</span
+            >
+          </div>
+          <div class="item">
+            <h5>빨리 대회에 참가하고 싶어! 어떻게 해야하나요?</h5>
+            <br />대회에 참가하기 위해서는 먼저 Seggle에
+            <a href="/register">회원가입</a>을 해야 해요! 그다음 참가하고 싶은
+            대회를 선택하고,
+            <button type="button" class="btn btn-light">참가 버튼</button>을
+            누르면 데이터를 다운로드할 수 있어요. 데이터 분석 후
+            결과물(submission file)을 제출하면 자동으로 평가 점수를 부여해요!
+            <strong>과연 나의 점수는 몇점일지?</strong> ✨두근두근✨ 지금
+            확인해보세요🔍
+          </div>
+          <div class="item">
+            <h5>포인트도 쌓고! 티어도 올리고!</h5>
+            <br />기존의 채점 시스템과 달라진 방식! 그동안 채점 결과만 나오고
+            아무런 보상이 없어서 서운했다면? Seggle은 이용자가 대회에서
+            <strong>코드를 제출하기만 해도 포인트가 적립돼요!</strong> 또 나의
+            코드를 자랑하고 싶다면 언제든지 공유해주세요! 역시
+            <strong>코드 공유에 대한 포인트</strong>가 쌓인답니다. 이렇게
+            포인트가 쌓이다보면 티어도 상승하겠죠? 티어와 함께 여러분의 실력을
+            높여보세요!
+          </div>
+          <div class="item">
+            <h5>💡이런 기능💡이 있었으면 좋겠어요</h5>
+            <br />Seggle은 이용자의 편의성과 원활한 서비스 구현을 위해 최선을
+            다하고 있습니다. 서비스 이용 중에 불편함이 있거나, 더 나은 기능 및
+            디자인이 생각나신다면 망설이지 말고
+            <a href="/proposals">피드백</a>을 남겨주세요! Seggle은 항상 여러분의
+            이야기에 귀기울이고 있어요!
+          </div>
         </div>
       </div>
     </section>
@@ -22,9 +63,7 @@
           class="row align-items-center justify-content-between flex-column flex-sm-row"
         >
           <div class="col-auto">
-            <div class="small m-0 text-white">
-              Copyright &copy; Seggle
-            </div>
+            <div class="small m-0 text-white">Copyright &copy; Seggle</div>
           </div>
           <div class="col-auto">
             <a class="link-light small" href="#!">Privacy</a>
@@ -40,6 +79,7 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
@@ -50,33 +90,50 @@ export default {
     msg: String
   },
   mounted () {
-    this.animation()
+    var windowWidth = $(window).width()
+    console.log(windowWidth)
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      // do functionality on screens smaller than 768px
+      // 768px-> iPad Mini
+      console.log('smaller than 768px')
+    } else {
+      this.animationOne()
+    }
+    this.animationTwo()
   },
   methods: {
-    animation () {
+    animationOne () {
       const horizontalSections = gsap.utils.toArray('section.horizontal')
       horizontalSections.forEach(function (sec, i) {
         var thisPinWrap = sec.querySelector('.pin-wrap')
         var thisAnimWrap = thisPinWrap.querySelector('.animation-wrap')
         var getToValue = () => -(thisAnimWrap.scrollWidth - window.innerWidth)
-        gsap.fromTo(thisAnimWrap, {
-          x: () => thisAnimWrap.classList.contains('to-right') ? 0 : getToValue()
-        }, {
-          x: () => thisAnimWrap.classList.contains('to-right') ? getToValue() : 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sec,
-            start: 'top top',
-            end: () => '+=' + (thisAnimWrap.scrollWidth - window.innerWidth),
-            pin: thisPinWrap,
-            pinSpacing: true,
-            invalidateOnRefresh: true,
-            // anticipatePin: 1,
-            scrub: true
-            // markers: true,
+        gsap.fromTo(
+          thisAnimWrap,
+          {
+            x: () =>
+              thisAnimWrap.classList.contains('to-right') ? 0 : getToValue()
+          },
+          {
+            x: () =>
+              thisAnimWrap.classList.contains('to-right') ? getToValue() : 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sec,
+              start: 'top top',
+              end: () => '+=' + (thisAnimWrap.scrollWidth - window.innerWidth),
+              pin: thisPinWrap,
+              pinSpacing: true,
+              invalidateOnRefresh: true,
+              // anticipatePin: 1,
+              scrub: true
+              // markers: true,
+            }
           }
-        })
+        )
       })
+    },
+    animationTwo () {
       // 여기서부터는 별
       var canvas = document.querySelector('#pixie')
       var WIDTH = window.innerWidth
@@ -90,14 +147,24 @@ export default {
       canvas.height = HEIGHT
 
       function Circle () {
-        this.settings = { ttl: 8000, xmax: 5, ymax: 2, rmin: 8, rmax: 15, drt: 1 }
+        this.settings = {
+          ttl: 8000,
+          xmax: 5,
+          ymax: 2,
+          rmin: 8,
+          rmax: 15,
+          drt: 1
+        }
         this.reset = function () {
           this.x = WIDTH * Math.random() // X 위치 랜덤 (0 ~ WIDTH)
           this.y = HEIGHT * Math.random() // Y 위치 랜덤 (0 ~ HEIGHT)
-          this.r = ((this.settings.rmax - 1) * Math.random()) + 1 // 반지름 크기 랜덤 (1 ~ rmax)
-          this.dx = (Math.random() * this.settings.xmax) * (Math.random() < 0.5 ? -1 : 1) // X 이동거리 랜덤 (-xmax ~ xmax)
-          this.dy = (Math.random() * this.settings.ymax) * (Math.random() < 0.5 ? -1 : 1) // Y 이동거리 랜덤 (-ymax ~ ymax)
-          this.hl = (this.settings.ttl / DRAW_INTERVAL) * (this.r / this.settings.rmax) // 총 생존 시간 (반지름 크기에 비례)
+          this.r = (this.settings.rmax - 1) * Math.random() + 1 // 반지름 크기 랜덤 (1 ~ rmax)
+          this.dx =
+            Math.random() * this.settings.xmax * (Math.random() < 0.5 ? -1 : 1) // X 이동거리 랜덤 (-xmax ~ xmax)
+          this.dy =
+            Math.random() * this.settings.ymax * (Math.random() < 0.5 ? -1 : 1) // Y 이동거리 랜덤 (-ymax ~ ymax)
+          this.hl =
+            (this.settings.ttl / DRAW_INTERVAL) * (this.r / this.settings.rmax) // 총 생존 시간 (반지름 크기에 비례)
           this.rt = 0 // 현재 생존 시간 (0 -> hl -> 0)
           this.settings.drt = Math.random() + 1 // 노화 속도 (1 ~ 2)
           this.stop = Math.random() * 0.2 + 0.4 // 음영 범위 (0.4 ~ 0.6)
@@ -113,15 +180,25 @@ export default {
         }
 
         this.draw = function () {
-          var newo = (this.rt / this.hl)
+          var newo = this.rt / this.hl
           context.beginPath()
           context.arc(this.x, this.y, this.r, 0, Math.PI * 2, true) // (x, y) 좌표에 반지름 r 크기의 원 그림
           context.closePath()
 
           var cr = this.r * newo // 밝기에 따른 반지름
-          gradient = context.createRadialGradient(this.x, this.y, 0, this.x, this.y, (cr < this.settings.rmin) ? this.settings.rmin : cr)
+          gradient = context.createRadialGradient(
+            this.x,
+            this.y,
+            0,
+            this.x,
+            this.y,
+            cr < this.settings.rmin ? this.settings.rmin : cr
+          )
           gradient.addColorStop(0.0, 'rgba(255,255,255,' + newo + ')')
-          gradient.addColorStop(this.stop, 'rgba(77,101,181,' + (newo * 0.6) + ')')
+          gradient.addColorStop(
+            this.stop,
+            'rgba(77,101,181,' + newo * 0.6 + ')'
+          )
           gradient.addColorStop(1.0, 'rgba(77,101,181,0)')
           context.fillStyle = gradient
           context.fill()
@@ -157,23 +234,30 @@ export default {
       }
       window.addEventListener('resize', setDimensions)
     }
-  }
+  },
+  animationThree () {}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-@import url('https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap');
+<style lang="scss" scoped>
+@import url("https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap");
 
-html, body, section.horizontal {
+html,
+body,
+section.horizontal {
   overflow-x: hidden;
 }
 
 #pixie {
   width: 100%;
   height: 20rem;
-  z-index:1;
-  background: linear-gradient(rgb(0, 0, 0) 50%, rgb(25, 19, 39)80%, rgb(43, 32, 72));
+  z-index: 1;
+  background: linear-gradient(
+    rgb(0, 0, 0) 50%,
+    rgb(25, 19, 39) 80%,
+    rgb(43, 32, 72)
+  );
 }
 
 body {
@@ -219,6 +303,8 @@ section:nth-of-type(even) {
 section.horizontal {
   overflow-x: hidden;
 }
+@media screen and (max-width: 768px) {
+}
 section.horizontal .pin-wrap,
 section.horizontal .animation-wrap {
   display: flex;
@@ -231,8 +317,7 @@ section.horizontal .item {
   padding: 150px 80px;
   flex: 0 0 500px;
   height: 100vh;
-  display: flex;
-  align-items: center;
+  justify-content: space-around;
   line-height: 1.7;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -240,11 +325,19 @@ section.horizontal .item {
   user-select: none;
   border-right: 1px solid rgba(0, 0, 0, 0.06);
   background-color: transparent;
+  h5 {
+    margin-top: 50px;
+    font-weight: bold;
+  }
+  a {
+    color: darkblue;
+    text-decoration: underline;
+  }
 }
 section.horizontal .item:before {
   position: absolute;
   font-size: 100px;
-  opacity: .13;
+  opacity: 0.13;
   font-weight: bold;
   z-index: -1;
   -webkit-transform: translate(-30px, -50px);
@@ -267,10 +360,10 @@ section.horizontal .animation-wrap.to-left .item:before {
   counter-increment: item -1;
   content: counter(item);
 }
-section.horizontal .animation-wrap .item:nth-child(2n+2) {
+section.horizontal .animation-wrap .item:nth-child(2n + 2) {
   align-items: flex-start;
 }
-section.horizontal .animation-wrap .item:nth-child(4n+4) {
+section.horizontal .animation-wrap .item:nth-child(4n + 4) {
   align-items: flex-end;
 }
 </style>

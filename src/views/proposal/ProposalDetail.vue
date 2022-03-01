@@ -21,7 +21,9 @@
           </tr>
           <tr>
             <td><h5>내용</h5></td>
-            <td colspan="3" class="context">{{ content.context }}</td>
+            <td colspan="3" class="context">
+              <pre>{{ content.context }}</pre>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -66,42 +68,37 @@
               ></button>
             </div>
             <div class="modal-body">
-              <form>
-                <table class="tbAdd">
-                  <colgroup>
-                    <col width="15%" />
-                    <col width="*" />
-                  </colgroup>
-                  <tr>
-                    <th>제목</th>
-                    <td>
-                      <!-- v-model 양뱡향데이터전송으로 상세 데이터 넣어준다 -->
-                      <input type="text" v-model="title" style="width: 350px" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>작성자</th>
-                    <td>{{ content.created_user }}</td>
-                  </tr>
-                  <tr>
-                    <th>수정일</th>
-                    <td>{{ date }}</td>
-                  </tr>
-                  <tr>
-                    <th>내용</th>
-                    <td><textarea v-model="context"></textarea></td>
-                  </tr>
-                </table>
-              </form>
+              <table class="table-div" style="width: 90%">
+                <tr>
+                  <th>제목</th>
+                  <td>
+                    <!-- v-model 양뱡향데이터전송으로 상세 데이터 넣어준다 -->
+                    <input type="text" v-model="title" style="width: 100%" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>작성자</th>
+                  <td>
+                    <input
+                      type="text"
+                      v-model="content.created_user"
+                      disabled
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>수정일</th>
+                  <td>
+                    <input type="text" v-model="date" disabled />
+                  </td>
+                </tr>
+                <tr>
+                  <th>내용</th>
+                  <td><textarea v-model="context"></textarea></td>
+                </tr>
+              </table>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                취소
-              </button>
               <button
                 type="button"
                 @click="editProposal"
@@ -215,9 +212,13 @@ tr {
 .context {
   height: 300px;
 }
+pre {
+  font-size: 20px;
+  font-weight: bold;
+}
 textarea {
-  width: 350px;
-  height: 100px;
+  width: 100%;
+  height: 200px;
 }
 .btn {
   margin-top: 30px;

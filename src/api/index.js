@@ -82,29 +82,18 @@ function getCompetitionsLeaderboard (competitionID) {
   return instance.get(`/leaderboards/competition/${competitionID}`)
 }
 
-function getUserProblemSubmissions (page, username, contestProblemID) {
-  return instance.get('/submissions/', {
+function getUserSubmissions (userID, competitionID, contestProblemID) {
+  return instance.get('submissions', {
     params: {
-      page: page,
-      username: username,
+      uid: userID,
+      cid: competitionID,
       cpid: contestProblemID
     }
   })
 }
 
-function getUserCompetitionSubmissions (competitionID, username) {
-  return instance.get(`/competitions/${competitionID}/submissions`, {
-    params: {
-      username: username
-    }
-  })
-}
-function selectProblemSubmission (classID, contestID, cpID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/${cpID}/check`, data)
-}
-
-function selectCompetitionSubmission (competitionID, data) {
-  return instance.patch(`/competitions/${competitionID}/check`, data)
+function selectFile (competitionID, userID, data) {
+  return instance.post(`submissions/${competitionID}/${userID}/`, data)
 }
 
 function createClass (data) {
@@ -355,14 +344,6 @@ function changeProblemSwitch (id) {
   return instance.post(`/problems/${id}/check`)
 }
 
-function submitFileProblem (classID, contestID, cpID, username, data) {
-  return formDataInstance.post(`/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
-}
-
-function submitFileCompetition (competitionID, username, data) {
-  return formDataInstance.post(`/competitions/${competitionID}/${username}/`, data)
-}
-
 function createGeneralProblem (data) {
   return instance.post('/competitions/', data)
 }
@@ -408,10 +389,8 @@ export default {
   getCompetitionTAList,
   submitCompetitionTAList,
   getCompetitionsLeaderboard,
-  getUserProblemSubmissions,
-  getUserCompetitionSubmissions,
-  selectProblemSubmission,
-  selectCompetitionSubmission,
+  getUserSubmissions,
+  selectFile,
   createClass,
   getClass,
   editClass,
@@ -468,8 +447,6 @@ export default {
   editProblem,
   deleteProblem,
   changeProblemSwitch,
-  submitFileProblem,
-  submitFileCompetition,
   createClassProblem,
   createGeneralProblem,
   examStart,
