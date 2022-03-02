@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="d-flex mb-2 mt-3">
-      <h1>글 등록</h1>
+      <h1>{{ title }}</h1>
       <div class="button-group">
         <button @click="goList" class="btn" id="head"><font-awesome-icon icon="angle-left" /> 목록</button>
       </div>
@@ -48,10 +48,22 @@ export default {
   data: () => {
     return {
       proposalTitle: '',
-      proposalContext: ''
+      proposalContext: '',
+      title: ''
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      if (this.$route.params.mode === 'edit') {
+        this.getProposal(this.$route.query.id)
+        this.title = '글 수정'
+      } else {
+        this.title = '글 등록'
+      }
+    },
     goList () {
       this.$router.push({
         name: 'Proposal'
@@ -63,17 +75,34 @@ export default {
           title: this.proposalTitle,
           context: this.proposalContext
         }
-        const res = await api.createProposal(data)
-        console.log(res.data)
+        if (this.$route.params.mode === 'create') {
+          await api.createProposal(data)
+        } else {
+          await api.editProposal(this.$route.query.id, data)
+        }
         this.$router.push({ path: '/proposals' })
       } catch (err) {
         console.log(err)
+      }
+    },
+    async getProposal (proposalID) {
+      try {
+        const res = await api.getProposalDetail(proposalID)
+        this.proposalTitle = res.data.title
+        this.proposalContext = res.data.context
+      } catch (error) {
+        console.log(error)
       }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+@media (max-width: 420px) {
+  .form-control {
+    font-size: calc(0.6rem + 1.5vw);
+  }
+}
 h1 {
   width: 50%;
   @media (max-width: 767px) {

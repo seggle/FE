@@ -30,6 +30,7 @@
             v-for="announce in announcementImportantList"
             :key="announce"
             @click="goAnnouncementDetail(announce.id)"
+            style="background-color: #dddddd"
           >
             <th class="tableId" style="font-weight: bold" scope="row">중요</th>
             <td class="title">{{ announce.title }}</td>
@@ -176,7 +177,7 @@ h1 {
   table-layout: fixed;
   th.tableId {
     @media (max-width: 767px) {
-      width: 40px;
+      width: 50px;
     }
     text-align: center;
   }
