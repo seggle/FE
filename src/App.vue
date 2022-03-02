@@ -94,7 +94,6 @@ export default {
     async logout () {
       try {
         this.$store.dispatch('Logout')
-        localStorage.removeItem('test')
         this.$router.push('/login')
       } catch (err) {
         console.log(err)
@@ -151,10 +150,6 @@ nav {
   font-weight: bold;
   font-size: 20px;
   padding: 0px 7px;
-}
-a {
-  text-decoration: none;
-  color: white;
 }
 a:hover {
   text-decoration: none;

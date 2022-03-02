@@ -72,6 +72,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
+import { GMTtoLocale } from '@/utils/time.js'
 
 export default {
   name: 'ClassAllProblems',
@@ -107,7 +108,7 @@ export default {
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.problemList = res.data.results
         for (var i = 0; i < this.problemList.length; i++) {
-          this.problemList[i].created_time = this.problemList[i].created_time.slice(0, 10) + ' ' + this.problemList[i].created_time.slice(11, 19)
+          this.problemList[i].created_time = GMTtoLocale(this.problemList[i].created_time)
         }
       } catch (error) {
         console.log(error)
