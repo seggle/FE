@@ -45,10 +45,11 @@
                   aria-labelledby="list-info-list"
                   :key="problemInfo">
               <h5 class="list-title">문제 설명</h5>
-              <textarea id="problem-description"
+              <!-- <textarea id="problem-description"
                           class="form-control"
                           v-model="problemInfo.description"
-                          placeholder="문제 설명을 입력하세요."></textarea>
+                          placeholder="문제 설명을 입력하세요."></textarea> -->
+              <v-md-editor v-model="problemInfo.description" height="400px" placeholder="문제 설명을 입력하세요."/>
               <div class="form-option">
                 <div class="form-metrics col-3">
                   <label class="form-label">평가 지표</label>
@@ -81,13 +82,15 @@
             <!-- 데이터 -->
             <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list" :key="dataInfo">
               <h5 class="list-title">데이터 설명</h5>
-              <textarea id="data-description"
+              <!-- <textarea id="data-description"
                         class="form-control"
                         v-model="dataInfo.description"
-                        placeholder="문제 설명을 입력하세요."></textarea>
+                        placeholder="문제 설명을 입력하세요."></textarea> -->
+              <v-md-editor v-model="dataInfo.description" height="400px" placeholder="데이터 설명을 입력하세요."/>
               <div class="form-option">
                 <div class="data-file col-5">
-                  <label class="form-label">데이터 파일 업로드</label>
+                  <p class="file-desc">하나의 zip 파일만 업로드 가능합니다</p>
+                  <label class="form-label">데이터 파일</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
                   <a class="file-download-btn"
                      :href="dataInfo.dataFile">다운로드</a>
@@ -95,11 +98,13 @@
                          type="file"
                          accept=".zip"
                          @change="uploadFile">
-                  <div v-if="dataInfo.dataFile"
-                      class="upload-file-name">{{ dataInfo.dataFile.name }}</div>
+                  <!-- <p class="file-desc">하나의 zip 파일만 업로드 가능합니다</p> -->
+                  <p v-if="dataInfo.dataFile"
+                      class="upload-file-name">{{ dataInfo.dataFile.name }}</p>
                 </div>
                 <div class="solution-file col-5">
-                  <label class="form-label">정답 파일 업로드</label>
+                  <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
+                  <label class="form-label">정답 파일</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
                   <a class="file-download-btn"
                      :href="dataInfo.solutionFile">다운로드</a>
@@ -107,8 +112,9 @@
                          type="file"
                          accept=".csv"
                          @change="uploadFile">
-                  <div v-if="dataInfo.solutionFile"
-                       class="upload-file-name">{{ dataInfo.solutionFile.name }}</div>
+                  <!-- <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p> -->
+                  <p v-if="dataInfo.solutionFile"
+                       class="upload-file-name">{{ dataInfo.solutionFile.name }}</p>
                 </div>
               </div>
             </div>
@@ -180,8 +186,8 @@ export default {
         this.problemInfo.public = data.public
         this.problemInfo.evaluation = data.evaluation
         this.dataInfo.description = data.data_description
-        this.dataInfo.dataFile = data.data
-        this.dataInfo.solutionFile = data.solution
+        // this.dataInfo.dataFile = data.data
+        // this.dataInfo.solutionFile = data.solution
       } catch (err) {
         console.log(err)
       }
@@ -333,7 +339,7 @@ export default {
       display: flex;
       justify-content: space-evenly;
       align-items: center;
-      padding: 1rem 0rem;
+      padding: 1.5rem 0rem;
       @media (max-width: 768px) {
         display: block;
       }
@@ -408,6 +414,19 @@ export default {
       border-radius: 50px;
       cursor: pointer;
       margin-left: 10px;
+    }
+
+    .file-desc {
+      color: rgb(0 0 0 / 50%);
+      font-size: 14px;
+      // margin-top: 0.75rem;
+    }
+
+    .upload-file-name {
+      margin-top: 0.75rem;
+      padding: 10px;
+      color: rgb(0 0 0 / 70%);
+      font-weight: bold;
     }
     // .data-file {
     //   display: flex;

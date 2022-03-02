@@ -11,6 +11,7 @@
               :disabled="alreadyJoined">{{ this.joinText }}
       </button>
     </div>
+
     <div class="problem-content row">
       <!-- 세로 메뉴 탭 -->
       <div class="problem-tab col-2">
@@ -53,16 +54,16 @@
               문제 설명
             </h5>
             <p class="list-content">
-              {{ problemInfo.description }}
+              <span v-html="problemInfo.description"></span>
             </p>
             <div class="period"
                  v-if="this.problemType == 'general'">
               <h5>시작 시간</h5>
-              <p class="list-content">
+              <p>
                 {{ problemInfo.start_time }}
               </p>
               <h5>종료 시간</h5>
-              <p class="list-content">
+              <p>
                 {{ problemInfo.end_time }}
               </p>
             </div>
@@ -75,8 +76,9 @@
               </button>
             </h5>
             <p class="list-content">
-              {{ problemInfo.data_description }}
+              <span v-html="problemInfo.data_description"></span>
             </p>
+            <iframe src="https://airtable.com/embed/shrwOUIZcuzf01UdZ?backgroundColor=cyan" frameborder="0" onmousewheel="" width="100%" height="533" class="airtable-embed" style="background: transparent; border: 1px solid rgb(204, 204, 204);"></iframe>
           </div>
         <!-- 리더보드 -->
           <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
@@ -117,6 +119,7 @@
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
+              <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
               <input id="csv-file-input"
                      type="file"
                      class="form-control"
@@ -124,6 +127,7 @@
                      @change="uploadFile">
 
               <h5 class="list-title">ipynb 파일 제출</h5>
+              <p class="file-desc">하나의 ipynb 파일만 업로드 가능합니다</p>
               <input id="ipynb-file-input"
                      type="file"
                      class="form-control"
@@ -133,6 +137,7 @@
             </div>
             <div class="table-div">
               <h5 class="list-title">제출 내역</h5>
+              <p class="file-desc">선택한 제출 내역이 리더보드에 표시됩니다.</p>
               <table class="table">
                 <thead>
                   <tr>
@@ -173,6 +178,9 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { GMTtoLocale } from '@/utils/time.js'
+
+const showdown = require('showdown')
+const converter = new showdown.Converter()
 
 export default {
   name: 'Problem',
@@ -272,6 +280,8 @@ export default {
         }
         res.data.start_time = GMTtoLocale(res.data.start_time)
         res.data.end_time = GMTtoLocale(res.data.end_time)
+        res.data.description = converter.makeHtml(res.data.description)
+        res.data.data_description = converter.makeHtml(res.data.data_description)
         this.problemInfo = res.data
       } catch (err) {
         console.log(err)
@@ -374,6 +384,7 @@ export default {
     },
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
+      console.log(files)
       const id = e.target.id
       if (id === 'csv-file-input') {
         this.csv = files[0]
@@ -476,6 +487,10 @@ export default {
         font-weight: bold;
       }
 
+      .list-content {
+        margin-bottom: 2rem;
+      }
+
       h5 {
         font-size: calc(1rem + 0.4vw);
       }
@@ -520,6 +535,11 @@ export default {
       .form-control::file-selector-button {
           color: transparent;
           background-color: #F4F4F8;
+      }
+
+      .file-desc {
+        color: rgb(0 0 0 / 50%);
+        font-size: 14px;
       }
     }
   }
