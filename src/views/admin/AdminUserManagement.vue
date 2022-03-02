@@ -269,8 +269,9 @@ export default {
   border: 1px solid;
   background-color: transparent;
 }
-.table {
-  min-width:950px;
+.table-div {
+  .table {
+  min-width: 900px;
   table-layout: fixed;
   tbody {
     tr:hover {
@@ -282,6 +283,7 @@ export default {
       white-space: nowrap;
     }
   }
+}
 }
 h1 {
   font-weight: bold;

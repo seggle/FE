@@ -121,8 +121,8 @@ textarea {
   width: 350px;
   height: 100px;
 }
-
-.table {
+.table-div {
+  .table {
   min-width: 0px;
   text-align: left;
   white-space: normal;
@@ -153,6 +153,7 @@ textarea {
     overflow: hidden;
     white-space: nowrap;
   }
+}
 }
 
 .button-group {

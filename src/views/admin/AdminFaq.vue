@@ -177,17 +177,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table {
-  min-width:950px;
-  table-layout: fixed;
-  tbody {
-    tr:hover {
-      cursor: default;
-    }
-    td.title {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+.table-div {
+  .table {
+    min-width:850px;
+    table-layout: fixed;
+    tbody {
+      tr:hover {
+        cursor: default;
+      }
+      td.title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
 }

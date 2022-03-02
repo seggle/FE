@@ -237,17 +237,19 @@ export default {
     font-size: calc(0.55rem + 1.5vw);
   }
 }
-.table {
-  min-width:950px;
-  table-layout: fixed;
-  tbody {
-    tr:hover {
-      cursor: default;
-    }
-    td.title {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+.table-div {
+  .table {
+    min-width:950px;
+    table-layout: fixed;
+    tbody {
+      tr:hover {
+        cursor: default;
+      }
+      td.title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
 }
