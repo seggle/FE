@@ -6,7 +6,6 @@
         <button @click="goCreate" class="btn" id="head">글쓰기</button>
       </div>
     </div>
-    <div class="table-div">
       <table class="table py-3">
         <thead>
           <tr>
@@ -25,7 +24,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
     <Pagination :pagination="PageValue" @get-page="getPage" />
   </div>
 </template>
@@ -124,10 +122,6 @@ h1 {
   margin-left: auto;
 }
 
-.btn {
-  margin-top: 50px;
-}
-
 .table {
   min-width: 0px;
   text-align: left;
@@ -149,10 +143,6 @@ h1 {
       font-size: calc(0.55rem + 2vw);
       padding: 0px;
     }
-  }
-  a {
-    color: black;
-    text-decoration: none;
   }
 }
 </style>

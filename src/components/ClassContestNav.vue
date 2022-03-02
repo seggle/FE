@@ -129,6 +129,7 @@ nav {
   }
 
   .nav-header {
+    width: 100%;
     #title {
       float: left;
       font-size: 18px;
@@ -159,7 +160,9 @@ nav {
       color: black;
     }
   }
-
+  .navbar-nav {
+    width: 100%;
+  }
   .nav-link {
     display: block;
     width: 6rem;

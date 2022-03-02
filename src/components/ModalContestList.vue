@@ -24,7 +24,7 @@
               />
             </div>
             <div class="row">
-              <div class="col-5" data-backdrop="static">
+              <div class="col-6" data-backdrop="static">
                 <label class="form-label">시작시간</label>
                 <Datepicker
                   v-model="contestInfo.startTime"
@@ -32,7 +32,7 @@
                   textInput
                 />
               </div>
-              <div class="col-5" data-backdrop="static">
+              <div class="col-6" data-backdrop="static">
                 <label class="form-label">종료시간</label>
                 <Datepicker
                   v-model="contestInfo.endTime"
@@ -41,8 +41,8 @@
                 />
               </div>
               <div class="row exam-checkbox">
-                <div class="col-5">
-                  <p style="float: left">시험모드</p>
+                <div class="col-6">
+                  <label style="float: left">시험모드</label>
                   <span
                     class="form-check form-switch"
                     style="float: left; margin-left: 10px"
@@ -56,8 +56,8 @@
                     />
                   </span>
                 </div>
-                <div class="col-5">
-                  <p style="float: left">공개</p>
+                <div class="col-6">
+                  <label style="float: left">공개</label>
                   <span
                     class="form-check form-switch"
                     style="float: left; margin-left: 10px"

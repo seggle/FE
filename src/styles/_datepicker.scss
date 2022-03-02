@@ -1,0 +1,25 @@
+// .dp__menu {
+//     position: absolute;
+//     background: var(--dp-background-color);
+//     border-radius: $dp__border_radius;
+//     min-width: $dp__menu_min_width;
+//     font-family: $dp__font_family;
+//     font-size: $dp__font_size;
+//     user-select: none;
+//     border: 1px solid var(--dp-menu-border-color);
+//     z-index: 99999;
+//     box-sizing: border-box;
+  
+//     &::after {
+//       box-sizing: border-box;
+//     }
+  
+//     &::before {
+//       box-sizing: border-box;
+//     }
+  
+//     &:focus {
+//       border: 1px solid var(--dp-menu-border-color);
+//       outline: none;
+//     }
+//   }
