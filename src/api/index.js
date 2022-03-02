@@ -79,7 +79,7 @@ function submitCompetitionTAList (competitionID, data) {
 }
 
 function getCompetitionsLeaderboard (competitionID) {
-  return instance.get(`/leaderboards/competition/${competitionID}`)
+  return instance.get(`/leaderboards/competitions/${competitionID}`)
 }
 
 function getUserProblemSubmissions (page, username, contestProblemID) {
