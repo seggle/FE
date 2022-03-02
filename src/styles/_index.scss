@@ -8,9 +8,6 @@
 //button 
 .btn {
   background: #060c20;
-  // background-color: transparent;
-  // color: #fe3b57;
-  // color:#b60005;
   color: white;
   border-radius: 50px;
   margin: 3px;
@@ -30,6 +27,7 @@ thead {
   border: none;
   font-weight: 800;
 }
+
 tbody {
   tr:hover {
     background-color: #f4f4f8;
@@ -42,6 +40,7 @@ tbody {
     }
   }
 }
+
 .table-div {
   overflow-x: auto;
   .table {
@@ -70,15 +69,6 @@ tbody {
     // }
   }
 }
-
-// @media (max-width: 420px) {
-//   .form-control {
-//     float: right;
-//     width: 80%;
-//     // height: 1.8rem;
-//     font-size: calc(0.55rem + 1.5vw);
-//   }
-// }
 
 // a tag
 a {
