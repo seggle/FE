@@ -70,7 +70,8 @@ export default {
       keyword: '',
       loading: false,
       PageValue: [],
-      currentPage: 1
+      currentPage: 1,
+      count: 0
     }
   },
   mounted () {
@@ -91,6 +92,7 @@ export default {
         this.announcementList = []
         this.announcementImportantList = []
         const res = await api.getAnnouncement(page, this.keyword)
+        this.count = res.data.count
         this.loading = false
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         if (res.data.count !== 0) {
