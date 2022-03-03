@@ -126,64 +126,64 @@
 </template>
 
 <script>
-import api from "@/api/index.js";
+import api from '@/api/index.js'
 export default {
-  name: "ProposalDetail",
+  name: 'ProposalDetail',
   data: () => {
     return {
       content: {},
-      title: "",
-      context: "",
+      title: '',
+      context: '',
       date:
         new Date().getFullYear() +
-        "/" +
+        '/' +
         (new Date().getMonth() + 1) +
-        "/" +
-        new Date().getDate(),
-    };
+        '/' +
+        new Date().getDate()
+    }
   },
-  created() {
-    this.getContent();
+  created () {
+    this.getContent()
   },
   methods: {
-    goList() {
+    goList () {
       this.$router.push({
-        name: "Proposal",
-      });
+        name: 'Proposal'
+      })
     },
-    async deleteProposal() {
+    async deleteProposal () {
       try {
-        const proposalId = this.$route.params.id;
-        if (confirm("삭제하시겠습니까?")) {
-          await api.deleteProposal(proposalId);
-          alert("삭제되었습니다.");
-          this.goList();
+        const proposalId = this.$route.params.id
+        if (confirm('삭제하시겠습니까?')) {
+          await api.deleteProposal(proposalId)
+          alert('삭제되었습니다.')
+          this.goList()
         }
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
-    async getContent() {
+    async getContent () {
       try {
-        const proposalId = this.$route.params.id;
-        const res = await api.getProposalDetail(proposalId);
-        this.content = res.data;
-        this.content.created_time = res.data.created_time.slice(0, 10);
-        this.title = res.data.title;
-        this.context = res.data.context;
+        const proposalId = this.$route.params.id
+        const res = await api.getProposalDetail(proposalId)
+        this.content = res.data
+        this.content.created_time = res.data.created_time.slice(0, 10)
+        this.title = res.data.title
+        this.context = res.data.context
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
-    goEdit(proposalID) {
+    goEdit (proposalID) {
       this.$router.push({
-        name: "ProposalCreate",
-        params: { mode: "edit" },
-        query: { id: proposalID },
-      });
-    },
-  },
-};
+        name: 'ProposalCreate',
+        params: { mode: 'edit' },
+        query: { id: proposalID }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
