@@ -92,7 +92,7 @@
                   <p class="file-desc">하나의 zip 파일만 업로드 가능합니다</p>
                   <label class="form-label">데이터 파일</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <a class="file-download-btn"
+                  <a v-if="mode==='edit'" class="file-download-btn"
                      :href="dataInfo.dataFile">다운로드</a>
                   <input id="data-file-input"
                          type="file"
@@ -106,7 +106,7 @@
                   <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
                   <label class="form-label">정답 파일</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <a class="file-download-btn"
+                  <a v-if="mode==='edit'" class="file-download-btn"
                      :href="dataInfo.solutionFile">다운로드</a>
                   <input id="solution-file-input"
                          type="file"
