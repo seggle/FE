@@ -12,7 +12,7 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <div class="navbar-toggler-icon">☰</div>
+          <div class="navbar-toggler-icon"><font-awesome-icon icon="bars" /></div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Pills navs -->

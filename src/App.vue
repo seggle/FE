@@ -11,7 +11,7 @@
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon"></span>
+        <font-awesome-icon icon="bars" />
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -42,19 +42,19 @@
             </ul>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link"
-                         to="/proposals"
-            >건의게시판</router-link>
+            <a class="nav-link"
+                         href="/proposals"
+            >건의게시판</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link"
-                         to="/announcements"
-            >공지사항</router-link>
+            <a class="nav-link"
+                         href="/announcements"
+            >공지사항</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link"
-                         to="/faqs"
-            >FAQ</router-link>
+            <a class="nav-link"
+                         href="/faqs"
+            >FAQ</a>
           </li>
         </ul>
         <!-- 로그인 했을 때 -->
@@ -121,8 +121,7 @@ export default {
 
 <style lang="scss">
 #app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
-  /* font-family: 'Noto Sans KR', 'Sans-serif', sans-serif; */
+  // font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -139,15 +138,15 @@ nav {
 #title {
   font-weight: 800;
 }
-a.router-link-exact-active {
-  font-weight: bold;
-  font-size: 16px;
-  color: black;
-  border-bottom: 3px solid black;
-}
+// a.router-link-exact-active {
+//   font-weight: bold;
+//   font-size: 16px;
+//   color: black;
+//   border-bottom: 3px solid black;
+// }
 .nav-link {
-  color: #ddd;
-  font-weight: bold;
+  color: black;
+  // font-weight: bold;
 
   &:focus,
   &:hover {

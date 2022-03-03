@@ -53,7 +53,7 @@
               <div class="form-option">
                 <div class="form-metrics col-3">
                   <label class="form-label">평가 지표</label>
-                  <select class="form-select" v-model="problemInfo.evaluation">
+                  <select class="form-select" v-model="problemInfo.evaluation" required>
                     <option disabled value="">평가 지표</option>
                     <option v-for="item in problemInfo.metrics" :key="item">{{ item }}</option>
                   </select>
@@ -142,7 +142,7 @@ export default {
       problemTitle: '',
       problemInfo: {
         description: '',
-        metrics: ['RSME', 'MSE', 'Accuracy'],
+        metrics: ['RSME', 'MSE', 'Accuracy', 'F1-score', 'RMSE', 'MAE', 'Log loss'],
         evaluation: '',
         startTime: '',
         endTime: '',

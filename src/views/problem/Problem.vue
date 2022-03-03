@@ -78,7 +78,7 @@
             <p class="list-content">
               <span v-html="problemInfo.data_description"></span>
             </p>
-            <iframe src="https://airtable.com/embed/shrwOUIZcuzf01UdZ?backgroundColor=cyan" frameborder="0" onmousewheel="" width="100%" height="533" class="airtable-embed" style="background: transparent; border: 1px solid rgb(204, 204, 204);"></iframe>
+            <!-- <iframe src="https://airtable.com/embed/shrwOUIZcuzf01UdZ?backgroundColor=cyan" frameborder="0" onmousewheel="" width="100%" height="533" class="airtable-embed" style="background: transparent; border: 1px solid rgb(204, 204, 204);"></iframe> -->
           </div>
         <!-- 리더보드 -->
           <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
@@ -94,7 +94,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(users, i) in leaderboardList" :key="users">
+              <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success': this.userID === users.username}">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ users.username }}</td>
                 <td>{{ users.score }}</td>
@@ -218,7 +218,7 @@ export default {
   methods: {
     init () {
       if (this.problemType === 'general') {
-        // this.getUserStatus() -> api 없이 진행할 예정
+        this.getUserStatus()
       }
       if (this.problemType === 'class') {
         this.getClassUserList()
@@ -232,20 +232,20 @@ export default {
       this.getUserSubmissions(1)
       this.getLeaderboard()
     },
-    // async getUserStatus () {
-    //   try {
-    //     const res = await api.getUserCompetitionList(this.userID)
-    //     const competitionList = res.data
-    //     for (let i = 0; i < competitionList.length; i++) {
-    //       if (String(competitionList[i].competition_id) === this.problemID) {
-    //         this.joinText = '참여중'
-    //         this.alreadyJoined = true
-    //       }
-    //     }
-    //   } catch (err) {
-    //     console.log(err.response.data)
-    //   }
-    // },
+    async getUserStatus () {
+      try {
+        const res = await api.getCompetitionTAList(this.problemID)
+        const competitionList = res.data
+        for (let i = 0; i < competitionList.length; i++) {
+          if (String(competitionList[i].username) === this.userID) {
+            this.joinText = '참여중'
+            this.alreadyJoined = true
+          }
+        }
+      } catch (err) {
+        console.log(err.response.data)
+      }
+    },
     async getClassUserList () {
       try {
         const res = await api.getClassUserList(this.problemID)
@@ -307,6 +307,8 @@ export default {
     async joinCompetition () {
       try {
         await api.joinCompetition(this.problemID)
+        alert('참여 완료되었습니다.')
+        this.$router.go(this.$router.currentRoute)
       } catch (err) {
         alert(err.response.data.error)
       }
@@ -360,7 +362,6 @@ export default {
         const formData = new FormData()
         formData.append('csv', this.csv)
         formData.append('ipynb', this.ipynb)
-        formData.append('ip_address', '123.123.1.12') // ip는 우선 static으로
 
         if (this.problemType === 'general') {
           await api.submitFileCompetition(
@@ -407,6 +408,7 @@ export default {
             data)
         }
         alert('제출이 완료되었습니다.')
+        this.getLeaderboard()
       } catch (err) {
         console.log(err)
       }
@@ -419,7 +421,7 @@ export default {
 .container {
   padding: 5rem 0rem;
   @media (max-width: 420px) {
-    padding: 0rem 1rem;;
+    padding: 0rem 1rem;
   }
 
   .problem-header {
@@ -427,6 +429,21 @@ export default {
     align-items: flex-end;
     justify-content: space-between;
     padding: 3rem 0;
+    @media (max-width: 420px) {
+      display: block;
+    }
+
+    h1 {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      @media (max-width: 420px) {
+        width: 100%;
+        padding: 0rem;
+      }
+    }
 
     .btn {
       padding: 0.5rem 2rem;
