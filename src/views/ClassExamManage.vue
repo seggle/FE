@@ -52,7 +52,6 @@
 
 <script>
 import api from '@/api/index.js'
-
 export default {
   name: 'ClassExamManage',
   data () {
@@ -61,16 +60,26 @@ export default {
       contestList: [],
       examList: [],
       userList: [],
-      currentPage: 1
+      currentPage: 1,
+      PageValue: [],
+      count: 0
     }
   },
   mounted () {
+    this.init()
     this.getUserList()
   },
   methods: {
+    init () {
+      this.getUserList(1)
+    },
+    getPage (page) {
+      this.getUserList(page)
+    },
     /* is_exam인 contest들의 contestID 추출 -> examList */
-    async getUserList () {
+    async getUserList (page) {
       try {
+        this.currentPage = page
         const res1 = await api.getContestList(this.classID)
         this.contestList = res1.data
         for (var i = 0; i < this.contestList.length; i++) {
@@ -108,7 +117,7 @@ export default {
       if (confirm('예외처리하시겠습니까?')) {
         const res = await api.exceptUser(this.classID, contestID, examID)
         console.log(res.data)
-        alert('리셋 완료')
+        alert('예외처리 완료')
         this.$router.go()
       } else {
       }

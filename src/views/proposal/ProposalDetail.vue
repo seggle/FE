@@ -2,7 +2,9 @@
   <div class="container">
     <div class="d-flex mb-2 mt-3">
       <div class="button-group">
-        <button @click="goList" class="btn" id="head"><font-awesome-icon icon="angle-left" /> 목록</button>
+        <button @click="goList" class="btn" id="head">
+          <font-awesome-icon icon="angle-left" /> 목록
+        </button>
       </div>
     </div>
     <div class="table-div">
@@ -36,7 +38,7 @@
       >
         편집
       </button>
-<<<<<<< HEAD
+      <<<<<<< HEAD
 
       <!-- Modal -->
       <div
@@ -108,8 +110,7 @@
         </div>
       </div>
 
-=======
->>>>>>> 0646f52fda164e37d23c48d1ee277f9fee52b5ae
+      ======= >>>>>>> 0646f52fda164e37d23c48d1ee277f9fee52b5ae
       <button
         @click="deleteProposal"
         class="btn btn-primary px-4 me-sm-3"
@@ -125,64 +126,64 @@
 </template>
 
 <script>
-import api from '@/api/index.js'
+import api from "@/api/index.js";
 export default {
-  name: 'ProposalDetail',
+  name: "ProposalDetail",
   data: () => {
     return {
       content: {},
-      title: '',
-      context: '',
+      title: "",
+      context: "",
       date:
         new Date().getFullYear() +
-        '/' +
+        "/" +
         (new Date().getMonth() + 1) +
-        '/' +
-        new Date().getDate()
-    }
+        "/" +
+        new Date().getDate(),
+    };
   },
-  created () {
-    this.getContent()
+  created() {
+    this.getContent();
   },
   methods: {
-    goList () {
+    goList() {
       this.$router.push({
-        name: 'Proposal'
-      })
+        name: "Proposal",
+      });
     },
-    async deleteProposal () {
+    async deleteProposal() {
       try {
-        const proposalId = this.$route.params.id
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteProposal(proposalId)
-          alert('삭제되었습니다.')
-          this.goList()
+        const proposalId = this.$route.params.id;
+        if (confirm("삭제하시겠습니까?")) {
+          await api.deleteProposal(proposalId);
+          alert("삭제되었습니다.");
+          this.goList();
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
-    async getContent () {
+    async getContent() {
       try {
-        const proposalId = this.$route.params.id
-        const res = await api.getProposalDetail(proposalId)
-        this.content = res.data
-        this.content.created_time = res.data.created_time.slice(0, 10)
-        this.title = res.data.title
-        this.context = res.data.context
+        const proposalId = this.$route.params.id;
+        const res = await api.getProposalDetail(proposalId);
+        this.content = res.data;
+        this.content.created_time = res.data.created_time.slice(0, 10);
+        this.title = res.data.title;
+        this.context = res.data.context;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
-    goEdit (proposalID) {
+    goEdit(proposalID) {
       this.$router.push({
-        name: 'ProposalCreate',
-        params: { mode: 'edit' },
-        query: { id: proposalID }
-      })
-    }
-  }
-}
+        name: "ProposalCreate",
+        params: { mode: "edit" },
+        query: { id: proposalID },
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -203,43 +204,41 @@ textarea {
 }
 .table-div {
   .table {
-  min-width: 0px;
-  text-align: left;
-  white-space: normal;
-  table-layout: fixed;
-  tbody {
-    tr:hover {
-      background-color: transparent;
-      cursor: default;
-    }
-  }
-  tr {
-    td {
-      text-align: left;
-      @media (max-width: 420px) {
-        font-size: calc(0.55rem + 2vw);
+    min-width: 0px;
+    text-align: left;
+    white-space: normal;
+    table-layout: fixed;
+    tbody {
+      tr:hover {
+        background-color: transparent;
+        cursor: default;
       }
     }
-    h5 {
-      text-align: center;
-      font-weight: bold;
-      @media (max-width: 420px) {
-        font-size: calc(0.7rem + 2vw);
+    tr {
+      td {
+        text-align: left;
+        @media (max-width: 420px) {
+          font-size: calc(0.55rem + 2vw);
+        }
+      }
+      h5 {
+        text-align: center;
+        font-weight: bold;
+        @media (max-width: 420px) {
+          font-size: calc(0.7rem + 2vw);
+        }
       }
     }
-  }
-  td.title {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    td.title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
 }
-}
-
 .button-group {
   margin-left: auto;
 }
-
 .btn {
   @media (max-width: 767px) {
     margin-right: 0px;
