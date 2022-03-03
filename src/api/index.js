@@ -368,8 +368,11 @@ function examStart (classID, contestID, data) {
   return instance.post(`/class/${classID}/contests/${contestID}/exam/`, data)
 }
 
-function examInfo (classID, contestID) {
-  return instance.get(`/class/${classID}/contests/${contestID}/exam`)
+function examInfo (classID, contestID, page) {
+  const params = { page }
+  return instance.get(`/class/${classID}/contests/${contestID}/exam`, {
+    params: params
+  })
 }
 
 function resetExam (classID, contestID, examID) {
