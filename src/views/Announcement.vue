@@ -172,7 +172,8 @@ h1 {
 .btnRightWrap .btnSearch {
   color: white;
 }
-.table {
+.table-div {
+  .table {
   min-width: 0px;
   text-align: left;
   white-space: normal;
@@ -204,5 +205,6 @@ h1 {
     color: black;
     text-decoration: none;
   }
+}
 }
 </style>
