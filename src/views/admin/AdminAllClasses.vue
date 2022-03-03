@@ -26,6 +26,7 @@
           </tr>
         </thead>
         <tbody>
+          <tr v-if="count===0"><td colspan="5">등록된 수업이 없습니다.</td></tr>
           <tr :loading="loading" v-for="Class in ClassList" :key="Class" @click="goClass(Class.id)">
             <th scope="row">{{ Class.id }}</th>
             <td>{{ Class.year}}</td>
@@ -53,7 +54,8 @@ export default {
       loading: false,
       keyword: '',
       currentPage: 1,
-      PageValue: []
+      PageValue: [],
+      count: 0
     }
   },
   mounted () {
@@ -72,6 +74,7 @@ export default {
         this.currentPage = page
         this.PageValue = []
         const res = await api.getAdminClassList(page, this.keyword)
+        this.count = res.data.count
         this.loading = false
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.ClassList = res.data.results

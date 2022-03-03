@@ -19,12 +19,13 @@
         <thead>
           <tr>
             <th class="col-lg-1 col-md-2 tableId" scope="col">#</th>
-            <th scope="col">제목</th>
+            <th class="title" scope="col">제목</th>
             <th class="col-lg-2" scope="col">작성일</th>
             <th class="col-lg-1 col-md-2" scope="col">작성자</th>
           </tr>
         </thead>
         <tbody>
+          <tr v-if="count===0"><td></td><td style="text-align: center;">게시물이 없습니다.</td><td></td><td></td></tr>
           <tr
             :loading="loading"
             v-for="announce in announcementImportantList"
@@ -133,6 +134,9 @@ export default {
   .table tr td:nth-child(3),.table tr td:nth-child(4) {
     display: none;
   }
+  .table-div.table.td.no-content {
+    column-span: all;
+  }
   .form-control {
     float: right;
     width: 80%;
@@ -187,7 +191,11 @@ h1 {
   td.tableId {
     text-align: center;
   }
+  th.title {
+    text-align: left;
+  }
   td.title {
+    text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

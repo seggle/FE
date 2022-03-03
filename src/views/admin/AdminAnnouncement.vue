@@ -99,7 +99,7 @@
     </tbody>
   </table>
   </div>
-  <Pagination :pagination="PageValue" @get-page="getPage"/>
+  <Pagination :pagination="PageValue" @get-page="getPage" />
 </div>
 </template>
 
