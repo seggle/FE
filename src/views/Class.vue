@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <ClassNavBar :className="classInfo.name"/>
+    <ClassNavBar v-if="privilege > 0" :className="classInfo.name"/>
     <!--밑에 페이지가 뿌려짐-->
     <router-view></router-view>
   </div>
@@ -19,13 +19,25 @@ export default {
   data () {
     return {
       classID: this.$route.params.classID,
-      classInfo: []
+      classInfo: [],
+      privilege: 0
     }
   },
   mounted () {
     this.getClass()
+    this.getPrevilege()
   },
   methods: {
+    async getPrevilege () {
+      const res = await api.getClassUserList(this.classID)
+      for (var i = 0; i < res.data.length; i++) {
+        if (res.data[i].username === this.$store.state.userid) {
+          this.privilege = res.data[i].privilege
+          break
+        }
+      }
+      console.log(this.privilege)
+    },
     async getClass (classID) {
       try {
         const res = await api.getClass(this.classID)
