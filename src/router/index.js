@@ -49,6 +49,14 @@ const requireAuth = () => (to, from, next) => {
   next('/login')
 }
 
+const requireAdminAuth = () => (to, from, next) => {
+  if (to.meta.isAdmin && store.getters.isAdmin) {
+    return next()
+  }
+  alert('접근 권한이 없습니다.')
+  next('/login')
+}
+
 const requireClassAuth = () => async (to, from, next) => {
   try {
     const res = await api.getClassUserList(to.params.classID)
@@ -77,6 +85,28 @@ const requireClassAdminAuth = () => async (to, from, next) => {
     }
     alert('접근 권한이 없습니다.')
     next(`/class/${to.params.classID}`)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const requireCompetitionAdminAuth = () => async (to, from, next) => {
+  try {
+    let res
+    if (to.params.problemType === 'general') {
+      res = await api.getCompetitionTAList(to.params.problemID)
+      const competitionList = res.data
+
+      for (let i = 0; i < competitionList.length; i++) {
+        if (competitionList[i].username === store.state.userid && competitionList[i].privilege > 0) {
+          return next()
+        }
+      }
+      alert('접근 권한이 없습니다.')
+      next('/')
+    } else {
+      return next()
+    }
   } catch (err) {
     console.log(err)
   }
@@ -141,14 +171,14 @@ const routes = [{
     path: 'student-manage',
     name: 'ClassStudentManage',
     component: ClassStudentManage,
-    meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
-    // beforeEnter: requireClassAdminAuth()
+    meta: { isAdmin: true }, // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+    beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'exam-manage',
     name: 'ClassExamManage',
-    component: ClassExamManage
-    // beforeEnter: requireClassAdminAuth()
+    component: ClassExamManage,
+    beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'class-problem',
@@ -256,13 +286,14 @@ const routes = [{
 {
   path: '/:problemType/create-problem',
   name: 'CreateProblem',
-  component: CreateProblem
-  // meta: { isAdmin: true }
+  component: CreateProblem,
+  beforeEnter: requireAdminAuth()
 },
 {
   path: '/:problemType/:problemID/edit-problem',
   name: 'EditProblem',
-  component: EditProblem
+  component: EditProblem,
+  beforeEnter: requireCompetitionAdminAuth()
 }
 ]
 

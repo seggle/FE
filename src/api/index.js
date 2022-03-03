@@ -170,7 +170,7 @@ function selectContestProblem (classID, contestID, data) {
 }
 
 function editContestProblem (classID, contestID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/title`, data)
+  return instance.patch(`/class/${classID}/contests/${contestID}/description`, data)
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
