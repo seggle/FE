@@ -371,6 +371,18 @@ function examStart (classID, contestID, data) {
 function examInfo (classID, contestID) {
   return instance.get(`/class/${classID}/contests/${contestID}/exam`)
 }
+
+function resetExam (classID, contestID, examID) {
+  return instance.post(
+        `/class/${classID}/contests/${contestID}/exam/${examID}/reset`
+  )
+}
+
+function exceptUser (classID, contestID, examID) {
+  return instance.post(
+        `/class/${classID}/contests/${contestID}/exam/${examID}/exception`
+  )
+}
 export default {
   registerUser,
   loginUser,
@@ -451,5 +463,7 @@ export default {
   createGeneralProblem,
   examStart,
   examInfo,
+  resetExam,
+  exceptUser,
   editGeneralProblem
 }

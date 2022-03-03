@@ -3,6 +3,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th scope="col">시험명</th>
           <th scope="col">아이디</th>
           <th scope="col">사용자</th>
           <th scope="col">IP주소</th>
@@ -13,17 +14,33 @@
       </thead>
       <tbody>
         <tr v-for="users in userList" :key="users">
-          <th scope="row">{{ users.id }}</th>
-          <td>{{ users.username }}</td>
+          <th scope="row">{{ users.contest }}</th>
+          <td>{{ users.id }}</td>
+          <td>{{ users.user }}</td>
           <td>{{ users.ip_address }}</td>
-          <td>{{ users.start_time.slice(0, 10) }}</td>
           <td>
-            <button class="btn btn-sm px-4 me-sm-3" @click="resetIP">
+            {{
+              users.start_time.slice(0, 10) +
+              " " +
+              users.start_time.slice(11, 19)
+            }}
+          </td>
+          <td>
+            <button
+              v-if="this.$store.getters.isAdmin"
+              class="btn btn-sm"
+              @click="resetIP(users.contest, users.id)"
+            >
               RESET
             </button>
           </td>
           <td>
-            <button class="btn btn-sm px-4 me-sm-3" href="#" @click="except">
+            <button
+              v-if="this.$store.getters.isAdmin"
+              class="btn btn-sm"
+              href="#"
+              @click="exceptIP(users.contest, users.id)"
+            >
               EXCEPTION
             </button>
           </td>
@@ -72,20 +89,27 @@ export default {
           console.log(res2.data.results)
           this.userList = this.userList.concat(res2.data.results)
         }
+        this.userList = this.userList.reverse()
         console.log(this.userList)
       } catch (error) {
         console.log(error)
       }
     },
-    resetIP () {
+    async resetIP (contestID, examID) {
       if (confirm('리셋하시겠습니까?')) {
+        const res = await api.resetExam(this.classID, contestID, examID)
+        console.log(res.data)
         alert('리셋 완료')
+        this.$router.go()
       } else {
       }
     },
-    except () {
+    async exceptIP (contestID, examID) {
       if (confirm('예외처리하시겠습니까?')) {
-        alert('예외처리 완료')
+        const res = await api.exceptUser(this.classID, contestID, examID)
+        console.log(res.data)
+        alert('리셋 완료')
+        this.$router.go()
       } else {
       }
     }
@@ -93,4 +117,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+tr {
+  text-align: center;
+}
+</style>
