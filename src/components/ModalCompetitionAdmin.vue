@@ -80,16 +80,24 @@ export default {
   },
   methods: {
     init () {
+      this.userInfo()
       this.getGeneralList()
+    },
+    async userInfo () {
+      try {
+        const res = await api.getUserInfo(this.$store.state.userid)
+        for (var i = 0; i < res.data.competition.length; i++) {
+          this.userCompetitionList.push(res.data.competition[i].competition_id)
+        }
+      } catch (err) {
+        console.log(err)
+      }
     },
     async getGeneralList () {
       try {
         this.competitionList = []
         const res = await api.getCompetitionList()
-        for (var i = 0; i < this.$store.state.competitions.length; i++) {
-          this.userCompetitionList.push(this.$store.state.competitions[i].competition_id)
-        }
-        for (i = 0; i < res.data.length; i++) {
+        for (var i = 0; i < res.data.length; i++) {
           if (this.userCompetitionList.includes(res.data[i].id)) {
             this.competitionList.push(res.data[i])
           }
