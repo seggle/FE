@@ -58,7 +58,11 @@
             </td>
             <td>{{ problems.end_time.slice(0, 10) }}</td>
             <td scope="row">
-              <button class="delete-btn" @click="deleteProblem(problems.id)">
+              <button
+                v-if="this.$store.getters.isAdmin"
+                class="delete-btn"
+                @click="deleteProblem(problems.id)"
+              >
                 <font-awesome-icon icon="trash-can" />
               </button>
             </td>
@@ -170,7 +174,7 @@ export default {
       if (confirm('시작하시겠습니까?')) {
         try {
           const data = {
-            ip_address: '123.123.123.001'
+            ip_address: '123.123.123.020'
           }
           const res = await api.examStart(this.classID, this.contestID, data)
           console.log(res.data)
