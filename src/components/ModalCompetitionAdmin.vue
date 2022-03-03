@@ -13,12 +13,11 @@
           </div>
 
           <div class="modal-body">
-            <div class="row">
               <table class = "modal-table" frame = void>
                 <thead>
                   <tr>
                     <th class="col-6 competition-title" scope="col">제목</th>
-                    <th class="col-5" scope="col">관리자 등록 | 삭제</th>
+                    <th class="col-5" scope="col">옵션</th>
                     <th scope="col">편집</th>
                   </tr>
                 </thead>
@@ -31,7 +30,6 @@
                                       competition_id = competition.id">
                         <font-awesome-icon icon="user-plus" />
                       </button> |
-                      <!-- <a class="ghost-button" @click="showModal = true; competition_id = competition.id">관리자 등록</a> | -->
                       <ModalCompetitionTA
                         v-if="showModal"
                         @close="showModal = false"
@@ -41,7 +39,6 @@
                               @click="deleteCompetition(competition.id)">
                         <font-awesome-icon icon="trash-can" />
                       </button>
-                      <!-- <a class="ghost-button" @click="deleteCompetition(competition.id)">삭제</a> -->
                     </td>
                     <td v-else></td>
                     <td>
@@ -49,17 +46,11 @@
                               @click="goEditCompetition(competition.id)">
                         <font-awesome-icon icon="pen" />
                       </button>
-                      <!-- <a class="ghost-button" @click="goEditCompetition(competition.id)">편집</a> -->
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-
-          <!-- <div class="modal-footer">
-            <button class="btn" type="submit">저장</button>
-          </div> -->
         </form>
       </div>
     </div>
@@ -132,18 +123,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.ghost-button {
-  color: black;
-}
-.ghost-button:hover {
-  text-decoration: underline;
-}
 .modal-table {
   width: 100%;
   border-collapse: collapse;
   white-space: nowrap;
+  table-layout: fixed;
   .competition-title {
-    // text-align: left;
+    @media (max-width: 797px) {
+    width: 40%;
+  }
   }
   td.competition-title {
     text-overflow: ellipsis;
@@ -153,6 +141,11 @@ export default {
   tr {
     border: 1px solid black;
   }
+  th {
+    @media (max-width: 420px) {
+      font-size: calc(0.55rem + 2vw);
+    }
+  }
 }
 
 tbody, td, tfoot, th, thead, tr {
@@ -160,14 +153,18 @@ tbody, td, tfoot, th, thead, tr {
 }
 
 .modal-container {
-  @media (max-width: 383px) {
+  @media (max-width: 797px) {
     width: 100%;
+    max-width: initial;
+    min-width: initial;
+    padding-right: 20px;
+    padding-left: 20px;
   }
-  @media (min-width: 384px) {
-    width: 70%;
-  }
-  @media (min-width: 768px) {
-    width: 500px;
+  max-width: initial;
+  min-width: initial;
+  width: 700px;
+  .modal-body {
+    padding: 1rem 0px 0px 0px;
   }
 }
 </style>

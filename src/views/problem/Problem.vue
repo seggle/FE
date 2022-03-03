@@ -11,6 +11,7 @@
               :disabled="alreadyJoined">{{ this.joinText }}
       </button>
     </div>
+
     <div class="problem-content row">
       <!-- 세로 메뉴 탭 -->
       <div class="problem-tab col-2">
@@ -53,16 +54,16 @@
               문제 설명
             </h5>
             <p class="list-content">
-              {{ problemInfo.description }}
+              <span v-html="problemInfo.description"></span>
             </p>
             <div class="period"
                  v-if="this.problemType == 'general'">
               <h5>시작 시간</h5>
-              <p class="list-content">
+              <p>
                 {{ problemInfo.start_time }}
               </p>
               <h5>종료 시간</h5>
-              <p class="list-content">
+              <p>
                 {{ problemInfo.end_time }}
               </p>
             </div>
@@ -75,8 +76,9 @@
               </button>
             </h5>
             <p class="list-content">
-              {{ problemInfo.data_description }}
+              <span v-html="problemInfo.data_description"></span>
             </p>
+            <!-- <iframe src="https://airtable.com/embed/shrwOUIZcuzf01UdZ?backgroundColor=cyan" frameborder="0" onmousewheel="" width="100%" height="533" class="airtable-embed" style="background: transparent; border: 1px solid rgb(204, 204, 204);"></iframe> -->
           </div>
         <!-- 리더보드 -->
           <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
@@ -92,7 +94,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(users, i) in leaderboardList" :key="users">
+              <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success': this.userID === users.username}">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ users.username }}</td>
                 <td>{{ users.score }}</td>
@@ -117,6 +119,7 @@
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
+              <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
               <input id="csv-file-input"
                      type="file"
                      class="form-control"
@@ -124,6 +127,7 @@
                      @change="uploadFile">
 
               <h5 class="list-title">ipynb 파일 제출</h5>
+              <p class="file-desc">하나의 ipynb 파일만 업로드 가능합니다</p>
               <input id="ipynb-file-input"
                      type="file"
                      class="form-control"
@@ -133,6 +137,7 @@
             </div>
             <div class="table-div">
               <h5 class="list-title">제출 내역</h5>
+              <p class="file-desc">선택한 제출 내역이 리더보드에 표시됩니다.</p>
               <table class="table">
                 <thead>
                   <tr>
@@ -174,6 +179,9 @@ import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { GMTtoLocale } from '@/utils/time.js'
 
+const showdown = require('showdown')
+const converter = new showdown.Converter()
+
 export default {
   name: 'Problem',
   components: {
@@ -210,7 +218,7 @@ export default {
   methods: {
     init () {
       if (this.problemType === 'general') {
-        // this.getUserStatus() -> api 없이 진행할 예정
+        this.getUserStatus()
       }
       if (this.problemType === 'class') {
         this.getClassUserList()
@@ -223,22 +231,21 @@ export default {
       this.getProblem()
       this.getUserSubmissions(1)
       this.getLeaderboard()
-      // this.getUserSubmissions() -> api 미구현
     },
-    // async getUserStatus () {
-    //   try {
-    //     const res = await api.getUserCompetitionList(this.userID)
-    //     const competitionList = res.data
-    //     for (let i = 0; i < competitionList.length; i++) {
-    //       if (String(competitionList[i].competition_id) === this.problemID) {
-    //         this.joinText = '참여중'
-    //         this.alreadyJoined = true
-    //       }
-    //     }
-    //   } catch (err) {
-    //     console.log(err.response.data)
-    //   }
-    // },
+    async getUserStatus () {
+      try {
+        const res = await api.getCompetitionTAList(this.problemID)
+        const competitionList = res.data
+        for (let i = 0; i < competitionList.length; i++) {
+          if (String(competitionList[i].username) === this.userID) {
+            this.joinText = '참여중'
+            this.alreadyJoined = true
+          }
+        }
+      } catch (err) {
+        console.log(err.response.data)
+      }
+    },
     async getClassUserList () {
       try {
         const res = await api.getClassUserList(this.problemID)
@@ -273,6 +280,8 @@ export default {
         }
         res.data.start_time = GMTtoLocale(res.data.start_time)
         res.data.end_time = GMTtoLocale(res.data.end_time)
+        res.data.description = converter.makeHtml(res.data.description)
+        res.data.data_description = converter.makeHtml(res.data.data_description)
         this.problemInfo = res.data
       } catch (err) {
         console.log(err)
@@ -286,6 +295,7 @@ export default {
           console.log(res.data)
         } else {
           const res2 = await api.getCompetitionsLeaderboard(this.problemID)
+          console.log(res2.data)
           this.leaderboardList = res2.data
         }
       } catch (err) {
@@ -298,6 +308,8 @@ export default {
     async joinCompetition () {
       try {
         await api.joinCompetition(this.problemID)
+        alert('참여 완료되었습니다.')
+        this.$router.go(this.$router.currentRoute)
       } catch (err) {
         alert(err.response.data.error)
       }
@@ -331,11 +343,10 @@ export default {
         let res
         if (this.problemType === 'general') {
           res = await api.getUserCompetitionSubmissions(this.problemID, this.userID)
-          this.submitList = res.data
         } else if (this.problemType === 'class') {
           res = await api.getUserProblemSubmissions(page, this.userID, this.contestProblemID)
-          this.submitList = res.data.results
         }
+        this.submitList = res.data.results
         this.alreadyChecked()
         this.changeSubmissionListName()
 
@@ -352,7 +363,6 @@ export default {
         const formData = new FormData()
         formData.append('csv', this.csv)
         formData.append('ipynb', this.ipynb)
-        formData.append('ip_address', '123.123.1.12') // ip는 우선 static으로
 
         if (this.problemType === 'general') {
           await api.submitFileCompetition(
@@ -376,6 +386,7 @@ export default {
     },
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
+      console.log(files)
       const id = e.target.id
       if (id === 'csv-file-input') {
         this.csv = files[0]
@@ -398,6 +409,7 @@ export default {
             data)
         }
         alert('제출이 완료되었습니다.')
+        this.getLeaderboard()
       } catch (err) {
         console.log(err)
       }
@@ -409,8 +421,8 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 5rem 0rem;
-  @media (max-width: 414px) {
-    width: 360px;
+  @media (max-width: 420px) {
+    padding: 0rem 1rem;
   }
 
   .problem-header {
@@ -418,10 +430,25 @@ export default {
     align-items: flex-end;
     justify-content: space-between;
     padding: 3rem 0;
+    @media (max-width: 420px) {
+      display: block;
+    }
+
+    h1 {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      @media (max-width: 420px) {
+        width: 100%;
+        padding: 0rem;
+      }
+    }
 
     .btn {
       padding: 0.5rem 2rem;
-      font-size: calc(1.2rem + 0.3vw);
+      font-size: calc(1rem + 0.4vw);
       font-weight: bold;
       @media (max-width: 768px) {
         padding: 0.4rem 1.6rem;
@@ -438,76 +465,100 @@ export default {
     @media (max-width: 768px) {
       width: 100%;
     }
-  }
 
-  .list-group-item {
-    border: none;
-    padding: 1rem 0rem;
-    font-size: calc(1.175rem + 0.2vw);
-    border-radius: 0.75rem;
-    margin-bottom: 1rem;
-    @media (max-width: 768px) {
-      font-size: 18px;
+    .list-group-item {
+      border: none;
+      padding: 1rem 0rem;
+      font-size: calc(1.175rem + 0.2vw);
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      @media (max-width: 420px) {
+        font-size: 16px;
+      }
+    }
+
+    .list-group-item.active {
+      z-index: 2;
+      color: black;
+      font-weight: bold;
+      background-color: #F4F4F8;
+      border-color: #fff;
     }
   }
-  .list-group-item.active {
-    z-index: 2;
-    color: black;
-    font-weight: bold;
-    background-color: #F4F4F8;
-    border-color: #fff;
-  }
+
   .problem-tab-content {
     @media (max-width: 768px) {
       width: 100%;
     }
-  }
-  .tab-content {
-    background-color: #fff;
-    // border: 0.0625rem solid #D7E2EB;
-    margin-top: 1.5rem;
-    border-radius: 0.75rem;
-    box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
-    padding: 2rem 1rem;
 
-    .list-title {
-      padding: 0.5rem 2rem;
+    .tab-content {
+      background-color: #fff;
+      // border: 0.0625rem solid #D7E2EB;
       margin-top: 1.5rem;
-      font-weight: bold;
-    }
-    .period {
-      display: flex;
-      justify-content: center;
+      border-radius: 0.75rem;
+      box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 8%);
+      padding: 2rem 1rem;
 
-      @media (max-width: 768px) {
-        display: block;
-      }
-      h5 {
-        padding: 0rem 1rem;
+      .list-title {
+        padding: 0.5rem 2rem;
+        margin-top: 1.5rem;
         font-weight: bold;
       }
-      p {
-        margin-right: 10px;
+
+      .list-content {
+        margin-bottom: 2rem;
       }
-    }
-    .btn {
-      display: block;
-      margin-left: auto;
-      padding: 0.5rem 1.5rem;
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 2rem;
-    }
-    .form-control {
-      background-color: #F4F4F8;
-      border: none;
-      margin-bottom: 1rem;
-      line-height: 10;
-      color: #98A8B9;
-    }
-    .form-control::file-selector-button {
-        color: transparent;
+
+      h5 {
+        font-size: calc(1rem + 0.4vw);
+      }
+
+      .period {
+        display: flex;
+        justify-content: center;
+        @media (max-width: 768px) {
+          display: block;
+        }
+
+        h5 {
+          padding: 0rem 1rem;
+          font-weight: bold;
+        }
+
+        p {
+          margin-right: 10px;
+        }
+      }
+
+      .btn {
+        display: block;
+        margin-left: auto;
+        padding: 0.5rem 1.5rem;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 2rem;
+        @media (max-width: 420px) {
+          font-size: 14px;
+        }
+      }
+
+      .form-control {
         background-color: #F4F4F8;
+        border: none;
+        margin-bottom: 1rem;
+        line-height: 10;
+        color: #98A8B9;
+      }
+
+      .form-control::file-selector-button {
+          color: transparent;
+          background-color: #F4F4F8;
+      }
+
+      .file-desc {
+        color: rgb(0 0 0 / 50%);
+        font-size: 14px;
+      }
     }
   }
 }

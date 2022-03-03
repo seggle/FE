@@ -12,7 +12,7 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <div class="navbar-toggler-icon">☰</div>
+          <div class="navbar-toggler-icon"><font-awesome-icon icon="bars" /></div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Pills navs -->
@@ -85,17 +85,17 @@ export default {
 
 <style lang="scss" scoped>
 h1 {
-  padding: 0px 4rem;
+  padding: 0px 0rem;
   margin-bottom: 0rem;
 
   display: block;
-  width: 30%;
+  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   @media (max-width: 992px) {
-    width: 40%;
+    width: 50%;
     padding: 0rem;
   }
 }
@@ -115,13 +115,19 @@ h1 {
       display: block;
     }
   }
-
+  .nav-link {
+    border-radius: 30px;
+    // background-color: #060c20;
+  }
+  .active {
+    background-color: #060c20;
+  }
   .nav-item {
     padding: 0.5rem 1.5rem;
 
-    &:hover {
-      background-color: var(--bs-light);
-    }
+    // &:hover {
+    //   background-color: var(--bs-light);
+    // }
   }
 }
 </style>

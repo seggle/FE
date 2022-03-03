@@ -79,7 +79,7 @@ function submitCompetitionTAList (competitionID, data) {
 }
 
 function getCompetitionsLeaderboard (competitionID) {
-  return instance.get(`/leaderboards/competition/${competitionID}`)
+  return instance.get(`/leaderboards/competitions/${competitionID}`)
 }
 
 function getUserSubmissions (userID, competitionID, contestProblemID) {
@@ -256,7 +256,7 @@ function getAdminProblemList (page, keyword) {
 }
 
 function deleteAdminProblem (problemID) {
-  return instance.delete('/admin/problems/' + problemID)
+  return instance.delete(`/admin/problems/${problemID}`)
 }
 
 function changeAdminProblemSwitch (problemID) {

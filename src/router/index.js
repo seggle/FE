@@ -84,7 +84,7 @@ const routes = [{
   component: ProposalDetail
 },
 {
-  path: '/proposals/create',
+  path: '/proposals/:mode',
   name: 'ProposalCreate',
   component: ProposalCreate,
   meta: { auth: true } // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다

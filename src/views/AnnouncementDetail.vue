@@ -70,7 +70,8 @@ h1 {
   font-weight: bold;
   text-align: left;
 }
-.table {
+.table-div {
+  .table {
   min-width: 0px;
   text-align: left;
   white-space: normal;
@@ -102,6 +103,8 @@ h1 {
     white-space: nowrap;
   }
 }
+}
+
 .context {
   height: 300px;
 }

@@ -28,17 +28,15 @@
       </table>
     </div>
     <div class="container">
-      <!-- Button trigger modal -->
       <button
         type="button"
-        class="btn btn-primary btn-sm px-4 me-sm-3"
-        data-bs-toggle="modal"
-        data-bs-target="#proposalModal
-        "
+        class="btn btn-primary px-4 me-sm-3"
+        @click="goEdit(this.$route.params.id)"
         v-show="this.$store.state.userid === content.created_user"
       >
         편집
       </button>
+<<<<<<< HEAD
 
       <!-- Modal -->
       <div
@@ -110,9 +108,11 @@
         </div>
       </div>
 
+=======
+>>>>>>> 0646f52fda164e37d23c48d1ee277f9fee52b5ae
       <button
         @click="deleteProposal"
-        class="btn btn-primary btn-sm px-4 me-sm-3"
+        class="btn btn-primary px-4 me-sm-3"
         v-show="
           this.$store.state.userid === content.created_user ||
           this.$store.getters.isSuperAdmin
@@ -123,6 +123,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import api from '@/api/index.js'
 export default {
@@ -153,27 +154,9 @@ export default {
       try {
         const proposalId = this.$route.params.id
         if (confirm('삭제하시겠습니까?')) {
-          console.log(proposalId)
-          const res = await api.deleteProposal(proposalId)
-          console.log(res.data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async editProposal () {
-      try {
-        const data = {
-          title: this.title,
-          context: this.context
-        }
-        const proposalId = this.$route.params.id
-        console.log(proposalId)
-        if (confirm('저장하시겠습니까?')) {
-          const res = await api.editProposal(proposalId, data)
-          console.log(res.data)
-          alert('저장 완료')
-          this.$router.go()
+          await api.deleteProposal(proposalId)
+          alert('삭제되었습니다.')
+          this.goList()
         }
       } catch (error) {
         console.log(error)
@@ -190,10 +173,18 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    goEdit (proposalID) {
+      this.$router.push({
+        name: 'ProposalCreate',
+        params: { mode: 'edit' },
+        query: { id: proposalID }
+      })
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 h1 {
   font-weight: bold;
@@ -210,8 +201,8 @@ textarea {
   width: 100%;
   height: 200px;
 }
-
-.table {
+.table-div {
+  .table {
   min-width: 0px;
   text-align: left;
   white-space: normal;
@@ -242,6 +233,7 @@ textarea {
     overflow: hidden;
     white-space: nowrap;
   }
+}
 }
 
 .button-group {

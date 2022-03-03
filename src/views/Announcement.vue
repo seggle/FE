@@ -30,6 +30,7 @@
             v-for="announce in announcementImportantList"
             :key="announce"
             @click="goAnnouncementDetail(announce.id)"
+            style="background-color: #dddddd"
           >
             <th class="tableId" style="font-weight: bold" scope="row">중요</th>
             <td class="title">{{ announce.title }}</td>
@@ -69,7 +70,8 @@ export default {
       keyword: '',
       loading: false,
       PageValue: [],
-      currentPage: 1
+      currentPage: 1,
+      count: 0
     }
   },
   mounted () {
@@ -90,6 +92,7 @@ export default {
         this.announcementList = []
         this.announcementImportantList = []
         const res = await api.getAnnouncement(page, this.keyword)
+        this.count = res.data.count
         this.loading = false
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         if (res.data.count !== 0) {
@@ -169,14 +172,15 @@ h1 {
 .btnRightWrap .btnSearch {
   color: white;
 }
-.table {
+.table-div {
+  .table {
   min-width: 0px;
   text-align: left;
   white-space: normal;
   table-layout: fixed;
   th.tableId {
     @media (max-width: 767px) {
-      width: 40px;
+      width: 50px;
     }
     text-align: center;
   }
@@ -201,5 +205,6 @@ h1 {
     color: black;
     text-decoration: none;
   }
+}
 }
 </style>

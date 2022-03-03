@@ -1,5 +1,6 @@
 <template>
-  <ProblemForm :mode="'create'" :classID="classID" />
+  <ProblemForm :mode="'create'"
+               :classID="classID" />
 </template>
 
 <script>

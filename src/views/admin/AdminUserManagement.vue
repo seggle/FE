@@ -24,7 +24,7 @@
           <div class="modal-dialog admin-user modal-dialog-centered col-md-4">
             <div class="modal-content">
               <div class="modal-header">
-                <h5>사용자 정보 수정</h5>
+                <h4>사용자 정보 수정</h4>
                 <button
                   type="button"
                   class="btn-close"
@@ -35,23 +35,23 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <h5 style="float: left" class="col-3">아이디</h5>
-                  <input class="col-6" type="text" :value="userName" disabled />
+                  <input class="col-6 text" type="text" :value="userName" disabled />
                 </div>
                 <div class="mb-3">
                   <h5 style="float: left" class="col-3">이름</h5>
-                  <input class="col-6" type="text" :value="Name" disabled />
+                  <input class="col-6 text" type="text" :value="Name" disabled />
                 </div>
                 <div class="mb-3">
                   <h5 style="float: left" class="col-3">이메일</h5>
                   <input
-                    class="col-6"
+                    class="col-6 text"
                     type="text"
                     :value="userEmail"
                     disabled
                   />
                 </div>
                 <div class="mb-3">
-                  <h5 style="float: left" class="col-3">사용자유형</h5>
+                  <h5 style="float: left" class="col-3">권한</h5>
                   <select class="btn-toggle col-6" v-model="selected">
                     <option value="student">학생</option>
                     <option value="prof">교수</option>
@@ -252,14 +252,26 @@ export default {
     height: 1.8rem;
     font-size: calc(0.55rem + 1.5vw);
   }
+  .text,
+  .btn-toggle {
+    width: 70%;
+    font-size: calc(0.55rem + 1.5vw);
+  }
+  h5 {
+    width: 30%;
+    font-size: 1rem;
+  }
 }
+
 .btn-toggle {
-  border-width: thin;
+  border-width: medium;
   text-align: center;
+  border: 1px solid;
   background-color: transparent;
 }
-.table {
-  min-width:950px;
+.table-div {
+  .table {
+  min-width: 900px;
   table-layout: fixed;
   tbody {
     tr:hover {
@@ -272,12 +284,18 @@ export default {
     }
   }
 }
+}
 h1 {
   font-weight: bold;
   width: 60%;
   text-align: left;
   @media (max-width: 420px) {
     font-size: calc(1.2rem + 2vw);
+  }
+}
+.btn {
+  @media (max-width: 767px) {
+    font-size: calc(0.5rem + 2vw);
   }
 }
 </style>
