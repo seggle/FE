@@ -63,7 +63,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr :loading="loading" v-for="announcement in announcementList" :key="announcement">
+      <tr v-if="count===0"><td colspan="5">게시물이 없습니다.</td></tr>
+      <tr v-else :loading="loading" v-for="announcement in announcementList" :key="announcement">
         <th scope="row">{{ announcement.id }}</th>
         <td class="title">{{ announcement.title}}</td>
         <td>{{ announcement.created_time }}</td>
@@ -123,7 +124,8 @@ export default {
       loading: false,
       keyword: '',
       currentPage: 1,
-      PageValue: []
+      PageValue: [],
+      count: 0
     }
   },
   mounted () {
@@ -143,6 +145,7 @@ export default {
         this.currentPage = page
         this.PageValue = []
         this.loading = false
+        this.count = res.data.count
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.announcementList = res.data.results
         for (var i = 0; i < this.announcementList.length; i++) {
@@ -237,17 +240,19 @@ export default {
     font-size: calc(0.55rem + 1.5vw);
   }
 }
-.table {
-  min-width:950px;
-  table-layout: fixed;
-  tbody {
-    tr:hover {
-      cursor: default;
-    }
-    td.title {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+.table-div {
+  .table {
+    min-width:950px;
+    table-layout: fixed;
+    tbody {
+      tr:hover {
+        cursor: default;
+      }
+      td.title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
 }

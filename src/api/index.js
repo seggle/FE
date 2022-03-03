@@ -267,7 +267,7 @@ function getAdminProblemList (page, keyword) {
 }
 
 function deleteAdminProblem (problemID) {
-  return instance.delete('/admin/problems/' + problemID)
+  return instance.delete(`/admin/problems/${problemID}`)
 }
 
 function changeAdminProblemSwitch (problemID) {

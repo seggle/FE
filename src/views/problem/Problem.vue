@@ -295,6 +295,7 @@ export default {
           console.log(res.data)
         } else {
           const res2 = await api.getCompetitionsLeaderboard(this.problemID)
+          console.log(res2.data)
           this.leaderboardList = res2.data
         }
       } catch (err) {
