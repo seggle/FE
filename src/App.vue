@@ -172,7 +172,7 @@ nav {
 }
 a:hover {
   text-decoration: none;
-  color: white;
+  color: black;
 }
 a.admin:hover {
   text-decoration: underline;

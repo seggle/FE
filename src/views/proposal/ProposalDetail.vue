@@ -120,6 +120,7 @@ h1 {
   height: 300px;
 }
 pre {
+  background: transparent;
   font-size: 20px;
   font-weight: bold;
 }
