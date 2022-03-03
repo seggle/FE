@@ -63,7 +63,7 @@ export default {
   methods: {
     goClass (classID) {
       this.$router.push({
-        name: 'Class',
+        name: 'ClassProblem',
         params: { classID: classID }
       })
     },

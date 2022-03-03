@@ -13,7 +13,7 @@
                 @click="submitStudentForm"
         >등록</button>
       </form>
-      <form class="class-TA-form col-md-4">
+      <form v-if="privilege>1" class="class-TA-form col-md-4">
         <label for="class-TA" class="p-2 fs-4">TA</label>
         <textarea id="class-TA"
                   class="form-control mb-3 p-3" cols="30" rows="15"
@@ -37,7 +37,8 @@ export default {
     return {
       classID: this.$route.params.classID,
       studentlist: '',
-      talist: ''
+      talist: '',
+      privilege: 0
     }
   },
   mounted () {
@@ -46,6 +47,16 @@ export default {
   methods: {
     init () {
       this.getClassUserList()
+      this.getPrevilege()
+    },
+    async getPrevilege () {
+      const res = await api.getClassUserList(this.classID)
+      for (var i = 0; i < res.data.length; i++) {
+        if (res.data[i].username === this.$store.state.userid) {
+          this.privilege = res.data[i].privilege
+          break
+        }
+      }
     },
     async getClassUserList () {
       try {
