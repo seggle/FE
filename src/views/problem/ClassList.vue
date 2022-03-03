@@ -109,6 +109,11 @@ export default {
   }
 
   .table {
+    .col-1 {
+      @media (max-width: 420px) {
+        width: 50px;
+      }
+    }
     p {
       margin-bottom: 0;
       overflow: hidden;

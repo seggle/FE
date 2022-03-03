@@ -38,79 +38,6 @@
       >
         편집
       </button>
-      <<<<<<< HEAD
-
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="proposalModal"
-        tabindex="-1"
-        aria-labelledby="proposalModal
-        Label"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5
-                class="modal-title"
-                id="proposalModal
-              Label"
-              >
-                건의사항 편집
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <table class="table-div" style="width: 90%">
-                <tr>
-                  <th>제목</th>
-                  <td>
-                    <!-- v-model 양뱡향데이터전송으로 상세 데이터 넣어준다 -->
-                    <input type="text" v-model="title" style="width: 100%" />
-                  </td>
-                </tr>
-                <tr>
-                  <th>작성자</th>
-                  <td>
-                    <input
-                      type="text"
-                      v-model="content.created_user"
-                      disabled
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>수정일</th>
-                  <td>
-                    <input type="text" v-model="date" disabled />
-                  </td>
-                </tr>
-                <tr>
-                  <th>내용</th>
-                  <td><textarea v-model="context"></textarea></td>
-                </tr>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                @click="editProposal"
-                class="btn btn-primary"
-              >
-                저장
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      ======= >>>>>>> 0646f52fda164e37d23c48d1ee277f9fee52b5ae
       <button
         @click="deleteProposal"
         class="btn btn-primary px-4 me-sm-3"
@@ -126,64 +53,64 @@
 </template>
 
 <script>
-import api from '@/api/index.js'
+import api from "@/api/index.js";
 export default {
-  name: 'ProposalDetail',
+  name: "ProposalDetail",
   data: () => {
     return {
       content: {},
-      title: '',
-      context: '',
+      title: "",
+      context: "",
       date:
         new Date().getFullYear() +
-        '/' +
+        "/" +
         (new Date().getMonth() + 1) +
-        '/' +
-        new Date().getDate()
-    }
+        "/" +
+        new Date().getDate(),
+    };
   },
-  created () {
-    this.getContent()
+  created() {
+    this.getContent();
   },
   methods: {
-    goList () {
+    goList() {
       this.$router.push({
-        name: 'Proposal'
-      })
+        name: "Proposal",
+      });
     },
-    async deleteProposal () {
+    async deleteProposal() {
       try {
-        const proposalId = this.$route.params.id
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteProposal(proposalId)
-          alert('삭제되었습니다.')
-          this.goList()
+        const proposalId = this.$route.params.id;
+        if (confirm("삭제하시겠습니까?")) {
+          await api.deleteProposal(proposalId);
+          alert("삭제되었습니다.");
+          this.goList();
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
-    async getContent () {
+    async getContent() {
       try {
-        const proposalId = this.$route.params.id
-        const res = await api.getProposalDetail(proposalId)
-        this.content = res.data
-        this.content.created_time = res.data.created_time.slice(0, 10)
-        this.title = res.data.title
-        this.context = res.data.context
+        const proposalId = this.$route.params.id;
+        const res = await api.getProposalDetail(proposalId);
+        this.content = res.data;
+        this.content.created_time = res.data.created_time.slice(0, 10);
+        this.title = res.data.title;
+        this.context = res.data.context;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
-    goEdit (proposalID) {
+    goEdit(proposalID) {
       this.$router.push({
-        name: 'ProposalCreate',
-        params: { mode: 'edit' },
-        query: { id: proposalID }
-      })
-    }
-  }
-}
+        name: "ProposalCreate",
+        params: { mode: "edit" },
+        query: { id: proposalID },
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -195,6 +122,7 @@ h1 {
   height: 300px;
 }
 pre {
+  background: transparent;
   font-size: 20px;
   font-weight: bold;
 }
