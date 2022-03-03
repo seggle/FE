@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h1 id="title">{{ this.classInfo.name }}</h1>
     <ClassNavBar v-if="privilege > 0" :className="classInfo.name"/>
     <!--밑에 페이지가 뿌려짐-->
     <router-view></router-view>
@@ -50,6 +51,22 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+h1 {
+  padding: 0px 0rem;
+  margin-bottom: 0rem;
+  margin-top: 4rem;
+  text-align: center;
+  // display: block;
+  // max-width: 300px;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+  // white-space: nowrap;
 
+  @media (max-width: 992px) {
+    width: 100%;
+    padding: 0rem;
+    margin-top: 1rem;
+  }
+}
 </style>

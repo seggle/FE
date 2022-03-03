@@ -39,12 +39,47 @@ import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
 import EditProblem from '@/views/problem/EditProblem.vue'
 
+import api from '@/api/index.js'
+
 const requireAuth = () => (to, from, next) => {
   if (to.meta.isSuperAdmin && store.getters.isSuperAdmin) {
     return next()
   }
   alert('접근 권한이 없습니다.')
   next('/login')
+}
+
+const requireClassAuth = () => async (to, from, next) => {
+  try {
+    const res = await api.getClassUserList(to.params.classID)
+    const classList = res.data
+    for (let i = 0; i < classList.length; i++) {
+      if (classList[i].username === store.state.userid) {
+        return next()
+      }
+    }
+    alert('접근 권한이 없습니다.')
+    next('/')
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const requireClassAdminAuth = () => async (to, from, next) => {
+  try {
+    const res = await api.getClassUserList(to.params.classID)
+    const classList = res.data
+    console.log(classList)
+    for (let i = 0; i < classList.length; i++) {
+      if (classList[i].username === store.state.userid && classList[i].privilege > 0) {
+        return next()
+      }
+    }
+    alert('접근 권한이 없습니다.')
+    next(`/class/${to.params.classID}`)
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 const routes = [{
@@ -93,23 +128,27 @@ const routes = [{
   // 수업
   path: '/class/:classID',
   name: 'Class',
+  beforeEnter: requireClassAuth(),
   component: Class,
   meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
   children: [{
     path: 'all-problems',
     name: 'ClassAllProblem',
-    component: ClassAllProblem
+    component: ClassAllProblem,
+    beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'student-manage',
     name: 'ClassStudentManage',
     component: ClassStudentManage,
     meta: { isAdmin: true } // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+    // beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'exam-manage',
     name: 'ClassExamManage',
     component: ClassExamManage
+    // beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'class-problem',

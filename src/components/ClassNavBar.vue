@@ -1,8 +1,7 @@
 <template>
-  <div class="class-nav-bar py-5">
+  <div class="class-nav-bar py-4">
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <h1 id="title">{{ this.className }}</h1>
         <button
           class="navbar-toggler"
           type="button"
