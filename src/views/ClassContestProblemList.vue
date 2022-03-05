@@ -19,7 +19,7 @@
       <h1 class="me-auto">{{ contestTitle }}</h1>
       <div class="button-group">
         <button
-          v-if="this.$store.getters.isAdmin"
+          v-if="testMode && this.$store.getters.isAdmin"
           type="button"
           class="btn btn-sm px-4 me-sm-3"
           @click="goExamManage"
