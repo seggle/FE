@@ -11,7 +11,9 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <div class="navbar-toggler-icon"><font-awesome-icon icon="bars" /></div>
+          <div class="navbar-toggler-icon">
+            <font-awesome-icon icon="bars" />
+          </div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Pills navs -->
@@ -36,15 +38,6 @@
                 data-bs-toggle="pill"
                 role="tab"
                 >수강생 및 TA 관리</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                id="ClassExamManage"
-                data-bs-toggle="pill"
-                role="tab"
-                >시험 관리</a
               >
             </li>
             <li class="nav-item">

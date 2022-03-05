@@ -71,7 +71,10 @@ const requireClassAdminAuth = () => async (to, from, next) => {
     const classList = res.data
     console.log(classList)
     for (let i = 0; i < classList.length; i++) {
-      if (classList[i].username === store.state.userid && classList[i].privilege > 0) {
+      if (
+        classList[i].username === store.state.userid &&
+                classList[i].privilege > 0
+      ) {
         return next()
       }
     }
@@ -145,9 +148,10 @@ const routes = [{
     // beforeEnter: requireClassAdminAuth()
   },
   {
-    path: 'exam-manage',
+    path: 'exam-manage/:contestID',
     name: 'ClassExamManage',
-    component: ClassExamManage
+    component: ClassExamManage,
+    meta: { isAdmin: true }
     // beforeEnter: requireClassAdminAuth()
   },
   {

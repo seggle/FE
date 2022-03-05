@@ -30,31 +30,21 @@
               aria-labelledby="navbarDropdownBlog"
             >
               <li>
-                <a class="dropdown-item"
-                   href="/problem/general"
-                >일반</a>
+                <a class="dropdown-item" href="/problem/general">일반</a>
               </li>
               <li>
-                <a class="dropdown-item"
-                   href="/problem/class"
-                >수업 및 시험</a>
+                <a class="dropdown-item" href="/problem/class">수업 및 시험</a>
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link"
-                         href="/proposals"
-            >건의게시판</a>
+            <a class="nav-link" href="/proposals">건의게시판</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"
-                         href="/announcements"
-            >공지사항</a>
+            <a class="nav-link" href="/announcements">공지사항</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"
-                         href="/faqs"
-            >FAQ</a>
+            <a class="nav-link" href="/faqs">FAQ</a>
           </li>
         </ul>
         <!-- 로그인 했을 때 -->
@@ -106,6 +96,7 @@ export default {
       try {
         this.$store.dispatch('Logout')
         this.$router.push('/login')
+        localStorage.removeItem('test')
       } catch (err) {
         console.log(err)
       }
