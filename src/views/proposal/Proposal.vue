@@ -16,6 +16,7 @@
           </tr>
         </thead>
         <tbody>
+          <tr v-if="count===0"><td></td><td style="text-align: center;">등록된 게시물이 없습니다.</td><td></td><td></td></tr>
           <tr v-for="proposals in proList" :key="proposals" @click="goProposalDetail(proposals.id)">
             <td class="tableId">{{ proposals.id }}</td>
             <td class="proposal-title">{{proposals.title}}</td>
@@ -40,7 +41,8 @@ export default {
     return {
       proList: [],
       PageValue: [],
-      currentPage: 1
+      currentPage: 1,
+      count: 0
     }
   },
   mounted () {
@@ -64,6 +66,7 @@ export default {
         this.currentPage = page
         this.PageValue = []
         const res = await api.getProposal(page)
+        this.count = res.data.count
         this.PageValue.push({
           count: res.data.count,
           currentPage: this.currentPage

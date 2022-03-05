@@ -61,8 +61,6 @@ export default {
     async getClassUserList () {
       try {
         const res = await api.getClassUserList(this.classID)
-        this.studentlist = ''
-        this.talist = ''
         for (var i = 0; i < res.data.length; i++) {
           if (res.data[i].privilege === 0) {
             this.studentlist += res.data[i].username + '\n'
@@ -82,6 +80,7 @@ export default {
       }
       await api.submitClassTAList(this.classID, data)
       alert('TA 등록이 완료되었습니다.')
+      this.talist = ''
       this.getClassUserList()
     },
     async submitStudentForm () {
@@ -92,6 +91,7 @@ export default {
       }
       await api.submitClassStudentList(this.classID, data)
       alert('수강생 등록이 완료되었습니다.')
+      this.studentlist = ''
       this.getClassUserList()
     }
   }

@@ -29,6 +29,7 @@
           </tr>
         </thead>
         <tbody>
+          <tr v-if="count===0"><td colspan="5">등록된 대회가 없습니다.</td></tr>
           <tr v-for="(problem, i) in problemList" :key="problem"
               @click="goProblem(problem.id)">
             <!-- <th scope="row">{{ i + 1 }}</th> -->
@@ -67,7 +68,8 @@ export default {
   data () {
     return {
       problemList: [],
-      showModal: false
+      showModal: false,
+      count: 0
     }
   },
   mounted () {
@@ -77,6 +79,7 @@ export default {
     async getGeneralList () {
       try {
         const res = await api.getCompetitionList()
+        this.count = res.data.length
         this.problemList = res.data.reverse()
         this.setTime()
         this.setProgressBar()

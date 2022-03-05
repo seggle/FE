@@ -20,7 +20,6 @@
           <ul
             class="nav nav-pills mb-2 mb-lg-0"
             role="tablist"
-            @click="handleRoute"
           >
             <li class="nav-item">
               <a
@@ -28,6 +27,7 @@
                 id="ClassAllProblem"
                 data-bs-toggle="pill"
                 role="tab"
+                @click="handleRoute('ClassAllProblem')"
                 >전체 문제</a
               >
             </li>
@@ -37,15 +37,30 @@
                 id="ClassStudentManage"
                 data-bs-toggle="pill"
                 role="tab"
+                @click="handleRoute('ClassStudentManage')"
                 >수강생 및 TA 관리</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link"
+<<<<<<< HEAD
+=======
+                id="ClassExamManage"
+                data-bs-toggle="pill"
+                role="tab"
+                @click="handleRoute('ClassExamManage')"
+                >시험 관리</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+>>>>>>> 5faa11196cd360844152fe7e1612a9d002fa55f8
                 id="ClassProblem"
                 data-bs-toggle="pill"
                 role="tab"
+                @click="handleRoute('ClassProblem')"
                 >문제</a
               >
             </li>
@@ -66,9 +81,9 @@ export default {
   mounted () {},
   methods: {
     handleRoute (route) {
-      // a태그의 id와 router index.js의 name과 동일해야함
       this.$router.push({
-        name: route.path[0].id
+        name: route,
+        params: this.$route.params.classID
       })
     }
   }

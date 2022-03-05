@@ -26,6 +26,8 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="!this.$store.getters.isLogin"><td colspan="3">로그인 후 이용가능합니다.</td></tr>
+        <tr v-else-if="count===0"><td colspan="3">등록된 수업이 없습니다.</td></tr>
         <tr
           v-for="classes in classList"
           :key="classes"
@@ -54,7 +56,8 @@ export default {
     return {
       userID: this.$store.state.userid,
       classList: [],
-      showModal: false
+      showModal: false,
+      count: 0
     }
   },
   mounted () {
@@ -73,6 +76,7 @@ export default {
     async getClassList () {
       try {
         const res = await api.getClassList()
+        this.count = res.data.length
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].is_show) {
             this.classList.push(res.data[i])
