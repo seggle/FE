@@ -58,20 +58,20 @@
 
 <script>
 export default {
-  name: "ClassNavBar",
+  name: 'ClassNavBar',
   props: {
-    className: String,
+    className: String
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    handleRoute(route) {
+    handleRoute (route) {
       this.$router.push({
         name: route,
-        params: this.$route.params.classID,
-      });
-    },
-  },
-};
+        params: this.$route.params.classID
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
