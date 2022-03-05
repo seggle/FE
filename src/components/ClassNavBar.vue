@@ -17,10 +17,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Pills navs -->
-          <ul
-            class="nav nav-pills mb-2 mb-lg-0"
-            role="tablist"
-          >
+          <ul class="nav nav-pills mb-2 mb-lg-0" role="tablist">
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -44,19 +41,6 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-<<<<<<< HEAD
-=======
-                id="ClassExamManage"
-                data-bs-toggle="pill"
-                role="tab"
-                @click="handleRoute('ClassExamManage')"
-                >시험 관리</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
->>>>>>> 5faa11196cd360844152fe7e1612a9d002fa55f8
                 id="ClassProblem"
                 data-bs-toggle="pill"
                 role="tab"
@@ -74,20 +58,20 @@
 
 <script>
 export default {
-  name: 'ClassNavBar',
+  name: "ClassNavBar",
   props: {
-    className: String
+    className: String,
   },
-  mounted () {},
+  mounted() {},
   methods: {
-    handleRoute (route) {
+    handleRoute(route) {
       this.$router.push({
         name: route,
-        params: this.$route.params.classID
-      })
-    }
-  }
-}
+        params: this.$route.params.classID,
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
