@@ -2,7 +2,9 @@
   <div class="container">
     <div class="d-flex mb-2 mt-3">
       <div class="button-group">
-        <button @click="goList" class="btn" id="head"><font-awesome-icon icon="angle-left" /> 목록</button>
+        <button @click="goList" class="btn" id="head">
+          <font-awesome-icon icon="angle-left" /> 목록
+        </button>
       </div>
     </div>
     <div class="table-div">
@@ -130,43 +132,41 @@ textarea {
 }
 .table-div {
   .table {
-  min-width: 0px;
-  text-align: left;
-  white-space: normal;
-  table-layout: fixed;
-  tbody {
-    tr:hover {
-      background-color: transparent;
-      cursor: default;
-    }
-  }
-  tr {
-    td {
-      text-align: left;
-      @media (max-width: 420px) {
-        font-size: calc(0.55rem + 2vw);
+    min-width: 0px;
+    text-align: left;
+    white-space: normal;
+    table-layout: fixed;
+    tbody {
+      tr:hover {
+        background-color: transparent;
+        cursor: default;
       }
     }
-    h5 {
-      text-align: center;
-      font-weight: bold;
-      @media (max-width: 420px) {
-        font-size: calc(0.7rem + 2vw);
+    tr {
+      td {
+        text-align: left;
+        @media (max-width: 420px) {
+          font-size: calc(0.55rem + 2vw);
+        }
+      }
+      h5 {
+        text-align: center;
+        font-weight: bold;
+        @media (max-width: 420px) {
+          font-size: calc(0.7rem + 2vw);
+        }
       }
     }
-  }
-  td.title {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    td.title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
 }
-}
-
 .button-group {
   margin-left: auto;
 }
-
 .btn {
   @media (max-width: 767px) {
     margin-right: 0px;

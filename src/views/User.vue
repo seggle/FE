@@ -16,6 +16,7 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">문제제목</th>
+          <th scope="col">시작 날짜</th>
           <th scope="col"></th>
           <th scope="col"></th>
           <th scope="col">마감 날짜</th>
@@ -23,17 +24,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(problems, index) in problemList" :key="index">
+        <tr
+          v-for="(problems, i) in problemList"
+          :key="problems"
+          @click="goProblem(problems.id)"
+        >
           <td>{{ problemList.indexOf(problems, 0) + 1 }}</td>
-          <td>{{ problems.problem_title }}</td>
-          <td><progress max="100" value="70">70%</progress></td>
-          <td>D- {{ d_day[index] }}</td>
-          <td>{{ problems.competition_end_time.slice(0, 10) }}</td>
+          <td>{{ problems.title }}</td>
+          <td>{{ problems.start_time }}</td>
           <td>
-            {{ problems.competition_user_rank }}/{{
-              problems.competition_user_total
-            }}
+            <div class="progress">
+              <div
+                class="progress-bar"
+                :class="this.problemList[i].progressBar.type"
+                role="progressbar"
+                :style="{ width: this.problemList[i].progressBar.value + '%' }"
+                :aria-valuenow="this.problemList[i].progressBar.value"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
           </td>
+          <td>{{ problems.dday }}</td>
+          <td>{{ problems.end_time }}</td>
+          <td>{{ problems.rank }}/{{ problems.user_total }}</td>
         </tr>
       </tbody>
     </table>
@@ -52,11 +66,12 @@ export default {
       problemList: [],
       heatmapValues: [],
       d_day: [],
-      endDate: '2021-11-21'
+      endDate: '2022-11-21'
     }
   },
   created () {
-    this.showUserInfo()
+    this.showUserCompetition()
+    this.showUserHeatmap()
   },
   methods: {
     goResign () {
@@ -69,33 +84,109 @@ export default {
         name: 'ResetPassword'
       })
     },
-    async showUserInfo () {
-      var username = this.$store.state.userid
+    async showUserCompetition () {
+      const username = this.$store.state.userid
       try {
-        const res1 = await api.showUserCompetition(username)
-        const res2 = await api.showUserCompetition(username)
-        this.problemList = res1.data
-        this.heatmapValues = res2.data
-        console.log(res1.data)
-        console.log(res2.data)
-        for (var i = 0; i < this.problemList.length; i++) {
-          var time = this.problemList[i].competition_end_time
-          var year = time.slice(0, 4)
-          var month = time.slice(5, 7)
-          var date = time.slice(8, 10)
-          year = Number(year)
-          month = Number(month) - 1
-          date = Number(date)
-          console.log(year, month, date)
-          var dday = new Date(year, month, date)
-          var gap = dday.getTime() - new Date().getTime()
-          var result = Math.ceil(gap / (1000 * 60 * 60 * 24))
-          console.log(result)
-          this.d_day.push(result)
-        }
+        const res = await api.showUserCompetition(username)
+        this.problemList = res.data.reverse()
+        console.log(res.data)
+        this.setTime()
+        this.setProgressBar()
+        this.problemList.sort((a, b) => {
+          if (a.start_end < b.start_end) return 1
+          else if (a.start_end > b.start_end) return -1
+        })
+        this.problemList.sort((a, b) => {
+          if ((a.start_end >= 0) & (b.start_end >= 0)) {
+            if (a.diffDay > b.diffDay) return 1
+            else if (a.diffDay < b.diffDay) return -1
+          }
+        })
+        console.log(this.problemList)
       } catch (error) {
         console.log(error)
       }
+    },
+    async showUserHeatmap () {
+      const username = this.$store.state.userid
+
+      try {
+        const res = await api.showUserHeatmap(username)
+        this.heatmapValues = res.data
+        console.log(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    setTime () {
+      for (let i = 0; i < this.problemList.length; i++) {
+        const startTime = this.problemList[i].start_time.substring(0, 10)
+        const endTime = this.problemList[i].end_time.substring(0, 10)
+        this.problemList[i].start_time = startTime
+        this.problemList[i].end_time = endTime
+        // D-Day 설정
+        const startDate = new Date(startTime.replace(/-/g, '/'))
+        const endDate = new Date(endTime.replace(/-/g, '/'))
+        const today = new Date()
+        endDate.setHours(23, 59, 59, 0)
+        today.setHours(0, 0, 0, 0)
+        let starttoend = endDate.getTime() - startDate.getTime()
+        starttoend = Math.floor(starttoend / (1000 * 60 * 60 * 24)) + 1
+        if (startDate > today) {
+          let interval = startDate.getTime() - today.getTime()
+          interval = Math.floor(interval / (1000 * 60 * 60 * 24))
+          this.problemList[i].dday = 'OPEN D - ' + interval
+          this.problemList[i].start_end = -1
+          this.problemList[i].diffDay = -1
+        } else if ((startDate <= today) & (endDate >= today)) {
+          this.problemList[i].start_end = starttoend
+          let interval = endDate.getTime() - today.getTime()
+          interval = Math.floor(interval / (1000 * 60 * 60 * 24))
+          if (interval === 0) {
+            this.problemList[i].dday = 'D - Day'
+            this.problemList[i].diffDay = 0
+          } else {
+            this.problemList[i].dday = 'D - ' + interval
+            this.problemList[i].diffDay = interval
+          }
+        } else {
+          this.problemList[i].start_end = -2
+          this.problemList[i].dday = '종료'
+          this.problemList[i].diffDay = -1
+        }
+      }
+    },
+    setProgressBar () {
+      for (let i = 0; i < this.problemList.length; i++) {
+        const progress = {}
+        if (this.problemList[i].start_end === -1) {
+          progress.value = 0
+          progress.type = 'bg-secondary'
+        } else if (this.problemList[i].start_end === -2) {
+          progress.value = 100
+          progress.type = 'bg-secondary'
+        } else {
+          progress.value =
+            100 -
+            (this.problemList[i].diffDay / this.problemList[i].start_end) * 100
+          if (progress.value <= 50) {
+            progress.type = 'bg-info'
+          } else if (progress.value <= 70) {
+            progress.type = 'bg-warning'
+          } else if (progress.value === 100) {
+            progress.type = 'bg-success'
+          } else {
+            progress.type = 'bg-danger'
+          }
+        }
+        this.problemList[i].progressBar = progress
+      }
+    },
+    goProblem (problemID) {
+      this.$router.push({
+        name: 'Problem',
+        params: { problemType: 'general', problemID: problemID }
+      })
     }
   }
 }

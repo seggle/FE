@@ -11,7 +11,9 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <div class="navbar-toggler-icon"><font-awesome-icon icon="bars" /></div>
+          <div class="navbar-toggler-icon">
+            <font-awesome-icon icon="bars" />
+          </div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <!-- Pills navs -->
@@ -42,6 +44,8 @@
             <li class="nav-item">
               <a
                 class="nav-link"
+<<<<<<< HEAD
+=======
                 id="ClassExamManage"
                 data-bs-toggle="pill"
                 role="tab"
@@ -52,6 +56,7 @@
             <li class="nav-item">
               <a
                 class="nav-link"
+>>>>>>> 5faa11196cd360844152fe7e1612a9d002fa55f8
                 id="ClassProblem"
                 data-bs-toggle="pill"
                 role="tab"

@@ -17,14 +17,19 @@
   <div v-else class="container">
     <div class="d-flex">
       <h1 class="me-auto">{{ contestTitle }}</h1>
-      <div>
+      <div class="button-group">
         <button
-          v-if="this.$store.state.usertype !== '0'"
+          v-if="this.$store.getters.isAdmin"
           type="button"
           class="btn btn-sm px-4 me-sm-3"
-          data-bs-toggle="modal"
-          data-bs-target="#problemModal
-        "
+          @click="goExamManage"
+        >
+          시험관리
+        </button>
+        <button
+          v-if="this.$store.getters.isAdmin"
+          type="button"
+          class="btn btn-sm px-4 me-sm-3"
           @click="goEdit"
         >
           문제 편집
@@ -102,6 +107,14 @@ export default {
     },
     goEdit () {
       this.$router.push({ name: 'ClassContestProblemListEdit' })
+    },
+    goExamManage () {
+      const classID = this.classID
+      const contestID = this.contestID
+      this.$router.push({
+        name: 'ClassExamManage',
+        params: { classID: classID, contestID: contestID }
+      })
     },
     async getProblemList (contestID) {
       try {
