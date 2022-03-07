@@ -139,7 +139,7 @@ export default {
           await api.editContest(this.classID, this.contestInfo.id, data)
         }
         alert(`${this.contestInfo.title}이(가) 등록되었습니다.`)
-        this.$router.go({ name: 'ClassProblem' })
+        this.$router.go({ name: 'ClassContest' })
       } catch (err) {
         console.log(err)
       }

@@ -1,4 +1,4 @@
-<!--시험모드인 contest이면서 학생인 경우--->
+<!--시험모드인 contest이면서 학생인 경우-->
 <template>
   <div
     v-if="testMode && testStart === null && this.$store.state.usertype === '0'"

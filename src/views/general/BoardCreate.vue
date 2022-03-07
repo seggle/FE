@@ -44,7 +44,7 @@
 <script>
 import api from '@/api/index.js'
 export default {
-  name: 'ProposalCreate',
+  name: 'BoardCreate',
   data: () => {
     return {
       proposalTitle: '',
@@ -66,7 +66,7 @@ export default {
     },
     goList () {
       this.$router.push({
-        name: 'Proposal'
+        name: 'Board'
       })
     },
     async submitProposal () {
@@ -80,7 +80,7 @@ export default {
         } else {
           await api.editProposal(this.$route.query.id, data)
         }
-        this.$router.push({ path: '/proposals' })
+        this.$router.push({ path: '/board' })
       } catch (err) {
         console.log(err)
       }

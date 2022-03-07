@@ -1,40 +1,40 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
-import Admin from '../views/admin/Admin.vue'
-import AdminAllProblems from '../views/admin/AdminAllProblems.vue'
-import AdminAnnouncment from '../views/admin/AdminAnnouncement.vue'
-import AdminFaq from '../views/admin/AdminFaq.vue'
-import AdminUserManagement from '../views/admin/AdminUserManagement.vue'
-import AdminAllClasses from '../views/admin/AdminAllClasses.vue'
+import Admin from '@/views/admin/Admin.vue'
+import AdminAllProblems from '@/views/admin/AdminAllProblems.vue'
+import AdminAnnouncment from '@/views/admin/AdminAnnouncement.vue'
+import AdminFaq from '@/views/admin/AdminFaq.vue'
+import AdminUserManagement from '@/views/admin/AdminUserManagement.vue'
+import AdminAllClasses from '@/views/admin/AdminAllClasses.vue'
 
-import Class from '@/views/Class.vue'
-import ClassAllProblem from '@/views/ClassAllProblem.vue'
-import ClassStudentManage from '@/views/ClassStudentManage.vue'
-import ClassExamManage from '@/views/ClassExamManage.vue'
-import ClassProblem from '@/views/ClassProblem.vue'
-import ClassContestProblemList from '@/views/ClassContestProblemList.vue'
-import ClassContestProblemListEdit from '@/views/ClassContestProblemListEdit.vue'
+import Class from '@/views/class/Class.vue'
+import ClassAllProblem from '@/views/class/ClassAllProblem.vue'
+import ClassStudentManage from '@/views/class/ClassStudentManage.vue'
+import ClassExamManage from '@/views/class/ClassExamManage.vue'
+import ClassContest from '@/views/class/ClassContest.vue'
+import ClassContestProblemList from '@/views/class/ClassContestProblemList.vue'
+import ClassContestProblemListEdit from '@/views/class/ClassContestProblemListEdit.vue'
+import ClassList from '@/views/class/ClassList.vue'
+import EditClassList from '@/views/class/EditClassList.vue'
 
 import Login from '@/views/users/Login.vue'
 import Register from '@/views/users/Register.vue'
 import FindPassword from '@/views/users/FindPassword.vue'
 import ResetPassword from '@/views/users/ResetPassword.vue'
 import Resign from '@/views/users/Resign.vue'
+import User from '@/views/users/User.vue'
 
-import Home from '../views/Home.vue'
-import User from '../views/User.vue'
+import Home from '@/views/general/Home.vue'
+import FAQ from '@/views/general/FAQ.vue'
+import Announcement from '@/views/general/Announcement.vue'
+import AnnouncementDetail from '@/views/general/AnnouncementDetail.vue'
+import Board from '@/views/general/Board.vue'
+import BoardDetail from '@/views/general/BoardDetail.vue'
+import BoardCreate from '@/views/general/BoardCreate.vue'
 
-import FAQ from '../views/FAQ.vue'
-import Announcement from '../views/Announcement.vue'
-import AnnouncementDetail from '../views/AnnouncementDetail.vue'
-import Proposal from '../views/proposal/Proposal.vue'
-import ProposalDetail from '../views/proposal/ProposalDetail.vue'
-import ProposalCreate from '../views/proposal/ProposalCreate.vue'
+import CompetitionList from '@/views/competition/CompetitionList.vue'
 
-import GeneralList from '@/views/problem/GeneralList.vue'
-import ClassList from '@/views/problem/ClassList.vue'
-import EditClassList from '@/views/problem/EditClassList.vue'
 import Problem from '@/views/problem/Problem.vue'
 import CreateProblem from '@/views/problem/CreateProblem.vue'
 import EditProblem from '@/views/problem/EditProblem.vue'
@@ -59,6 +59,7 @@ const requireAdminAuth = () => (to, from, next) => {
 
 const requireClassAuth = () => async (to, from, next) => {
   try {
+    console.log(to.params.classID)
     const res = await api.getClassUserList(to.params.classID)
     const classList = res.data
     for (let i = 0; i < classList.length; i++) {
@@ -127,7 +128,7 @@ const routes = [{
   path: '/users',
   name: 'User',
   component: User,
-  meta: { auth: true } // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  meta: { auth: true }
 },
 {
   path: '/faqs',
@@ -145,20 +146,20 @@ const routes = [{
   component: AnnouncementDetail
 },
 {
-  path: '/proposals',
-  name: 'Proposal',
-  component: Proposal
+  path: '/board',
+  name: 'Board',
+  component: Board
 },
 {
-  path: '/proposals/:id',
-  name: 'ProposalDetail',
-  component: ProposalDetail
+  path: '/board/:id',
+  name: 'BoardDetail',
+  component: BoardDetail
 },
 {
-  path: '/proposals/:mode',
-  name: 'ProposalCreate',
-  component: ProposalCreate,
-  meta: { auth: true } // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  path: '/board/:mode',
+  name: 'BoardCreate',
+  component: BoardCreate,
+  meta: { auth: true }
 },
 {
   // 수업
@@ -166,7 +167,7 @@ const routes = [{
   name: 'Class',
   beforeEnter: requireClassAuth(),
   component: Class,
-  meta: { auth: true }, // 로그인 권한이 필요한 페이지에 해당 태그를 작성하면 됩니다
+  meta: { auth: true },
   children: [{
     path: 'all-problems',
     name: 'ClassAllProblem',
@@ -177,7 +178,7 @@ const routes = [{
     path: 'student-manage',
     name: 'ClassStudentManage',
     component: ClassStudentManage,
-    meta: { isAdmin: true }, // 교수, superadmin의 권한이 필요한 페이지에 작성하면 됩니다
+    meta: { isAdmin: true },
     beforeEnter: requireClassAdminAuth()
   },
   {
@@ -185,13 +186,12 @@ const routes = [{
     name: 'ClassExamManage',
     component: ClassExamManage,
     meta: { isAdmin: true },
-    // beforeEnter: requireClassAdminAuth()
     beforeEnter: requireClassAdminAuth()
   },
   {
-    path: 'class-problem',
-    name: 'ClassProblem',
-    component: ClassProblem,
+    path: 'class-contest',
+    name: 'ClassContest',
+    component: ClassContest,
     meta: { isAdmin: true },
     children: [{
       path: ':contestID',
@@ -268,9 +268,9 @@ const routes = [{
   component: Resign
 },
 {
-  path: '/problem/general',
-  name: 'GeneralList',
-  component: GeneralList
+  path: '/problem/competition',
+  name: 'CompetitionList',
+  component: CompetitionList
 },
 {
   path: '/problem/class',
@@ -295,6 +295,7 @@ const routes = [{
   path: '/:problemType/create-problem',
   name: 'CreateProblem',
   component: CreateProblem,
+  meta: { isAdmin: true },
   beforeEnter: requireAdminAuth()
 },
 {

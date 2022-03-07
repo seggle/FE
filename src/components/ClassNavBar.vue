@@ -44,7 +44,7 @@
                 id="ClassProblem"
                 data-bs-toggle="pill"
                 role="tab"
-                @click="handleRoute('ClassProblem')"
+                @click="handleRoute('ClassContest')"
                 >문제</a
               >
             </li>

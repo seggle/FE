@@ -66,7 +66,7 @@ export default {
   methods: {
     goClass (classID) {
       this.$router.push({
-        name: 'ClassProblem',
+        name: 'ClassContest',
         params: { classID: classID }
       })
     },

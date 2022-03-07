@@ -11,7 +11,7 @@
 <script>
 import ClassContestNav from '@/components/ClassContestNav.vue'
 export default {
-  name: 'ClassProblem',
+  name: 'ClassContest',
   components: {
     ClassContestNav
   }

@@ -61,7 +61,7 @@ import api from '@/api/index.js'
 import ModalCompetitionAdmin from '@/components/ModalCompetitionAdmin.vue'
 
 export default {
-  name: 'GeneralList',
+  name: 'CompetitionList',
   components: {
     ModalCompetitionAdmin
   },

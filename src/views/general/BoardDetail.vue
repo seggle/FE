@@ -55,7 +55,7 @@
 <script>
 import api from '@/api/index.js'
 export default {
-  name: 'ProposalDetail',
+  name: 'BoardDetail',
   data: () => {
     return {
       content: {},
@@ -75,7 +75,7 @@ export default {
   methods: {
     goList () {
       this.$router.push({
-        name: 'Proposal'
+        name: 'Board'
       })
     },
     async deleteProposal () {
@@ -104,7 +104,7 @@ export default {
     },
     goEdit (proposalID) {
       this.$router.push({
-        name: 'ProposalCreate',
+        name: 'BoardCreate',
         params: { mode: 'edit' },
         query: { id: proposalID }
       })
