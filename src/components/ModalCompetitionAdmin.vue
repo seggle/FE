@@ -119,10 +119,9 @@ export default {
     },
     goEditCompetition (competitionID) {
       this.$router.push({
-        name: 'EditProblem',
+        name: 'EditCompetition',
         params: {
-          problemType: 'general',
-          problemID: competitionID
+          competitionID: competitionID
         }
       })
     }

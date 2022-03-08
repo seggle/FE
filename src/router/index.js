@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
+import {
+  requireAuth,
+  requireAdminAuth,
+  requireClassAuth,
+  requireClassAdminAuth,
+  requireCompetitionAdminAuth
+} from './auth.js'
 
 import Admin from '@/views/admin/Admin.vue'
 import AdminAllProblems from '@/views/admin/AdminAllProblems.vue'
@@ -17,6 +24,10 @@ import ClassContestProblemList from '@/views/class/ClassContestProblemList.vue'
 import ClassContestProblemListEdit from '@/views/class/ClassContestProblemListEdit.vue'
 import ClassList from '@/views/class/ClassList.vue'
 import EditClassList from '@/views/class/EditClassList.vue'
+import ClassProblem from '@/views/class/ClassProblem.vue'
+import ClassContestProblem from '@/views/class/ClassContestProblem.vue'
+import CreateClassProblem from '@/views/class/CreateClassProblem.vue'
+import EditClassProblem from '@/views/class/EditClassProblem.vue'
 
 import Login from '@/views/users/Login.vue'
 import Register from '@/views/users/Register.vue'
@@ -34,90 +45,9 @@ import BoardDetail from '@/views/general/BoardDetail.vue'
 import BoardCreate from '@/views/general/BoardCreate.vue'
 
 import CompetitionList from '@/views/competition/CompetitionList.vue'
-
-import Problem from '@/views/problem/Problem.vue'
-import CreateProblem from '@/views/problem/CreateProblem.vue'
-import EditProblem from '@/views/problem/EditProblem.vue'
-
-import api from '@/api/index.js'
-
-const requireAuth = () => (to, from, next) => {
-  if (to.meta.isSuperAdmin && store.getters.isSuperAdmin) {
-    return next()
-  }
-  alert('접근 권한이 없습니다.')
-  next('/login')
-}
-
-const requireAdminAuth = () => (to, from, next) => {
-  if (to.meta.isAdmin && store.getters.isAdmin) {
-    return next()
-  }
-  alert('접근 권한이 없습니다.')
-  next('/login')
-}
-
-const requireClassAuth = () => async (to, from, next) => {
-  try {
-    console.log(to.params.classID)
-    const res = await api.getClassUserList(to.params.classID)
-    const classList = res.data
-    for (let i = 0; i < classList.length; i++) {
-      if (classList[i].username === store.state.userid) {
-        return next()
-      }
-    }
-    alert('접근 권한이 없습니다.')
-    next('/')
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-const requireClassAdminAuth = () => async (to, from, next) => {
-  try {
-    const res = await api.getClassUserList(to.params.classID)
-    const classList = res.data
-    console.log(classList)
-    for (let i = 0; i < classList.length; i++) {
-      if (
-        classList[i].username === store.state.userid &&
-                classList[i].privilege > 0
-      ) {
-        return next()
-      }
-    }
-    alert('접근 권한이 없습니다.')
-    next(`/class/${to.params.classID}`)
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-const requireCompetitionAdminAuth = () => async (to, from, next) => {
-  try {
-    let res
-    if (to.params.problemType === 'general') {
-      res = await api.getCompetitionTAList(to.params.problemID)
-      const competitionList = res.data
-
-      for (let i = 0; i < competitionList.length; i++) {
-        if (
-          competitionList[i].username === store.state.userid &&
-                    competitionList[i].privilege > 0
-        ) {
-          return next()
-        }
-      }
-      alert('접근 권한이 없습니다.')
-      next('/')
-    } else {
-      return next()
-    }
-  } catch (err) {
-    console.log(err)
-  }
-}
+import Competition from '@/views/competition/Competition.vue'
+import CreateCompetition from '@/views/competition/CreateCompetition.vue'
+import EditCompetition from '@/views/competition/EditCompetition.vue'
 
 const routes = [{
   path: '/',
@@ -267,13 +197,34 @@ const routes = [{
   name: 'Resign',
   component: Resign
 },
+
 {
-  path: '/problem/competition',
+  path: '/competition',
   name: 'CompetitionList',
   component: CompetitionList
 },
 {
-  path: '/problem/class',
+  path: '/competition/:competitionID',
+  name: 'Competition',
+  component: Competition
+},
+{
+  path: '/competition/create',
+  name: 'CreateCompetition',
+  component: CreateCompetition,
+  meta: { isAdmin: true },
+  beforeEnter: requireAdminAuth()
+},
+{
+  path: '/competition/edit/:competitionID',
+  name: 'EditCompetition',
+  component: EditCompetition,
+  meta: { isAdmin: true },
+  beforeEnter: requireAdminAuth()
+},
+
+{
+  path: '/class',
   name: 'ClassList',
   component: ClassList
 },
@@ -283,13 +234,28 @@ const routes = [{
   component: EditClassList
 },
 {
-  path: '/problem/:problemType/:problemID',
-  name: 'Problem',
-  component: Problem,
-  children: [{
-    path: ':contestID/:contestProblemID',
-    component: Problem
-  }]
+  path: '/class/:problemID',
+  name: 'ClassProblem',
+  component: ClassProblem
+},
+{
+  path: '/class/:classID/:contestID/:contestProblemID',
+  name: 'ClassContestProblem',
+  component: ClassContestProblem
+},
+{
+  path: '/class/create/:classID',
+  name: 'CreateClassProblem',
+  component: CreateClassProblem,
+  meta: { isAdmin: true },
+  beforeEnter: requireAdminAuth()
+},
+{
+  path: '/class/edit/:classID/:problemID',
+  name: 'EditClassProblem',
+  component: EditClassProblem,
+  meta: { isAdmin: true },
+  beforeEnter: requireCompetitionAdminAuth()
 }
 ]
 

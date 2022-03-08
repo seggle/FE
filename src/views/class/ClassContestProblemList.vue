@@ -126,7 +126,6 @@ export default {
             this.testMode = this.contestList[i].is_exam
           }
         }
-        console.log(this.testMode)
       } catch (error) {
         console.log(error)
       }
@@ -136,9 +135,6 @@ export default {
         this.problemList.sort(function (a, b) {
           return a.order - b.order
         })
-        console.log(typeof this.problemList)
-        console.log(this.problemList)
-        console.log(this.testMode, this.testStart, this.$store.state.usertype)
       } catch (error) {
         console.log(error)
       }
@@ -151,12 +147,10 @@ export default {
         today.getTime() >= startTime.getTime() &&
         today.getTime() <= endTime.getTime()
       ) {
-        // console.log('router push 로 이동하기' + problemID)
         this.$router.push({
-          name: 'Problem',
+          name: 'ClassContestProblem',
           params: {
-            problemType: 'class',
-            problemID: this.classID,
+            classID: this.classID,
             contestID: this.contestID,
             contestProblemID: problemID
           }

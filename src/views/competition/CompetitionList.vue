@@ -161,14 +161,13 @@ export default {
     },
     goCreateProblem () {
       this.$router.push({
-        name: 'CreateProblem',
-        params: { problemType: 'general' }
+        name: 'CreateCompetition'
       })
     },
     goProblem (problemID) {
       this.$router.push({
-        name: 'Problem',
-        params: { problemType: 'general', problemID: problemID }
+        name: 'Competition',
+        params: { competitionID: problemID }
       })
     }
   }

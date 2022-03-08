@@ -30,10 +30,10 @@
               aria-labelledby="navbarDropdownBlog"
             >
               <li>
-                <a class="dropdown-item" href="/problem/competition">일반</a>
+                <a class="dropdown-item" href="/competition">일반</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/problem/class">수업 및 시험</a>
+                <a class="dropdown-item" href="/class">수업 및 시험</a>
               </li>
             </ul>
           </li>

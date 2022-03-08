@@ -116,8 +116,10 @@ export default {
     },
     goProblem (problemID) {
       this.$router.push({
-        name: 'Problem',
-        params: { problemType: 'class', problemID: problemID }
+        name: 'ClassProblem',
+        params: {
+          problemID: problemID
+        }
       })
     },
     async deleteProblem (problemID) {
@@ -134,19 +136,17 @@ export default {
       try {
         if (typeof problemID === 'undefined') {
           this.$router.push({
-            name: 'CreateProblem',
+            name: 'CreateClassProblem',
             params: {
-              problemType: 'class',
               classID: this.$route.params.classID
             }
           })
         } else {
           this.$router.push({
-            name: 'EditProblem',
+            name: 'EditClassProblem',
             params: {
-              problemType: 'class',
-              problemID: problemID,
-              classID: this.$route.params.classID
+              classID: this.$route.params.classID,
+              problemID: problemID
             }
           })
         }
