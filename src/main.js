@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import jQuery from 'jquery'
+import VueConfetti from 'vue-confetti'
 
 import Datepicker from 'vue3-date-time-picker'
 import 'vue3-date-time-picker/dist/main.css'
@@ -35,6 +36,7 @@ const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(VueCalendarHeatMap)
+app.use(VueConfetti)
 // app.component('apexchart', VueApexCharts)
 // app.use(VueApexCharts)
 app.component('Datepicker', Datepicker)

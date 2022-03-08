@@ -1,9 +1,6 @@
 <!--시험모드인 contest이면서 학생인 경우--->
 <template>
-  <div
-    v-if="testMode && testStart === null && this.$store.state.usertype === '0'"
-    class="container"
-  >
+  <div v-if="testMode && testStart === null && classStudent" class="container">
     <div class="d-flex">
       <h1 class="me-auto">{{ contestTitle }}</h1>
     </div>
@@ -93,12 +90,15 @@ export default {
       testMode: false,
       testStart: localStorage.getItem('test'),
       date: new Date(),
-      examUser: []
+      examUser: [],
+      classStudent: true,
+      classUserList: []
     }
   },
   created () {
     this.getProblemList(this.$route.params.contestID)
     this.onEverySecond()
+    this.adminCheck()
   },
   methods: {
     onEverySecond () {
@@ -115,6 +115,22 @@ export default {
         name: 'ClassExamManage',
         params: { classID: classID, contestID: contestID }
       })
+    },
+    async adminCheck () {
+      try {
+        const res = await api.getClassList()
+        this.classUserList = res.data
+        for (var i = 0; i < this.classUserList.length; i++) {
+          if (this.classUserList[i].id === parseInt(this.classID)) {
+            if (this.classUserList[i].privilege !== 0) {
+              this.classStudent = false
+            }
+          }
+        }
+        console.log(this.classStudent)
+      } catch (error) {
+        console.log(error)
+      }
     },
     async getProblemList (contestID) {
       try {

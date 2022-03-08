@@ -26,9 +26,9 @@
     "vue": "^3.0.0",
     "vue-apexcharts": "^1.6.2",
     "vue-calendar-heatmap": "^0.8.4",
+    "vue-confetti": "^2.3.0",
     "vue-draggable-next": "^2.1.1",
     "vue-router": "^4.0.0-0",
-    "vue3-calendar-heatmap": "^2.0.0",
     "vue3-date-time-picker": "^2.4.4",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.0-0"
@@ -50,7 +50,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.0.0",
+    "vue3-calendar-heatmap": "^2.0.0"
   },
   "eslintConfig": {
     "globals": {

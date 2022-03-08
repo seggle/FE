@@ -1,6 +1,6 @@
 <template>
   <div v-if="firstPage" class="container">
-    <div class="d-flex mb-2 mt-3 justify-content-end">
+    <div class="search-box mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 등록</h2>
       <div>
         <form>
@@ -52,34 +52,11 @@
         </tbody>
       </table>
     </div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled" v-if="currentPage == 1">
-          <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getProblemList(currentPage - 1)">이전</a>
-        </li>
-        <div v-for="page in total" :key="page">
-          <li class="page-item active" v-if="page == currentPage">
-            <a class="page-link" @click="getProblemList(page)">{{ page }}</a>
-          </li>
-          <li class="page-item" v-else>
-            <a class="page-link" @click="getProblemList(page)">{{ page }}</a>
-          </li>
-        </div>
-        <li class="page-item disabled" v-if="currentPage == total">
-          <a class="page-link" href="#">다음</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getProblemList(currentPage + 1)">다음</a>
-        </li>
-      </ul>
-    </nav>
+    <Pagination :pagination="PageValue" @get-page="getPage" class="page" />
   </div>
   <!---다음 버튼 누르면-->
   <div v-else class="container">
-    <div class="d-flex mb-2 mt-3 justify-content-end">
+    <div class="search-box mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 순서 및 제목 수정</h2>
       <div>
         <button class="btn" id="problem-create" @click="editProblem">
@@ -119,10 +96,12 @@
 import api from '@/api/index.js'
 import { defineComponent } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
+import Pagination from '@/components/Pagination.vue'
 export default defineComponent({
   name: 'ClassContestListEdit',
   components: {
-    draggable: VueDraggableNext
+    draggable: VueDraggableNext,
+    Pagination
   },
   data () {
     return {
@@ -141,7 +120,8 @@ export default defineComponent({
       firstPage: true,
       problemTitle: '',
       enabled: true,
-      dragging: false
+      dragging: false,
+      PageValue: []
     }
   },
   mounted () {
@@ -151,13 +131,20 @@ export default defineComponent({
     init () {
       this.getProblemList(1)
     },
+    getPage (page) {
+      this.getProblemList(page)
+    },
     async getProblemList (page) {
       try {
         this.loading = true
         this.currentPage = page
+        this.PageValue = []
         const res = await api.getProblemList(page, this.keyword)
         this.loading = false
-        this.total = parseInt(res.data.count / 15) + 1
+        this.PageValue.push({
+          count: res.data.count,
+          currentPage: this.currentPage
+        })
         this.problemList = res.data.results
       } catch (error) {
         console.log(error)
@@ -279,6 +266,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.search-box {
+  display: flex;
+  display: flex;
+  @media (max-width: 420px) {
+    display: block;
+  }
+
+  .form-control {
+    @media (max-width: 420px) {
+      font-size: 14px;
+    }
+  }
+}
+.btn {
+  @media (max-width: 420px) {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+}
 h5 {
   margin-top: 5px;
 }
@@ -300,5 +306,8 @@ a {
 .detail {
   font-size: 8px;
   color: gray;
+}
+.page {
+  margin-top: 7px;
 }
 </style>

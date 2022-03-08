@@ -21,6 +21,7 @@ import Register from '@/views/users/Register.vue'
 import FindPassword from '@/views/users/FindPassword.vue'
 import ResetPassword from '@/views/users/ResetPassword.vue'
 import Resign from '@/views/users/Resign.vue'
+import Congratulation from '@/views/users/Congratulation.vue'
 
 import Home from '../views/Home.vue'
 import User from '../views/User.vue'
@@ -243,6 +244,11 @@ const routes = [{
   ]
 },
 {
+  path: '/congratulation',
+  name: 'Congratulation',
+  component: Congratulation
+},
+{
   path: '/login',
   name: 'Login',
   component: Login
@@ -295,6 +301,7 @@ const routes = [{
   path: '/:problemType/create-problem',
   name: 'CreateProblem',
   component: CreateProblem,
+  meta: { isAdmin: true },
   beforeEnter: requireAdminAuth()
 },
 {

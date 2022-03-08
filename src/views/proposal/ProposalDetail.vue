@@ -123,8 +123,8 @@ h1 {
 }
 pre {
   background: transparent;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
+  font-family: sans-serif;
 }
 textarea {
   width: 100%;
