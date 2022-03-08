@@ -290,19 +290,6 @@ const routes = [{
     path: ':contestID/:contestProblemID',
     component: Problem
   }]
-},
-{
-  path: '/:problemType/create-problem',
-  name: 'CreateProblem',
-  component: CreateProblem,
-  meta: { isAdmin: true },
-  beforeEnter: requireAdminAuth()
-},
-{
-  path: '/:problemType/:problemID/edit-problem',
-  name: 'EditProblem',
-  component: EditProblem,
-  beforeEnter: requireCompetitionAdminAuth()
 }
 ]
 
