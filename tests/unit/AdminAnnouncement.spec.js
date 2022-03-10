@@ -57,7 +57,7 @@ import AdminAnnouncement from '@/views/admin/AdminAnnouncement.vue'
 //   })
 // })
 
-const response = {
+const announcementList = {
   id: 1,
   title: '세글 이용 공지',
   context: '공지글 내용 공지글 내용 공지글 내용',
@@ -68,36 +68,60 @@ const response = {
   visible: true
 }
 
+const response = {
+  code: 200,
+  message: 'Success'
+}
+
 jest.mock('axios')
 
 jest.spyOn(axios, 'get')
-  .mockImplementation((url) => {
+  .mockImplementation(() => {
+    return jest.fn().mockResolvedValue(announcementList)()
+  })
+
+jest.spyOn(axios, 'delete')
+  .mockImplementation(() => {
     return jest.fn().mockResolvedValue(response)()
   })
 
 describe('AdminAnnouncement.vue', () => {
-  it('편집 버튼을 누르면 공지사항을 get하는 api를 호출한다', async () => {
-    const wrapper = shallowMount(AdminAnnouncement, {
-      data () {
-        return {
-          count: 1,
-          announcementList: [
-            {
-              id: 1,
-              title: '제목',
-              created_time: '1',
-              last_modified: '1'
-            }
-          ]
-        }
+  const wrapper = shallowMount(AdminAnnouncement, {
+    data () {
+      return {
+        count: 1,
+        announcementList: [
+          {
+            id: 1,
+            title: '제목',
+            created_time: '1',
+            last_modified: '1'
+          }
+        ]
       }
-    })
-    const editButton = wrapper.find('.edit-btn')
+    }
+  })
 
-    await editButton.trigger('click')
+  it('편집 버튼을 누르면 공지사항을 get하는 api를 호출한다', async () => {
+    // const editButton = wrapper.find('.edit-btn')
 
-    // expect(axios.get('/admin/announcements/1')).toHaveBeenCalled()
-    expect(axios.get('/admin/announcements/1')).toHaveBeenCalledWith('/admin/announcements/0')
+    // await editButton.trigger('click')
+
+    expect(axios.get).toHaveBeenCalled()
+    expect(axios.get).toHaveBeenCalledWith('/admin/announcements/0')
+
+    await flushPromises()
+  })
+
+  it('삭제 버튼을 누르면 공지사항을 delete하는 api를 호출한다.', async () => {
+    const deleteButton = wrapper.find('.delete-btn')
+
+    expect(deleteButton.exists()).toBeTruthy()
+
+    await deleteButton.trigger('click')
+
+    expect(axios.delete).toHaveBeenCalled()
+    expect(axios.get).toHaveBeenCalledWith('')
 
     await flushPromises()
   })
