@@ -259,14 +259,8 @@ const routes = [{
   meta: { isAdmin: true },
   beforeEnter: requireCompetitionAdminAuth()
 },
-
 {
   path: '/:pathMatch(.*)*',
-  redirect: '/404'
-},
-{
-  path: '/404',
-  name: 'PageNotFound',
   component: PageNotFound
 }
 ]
