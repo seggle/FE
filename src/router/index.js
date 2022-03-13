@@ -49,7 +49,7 @@ import Competition from '@/views/competition/Competition.vue'
 import CreateCompetition from '@/views/competition/CreateCompetition.vue'
 import EditCompetition from '@/views/competition/EditCompetition.vue'
 
-import ErrorPage from '@/views/ErrorPage'
+import PageNotFound from '@/views/PageNotFound'
 
 const routes = [{
   path: '/',
@@ -266,8 +266,8 @@ const routes = [{
 },
 {
   path: '/404',
-  name: 'ErrorPage',
-  component: ErrorPage
+  name: 'PageNotFound',
+  component: PageNotFound
 }
 ]
 
