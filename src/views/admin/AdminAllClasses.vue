@@ -5,11 +5,11 @@
       <div>
         <form>
           <input
-              class="form-control"
-              type="search"
-              placeholder="검색"
-              aria-label="검색"
-              v-model="keyword"
+            class="form-control"
+            type="search"
+            placeholder="검색"
+            aria-label="검색"
+            v-model="keyword"
           />
         </form>
       </div>
@@ -26,18 +26,25 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-if="count===0"><td colspan="5">등록된 수업이 없습니다.</td></tr>
-          <tr :loading="loading" v-for="Class in ClassList" :key="Class" @click="goClass(Class.id)">
+          <tr v-if="count === 0">
+            <td colspan="5">등록된 수업이 없습니다.</td>
+          </tr>
+          <tr
+            :loading="loading"
+            v-for="Class in classList"
+            :key="Class"
+            @click="goClass(Class.id)"
+          >
             <th scope="row">{{ Class.id }}</th>
-            <td>{{ Class.year}}</td>
-            <td>{{ Class.semester}}</td>
+            <td>{{ Class.year }}</td>
+            <td>{{ Class.semester }}</td>
             <td>{{ Class.name }}</td>
             <td>{{ Class.created_user }}</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage"/>
+    <Pagination :pagination="PageValue" @get-page="getPage" />
   </div>
 </template>
 
@@ -50,24 +57,26 @@ export default {
   name: 'AdminAllClasses',
   data () {
     return {
-      ClassList: [],
-      loading: false,
       keyword: '',
+      count: 0,
+      loading: false,
+      classList: [],
       currentPage: 1,
-      PageValue: [],
-      count: 0
+      PageValue: []
     }
   },
   mounted () {
     this.init()
   },
   methods: {
+    /* mount 하면 1페이지 불러오기 */
     init () {
       this.getClassList(1)
     },
     getPage (page) {
       this.getClassList(page)
     },
+    /* 페이지값으로 전체수업 리스트 불러오기 */
     async getClassList (page) {
       try {
         this.loading = true
@@ -76,12 +85,16 @@ export default {
         const res = await api.getAdminClassList(page, this.keyword)
         this.count = res.data.count
         this.loading = false
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
-        this.ClassList = res.data.results
+        this.PageValue.push({
+          count: res.data.count,
+          currentPage: this.currentPage
+        })
+        this.classList = res.data.results
       } catch (error) {
         console.log(error)
       }
     },
+    /* 해당 수업으로 이동 */
     goClass (classID) {
       this.$router.push({
         name: 'Class',
@@ -90,7 +103,7 @@ export default {
     }
   },
   watch: {
-    'keyword' () {
+    keyword () {
       this.getClassList(1)
     }
   }
@@ -107,7 +120,7 @@ export default {
   }
 }
 .table {
-  min-width:950px;
+  min-width: 950px;
   table-layout: fixed;
   text-align: left;
   tbody {
