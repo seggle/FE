@@ -264,7 +264,7 @@ export default {
           await api.deleteAnnouncement(announcementID)
           // 공지사항 삭제 후 page=1
           const res = await api.getAnnouncementList(1, this.keyword)
-          // 마지막 page의 유일한 문제를 지운 경우, 현재 페이지값 재조정
+          // 마지막 page의 유일한 공지사항을 지운 경우, 현재 페이지값 재조정
           if (
             this.currentPage !== 1 &&
             res.data.count / 15 < this.currentPage

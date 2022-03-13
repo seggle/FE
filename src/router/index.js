@@ -49,6 +49,8 @@ import Competition from '@/views/competition/Competition.vue'
 import CreateCompetition from '@/views/competition/CreateCompetition.vue'
 import EditCompetition from '@/views/competition/EditCompetition.vue'
 
+import ErrorPage from '@/views/ErrorPage'
+
 const routes = [{
   path: '/',
   name: 'Home',
@@ -256,6 +258,11 @@ const routes = [{
   component: EditClassProblem,
   meta: { isAdmin: true },
   beforeEnter: requireCompetitionAdminAuth()
+},
+{
+  path: '/error',
+  name: 'ErrorPage',
+  component: ErrorPage
 }
 ]
 
