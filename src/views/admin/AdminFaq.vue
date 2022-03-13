@@ -3,30 +3,78 @@
     <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">FAQ</h1>
       <div>
-        <button class="btn" id="faq-create" data-bs-toggle="modal" data-bs-target="#faqModal" @click="openFAQ()">+ 글쓰기</button>
-        <div class="modal fade" id="faqModal" tabindex="-1" aria-labelledby="faqModalLabel" aria-hidden="true">
+        <button
+          class="btn"
+          id="faq-create"
+          data-bs-toggle="modal"
+          data-bs-target="#faqModal"
+          @click="openFAQ()"
+        >
+          + 글쓰기
+        </button>
+        <div
+          class="modal fade"
+          id="faqModal"
+          tabindex="-1"
+          aria-labelledby="faqModalLabel"
+          aria-hidden="true"
+        >
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 v-if="createMode">FAQ 생성</h5>
                 <h5 v-else>FAQ 수정</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
               <div class="modal-body">
-                <h5 style="float:left">질문</h5>
-                <textarea v-model="faqQuestion" id="faq-title" class="form-control mb-3 p-2" cols="100" rows="1" placeholder="질문을 입력하세요"></textarea>
-                <h5 style="float:left">답변</h5>
+                <h5 style="float: left">질문</h5>
+                <textarea
+                  v-model="faqQuestion"
+                  id="faq-title"
+                  class="form-control mb-3 p-2"
+                  cols="100"
+                  rows="1"
+                  placeholder="질문을 입력하세요"
+                ></textarea>
+                <h5 style="float: left">답변</h5>
                 <v-md-editor v-model="faqAnswer" height="400px"></v-md-editor>
                 <div class="mt-2">
-                  <p style="float:left">공개여부 </p>
-                  <span class="form-check form-switch" style="float:left; margin-left:10px">
-                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="faqVisible">
+                  <p style="float: left">공개여부</p>
+                  <span
+                    class="form-check form-switch"
+                    style="float: left; margin-left: 10px"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="flexSwitchCheckChecked"
+                      v-model="faqVisible"
+                    />
                   </span>
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary" id="faq-save" data-bs-dismiss="modal" @click="submitFaq">저장</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  id="faq-save"
+                  data-bs-dismiss="modal"
+                  @click="submitFaq"
+                >
+                  저장
+                </button>
               </div>
             </div>
           </div>
@@ -49,25 +97,32 @@
         <tbody>
           <tr v-for="faq in faqList" :key="faq">
             <th scope="row">{{ faq.id }}</th>
-            <td class="title">{{ faq.question}}</td>
+            <td class="title">{{ faq.question }}</td>
             <td>{{ faq.created_time }}</td>
             <td>{{ faq.last_modified }}</td>
             <td>
               <div style="display: inline-block" class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="faq.visible" @change="changeSwitch(faq.id)">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckChecked"
+                  v-model="faq.visible"
+                  @change="changeSwitch(faq.id)"
+                />
               </div>
             </td>
             <td scope="row">
-              <button class="edit-btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#faqModal"
-                      @click="openFAQ(faq.id)">
+              <button
+                class="edit-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#faqModal"
+                @click="openFAQ(faq.id)"
+              >
                 <font-awesome-icon icon="pen" />
               </button>
             </td>
             <td scope="row">
-              <button class="delete-btn"
-                      @click="deleteFAQ(faq.id)">
+              <button class="delete-btn" @click="deleteFAQ(faq.id)">
                 <font-awesome-icon icon="trash-can" />
               </button>
             </td>
@@ -80,17 +135,18 @@
 
 <script>
 import api from '@/api/index.js'
+import { GMTtoLocale } from '@/utils/time.js'
 
 export default {
   name: 'AdminFAQ',
   data () {
     return {
       currentFaqID: '',
-      faqList: [],
+      createMode: true,
       faqQuestion: '',
       faqAnswer: '',
       faqVisible: true,
-      createMode: true,
+      faqList: [],
       loading: false
     }
   },
@@ -101,18 +157,24 @@ export default {
     init () {
       this.getFAQList()
     },
+    /* FAQ 리스트 불러오기 */
     async getFAQList () {
       try {
         const res = await api.getFAQList()
         this.faqList = res.data
         for (var i = 0; i < this.faqList.length; i++) {
-          this.faqList[i].created_time = this.faqList[i].created_time.slice(0, 10) + ' ' + this.faqList[i].created_time.slice(11, 19)
-          this.faqList[i].last_modified = this.faqList[i].last_modified.slice(0, 10) + ' ' + this.faqList[i].last_modified.slice(11, 19)
+          this.faqList[i].created_time = GMTtoLocale(
+            this.faqList[i].created_time
+          )
+          this.faqList[i].last_modified = GMTtoLocale(
+            this.faqList[i].last_modified
+          )
         }
       } catch (error) {
         console.log(error)
       }
     },
+    /* FAQ 삭제 */
     async deleteFAQ (faqID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
@@ -123,6 +185,7 @@ export default {
         console.log(error)
       }
     },
+    /* FAQ 열람 */
     async openFAQ (faqID) {
       try {
         if (typeof faqID === 'undefined') {
@@ -143,21 +206,18 @@ export default {
         console.log(error)
       }
     },
+    /* FAQ 작성 후 제출 */
     async submitFaq () {
       try {
+        const data = {
+          question: this.faqQuestion,
+          answer: this.faqAnswer,
+          visible: this.faqVisible
+        }
+        /* 공지사항 수정 or 생성 */
         if (this.currentFaqID === '') {
-          const data = {
-            question: this.faqQuestion,
-            answer: this.faqAnswer,
-            visible: this.faqVisible
-          }
           await api.submitFAQ(data)
         } else {
-          const data = {
-            question: this.faqQuestion,
-            answer: this.faqAnswer,
-            visible: this.faqVisible
-          }
           await api.submitEditFAQ(this.currentFaqID, data)
         }
         this.getFAQList()
@@ -165,6 +225,7 @@ export default {
         console.log(error)
       }
     },
+    /* FAQ 공개 여부 설정 */
     async changeSwitch (faqID) {
       try {
         await api.changeFAQSwitch(faqID)
@@ -179,7 +240,7 @@ export default {
 <style lang="scss" scoped>
 .table-div {
   .table {
-    min-width:850px;
+    min-width: 850px;
     table-layout: fixed;
     tbody {
       tr:hover {
