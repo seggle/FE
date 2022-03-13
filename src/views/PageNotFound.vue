@@ -23,8 +23,8 @@
   <div class="bottom">
     <p>페이지를 찾을 수 없어요</p>
     <div class="buttons">
-      <a class="btn" href="/">이전화면으로</a>
-      <a class="btn" href="javascript:history.back();">메인홈으로</a>
+      <a class="btn" href="/">메인홈으로</a>
+      <a class="btn" href="javascript:history.back();">이전화면으로</a>
     </div>
   </div>
 </template>
