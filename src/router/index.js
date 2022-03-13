@@ -259,8 +259,13 @@ const routes = [{
   meta: { isAdmin: true },
   beforeEnter: requireCompetitionAdminAuth()
 },
+
 {
-  path: '/error',
+  path: '/:pathMatch(.*)*',
+  redirect: '/404'
+},
+{
+  path: '/404',
   name: 'ErrorPage',
   component: ErrorPage
 }
