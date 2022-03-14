@@ -35,11 +35,21 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <h5 style="float: left" class="col-3">아이디</h5>
-                  <input class="col-6 text" type="text" :value="userName" disabled />
+                  <input
+                    class="col-6 text"
+                    type="text"
+                    :value="userName"
+                    disabled
+                  />
                 </div>
                 <div class="mb-3">
                   <h5 style="float: left" class="col-3">이름</h5>
-                  <input class="col-6 text" type="text" :value="Name" disabled />
+                  <input
+                    class="col-6 text"
+                    type="text"
+                    :value="Name"
+                    disabled
+                  />
                 </div>
                 <div class="mb-3">
                   <h5 style="float: left" class="col-3">이메일</h5>
@@ -86,7 +96,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th style="width:40px" scope="col" prop="id">#</th>
+            <th style="width: 40px" scope="col" prop="id">#</th>
             <th class="col-2" scope="col">ID</th>
             <th class="col-2" scope="col">이름</th>
             <th scope="col">이메일</th>
@@ -105,16 +115,17 @@
             <td>{{ user.date_joined }}</td>
             <td>{{ user.privilege }}</td>
             <td scope="row">
-              <button class="edit-btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#userModal"
-                      @click="openUser(user.username)">
+              <button
+                class="edit-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#userModal"
+                @click="openUser(user.username)"
+              >
                 <font-awesome-icon icon="pen" />
               </button>
             </td>
             <td scope="row">
-              <button class="delete-btn"
-                      @click="deleteUser(user.username)">
+              <button class="delete-btn" @click="deleteUser(user.username)">
                 <font-awesome-icon icon="trash-can" />
               </button>
             </td>
@@ -122,13 +133,14 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage"/>
+    <Pagination :pagination="PageValue" @get-page="getPage" />
   </div>
 </template>
 
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
+import { GMTtoLocale } from '@/utils/time.js'
 
 export default {
   name: 'AdminUser',
@@ -137,16 +149,16 @@ export default {
   },
   data () {
     return {
-      currentid: '',
-      userList: [],
+      keyword: '',
       selected: '',
       loading: false,
-      keyword: '',
-      currentPage: 1,
+      userList: [],
       Name: '',
       userEmail: '',
       userName: '',
+      currentPage: 1,
       PageValue: []
+      // currentid: ''
     }
   },
   mounted () {
@@ -159,6 +171,7 @@ export default {
     getPage (page) {
       this.getUserList(page)
     },
+    /* 사용자 정보 리스트 불러오기 */
     async getUserList (page) {
       try {
         this.loading = true
@@ -166,13 +179,15 @@ export default {
         this.PageValue = []
         const res = await api.getUserList(page, this.keyword)
         this.loading = false
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        this.PageValue.push({
+          count: res.data.count,
+          currentPage: this.currentPage
+        })
         this.userList = res.data.results
         for (var i = 0; i < this.userList.length; i++) {
-          this.userList[i].date_joined =
-            this.userList[i].date_joined.slice(0, 10) +
-            ' ' +
-            this.userList[i].date_joined.slice(11, 19)
+          this.userList[i].date_joined = GMTtoLocale(
+            this.userList[i].date_joined
+          )
           if (this.userList[i].privilege === 0) {
             this.userList[i].privilege = '학생'
           } else if (this.userList[i].privilege === 1) {
@@ -185,6 +200,7 @@ export default {
         console.log(error)
       }
     },
+    /* 사용자 정보 열람 */
     async openUser (userName) {
       try {
         this.currentName = userName
@@ -203,6 +219,7 @@ export default {
         console.log(error)
       }
     },
+    /* 사용자 정보 제출 */
     async submitUser () {
       try {
         if (this.selected === 'student') {
@@ -221,12 +238,16 @@ export default {
         console.log(error)
       }
     },
+    /* 사용자 삭제 */
     async deleteUser (userName) {
       try {
         if (confirm('삭제하시겠습니까?')) {
           await api.deleteUser(userName)
           const res = await api.getUserList(1, this.keyword)
-          if (this.currentPage !== 1 && res.data.count / 15 < this.currentPage) {
+          if (
+            this.currentPage !== 1 &&
+            res.data.count / 15 < this.currentPage
+          ) {
             this.currentPage = this.currentPage - 1
           }
           this.getUserList(this.currentPage)
@@ -271,19 +292,19 @@ export default {
 }
 .table-div {
   .table {
-  min-width: 900px;
-  table-layout: fixed;
-  tbody {
-    tr:hover {
-      cursor: default;
-    }
-    td.email {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+    min-width: 900px;
+    table-layout: fixed;
+    tbody {
+      tr:hover {
+        cursor: default;
+      }
+      td.email {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
-}
 }
 h1 {
   font-weight: bold;
