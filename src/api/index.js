@@ -15,75 +15,75 @@ const instance = createInstance(false)
 const formDataInstance = createInstance(true)
 
 function registerUser (data) {
-  return instance.post('/users/', data)
+  return instance.post('/api/users/', data)
 }
 
 function loginUser (data) {
-  return instance.post('/users/login/', data)
+  return instance.post('/api/users/login/', data)
 }
 
 function logoutUser (data) {
-  return instance.post('/users/logout/', data)
+  return instance.post('/api/users/logout/', data)
 }
 
 function refreshAccessToken (data) {
-  return instance.post('/users/login/refresh/', data)
+  return instance.post('/api/users/login/refresh/', data)
 }
 
 function getUserInfo (username) {
-  return instance.get(`/users/${username}/`)
+  return instance.get(`/api/users/${username}/`)
 }
 
 function checkUserIDorEmail (data) {
-  return instance.post('check-userid-or-email/', data)
+  return instance.post('/api/check-userid-or-email/', data)
 }
 
 function findPassword (data) {
-  return instance.post('users/password/', data)
+  return instance.post('/api/users/password/', data)
 }
 
 function resetPassword (username, data) {
-  return instance.patch(`users/${username}/`, data)
+  return instance.patch(`/api/users/${username}/`, data)
 }
 
 function resignUser (username, data) {
-  return instance.delete(`users/${username}/`, { data })
+  return instance.delete(`/api/users/${username}/`, { data })
 }
 
 function getCompetitionList () {
-  return instance.get('/competitions/')
+  return instance.get('/api/competitions/')
 }
 
 function getUserCompetitionList (userID) {
-  return instance.get(`/users/${userID}/competitions/`)
+  return instance.get(`/api/users/${userID}/competitions/`)
 }
 
 function joinCompetition (competitionID) {
-  return instance.post(`/competitions/${competitionID}/participation/`)
+  return instance.post(`/api/competitions/${competitionID}/participation/`)
 }
 
 function getCompetitions (competitionID) {
-  return instance.get(`/competitions/${competitionID}/`)
+  return instance.get(`/api/competitions/${competitionID}/`)
 }
 
 function deleteCompetition (competitionID) {
-  return instance.delete(`/competitions/${competitionID}/`)
+  return instance.delete(`/api/competitions/${competitionID}/`)
 }
 
 function getCompetitionTAList (competitionID) {
-  return instance.get(`/competitions/${competitionID}/participation`)
+  return instance.get(`/api/competitions/${competitionID}/participation`)
 }
 
 function submitCompetitionTAList (competitionID, data) {
-  return instance.post(`/competitions/${competitionID}/participation/ta`, data)
+  return instance.post(`/api/competitions/${competitionID}/participation/ta`, data)
 }
 
 function getCompetitionsLeaderboard (competitionID) {
-  return instance.get(`/leaderboards/competitions/${competitionID}`)
+  return instance.get(`/api/leaderboards/competitions/${competitionID}`)
 }
 
 function getUserProblemSubmissions (page, username, contestProblemID) {
-  return instance.get('/submissions/', {
+  return instance.get('/api/submissions/', {
     params: {
       page: page,
       username: username,
@@ -93,121 +93,121 @@ function getUserProblemSubmissions (page, username, contestProblemID) {
 }
 
 function getUserCompetitionSubmissions (competitionID, username) {
-  return instance.get(`/competitions/${competitionID}/submissions`, {
+  return instance.get(`/api/competitions/${competitionID}/submissions`, {
     params: {
       username: username
     }
   })
 }
 function selectProblemSubmission (classID, contestID, cpID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/${cpID}/check`, data)
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/${cpID}/check`, data)
 }
 
 function selectCompetitionSubmission (competitionID, data) {
-  return instance.patch(`/competitions/${competitionID}/check`, data)
+  return instance.patch(`/api/competitions/${competitionID}/check`, data)
 }
 
 function createClass (data) {
-  return instance.post('/class/', data)
+  return instance.post('/api/class/', data)
 }
 
 function getClass (classID) {
-  return instance.get(`/class/${classID}`)
+  return instance.get(`/api/class/${classID}`)
 }
 
 function editClass (data, classID) {
-  return instance.patch(`/class/${classID}`, data)
+  return instance.patch(`/api/class/${classID}`, data)
 }
 
 function removeClass (classID) {
-  return instance.delete(`/class/${classID}`)
+  return instance.delete(`/api/class/${classID}`)
 }
 
 function getClassList () {
-  return instance.get('/users/class')
+  return instance.get('/api/users/class')
 }
 
 function editClassList (data) {
-  return instance.patch('/users/class', data)
+  return instance.patch('/api/users/class', data)
 }
 
 function getContestProblem (classID, contestID, contestProblemID) {
   return instance.get(
-        `/class/${classID}/contests/${contestID}/${contestProblemID}`
+        `/api/class/${classID}/contests/${contestID}/${contestProblemID}`
   )
 }
 
 function getClassLeaderboard (contestProblemID) {
-  return instance.get(`/leaderboards/contest-problem/${contestProblemID}`)
+  return instance.get(`/api/leaderboards/contest-problem/${contestProblemID}`)
 }
 
 function getClassUserList (classID) {
-  return instance.get(`/class/${classID}/users`)
+  return instance.get(`/api/class/${classID}/users`)
 }
 
 function createContest (classID, data) {
-  return instance.post(`/class/${classID}/contests`, data)
+  return instance.post(`/api/class/${classID}/contests`, data)
 }
 
 function editContest (classID, contestID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}`, data)
+  return instance.patch(`/api/class/${classID}/contests/${contestID}`, data)
 }
 
 function getContestList (classID) {
-  return instance.get(`/class/${classID}/contests`)
+  return instance.get(`/api/class/${classID}/contests`)
 }
 
 function deleteContest (classID, contestID) {
-  return instance.delete(`/class/${classID}/contests/${contestID}`)
+  return instance.delete(`/api/class/${classID}/contests/${contestID}`)
 }
 
 function getContestProblemList (classID, contestID) {
-  return instance.get(`/class/${classID}/contests/${contestID}`)
+  return instance.get(`/api/class/${classID}/contests/${contestID}`)
 }
 
 function selectContestProblem (classID, contestID, data) {
-  return instance.post(`/class/${classID}/contests/${contestID}`, data)
+  return instance.post(`/api/class/${classID}/contests/${contestID}`, data)
 }
 
 function editContestProblem (classID, contestID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/description`, data)
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/description`, data)
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
   return instance.delete(
-        `/class/${classID}/contests/${contestID}/${problemID}`
+        `/api/class/${classID}/contests/${contestID}/${problemID}`
   )
 }
 
 function changeContestPublic (classID, contestID) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/check`)
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/check`)
 }
 
 function getFAQList () {
-  return instance.get('/admin/faqs/')
+  return instance.get('/api/admin/faqs/')
 }
 
 function deleteFAQ (faqID) {
-  return instance.delete('/admin/faqs/' + faqID)
+  return instance.delete('/api/admin/faqs/' + faqID)
 }
 
 function editFAQ (faqID) {
-  return instance.get('/admin/faqs/' + faqID)
+  return instance.get('/api/admin/faqs/' + faqID)
 }
 
 function submitEditFAQ (faqID, data) {
-  return instance.patch('/admin/faqs/' + faqID, data)
+  return instance.patch('/api/admin/faqs/' + faqID, data)
 }
 
 function submitFAQ (data) {
-  return instance.post('/admin/faqs/', data)
+  return instance.post('/api/admin/faqs/', data)
 }
 
 function changeFAQSwitch (faqID) {
   const data = {
     id: faqID
   }
-  return instance.post('/admin/faqs/check/', data)
+  return instance.post('/api/admin/faqs/check/', data)
 }
 
 function getAnnouncementList (page, keyword) {
@@ -215,27 +215,27 @@ function getAnnouncementList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/admin/announcements/', { params: params })
+  return instance.get('/api/admin/announcements/', { params: params })
 }
 
 function deleteAnnouncement (announcementID) {
-  return instance.delete('/admin/announcements/' + announcementID)
+  return instance.delete('/api/admin/announcements/' + announcementID)
 }
 
 function editAnnouncement (announcementID) {
-  return instance.get(`/admin/announcements/${announcementID}`)
+  return instance.get(`/api/admin/announcements/${announcementID}`)
 }
 
 function submitAnnouncement (data) {
-  return instance.post('/admin/announcements/', data)
+  return instance.post('/api/admin/announcements/', data)
 }
 
 function submitEditAnnouncement (announcementID, data) {
-  return instance.put('/admin/announcements/' + announcementID, data)
+  return instance.put('/api/admin/announcements/' + announcementID, data)
 }
 
 function changeAnnouncementSwitch (announcementID, data) {
-  return instance.put(`/admin/announcements/${announcementID}/check`, data)
+  return instance.put(`/api/admin/announcements/${announcementID}/check`, data)
 }
 
 function getUserList (page, keyword) {
@@ -243,19 +243,19 @@ function getUserList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/admin/users/', { params: params })
+  return instance.get('/api/admin/users/', { params: params })
 }
 
 function editUser (username) {
-  return instance.get('/admin/users/' + username)
+  return instance.get('/api/admin/users/' + username)
 }
 
 function submitUser (username, data) {
-  return instance.put(`/admin/users/${username}/`, data)
+  return instance.put(`/api/admin/users/${username}/`, data)
 }
 
 function deleteUser (username) {
-  return instance.delete(`/admin/users/${username}`)
+  return instance.delete(`/api/admin/users/${username}`)
 }
 
 function getAdminProblemList (page, keyword) {
@@ -263,15 +263,15 @@ function getAdminProblemList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/admin/problems', { params: params })
+  return instance.get('/api/admin/problems', { params: params })
 }
 
 function deleteAdminProblem (problemID) {
-  return instance.delete(`/admin/problems/${problemID}`)
+  return instance.delete(`/api/admin/problems/${problemID}`)
 }
 
 function changeAdminProblemSwitch (problemID) {
-  return instance.put('/admin/problems/check', { params: { problemID } })
+  return instance.put('/api/admin/problems/check', { params: { problemID } })
 }
 
 function getAdminClassList (page, keyword) {
@@ -279,23 +279,23 @@ function getAdminClassList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/admin/class', { params: params })
+  return instance.get('/api/admin/class', { params: params })
 }
 
 function deleteClass (classID) {
-  return instance.delete('/admin/class/' + classID)
+  return instance.delete('/api/admin/class/' + classID)
 }
 
 function showUserCompetition (username) {
-  return instance.get(`/users/${username}/competitions`)
+  return instance.get(`/api/users/${username}/competitions`)
 }
 
 function showUserHeatmap (username) {
-  return instance.get(`/users/${username}/contributions`)
+  return instance.get(`/api/users/${username}/contributions`)
 }
 
 function getFAQ () {
-  return instance.get('/faqs')
+  return instance.get('/api/faqs')
 }
 
 function getAnnouncement (page, keyword) {
@@ -303,32 +303,32 @@ function getAnnouncement (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/announcements', { params: params })
+  return instance.get('/api/announcements', { params: params })
 }
 
 function getAnnouncementDetail (id) {
-  return instance.get('/announcements/' + id)
+  return instance.get('/api/announcements/' + id)
 }
 
 function getProposal (page) {
   const params = { page }
-  return instance.get('/proposals', { params: params })
+  return instance.get('/api/proposals', { params: params })
 }
 
 function getProposalDetail (id) {
-  return instance.get('/proposals/' + id)
+  return instance.get('/api/proposals/' + id)
 }
 
 function createProposal (data) {
-  return instance.post('/proposals/', data)
+  return instance.post('/api/proposals/', data)
 }
 
 function editProposal (id, data) {
-  return instance.patch('/proposals/' + id, data)
+  return instance.patch('/api/proposals/' + id, data)
 }
 
 function deleteProposal (id) {
-  return instance.delete('/proposals/' + id)
+  return instance.delete('/api/proposals/' + id)
 }
 
 function getProblemList (page, keyword) {
@@ -336,73 +336,73 @@ function getProblemList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/problems', { params: params })
+  return instance.get('/api/problems', { params: params })
 }
 
 function getProblem (id) {
-  return instance.get(`/problems/${id}/`)
+  return instance.get(`/api/problems/${id}/`)
 }
 
 function editProblem (id, data) {
-  return formDataInstance.put(`/problems/${id}/`, data)
+  return formDataInstance.put(`/api/problems/${id}/`, data)
 }
 
 function deleteProblem (id) {
-  return instance.delete(`/problems/${id}`)
+  return instance.delete(`/api/problems/${id}`)
 }
 
 function changeProblemSwitch (id) {
-  return instance.post(`/problems/${id}/check`)
+  return instance.post(`/api/problems/${id}/check`)
 }
 
 function submitFileProblem (classID, contestID, cpID, username, data) {
-  return formDataInstance.post(`/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
+  return formDataInstance.post(`/api/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
 }
 
 function submitFileCompetition (competitionID, username, data) {
-  return formDataInstance.post(`/competitions/${competitionID}/${username}/`, data)
+  return formDataInstance.post(`/api/competitions/${competitionID}/${username}/`, data)
 }
 
 function createGeneralProblem (data) {
-  return instance.post('/competitions/', data)
+  return instance.post('/api/competitions/', data)
 }
 
 function editGeneralProblem (competitionID, data) {
-  return instance.put(`/competitions/${competitionID}/`, data)
+  return instance.put(`/api/competitions/${competitionID}/`, data)
 }
 
 function createClassProblem (data) {
-  return formDataInstance.post('/problems/', data)
+  return formDataInstance.post('/api/problems/', data)
 }
 
 function submitClassStudentList (classID, data) {
-  return instance.post(`/class/${classID}/std`, data)
+  return instance.post(`/api/class/${classID}/std`, data)
 }
 
 function submitClassTAList (classID, data) {
-  return instance.post(`/class/${classID}/ta`, data)
+  return instance.post(`/api/class/${classID}/ta`, data)
 }
 
-function examStart (classID, contestID, data) {
-  return instance.post(`/class/${classID}/contests/${contestID}/exam/`, data)
+function examStart (classID, contestID) {
+  return instance.post(`/api/class/${classID}/contests/${contestID}/exam/`)
 }
 
 function examInfo (classID, contestID, page) {
   const params = { page }
-  return instance.get(`/class/${classID}/contests/${contestID}/exam`, {
+  return instance.get(`/api/class/${classID}/contests/${contestID}/exam`, {
     params: params
   })
 }
 
 function resetExam (classID, contestID, examID) {
   return instance.post(
-        `/class/${classID}/contests/${contestID}/exam/${examID}/reset`
+        `/api/class/${classID}/contests/${contestID}/exam/${examID}/reset`
   )
 }
 
 function exceptUser (classID, contestID, examID) {
   return instance.post(
-        `/class/${classID}/contests/${contestID}/exam/${examID}/exception`
+        `/api/class/${classID}/contests/${contestID}/exam/${examID}/exception`
   )
 }
 export default {

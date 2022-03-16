@@ -28,10 +28,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr :loading="loading" v-for="problem in problemList" :key="problem">
+          <tr v-for="problem in problemList" :key="problem">
             <th scope="row">
               <input
-                v-if="alreadyExist(problem.id) === true"
+                v-if="isAlreadyContestProblemExist(problem.id)"
                 class="form-check-input"
                 type="checkbox"
                 :value="problem.id"
@@ -52,30 +52,7 @@
         </tbody>
       </table>
     </div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled" v-if="currentPage == 1">
-          <a class="page-link" tabindex="-1" aria-disabled="true">이전</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getProblemList(currentPage - 1)">이전</a>
-        </li>
-        <div v-for="page in total" :key="page">
-          <li class="page-item active" v-if="page == currentPage">
-            <a class="page-link" @click="getProblemList(page)">{{ page }}</a>
-          </li>
-          <li class="page-item" v-else>
-            <a class="page-link" @click="getProblemList(page)">{{ page }}</a>
-          </li>
-        </div>
-        <li class="page-item disabled" v-if="currentPage == total">
-          <a class="page-link" href="#">다음</a>
-        </li>
-        <li class="page-item" v-else>
-          <a class="page-link" @click="getProblemList(currentPage + 1)">다음</a>
-        </li>
-      </ul>
-    </nav>
+    <Pagination :pagination="PageValue" @get-page="getProblemList" />
   </div>
   <!---다음 버튼 누르면-->
   <div v-else class="container">
@@ -117,12 +94,15 @@
 
 <script>
 import api from '@/api/index.js'
+import Pagination from '@/components/Pagination.vue'
 import { defineComponent } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
+
 export default defineComponent({
   name: 'ClassContestListEdit',
   components: {
-    draggable: VueDraggableNext
+    draggable: VueDraggableNext,
+    Pagination
   },
   data () {
     return {
@@ -134,14 +114,14 @@ export default defineComponent({
       checkList: [],
       selectedProblem: [],
       changedList: [],
-      loading: false,
       keyword: '',
       total: 0,
       currentPage: 1,
       firstPage: true,
       problemTitle: '',
       enabled: true,
-      dragging: false
+      dragging: false,
+      PageValue: []
     }
   },
   mounted () {
@@ -153,14 +133,14 @@ export default defineComponent({
     },
     async getProblemList (page) {
       try {
-        this.loading = true
         this.currentPage = page
+        this.PageValue = []
         const res = await api.getProblemList(page, this.keyword)
-        this.loading = false
-        this.total = parseInt(res.data.count / 15) + 1
         this.problemList = res.data.results
-      } catch (error) {
-        console.log(error)
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        this.total = parseInt((res.data.count - 1) / 15) + 1
+      } catch (err) {
+        console.log(err)
       }
       try {
         const res = await api.getContestProblemList(
@@ -168,42 +148,39 @@ export default defineComponent({
           this.contestID
         )
         this.alreadyList = res.data
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
-    alreadyExist (problemID) {
-      var flag = 0
-      for (var i = 0; i < this.alreadyList.length; i++) {
-        if (problemID === this.alreadyList[i].problem_id) {
-          flag = 1
+    isAlreadyContestProblemExist (problemID) {
+      for (const alreadyProblem of this.alreadyList) {
+        if (problemID === alreadyProblem.problem_id) {
+          return true
         }
       }
-      if (flag === 1) return true
-      else return false
+      return false
     },
     async selectProblem () {
       try {
-        for (let i = 0; i < this.checkList.length; i++) {
+        for (const checkedProblem of this.checkList) {
           const item = {}
-          item.problem_id = this.checkList[i]
+          item.problem_id = checkedProblem
           this.selectedProblem.push(item)
         }
-        const res = await api.selectContestProblem(
+        await api.selectContestProblem(
           this.classID,
           this.contestID,
           this.selectedProblem
         )
-        console.log(res)
         alert('변경사항이 저장되었습니다.')
         this.firstPage = false
-        this.getProblem()
+        this.getContestProblemList()
       } catch (err) {
         console.log(err)
       }
     },
 
-    async getProblem () {
+    async getContestProblemList () {
       try {
         const res = await api.getContestProblemList(
           this.classID,
@@ -216,6 +193,7 @@ export default defineComponent({
     },
 
     // 문제제목 중복체크
+    // 수정 필요
     checkTitle () {
       var k = 0
       for (var i = 0; i < this.changedList.length;) {
@@ -231,6 +209,7 @@ export default defineComponent({
       if (k === 0) return true
       else return false
     },
+    // 수정필요
     async editProblem () {
       try {
         for (let i = 0; i < this.contestProblemList.length; i++) {
@@ -241,12 +220,11 @@ export default defineComponent({
           this.changedList.push(item)
         }
         if (this.checkTitle()) {
-          const res = await api.editContestProblem(
+          await api.editContestProblem(
             this.classID,
             this.contestID,
             this.changedList
           )
-          console.log(res)
           alert('변경사항이 저장되었습니다.')
           this.firstPage = true
           this.$router.push({ name: 'ClassContestProblemList' })
@@ -260,18 +238,6 @@ export default defineComponent({
   },
   watch: {
     keyword () {
-      this.getProblemList(1)
-    },
-    yearSelected () {
-      this.getProblemList(1)
-    },
-    semesterSelected () {
-      this.getProblemList(1)
-    },
-    classSelected () {
-      this.getProblemList(1)
-    },
-    createUserSelecte () {
       this.getProblemList(1)
     }
   }

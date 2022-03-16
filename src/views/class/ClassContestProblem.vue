@@ -3,7 +3,7 @@
        v-if="isClassUser">
     <div class="problem-header">
       <h1 id="title">
-        {{ problem.title}}
+        {{ problem.title }}
       </h1>
     </div>
 
@@ -66,36 +66,36 @@
         <!-- 리더보드 -->
           <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
             <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">이름</th>
-                <th scope="col">점수</th>
-                <th scope="col">제출 날짜</th>
-                <th v-if="privilege" scope="col">코드(.ipynb)</th>
-                <th v-if="privilege" scope="col">답안(.csv)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success': this.userID === users.username}">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ users.username }}</td>
-                <td>{{ users.score }}</td>
-                <td>{{ users.created_time.slice(0, 10) + ' ' + users.created_time.slice(11, 19)}}</td>
-                <td v-if="privilege">
-                  <button class="download-btn"
-                    @click="download(users.ipynb)">
-                    <font-awesome-icon icon="file-arrow-down" />
-                  </button>
-                </td>
-                <td v-if="privilege">
-                  <button class="download-btn"
-                    @click="download(users.csv)">
-                    <font-awesome-icon icon="file-arrow-down" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">이름</th>
+                  <th scope="col">점수</th>
+                  <th scope="col">제출 날짜</th>
+                  <th v-if="isTAOverPrivilege()" scope="col">코드(.ipynb)</th>
+                  <th v-if="isTAOverPrivilege()" scope="col">답안(.csv)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success': this.userID === users.username }">
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ users.username }}</td>
+                  <td>{{ users.score }}</td>
+                  <td>{{ users.created_time }}</td>
+                  <td v-if="isTAOverPrivilege()">
+                    <button class="download-btn"
+                      @click="downloadFile(users.ipynb)">
+                      <font-awesome-icon icon="file-arrow-down" />
+                    </button>
+                  </td>
+                  <td v-if="isTAOverPrivilege()">
+                    <button class="download-btn"
+                      @click="downloadFile(users.csv)">
+                      <font-awesome-icon icon="file-arrow-down" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         <!-- 제출 -->
@@ -107,7 +107,7 @@
                      type="file"
                      class="form-control"
                      accept=".csv"
-                     @change="uploadFile">
+                     @change="uploadFile()">
 
               <h5 class="list-title">ipynb 파일 제출</h5>
               <p class="file-desc">하나의 ipynb 파일만 업로드 가능합니다</p>
@@ -115,8 +115,8 @@
                      type="file"
                      class="form-control"
                      accept=".ipynb"
-                     @change="uploadFile">
-              <button class="btn" @click="submitFile">파일 제출</button>
+                     @change="uploadFile()">
+              <button class="btn" @click="submitFile()">파일 제출</button>
             </div>
             <div class="table-div">
               <h5 class="list-title">제출 내역</h5>
@@ -148,7 +148,7 @@
                 </tbody>
               </table>
             </div>
-            <Pagination :pagination="PageValue" @get-page="getPage" />
+            <Pagination :pagination="PageValue" @get-page="getUserSubmissions" />
             <button class="btn" @click="selectSubmission">제출</button>
           </div>
         </div>
@@ -174,10 +174,11 @@ export default {
     return {
       userID: this.$store.state.userid,
       isClassUser: false,
+      userPrivilege: 0,
 
-      problemID: this.$route.params.classID, // 대회 문제 아이디, 수업 아이디
-      contestID: this.$route.params.contestID, // 수업 사이드바 아이디
-      contestProblemID: this.$route.params.contestProblemID, // 수업 사이드바 하위 문제 아이디
+      problemID: this.$route.params.classID,
+      contestID: this.$route.params.contestID,
+      contestProblemID: this.$route.params.contestProblemID,
 
       problem: [],
       leaderboardList: [],
@@ -188,8 +189,7 @@ export default {
       ipynb: '',
 
       PageValue: [],
-      currentPage: 1,
-      privilege: false
+      currentPage: 1
     }
   },
   mounted () {
@@ -206,25 +206,23 @@ export default {
       try {
         const res = await api.getClassUserList(this.problemID)
         const userList = res.data
-        console.log(userList)
-        for (let i = 0; i < userList.length; i++) {
-          if (String(userList[i].username) === this.userID) {
+        for (const user of userList) {
+          if (String(user.username) === this.userID) {
             this.isClassUser = true
             this.alreadyJoined = true
-            if (userList[i].privilege > 0) {
-              this.privilege = true
-            }
+            this.userPrivilege = user.privilege
           }
         }
       } catch (err) {
         console.log(err)
       }
     },
+    isTAOverPrivilege (userPrivilege) {
+      return (userPrivilege > 0)
+    },
     async getProblem () {
       try {
         const res = await api.getContestProblem(this.problemID, this.contestID, this.contestProblemID)
-        res.data.start_time = GMTtoLocale(res.data.start_time)
-        res.data.end_time = GMTtoLocale(res.data.end_time)
         res.data.description = converter.makeHtml(res.data.description)
         res.data.data_description = converter.makeHtml(res.data.data_description)
         this.problem = res.data
@@ -236,33 +234,32 @@ export default {
       try {
         const res = await api.getClassLeaderboard(this.contestProblemID)
         this.leaderboardList = res.data
+        for (const leaderboard of this.leaderboardList) {
+          leaderboard.created_time = GMTtoLocale(leaderboard.created_time)
+        }
       } catch (err) {
         console.log(err)
       }
     },
-    download (url) {
+    downloadFile (url) {
       location.href = url
     },
-    getPage (page) {
-      this.getUserSubmissions(page)
-    },
     alreadyChecked () {
-      // is_show이면 체크되어있어야함
-      for (let i = 0; i < this.submitList.length; i++) {
-        if (this.submitList[i].on_leaderboard) {
-          this.submitRowIndex = this.submitList[i].id
+      for (const submission of this.submitList) {
+        if (submission.on_leaderboard) {
+          this.submitRowIndex = submission.id
         }
       }
     },
     changeSubmissionListName () {
-      for (let i = 0; i < this.submitList.length; i++) {
-        const csvName = this.submitList[i].csv
-        const ipynbName = this.submitList[i].ipynb
-        const submitDate = this.submitList[i].created_time
+      for (const submission of this.submitList) {
+        const csvName = submission.csv
+        const ipynbName = submission.ipynb
+        const submitDate = submission.created_time
 
-        this.submitList[i].csv = csvName.split('/').pop()
-        this.submitList[i].ipynb = ipynbName.split('/').pop()
-        this.submitList[i].created_time = GMTtoLocale(submitDate)
+        submission.csv = csvName.split('/').pop()
+        submission.ipynb = ipynbName.split('/').pop()
+        submission.created_time = GMTtoLocale(submitDate)
       }
     },
     async getUserSubmissions (page) {
@@ -271,15 +268,13 @@ export default {
         this.PageValue = []
 
         const res = await api.getUserProblemSubmissions(page, this.userID, this.contestProblemID)
-
         this.submitList = res.data.results
+
         this.alreadyChecked()
         this.changeSubmissionListName()
 
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
-        if (res.data.count !== 0) {
-          this.total = parseInt((res.data.count - 1) / 15) + 1
-        }
+        this.total = parseInt((res.data.count - 1) / 15) + 1
       } catch (err) {
         console.log(err)
       }
@@ -334,48 +329,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .container {
-
-//   .problem-header {
-//   }
-
-//   .problem-tab {
-//     .list-group-item {
-//       border: none;
-//       padding: 1rem 0rem;
-//       font-size: calc(1.175rem + 0.2vw);
-//       border-radius: 0.75rem;
-//       margin-bottom: 1rem;
-//       @media (max-width: 420px) {
-//         font-size: 16px;
-//       }
-//     }
-
-//     .list-group-item.active {
-//       z-index: 2;
-//       color: black;
-//       font-weight: bold;
-//       background-color: #F4F4F8;
-//       border-color: #fff;
-//     }
-//   }
-
-//   .problem-tab-content {
-//     .tab-content {
-//       background-color: #fff;
-//       .form-control {
-//         background-color: #F4F4F8;
-//         border: none;
-//         margin-bottom: 1rem;
-//         line-height: 10;
-//         color: #98A8B9;
-//       }
-
-//       .form-control::file-selector-button {
-//           color: transparent;
-//           background-color: #F4F4F8;
-//       }
-//     }
-//   }
-// }
 </style>
