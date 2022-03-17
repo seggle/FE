@@ -10,12 +10,7 @@
         <div class="button">
           <button class="btn"
                   type="submit"
-                  @click="saveMode = 'save'"
           >저장</button>
-          <button class="btn"
-                  type="submit"
-                  @click="saveMode = 'new-save'"
-          >새로 저장</button>
         </div>
       </div>
       <div class="problem-content row">
@@ -108,11 +103,6 @@ import api from '@/api/index.js'
 
 export default {
   name: 'ClassContestProblem',
-  props: {
-    // mode: String,
-    // problemID: Number
-    // classID: Number
-  },
   data () {
     return {
       mode: this.$route.params.mode,
@@ -128,8 +118,7 @@ export default {
         data: '',
         solution: ''
       },
-      placeholder: '',
-      saveMode: ''
+      placeholder: ''
     }
   },
   mounted () {
@@ -156,9 +145,6 @@ export default {
         for (const key in data) {
           formData.append(`${key}`, data[key])
         }
-        // for (const value of formData.values()) {
-        //   console.log(value)
-        // }
         await api.createClassProblem(formData)
 
         alert('저장이 완료되었습니다.')

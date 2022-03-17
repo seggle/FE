@@ -13,7 +13,7 @@
             </form>
       </div>
       <div>
-        <button class="btn" @click="openProblem()">+ 문제 생성</button>
+        <button class="btn" @click="createProblem()">+ 문제 생성</button>
       </div>
     </div>
     <div class="table-div">
@@ -25,16 +25,15 @@
         <th scope="col">작성일</th>
         <th scope="col">작성자</th>
         <th scope="col">공개</th>
-        <!-- <th scope="col">옵션</th> -->
         <th scope="col">편집</th>
         <th scope="col">삭제</th>
       </tr>
     </thead>
     <tbody>
-      <tr :loading="loading" v-for="problem in problemList" :key="problem">
+      <tr v-for="problem in problemList" :key="problem">
         <th scope="row">{{ problem.id }}</th>
         <td>
-          <a @click="goProblem(problem.id)">{{ problem.title }}</a>
+          <a @click="goProblemDetail(problem.id)">{{ problem.title }}</a>
         </td>
         <td>{{ problem.created_time }}</td>
         <td>{{ problem.created_user }}</td>
@@ -49,11 +48,9 @@
         </td>
         <td scope="row">
           <button class="edit-btn"
-                  @click="openProblem(problem.id)">
+                  @click="editProblem(problem.id)">
             <font-awesome-icon icon="pen" />
           </button>
-          <!-- <a class="ghost-button" @click="openProblem(problem.id)">편집</a> | -->
-          <!-- <a class="ghost-button" @click="deleteProblem(problem.id)">삭제</a> -->
         </td>
         <td scope="row">
           <button class="delete-btn"
@@ -65,7 +62,7 @@
     </tbody>
   </table>
   </div>
-  <Pagination :pagination="PageValue" @get-page="getPage"/>
+  <Pagination :pagination="PageValue" @get-page="getProblemList"/>
 </div>
 </template>
 
@@ -82,7 +79,6 @@ export default {
   data () {
     return {
       problemList: [],
-      loading: false,
       keyword: '',
       currentPage: 1,
       PageValue: []
@@ -95,32 +91,19 @@ export default {
     init () {
       this.getProblemList(1)
     },
-    getPage (page) {
-      this.getProblemList(page)
-    },
     async getProblemList (page) {
       try {
-        this.loading = true
         this.currentPage = page
         this.PageValue = []
         const res = await api.getProblemList(page, this.keyword)
-        this.loading = false
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
         this.problemList = res.data.results
-        for (var i = 0; i < this.problemList.length; i++) {
-          this.problemList[i].created_time = GMTtoLocale(this.problemList[i].created_time)
+        for (const problem of this.problemList) {
+          problem.created_time = GMTtoLocale(problem.created_time)
         }
-      } catch (error) {
-        console.log(error)
+        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+      } catch (err) {
+        console.log(err)
       }
-    },
-    goProblem (problemID) {
-      this.$router.push({
-        name: 'ClassProblem',
-        params: {
-          problemID: problemID
-        }
-      })
     },
     async deleteProblem (problemID) {
       try {
@@ -128,38 +111,41 @@ export default {
           await api.deleteProblem(problemID)
           this.getProblemList(this.currentPage)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
-    openProblem (problemID) {
-      try {
-        if (typeof problemID === 'undefined') {
-          this.$router.push({
-            name: 'CreateClassProblem',
-            params: {
-              classID: this.$route.params.classID
-            }
-          })
-        } else {
-          this.$router.push({
-            name: 'EditClassProblem',
-            params: {
-              classID: this.$route.params.classID,
-              problemID: problemID
-            }
-          })
+    goProblemDetail (problemID) {
+      this.$router.push({
+        name: 'ClassProblem',
+        params: {
+          problemID: problemID
         }
-      } catch (error) {
-        console.log(error)
-      }
+      })
+    },
+    editProblem (problemID) {
+      this.$router.push({
+        name: 'EditClassProblem',
+        params: {
+          classID: this.$route.params.classID,
+          problemID: problemID
+        }
+      })
+    },
+    createProblem () {
+      this.$router.push({
+        name: 'CreateClassProblem',
+        params: {
+          classID: this.$route.params.classID
+        }
+      })
     },
     async changeSwitch (problemID) {
       try {
         await api.changeProblemSwitch(problemID)
         this.getProblemList(this.currentPage)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
   },

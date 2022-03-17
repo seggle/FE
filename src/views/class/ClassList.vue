@@ -2,9 +2,8 @@
   <div class="container">
     <header>
       <h1 id="title">수업 및 시험</h1>
-      <div v-if="this.$store.getters.isAdmin"
-           class="button-group">
-        <button class="btn" @click="goEdit">편집</button>
+      <div v-if="this.$store.getters.isAdmin" class="button-group">
+        <button class="btn" @click="goEditClass">편집</button>
         <button class="btn" @click="showModal = true">
           수업 생성
         </button>
@@ -19,7 +18,6 @@
     <table class="table">
       <thead>
         <tr>
-          <!-- <th class="col-1" scope="col">#</th> -->
           <th class="col-1" scope="col">연도</th>
           <th class="col-3" scope="col">학기</th>
           <th scope="col">제목</th>
@@ -27,16 +25,15 @@
       </thead>
       <tbody>
         <tr v-if="!this.$store.getters.isLogin"><td colspan="3">로그인 후 이용가능합니다.</td></tr>
-        <tr v-else-if="count===0"><td colspan="3">등록된 수업이 없습니다.</td></tr>
+        <tr v-else-if="noClass()"><td colspan="3">등록된 수업이 없습니다.</td></tr>
         <tr
           v-for="classes in classList"
           :key="classes"
-          @click="goClass(classes.id)"
+          @click="goClassDetail(classes.id)"
         >
-          <!-- <th scope="row">{{ classes.id }}</th> -->
           <td>{{ classes.year }}</td>
           <td>{{ classes.semester }}</td>
-          <td><p>{{ classes.name }}</p></td>
+          <td>{{ classes.name }}</td>
         </tr>
       </tbody>
     </table>
@@ -54,37 +51,41 @@ export default {
   },
   data () {
     return {
-      userID: this.$store.state.userid,
+      classCount: 0,
       classList: [],
-      showModal: false,
-      count: 0
+      showModal: false
     }
   },
   mounted () {
     this.getClassList()
   },
   methods: {
-    goClass (classID) {
-      this.$router.push({
-        name: 'ClassContest',
-        params: { classID: classID }
-      })
-    },
-    goEdit () {
-      this.$router.push({ name: 'EditClassList' })
-    },
     async getClassList () {
       try {
         const res = await api.getClassList()
-        this.count = res.data.length
-        for (let i = 0; i < res.data.length; i++) {
-          if (res.data[i].is_show) {
-            this.classList.push(res.data[i])
+        this.classCount = res.data.length
+        for (const classes of res.data) {
+          if (classes.is_show) {
+            this.classList.push(classes)
           }
         }
       } catch (err) {
         console.log(err)
       }
+    },
+    goClassDetail (classID) {
+      this.$router.push({
+        name: 'ClassContest',
+        params: { classID: classID }
+      })
+    },
+    goEditClass () {
+      this.$router.push({
+        name: 'EditClassList'
+      })
+    },
+    noClass () {
+      return (this.classCount === 0)
     }
   }
 }

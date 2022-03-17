@@ -10,12 +10,7 @@
         <div class="button">
           <button class="btn"
                   type="submit"
-                  @click="saveMode = 'save'"
           >저장</button>
-          <button class="btn"
-                  type="submit"
-                  @click="saveMode = 'new-save'"
-          >새로 저장</button>
         </div>
       </div>
       <div class="problem-content row">
@@ -127,8 +122,7 @@ export default {
         data: '',
         solution: ''
       },
-      placeholder: '',
-      saveMode: ''
+      placeholder: ''
     }
   },
   mounted () {
@@ -167,12 +161,7 @@ export default {
         for (const key in data) {
           formData.append(`${key}`, data[key])
         }
-
-        if (this.saveMode === 'save') {
-          await api.editProblem(this.problemID, formData)
-        } else if (this.saveMode === 'new-save') {
-          await api.createClassProblem(formData)
-        }
+        await api.editProblem(this.problemID, formData)
 
         alert('저장이 완료되었습니다.')
         this.$router.push({

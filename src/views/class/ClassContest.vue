@@ -2,7 +2,6 @@
   <div class="container">
     <div class="row">
       <ClassContestNav class="col-lg-3 col-xs-4 py-4"></ClassContestNav>
-      <!--밑에 페이지가 뿌려짐-->
       <router-view class="col-lg-9 col-xs-8 px-4 py-4"></router-view>
     </div>
   </div>

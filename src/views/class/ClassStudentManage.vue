@@ -5,7 +5,7 @@
         <label for="class-student" class="p-2 fs-4">수강생</label>
         <textarea id="class-student"
                   class="form-control mb-3 p-3" cols="30" rows="15"
-                  v-model="studentlist"
+                  v-model="studentList"
                   placeholder="수강생을 등록하세요.">
         </textarea>
         <button class="btn"
@@ -13,11 +13,11 @@
                 @click="submitStudentForm"
         >등록</button>
       </form>
-      <form v-if="privilege>1" class="class-TA-form col-md-4">
+      <form v-if="isProf()" class="class-TA-form col-md-4">
         <label for="class-TA" class="p-2 fs-4">TA</label>
         <textarea id="class-TA"
                   class="form-control mb-3 p-3" cols="30" rows="15"
-                  v-model="talist"
+                  v-model="taList"
                   placeholder="TA를 등록하세요.">
         </textarea>
         <button class="btn"
@@ -36,9 +36,10 @@ export default {
   data () {
     return {
       classID: this.$route.params.classID,
-      studentlist: '',
-      talist: '',
-      privilege: 0
+      classUserList: [],
+      studentList: '',
+      taList: '',
+      userPrivilege: 0
     }
   },
   mounted () {
@@ -47,52 +48,58 @@ export default {
   methods: {
     init () {
       this.getClassUserList()
-      this.getPrevilege()
     },
-    async getPrevilege () {
-      const res = await api.getClassUserList(this.classID)
-      for (var i = 0; i < res.data.length; i++) {
-        if (res.data[i].username === this.$store.state.userid) {
-          this.privilege = res.data[i].privilege
+    async getClassUserList () {
+      try {
+        this.taList = ''
+        this.studentList = ''
+        const res = await api.getClassUserList(this.classID)
+        this.classUserList = res.data
+        this.setUserList()
+        this.getPrivilege()
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    setUserList () {
+      for (const classUser of this.classUserList) {
+        if (classUser.privilege === 0) {
+          this.studentList += classUser.username + '\n'
+        } else if (classUser.privilege === 1) {
+          this.taList += classUser.username + '\n'
+        }
+      }
+    },
+    getPrivilege () {
+      for (const classUser of this.classUserList) {
+        if (classUser.username === this.$store.state.userid) {
+          this.userPrivilege = classUser.privilege
           break
         }
       }
     },
-    async getClassUserList () {
-      try {
-        const res = await api.getClassUserList(this.classID)
-        for (var i = 0; i < res.data.length; i++) {
-          if (res.data[i].privilege === 0) {
-            this.studentlist += res.data[i].username + '\n'
-          } else if (res.data[i].privilege === 1) {
-            this.talist += res.data[i].username + '\n'
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      }
+    isProf () {
+      return (this.userPrivilege > 1)
     },
     async submitTAForm () {
-      const data = []
-      const tmp = this.talist.split('\n')
-      for (var i = 0; i < tmp.length; i++) {
-        data.push({ username: tmp[i] })
-      }
+      const data = this.makeClassUserData(this.taList)
       await api.submitClassTAList(this.classID, data)
       alert('TA 등록이 완료되었습니다.')
-      this.talist = ''
       this.getClassUserList()
     },
     async submitStudentForm () {
-      const data = []
-      const tmp = this.studentlist.split('\n')
-      for (var i = 0; i < tmp.length; i++) {
-        data.push({ username: tmp[i] })
-      }
+      const data = this.makeClassUserData(this.studentList)
       await api.submitClassStudentList(this.classID, data)
       alert('수강생 등록이 완료되었습니다.')
-      this.studentlist = ''
       this.getClassUserList()
+    },
+    makeClassUserData (userList) {
+      const data = []
+      const tmp = userList.split('\n')
+      for (const user of tmp) {
+        data.push({ username: user })
+      }
+      return data
     }
   }
 }
