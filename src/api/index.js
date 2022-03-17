@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:8000',
+      target: ' http://52.14.242.186:8000',
       changeOrigin: true
     }
   })
@@ -99,8 +99,12 @@ function getUserCompetitionSubmissions (competitionID, username) {
     }
   })
 }
+
 function selectProblemSubmission (classID, contestID, cpID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/${cpID}/check`, data)
+  return instance.patch(
+        `/class/${classID}/contests/${contestID}/${cpID}/check`,
+        data
+  )
 }
 
 function selectCompetitionSubmission (competitionID, data) {
@@ -170,7 +174,10 @@ function selectContestProblem (classID, contestID, data) {
 }
 
 function editContestProblem (classID, contestID, data) {
-  return instance.patch(`/class/${classID}/contests/${contestID}/description`, data)
+  return instance.patch(
+        `/class/${classID}/contests/${contestID}/description`,
+        data
+  )
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
@@ -356,11 +363,17 @@ function changeProblemSwitch (id) {
 }
 
 function submitFileProblem (classID, contestID, cpID, username, data) {
-  return formDataInstance.post(`/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
+  return formDataInstance.post(
+        `/class/${classID}/contests/${contestID}/${cpID}/${username}`,
+        data
+  )
 }
 
 function submitFileCompetition (competitionID, username, data) {
-  return formDataInstance.post(`/competitions/${competitionID}/${username}/`, data)
+  return formDataInstance.post(
+        `/competitions/${competitionID}/${username}/`,
+        data
+  )
 }
 
 function createGeneralProblem (data) {
