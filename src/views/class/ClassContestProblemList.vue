@@ -43,10 +43,11 @@
             <th scope="col">제목</th>
             <th scope="col">마감기한</th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="problems in problemList" :key="problems">
+          <tr v-for="problems in contestProblemList" :key="problems">
             <th scope="row">{{ problems.id }}</th>
             <td>
               <a
@@ -62,8 +63,17 @@
             </td>
             <td>{{ problems.end_time }}</td>
             <td scope="row">
+                <button
+                  v-if="isTAOverPrivilege()"
+                  class="edit-btn"
+                  @click="EditClassContestProblem(problems.id)"
+                >
+                  <font-awesome-icon icon="pen" />
+                </button>
+              </td>
+            <td scope="row">
               <button
-                v-if="this.$store.getters.isAdmin"
+                v-if="isTAOverPrivilege()"
                 class="delete-btn"
                 @click="deleteContestProblem(problems.id)"
               >
@@ -86,7 +96,7 @@ export default {
       classID: this.$route.params.classID,
       contestID: this.$route.params.contestID,
       contestTitle: '',
-      problemList: [],
+      contestProblemList: [],
       problemID: '',
       testMode: false,
       testStart: localStorage.getItem('test'),
@@ -97,6 +107,7 @@ export default {
   },
   created () {
     this.getContestInfo(this.$route.params.contestID)
+    this.getClassUserList()
     this.getContestProblemList(this.$route.params.contestID)
     this.onEverySecond()
   },
@@ -129,6 +140,13 @@ export default {
       this.$router.push({
         name: 'ClassExamManage',
         params: { classID: this.classID, contestID: this.contestID }
+      })
+    },
+    EditClassContestProblem (contestProblemID) {
+      console.log(contestProblemID)
+      this.$router.push({
+        name: 'EditClassContestProblem',
+        params: { contestID: this.contestID, contestProblemID: contestProblemID }
       })
     },
     async getContestInfo (contestID) {

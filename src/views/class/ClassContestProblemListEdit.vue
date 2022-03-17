@@ -14,7 +14,7 @@
         </form>
       </div>
       <div>
-        <button class="btn" id="problem-create" @click="selectProblem">
+        <button class="btn" id="problem-create" @click="selectClassProblem">
           다음
         </button>
       </div>
@@ -59,7 +59,7 @@
     <div class="d-flex mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 순서 및 제목 수정</h2>
       <div>
-        <button class="btn" id="problem-create" @click="editProblem">
+        <button class="btn" id="problem-create" @click="SaveContestProblem">
           저장
         </button>
       </div>
@@ -73,7 +73,6 @@
           <draggable
             class="dragArea list-group w-full"
             :list="contestProblemList"
-            @change="log"
           >
             <tr
               class="list-group-item"
@@ -81,9 +80,7 @@
               :key="problem"
             >
               <th scope="row">{{ problem.problem_id }}</th>
-              <td>
-                <input type="text" v-model="problem.title" />
-              </td>
+              <td> {{ problem.title }} </td>
             </tr>
           </draggable>
         </tbody>
@@ -118,9 +115,6 @@ export default defineComponent({
       total: 0,
       currentPage: 1,
       firstPage: true,
-      problemTitle: '',
-      enabled: true,
-      dragging: false,
       PageValue: []
     }
   },
@@ -160,7 +154,7 @@ export default defineComponent({
       }
       return false
     },
-    async selectProblem () {
+    async selectClassProblem () {
       try {
         for (const checkedProblem of this.checkList) {
           const item = {}
@@ -187,50 +181,33 @@ export default defineComponent({
           this.contestID
         )
         this.contestProblemList = res.data
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
-
-    // 문제제목 중복체크
-    // 수정 필요
-    checkTitle () {
-      var k = 0
-      for (var i = 0; i < this.changedList.length;) {
-        var item = this.changedList[i]
-        for (var j = 0; j < i; j++) {
-          if (item.title === this.changedList[j].title) {
-            k = 1
-            break
-          }
-        }
-        if (k === 0) i += 1
-      }
-      if (k === 0) return true
-      else return false
+    EditClassContestProblem (contestProblemID) {
+      console.log(contestProblemID)
+      this.$router.push({
+        name: 'EditClassContestProblem',
+        params: { contestProblemID: contestProblemID }
+      })
     },
-    // 수정필요
-    async editProblem () {
+    async SaveContestProblem () {
       try {
         for (let i = 0; i < this.contestProblemList.length; i++) {
           const item = {}
           item.id = this.contestProblemList[i].id
-          item.title = this.contestProblemList[i].title
           item.order = i + 1
           this.changedList.push(item)
         }
-        if (this.checkTitle()) {
-          await api.editContestProblem(
-            this.classID,
-            this.contestID,
-            this.changedList
-          )
-          alert('변경사항이 저장되었습니다.')
-          this.firstPage = true
-          this.$router.push({ name: 'ClassContestProblemList' })
-        } else {
-          alert('중복된 제목이 존재합니다')
-        }
+        await api.editContestProblemOrder(
+          this.classID,
+          this.contestID,
+          this.changedList
+        )
+        alert('변경사항이 저장되었습니다.')
+        this.firstPage = true
+        this.$router.push({ name: 'ClassContestProblemList' })
       } catch (err) {
         console.log(err)
       }

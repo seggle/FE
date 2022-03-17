@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:8000',
+      target: 'http://15.165.30.200:8000',
       changeOrigin: true
     }
   })
@@ -169,8 +169,12 @@ function selectContestProblem (classID, contestID, data) {
   return instance.post(`/api/class/${classID}/contests/${contestID}`, data)
 }
 
-function editContestProblem (classID, contestID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/description`, data)
+function editContestProblem (classID, contestID, contestProblemID, data) {
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/${contestProblemID}/description`, data)
+}
+
+function editContestProblemOrder (classID, contestID, data) {
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/order`, data)
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
@@ -491,5 +495,6 @@ export default {
   examInfo,
   resetExam,
   exceptUser,
-  editGeneralProblem
+  editGeneralProblem,
+  editContestProblemOrder
 }
