@@ -19,7 +19,6 @@ const requireAdminAuth = () => (to, from, next) => {
 
 const requireClassAuth = () => async (to, from, next) => {
   try {
-    console.log(to.params.classID)
     const res = await api.getClassUserList(to.params.classID)
     const classList = res.data
     for (let i = 0; i < classList.length; i++) {

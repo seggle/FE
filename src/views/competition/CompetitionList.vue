@@ -5,7 +5,7 @@
       <div v-if="this.$store.getters.isAdmin">
         <button class="btn" @click="showModal = true">대회 관리</button>
         <ModalCompetitionAdmin v-if="showModal" @close="showModal = false" />
-        <button class="btn" @click="goCreateProblem">대회 생성</button>
+        <button class="btn" @click="goCreateCompetitionProblem">대회 생성</button>
       </div>
     </header>
 
@@ -73,11 +73,11 @@ export default {
     }
   },
   mounted () {
-    this.getGeneralList()
+    this.getCompetitionList()
   },
   methods: {
     /* 일반대회 리스트 불러오기 */
-    async getGeneralList () {
+    async getCompetitionList () {
       try {
         const res = await api.getCompetitionList()
         this.count = res.data.length
@@ -167,7 +167,7 @@ export default {
       }
     },
     /* 대회문제 생성 */
-    goCreateProblem () {
+    goCreateCompetitionProblem () {
       this.$router.push({
         name: 'CreateCompetition'
       })

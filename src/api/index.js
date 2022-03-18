@@ -388,11 +388,11 @@ function submitFileCompetition (competitionID, username, data) {
   return formDataInstance.post(`/api/competitions/${competitionID}/${username}/`, data)
 }
 
-function createGeneralProblem (data) {
+function createCompetitionProblem (data) {
   return instance.post('/api/competitions/', data)
 }
 
-function editGeneralProblem (competitionID, data) {
+function editCompetitionProblem (competitionID, data) {
   return instance.put(`/api/competitions/${competitionID}/`, data)
 }
 
@@ -530,12 +530,12 @@ export default {
   submitFileCompetition,
   submitFileProblem,
   createClassProblem,
-  createGeneralProblem,
+  createCompetitionProblem,
   examStart,
   examInfo,
   resetExam,
   exceptUser,
-  editGeneralProblem,
+  editCompetitionProblem,
   downloadDataFile,
   downloadSolutionFile,
   downloadCsvFile,
