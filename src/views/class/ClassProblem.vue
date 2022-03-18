@@ -41,8 +41,10 @@
         <!-- 데이터 -->
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
             <h5 class="list-title">데이터 설명
-              <button class="btn" :disabled="alreadyJoined == false">
-                <a :href="problem.data">다운로드</a>
+              <button class="btn"
+                      :disabled="alreadyJoined == false"
+                      @click="downloadDataFile">
+                <a id="data-download">다운로드</a>
               </button>
             </h5>
             <p class="list-content">
@@ -67,7 +69,8 @@ export default {
     return {
       userID: this.$store.state.userid,
       problemID: this.$route.params.problemID,
-      problem: []
+      problem: [],
+      dataLink: ''
     }
   },
   mounted () {
@@ -89,6 +92,18 @@ export default {
     },
     download (url) {
       location.href = url
+    },
+    async downloadDataFile () {
+      const response = await api.downloadDataFile(this.problemID)
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: 'application/zip'
+        })
+      )
+      const a = document.getElementById('data-download')
+      a.download = filename
+      a.href = url
     }
   }
 }

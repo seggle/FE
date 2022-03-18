@@ -55,9 +55,13 @@
         <!-- 데이터 -->
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
             <h5 class="list-title">데이터 설명
-              <button class="btn" :disabled="alreadyJoined == false">
-                <a :href="problem.data">다운로드</a>
-              </button>
+              <a id="zip-download">
+                <button class="btn"
+                        :disabled="alreadyJoined == false"
+                        @click="downloadFile('zip')">
+                  다운로드
+                </button>
+              </a>
             </h5>
             <p class="list-content">
               <span v-html="problem.data_description"></span>
@@ -83,16 +87,20 @@
                 <td>{{ users.score }}</td>
                 <td>{{ users.created_time.slice(0, 10) + ' ' + users.created_time.slice(11, 19)}}</td>
                 <td v-if="privilege">
-                  <button class="download-btn"
-                    @click="download(users.ipynb)">
-                    <font-awesome-icon icon="file-arrow-down" />
-                  </button>
+                  <a id="ipynb-download">
+                    <button class="download-btn"
+                            @click="downloadFile('ipynb')">
+                      <font-awesome-icon icon="file-arrow-down" />
+                    </button>
+                  </a>
                 </td>
                 <td v-if="privilege">
-                  <button class="download-btn"
-                    @click="download(users.csv)">
-                    <font-awesome-icon icon="file-arrow-down" />
-                  </button>
+                  <a id="csv-download">
+                    <button class="download-btn"
+                            @click="downloadFile('csv')">
+                      <font-awesome-icon icon="file-arrow-down" />
+                    </button>
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -328,6 +336,30 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    downloadFile (response, FILE_TYPE) {
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: `application/${FILE_TYPE}`
+        })
+      )
+      const a = document.getElementById(`${FILE_TYPE}-download`)
+      a.href = url
+      a.download = filename
+      a.click()
+    },
+    async downloadDataFile () {
+      const response = await api.downloadDataFile(this.problemID)
+      this.downloadFile(response, 'zip')
+    },
+    async downloadCsvFile (submissionID) {
+      const response = await api.downloadCsvFile(submissionID)
+      this.downloadFile(response, 'csv')
+    },
+    async downloadIpynbFile (submissionID) {
+      const response = await api.downloadIpynbFile(submissionID)
+      this.downloadFile(response, 'ipynb')
     }
   }
 }

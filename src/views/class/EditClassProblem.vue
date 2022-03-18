@@ -89,7 +89,8 @@
                   <label class="form-label">정답 파일</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
                   <a class="file-download-btn"
-                     :href="problem.solution"
+                     id="solution-download"
+                     @click="downloadSolution"
                   >다운로드</a>
                   <input id="solution-file-input"
                          type="file"
@@ -193,6 +194,19 @@ export default {
       } else {
         this.problem.solution = files[0]
       }
+    },
+    async downloadSolution () {
+      const FILE_TYPE = 'application/csv'
+      const response = await api.downloadSolutionfile(this.problemID)
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: FILE_TYPE
+        })
+      )
+      const a = document.getElementById('solution-download')
+      a.download = filename
+      a.href = url
     }
   }
 }
