@@ -2,11 +2,10 @@
   <div class="container problem-container" :key="problem">
     <div class="problem-header">
       <h1 id="title">
-        {{ problem.title}}
+        {{ problem.title }}
       </h1>
-      <button class="btn"
-              @click="joinCompetition"
-              :disabled="alreadyJoined">{{ this.joinText }}
+      <button class="btn" @click="joinCompetition" :disabled="alreadyJoined">
+        {{ this.joinText }}
       </button>
     </div>
 
@@ -14,26 +13,37 @@
       <!-- 세로 메뉴 탭 -->
       <div class="problem-tab col-2">
         <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active"
-            data-bs-toggle="list" role="tab"
+          <a
+            class="list-group-item list-group-item-action active"
+            data-bs-toggle="list"
+            role="tab"
             id="list-info-list"
             href="#list-info"
-            aria-controls="list-info">문제 설명
+            aria-controls="list-info"
+            >문제 설명
           </a>
-          <a class="list-group-item list-group-item-action"
-            data-bs-toggle="list" role="tab"
+          <a
+            class="list-group-item list-group-item-action"
+            data-bs-toggle="list"
+            role="tab"
             id="list-data-list"
             href="#list-data"
-            aria-controls="list-data">데이터
+            aria-controls="list-data"
+            >데이터
           </a>
-          <a class="list-group-item list-group-item-action"
-            data-bs-toggle="list" role="tab"
+          <a
+            class="list-group-item list-group-item-action"
+            data-bs-toggle="list"
+            role="tab"
             id="list-leaderboard-list"
             href="#list-leaderboard"
-            aria-controls="list-leaderboard">리더보드
+            aria-controls="list-leaderboard"
+            >리더보드
           </a>
-          <a class="list-group-item list-group-item-action"
-            data-bs-toggle="list" role="tab"
+          <a
+            class="list-group-item list-group-item-action"
+            data-bs-toggle="list"
+            role="tab"
             id="list-submit-list"
             href="#list-submit"
             aria-controls="list-submit"
@@ -44,13 +54,15 @@
       <!-- 탭 내용 -->
       <div class="problem-tab-content col-10">
         <div class="tab-content" id="nav-tabContent">
-        <!-- 문제 설명 -->
-          <div class="tab-pane fade show active" role="tabpanel"
-                id="list-info" aria-labelledby="list-info-list"
-                :key="problem">
-            <h5 class="list-title">
-              문제 설명
-            </h5>
+          <!-- 문제 설명 -->
+          <div
+            class="tab-pane fade show active"
+            role="tabpanel"
+            id="list-info"
+            aria-labelledby="list-info-list"
+            :key="problem"
+          >
+            <h5 class="list-title">문제 설명</h5>
             <p class="list-content">
               <span v-html="problem.description"></span>
             </p>
@@ -65,11 +77,16 @@
               </p>
             </div>
           </div>
-        <!-- 데이터 -->
-          <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
-            <h5 class="list-title">데이터 설명
-              <button class="btn"
-                     :disabled="alreadyJoined == false">
+          <!-- 데이터 -->
+          <div
+            class="tab-pane fade"
+            id="list-data"
+            role="tabpanel"
+            aria-labelledby="list-data-list"
+          >
+            <h5 class="list-title">
+              데이터 설명
+              <button class="btn" :disabled="alreadyJoined == false">
                 <a :href="problem.data">다운로드</a>
               </button>
             </h5>
@@ -77,60 +94,86 @@
               <span v-html="problem.data_description"></span>
             </p>
           </div>
-        <!-- 리더보드 -->
-          <div class="tab-pane fade table-div" id="list-leaderboard" role="tabpanel" aria-labelledby="list-leaderboard-list">
+          <!-- 리더보드 -->
+          <div
+            class="tab-pane fade table-div"
+            id="list-leaderboard"
+            role="tabpanel"
+            aria-labelledby="list-leaderboard-list"
+          >
             <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">이름</th>
-                <th scope="col">점수</th>
-                <th scope="col">제출 날짜</th>
-                <th v-if="privilege" scope="col">코드(.ipynb)</th>
-                <th v-if="privilege" scope="col">답안(.csv)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(users, i) in leaderboardList" :key="users"
-                 :class="{ 'bg-success': this.userID === users.username}">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ users.username }}</td>
-                <td>{{ users.score }}</td>
-                <td>{{ users.created_time.slice(0, 10) + ' ' + users.created_time.slice(11, 19)}}</td>
-                <td v-if="privilege">
-                  <button class="download-btn"
-                    @click="download(users.ipynb)">
-                    <font-awesome-icon icon="file-arrow-down" />
-                  </button>
-                </td>
-                <td v-if="privilege">
-                  <button class="download-btn"
-                    @click="download(users.csv)">
-                    <font-awesome-icon icon="file-arrow-down" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">이름</th>
+                  <th scope="col">점수</th>
+                  <th scope="col">제출 날짜</th>
+                  <th v-if="IsContestAdminCheck" scope="col">코드(.ipynb)</th>
+                  <th v-if="IsContestAdminCheck" scope="col">답안(.csv)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(user, i) in leaderboardList"
+                  :key="user"
+                  :class="{
+                    'bg-success p-2 text-dark bg-opacity-50':
+                      this.userID === user.username,
+                  }"
+                >
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.score }}</td>
+                  <td>
+                    {{ user.created_time }}
+                  </td>
+                  <td v-if="IsContestAdminCheck">
+                    <button
+                      class="download-btn"
+                      @click="downloadFile(user.ipynb)"
+                    >
+                      <font-awesome-icon icon="file-arrow-down" />
+                    </button>
+                  </td>
+                  <td v-if="IsContestAdminCheck">
+                    <button
+                      class="download-btn"
+                      @click="downloadFile(user.csv)"
+                    >
+                      <font-awesome-icon icon="file-arrow-down" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
-        <!-- 제출 -->
-          <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
+          <!-- 제출 -->
+          <div
+            class="tab-pane fade"
+            id="list-submit"
+            role="tabpanel"
+            aria-labelledby="list-submit-list"
+          >
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
-              <input id="csv-file-input"
-                     type="file"
-                     class="form-control"
-                     accept=".csv"
-                     @change="uploadFile">
+              <input
+                id="csv-file-input"
+                type="file"
+                class="form-control"
+                accept=".csv"
+                @change="uploadFile"
+              />
 
               <h5 class="list-title">ipynb 파일 제출</h5>
               <p class="file-desc">하나의 ipynb 파일만 업로드 가능합니다</p>
-              <input id="ipynb-file-input"
-                     type="file"
-                     class="form-control"
-                     accept=".ipynb"
-                     @change="uploadFile">
+              <input
+                id="ipynb-file-input"
+                type="file"
+                class="form-control"
+                accept=".ipynb"
+                @change="uploadFile"
+              />
               <button class="btn" @click="submitFile">파일 제출</button>
             </div>
             <div class="table-div">
@@ -147,12 +190,16 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr v-if="count === 0">
+                    <td colspan="3">제출한 대회가 없습니다.</td>
+                  </tr>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
-                      <input class="form-check-input"
-                            type="checkbox"
-                            v-model="submitRowIndex"
-                            :true-value="submit.id"
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        v-model="submitRowIndex"
+                        :true-value="submit.id"
                       />
                     </th>
                     <td>{{ submit.csv }}</td>
@@ -203,8 +250,9 @@ export default {
       ipynb: '',
 
       PageValue: [],
+      count: 0,
       currentPage: 1,
-      privilege: false
+      privilege: 0
     }
   },
   mounted () {
@@ -213,6 +261,7 @@ export default {
   methods: {
     init () {
       this.getUserStatus()
+      /* 대회 참여여부 체크 */
       if (this.alreadyjoined) {
         this.joinText = '참여중'
       } else {
@@ -222,44 +271,63 @@ export default {
       this.getUserSubmissions(1)
       this.getLeaderboard()
     },
+    /* 대회 관리자 리스트 불러오기 */
     async getUserStatus () {
       try {
         const res = await api.getCompetitionTAList(this.competitionID)
         const competitionList = res.data
-        for (let i = 0; i < competitionList.length; i++) {
-          if (String(competitionList[i].username) === this.userID) {
+        for (const competition of competitionList) {
+          if (String(competition.username) === this.userID) {
             this.joinText = '참여중'
             this.alreadyJoined = true
+            this.privilege = competition.privilege
           }
         }
       } catch (err) {
         console.log(err.response.data)
       }
     },
+    /* 대회 관리자인지 체크 */
+    IsContestAdminCheck () {
+      if (this.privilege !== 0) {
+        return false
+      } else {
+        return true
+      }
+    },
+    /* 대회문제 불러오기 */
     async getProblem () {
       try {
         const res = await api.getCompetitions(this.competitionID)
         res.data.start_time = GMTtoLocale(res.data.start_time)
         res.data.end_time = GMTtoLocale(res.data.end_time)
         res.data.description = converter.makeHtml(res.data.description)
-        res.data.data_description = converter.makeHtml(res.data.data_description)
+        res.data.data_description = converter.makeHtml(
+          res.data.data_description
+        )
         this.problem = res.data
       } catch (err) {
         console.log(err)
       }
     },
+    /* 리더보드 불러오기 */
     async getLeaderboard () {
       try {
         const res = await api.getCompetitionsLeaderboard(this.competitionID)
         console.log(res.data)
         this.leaderboardList = res.data
+        for (const user of this.leaderboardList) {
+          user.created_time = GMTtoLocale(user.created_time)
+        }
       } catch (err) {
         console.log(err)
       }
     },
-    download (url) {
+    /* 제출한 파일 다운로드 */
+    downloadFile (url) {
       location.href = url
     },
+    /* 대회 참여하기 */
     async joinCompetition () {
       try {
         await api.joinCompetition(this.competitionID)
@@ -272,36 +340,47 @@ export default {
     getPage (page) {
       this.getUserSubmissions(page)
     },
+    /* 제출할 파일이 이미 리더보드에 있는지 확인 */
     alreadyChecked () {
       // is_show이면 체크되어있어야함
-      for (let i = 0; i < this.submitList.length; i++) {
-        if (this.submitList[i].on_leaderboard) {
-          this.submitRowIndex = this.submitList[i].id
+      for (const submit of this.submitList) {
+        if (submit.on_leaderboard) {
+          this.submitRowIndex = submit.id
         }
       }
     },
+    /* 제출내역의 파일명 바꾸기 */
     changeSubmissionListName () {
-      for (let i = 0; i < this.submitList.length; i++) {
-        const csvName = this.submitList[i].csv
-        const ipynbName = this.submitList[i].ipynb
-        const submitDate = this.submitList[i].created_time
+      for (const submit of this.submitList) {
+        const csvName = submit.csv
+        const ipynbName = submit.ipynb
+        const submitDate = submit.created_time
 
-        this.submitList[i].csv = csvName.split('/').pop()
-        this.submitList[i].ipynb = ipynbName.split('/').pop()
-        this.submitList[i].created_time = GMTtoLocale(submitDate)
+        submit.csv = csvName.split('/').pop()
+        submit.ipynb = ipynbName.split('/').pop()
+        submit.created_time = GMTtoLocale(submitDate)
       }
     },
+    /* 대회참여자의 제출물 불러오기 */
     async getUserSubmissions (page) {
       try {
         this.currentPage = page
         this.PageValue = []
 
-        const res = await api.getUserCompetitionSubmissions(this.competitionID, this.userID)
+        const res = await api.getUserCompetitionSubmissions(
+          this.competitionID,
+          this.userID
+        )
+        this.count = res.data.length
         this.submitList = res.data.results
         this.alreadyChecked()
         this.changeSubmissionListName()
 
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        this.PageValue.push({
+          count: res.data.count,
+          currentPage: this.currentPage
+        })
+
         if (res.data.count !== 0) {
           this.total = parseInt((res.data.count - 1) / 15) + 1
         }
@@ -309,6 +388,7 @@ export default {
         console.log(err)
       }
     },
+    /* 파일 제출 */
     async submitFile () {
       try {
         const formData = new FormData()
@@ -327,6 +407,7 @@ export default {
         console.log(err)
       }
     },
+    /* 파일 업로드 */
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
       const id = e.target.id
@@ -336,6 +417,7 @@ export default {
         this.ipynb = files[0]
       }
     },
+    /* 제출할 파일 선택 */
     async selectSubmission () {
       try {
         const data = {
@@ -353,5 +435,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

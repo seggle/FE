@@ -75,7 +75,10 @@ function getCompetitionTAList (competitionID) {
 }
 
 function submitCompetitionTAList (competitionID, data) {
-  return instance.post(`/api/competitions/${competitionID}/participation/ta`, data)
+  return instance.post(
+        `/api/competitions/${competitionID}/participation/ta`,
+        data
+  )
 }
 
 function getCompetitionsLeaderboard (competitionID) {
@@ -99,8 +102,12 @@ function getUserCompetitionSubmissions (competitionID, username) {
     }
   })
 }
+
 function selectProblemSubmission (classID, contestID, cpID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/${cpID}/check`, data)
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/${cpID}/check`,
+        data
+  )
 }
 
 function selectCompetitionSubmission (competitionID, data) {
@@ -170,11 +177,17 @@ function selectContestProblem (classID, contestID, data) {
 }
 
 function editContestProblem (classID, contestID, contestProblemID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/${contestProblemID}/description`, data)
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/${contestProblemID}/description`,
+        data
+  )
 }
 
 function editContestProblemOrder (classID, contestID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/order`, data)
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/order`,
+        data
+  )
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
@@ -360,11 +373,17 @@ function changeProblemSwitch (id) {
 }
 
 function submitFileProblem (classID, contestID, cpID, username, data) {
-  return formDataInstance.post(`/api/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
+  return formDataInstance.post(
+        `/api/class/${classID}/contests/${contestID}/${cpID}/${username}`,
+        data
+  )
 }
 
 function submitFileCompetition (competitionID, username, data) {
-  return formDataInstance.post(`/api/competitions/${competitionID}/${username}/`, data)
+  return formDataInstance.post(
+        `/api/competitions/${competitionID}/${username}/`,
+        data
+  )
 }
 
 function createGeneralProblem (data) {
