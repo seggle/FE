@@ -1,24 +1,24 @@
 <template>
   <nav class="navbar navbar-expand-lg">
-    <div class="container px-5">
+    <div class="container px-3">
       <a class="navbar-brand" href="/">Seggle</a>
       <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
+        data-bs-target="#navBarContent"
+        aria-controls="navBarContent"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
         <font-awesome-icon icon="bars" />
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="navBarContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
-              id="navbarDropdownBlog"
+              id="navbarDropdown"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
@@ -27,7 +27,7 @@
             >
             <ul
               class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarDropdownBlog"
+              aria-labelledby="navbarDropdown"
             >
               <li>
                 <a class="dropdown-item" href="/competition">일반</a>
@@ -50,10 +50,7 @@
         <!-- 로그인 했을 때 -->
         <template v-if="isUserLogin">
           <router-link
-            v-if="
-              this.$store.state.usertype === 2 ||
-              this.$store.state.userid === 'seggle'
-            "
+            v-if="this.$store.getters.isSuperAdmin"
             to="/admin"
             class="admin"
           >
@@ -63,18 +60,21 @@
             {{ this.$store.state.userid }}
           </router-link>
 
-          <button type="button" class="btn" id="logout" @click="logout">
-            로그아웃
-          </button>
+          <button type="button"
+                  class="btn"
+                  @click="logout"
+          >로그아웃</button>
         </template>
         <!-- 로그인 안했을 때 -->
         <template v-else>
-          <button type="button" class="btn" id="login">
-            <a href="/login">로그인</a>
-          </button>
-          <button type="button" class="btn" id="login">
-            <a href="/register">회원가입</a>
-          </button>
+          <button type="button"
+                  class="btn"
+                  @click="goPage('Login')"
+          >로그인</button>
+          <button type="button"
+                  class="btn"
+                  @click="goPage('Register')"
+          >회원가입</button>
         </template>
       </div>
     </div>
@@ -84,11 +84,11 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
+
 export default {
   data () {
     return {
-      userid: this.$store.state.userid,
-      selected: ''
+      userid: this.$store.state.userid
     }
   },
   methods: {
@@ -100,6 +100,11 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    goPage (name) {
+      this.$router.push({
+        name: name
+      })
     }
   },
   computed: {
@@ -120,60 +125,39 @@ export default {
   width: 100%;
   min-height: 100vh;
 }
-nav {
-  background-color: white;
-}
-.navbar-brand {
-  color: black;
-}
+
 #title {
   font-weight: 800;
 }
-// a.router-link-exact-active {
-//   font-weight: bold;
-//   font-size: 16px;
-//   color: black;
-//   border-bottom: 3px solid black;
-// }
-.nav-link {
-  color: black;
-  // font-weight: bold;
 
-  &:focus,
-  &:hover {
+nav {
+  background-color: white;
+
+  .navbar-brand {
     color: black;
   }
+
+  .nav-link {
+    color: black;
+
+    &:focus,
+    &:hover {
+      color: black;
+      font-weight: bold;
+    }
+  }
 }
-.user {
-  display: grid;
-  padding: 15px 25px;
-  justify-content: space-between;
-}
-.users {
-  color: #000000;
-  font-weight: bold;
-  font-size: 20px;
-  padding: 0px 7px;
-}
+
+.users,
 .admin {
-  color: #000000;
+  color: black;
   font-weight: bold;
   font-size: 20px;
   padding: 0px 7px;
-}
-a:hover {
-  text-decoration: none;
-  color: black;
-}
-a.admin:hover {
-  text-decoration: underline;
-  color: black;
-}
-a.users:hover {
-  color: rgb(5, 1, 1);
-  text-decoration: underline;
-}
-a.nav-link:hover {
-  font-weight: bold;
+
+  &:hover {
+    color: black;
+    text-decoration: underline;
+  }
 }
 </style>

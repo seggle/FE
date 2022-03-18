@@ -1,43 +1,44 @@
 <template>
   <div class="container">
-    <div class="d-flex mb-2 mt-3">
-      <h1>{{ title }}</h1>
-      <div class="button-group">
-        <button @click="goList" class="btn" id="head"><font-awesome-icon icon="angle-left" /> 목록</button>
-      </div>
-    </div>
-    <div class="container">
+
+    <header class="board-create-header">
+      <h1 id="title">{{ title }}</h1>
+      <button class="btn"
+              @click="goBoardList">
+        <font-awesome-icon icon="angle-left" />
+        목록
+      </button>
+    </header>
+
+    <main class="board-create-content">
       <div class="form-group">
-        <div class="title">제목</div>
-        <div>
+        <label for="proposalTitle">제목</label>
         <input
           type="text"
           class="form-control"
           id="proposalTitle"
-          v-model="proposalTitle"
+          v-model="proposal.title"
           placeholder="글 제목을 입력해주세요."
         />
-        </div>
       </div>
 
       <div class="form-group">
-        <div class="context">본문</div>
+        <label for="proposalContext">본문</label>
         <textarea
           rows="10"
           class="form-control"
           id="proposalContext"
-          v-model="proposalContext"
+          v-model="proposal.context"
           placeholder="내용을 입력해주세요."
         />
       </div>
-    </div>
+    </main>
+
     <button
-      type="button"
-      class="btn btn-primary btn-sm px-4 me-sm-3"
-      id="proposal-submit"
+      class="btn"
+      id="proposal-submit-btn"
       @click="submitProposal"
-    >
-      등록
+    >등록
     </button>
   </div>
 </template>
@@ -45,11 +46,15 @@
 import api from '@/api/index.js'
 export default {
   name: 'BoardCreate',
-  data: () => {
+  data () {
     return {
-      proposalTitle: '',
-      proposalContext: '',
-      title: ''
+      title: '',
+      mode: this.$route.params.mode,
+      proposal: {
+        id: this.$route.query.id,
+        title: '',
+        context: ''
+      }
     }
   },
   mounted () {
@@ -57,82 +62,88 @@ export default {
   },
   methods: {
     init () {
-      if (this.$route.params.mode === 'edit') {
-        this.getProposal(this.$route.query.id)
+      if (this.mode === 'edit') {
+        this.getProposal()
         this.title = '글 수정'
       } else {
         this.title = '글 등록'
       }
     },
-    goList () {
-      this.$router.push({
-        name: 'Board'
-      })
+    async getProposal () {
+      try {
+        const res = await api.getProposalDetail(this.proposal.id)
+        this.proposal.title = res.data.title
+        this.proposal.context = res.data.context
+      } catch (error) {
+        console.log(error)
+      }
     },
     async submitProposal () {
       try {
         const data = {
-          title: this.proposalTitle,
-          context: this.proposalContext
+          title: this.proposal.title,
+          context: this.proposal.context
         }
-        if (this.$route.params.mode === 'create') {
+
+        if (this.mode === 'create') {
           await api.createProposal(data)
         } else {
-          await api.editProposal(this.$route.query.id, data)
+          await api.editProposal(this.proposal.id, data)
         }
-        this.$router.push({ path: '/board' })
+
+        this.goBoardList()
       } catch (err) {
         console.log(err)
       }
     },
-    async getProposal (proposalID) {
-      try {
-        const res = await api.getProposalDetail(proposalID)
-        this.proposalTitle = res.data.title
-        this.proposalContext = res.data.context
-      } catch (error) {
-        console.log(error)
-      }
+    goBoardList () {
+      this.$router.push({ name: 'Board' })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-@media (max-width: 420px) {
-  .form-control {
-    font-size: calc(0.6rem + 1.5vw);
+.container {
+  padding: 3rem 3rem;
+  @media (max-width: 420px) {
+    padding: 1rem 1rem;
   }
 }
-h1 {
-  width: 50%;
-  @media (max-width: 767px) {
-    font-size: calc(1.3rem + 2vw);
-    padding: 0px;
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0rem;
+  @media (max-width: 420px) {
+    padding: 1rem 0rem;
   }
-  margin-right: 0px;
-  text-align: left;
-  margin-top: 50px;
-  font-weight: bold;
-  text-align: left;
 }
-.title,
-.context {
-  font-weight: bold;
-  text-align: left;
-  margin: 10px;
-}
-.form-control {
-  float: left;
-  width: 100%;
-}
-.button-group {
-  margin-left: auto;
-}
+
 .btn {
-  float: right;
-  @media (max-width: 767px) {
-    font-size: calc(0.5rem + 2vw);
+  @media (max-width: 420px) {
+    font-size: calc(0.5rem + 1.5vw);
   }
-  margin-top: 50px;
+}
+
+.form-group {
+  text-align: left;
+
+  label {
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px 0px;
+  }
+
+  .form-control {
+    resize: none;
+    margin-bottom: 10px;
+    @media (max-width: 420px) {
+      font-size: calc(0.6rem + 1.5vw);
+    }
+  }
+}
+
+#proposal-submit-btn {
+  float: right
 }
 </style>

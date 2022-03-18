@@ -1,31 +1,42 @@
 <template>
   <div class="container">
-    <div class="d-flex mb-2 mt-3">
-      <h1>건의게시판</h1>
-      <div class="button-group">
-        <button @click="goCreate" class="btn" id="head">글쓰기</button>
-      </div>
-    </div>
-      <table class="table py-3">
-        <thead>
-          <tr>
-            <th class="col-1 tableId" scope="col">#</th>
-            <th class="col-7 proposal-title" scope="col">제목</th>
-            <th class="col-2" scope="col">작성자</th>
-            <th class="col-2" scope="col">작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="count===0"><td></td><td style="text-align: center;">등록된 게시물이 없습니다.</td><td></td><td></td></tr>
-          <tr v-for="proposals in proList" :key="proposals" @click="goProposalDetail(proposals.id)">
-            <td class="tableId">{{ proposals.id }}</td>
-            <td class="proposal-title">{{proposals.title}}</td>
-            <td>{{ proposals.created_user }}</td>
-            <td>{{ proposals.created_time.slice(0, 10) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    <Pagination :pagination="PageValue" @get-page="getPage" />
+
+    <header class="board-header">
+      <h1 id="title">건의게시판</h1>
+      <button class="btn"
+              @click="goCreateProposal"
+      >글쓰기</button>
+    </header>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="col-1" scope="col">#</th>
+          <th class="col-7" scope="col">제목</th>
+          <th class="col-2" scope="col">작성자</th>
+          <th class="col-2" scope="col">작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-if="count === 0">
+          <td></td>
+          <td>등록된 게시물이 없습니다.</td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr v-for="proposal in proposalList"
+            :key="proposal"
+            @click="goProposalDetail(proposal.id)">
+          <td>{{ proposal.id }}</td>
+          <td>{{proposal.title}}</td>
+          <td>{{ proposal.created_user }}</td>
+          <td>{{ setCreatedTime(proposal.created_time) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <Pagination :pagination="pageValue"
+                @get-page="getPage" />
   </div>
 </template>
 <script>
@@ -37,10 +48,10 @@ export default {
   components: {
     Pagination
   },
-  data: () => {
+  data () {
     return {
-      proList: [],
-      PageValue: [],
+      proposalList: [],
+      pageValue: [],
       currentPage: 1,
       count: 0
     }
@@ -55,27 +66,35 @@ export default {
     getPage (page) {
       this.getProposal(page)
     },
-    goCreate () {
-      this.$router.push({
-        name: 'BoardCreate',
-        params: { mode: 'create' }
+    setPagination (page) {
+      this.currentPage = page
+      this.pageValue = []
+
+      this.pageValue.push({
+        count: this.count,
+        currentPage: this.currentPage
       })
     },
     async getProposal (page) {
       try {
-        this.currentPage = page
-        this.PageValue = []
         const res = await api.getProposal(page)
+        this.proposalList = res.data.results
+        this.proposalList.reverse()
+
         this.count = res.data.count
-        this.PageValue.push({
-          count: res.data.count,
-          currentPage: this.currentPage
-        })
-        this.proList = res.data.results
-        this.proList.reverse()
+        this.setPagination(page)
       } catch (error) {
         console.log(error)
       }
+    },
+    setCreatedTime (createdTime) {
+      return createdTime.slice(0, 10)
+    },
+    goCreateProposal () {
+      this.$router.push({
+        name: 'BoardCreate',
+        params: { mode: 'create' }
+      })
     },
     goProposalDetail (proposalID) {
       this.$router.push({
@@ -87,43 +106,30 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@media (max-width: 420px) {
-  .table tr th:nth-child(4), .table tr td:nth-child(4) {
-    display: none;
-  }
-  .table tr th:nth-child(3), .table tr td:nth-child(3) {
-    width: 70px;
-  }
-}
-@media (max-width: 991px) {
-  .table tr th:nth-child(4), .table tr td:nth-child(4) {
-    width: 100px;
+.container {
+  padding: 3rem 3rem;
+  @media (max-width: 420px) {
+    padding: 1rem 1rem;
   }
 }
 
-h1 {
-  width: 50%;
-  @media (max-width: 767px) {
-    font-size: calc(1.3rem + 2vw);
-    padding: 0px;
-  }
-  margin-right: 0px;
-  text-align: left;
-  padding: 0 4rem 0 0;
-  margin-top: 50px;
-  font-weight: bold;
-  text-align: left;
-}
-.map {
-  background-color: gainsboro;
-}
-.page {
+header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-}
-.button-group {
-  margin-left: auto;
+  padding: 3rem 0rem;
+  @media (max-width: 420px) {
+    padding: 1rem 0rem;
+  }
+
+  .btn {
+    width: 6rem;
+    height: 2.5rem;
+    @media (max-width: 420px) {
+      width: 4rem;
+      font-size: 14px;
+    }
+  }
 }
 
 .table {
@@ -131,22 +137,42 @@ h1 {
   text-align: left;
   white-space: normal;
   table-layout: fixed;
-  th.tableId {
-    text-align: center;
+
+  th:nth-child(2) {
+    text-align: left;
   }
-  td.proposal-title {
+
+  td:nth-child(2) {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    text-align: left;
   }
-  td.tableId {
-    text-align: center;
-  }
+
   tr {
     @media (max-width: 420px) {
       font-size: calc(0.55rem + 2vw);
       padding: 0px;
     }
+  }
+}
+
+@media (max-width: 420px) {
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 70px;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 100px;
   }
 }
 </style>
