@@ -229,7 +229,7 @@ const routes = [{
   name: 'EditCompetition',
   component: EditCompetition,
   meta: { isAdmin: true },
-  beforeEnter: requireAdminAuth()
+  beforeEnter: requireCompetitionAdminAuth()
 },
 
 {

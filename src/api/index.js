@@ -70,7 +70,7 @@ function deleteCompetition (competitionID) {
   return instance.delete(`/api/competitions/${competitionID}/`)
 }
 
-function getCompetitionTAList (competitionID) {
+function getCompetitionUserList (competitionID) {
   return instance.get(`/api/competitions/${competitionID}/participation`)
 }
 
@@ -443,7 +443,7 @@ export default {
   joinCompetition,
   getCompetitions,
   deleteCompetition,
-  getCompetitionTAList,
+  getCompetitionUserList,
   submitCompetitionTAList,
   getCompetitionsLeaderboard,
   getUserProblemSubmissions,

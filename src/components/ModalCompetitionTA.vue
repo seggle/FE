@@ -52,7 +52,7 @@ export default {
     },
     async getCompetitionTAList () {
       try {
-        const res = await api.getCompetitionTAList(this.competition_id)
+        const res = await api.getCompetitionUserList(this.competition_id)
         this.talist = ''
         for (var i = 0; i < res.data.length; i++) {
           if (res.data[i].privilege === 1) {

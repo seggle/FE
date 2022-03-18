@@ -274,7 +274,7 @@ export default {
     /* 대회 관리자 리스트 불러오기 */
     async getUserStatus () {
       try {
-        const res = await api.getCompetitionTAList(this.competitionID)
+        const res = await api.getCompetitionUserList(this.competitionID)
         const competitionList = res.data
         for (const competition of competitionList) {
           if (String(competition.username) === this.userID) {
