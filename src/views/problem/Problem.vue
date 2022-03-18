@@ -234,7 +234,7 @@ export default {
     },
     async getUserStatus () {
       try {
-        const res = await api.getCompetitionTAList(this.problemID)
+        const res = await api.getCompetitionList(this.problemID)
         const competitionList = res.data
         for (let i = 0; i < competitionList.length; i++) {
           if (String(competitionList[i].username) === this.userID) {

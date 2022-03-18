@@ -28,9 +28,7 @@
             />
           </th>
           <td>{{ classes.semester }}</td>
-          <td class="class-name">
-            <p>{{ classes.name }}</p>
-          </td>
+          <td class="class-name">{{ classes.name }}</td>
           <td>
             <button class="edit-btn"
                     @click="showModal = true;
@@ -68,11 +66,9 @@ export default {
   },
   data () {
     return {
-      userID: this.$store.state.userid,
       classList: [],
       checkList: [],
-      showModal: false,
-      rowIndex: ''
+      showModal: false
     }
   },
   mounted () {
@@ -89,19 +85,18 @@ export default {
       }
     },
     alreadyChecked () {
-      // is_show이면 체크되어있어야함
-      for (let i = 0; i < this.classList.length; i++) {
-        if (this.classList[i].is_show) {
-          this.checkList.push(this.classList[i].id)
+      for (const classes of this.classList) {
+        if (classes.is_show) {
+          this.checkList.push(classes.id)
         }
       }
     },
     async editClassList () {
       try {
         const data = []
-        for (let i = 0; i < this.checkList.length; i++) {
+        for (const checkedClass of this.checkList) {
           const item = {}
-          item.class_id = this.checkList[i]
+          item.class_id = checkedClass
           data.push(item)
         }
         await api.editClassList(data)
@@ -115,7 +110,7 @@ export default {
       try {
         if (confirm('삭제하시겠습니까?')) {
           await api.removeClass(classID)
-          alert('변경사항이 저장되었습니다.')
+          alert('삭제되었습니다.')
           this.$router.push({ name: 'ClassList' })
         }
       } catch (err) {

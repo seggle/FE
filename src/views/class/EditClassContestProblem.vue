@@ -48,54 +48,12 @@
                     <option v-for="item in problem.metrics" :key="item">{{ item }}</option>
                   </select>
                 </div>
-
-                <div class="form-check form-switch">
-                  <label class="form-label">전체 공개</label>
-                  <input v-model="problem.public"
-                        class="form-check-input"
-                        id="publicSwitch"
-                        type="checkbox"
-                        role="switch">
-                </div>
               </div>
             </div>
             <!-- 데이터 -->
             <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list" :key="problem">
               <h5 class="list-title">데이터 설명</h5>
               <v-md-editor v-model="problem.data_description" height="400px" placeholder="데이터 설명을 입력하세요."/>
-              <div class="form-option">
-                <div class="data-file col-5">
-                  <p class="file-desc">하나의 zip 파일만 업로드 가능합니다</p>
-                  <label class="form-label">데이터 파일</label>
-                  <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <a class="file-download-btn"
-                     :href="problem.data">다운로드</a>
-                  <input id="data-file-input"
-                         type="file"
-                         accept=".zip"
-                         @change="uploadFile">
-                  <p v-if="problem.data"
-                      class="upload-file-name">
-                    {{ problem.data.name }}
-                  </p>
-                </div>
-                <div class="solution-file col-5">
-                  <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
-                  <label class="form-label">정답 파일</label>
-                  <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <a class="file-download-btn"
-                     id="solution-download"
-                     @click="downloadSolution"
-                  >다운로드</a>
-                  <input id="solution-file-input"
-                         type="file"
-                         accept=".csv"
-                         @change="uploadFile">
-                  <p v-if="problem.solution"
-                       class="upload-file-name"
-                  >{{ problem.solution.name }}</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -108,20 +66,18 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'EditContestProblem',
+  name: 'EditClassContestProblem',
   data () {
     return {
       classID: this.$route.params.classID,
-      problemID: this.$route.params.problemID,
+      contestID: this.$route.params.contestID,
+      contestProblemID: this.$route.params.contestProblemID,
       problem: {
         title: '',
         description: '',
         metrics: ['RSME', 'MSE', 'Accuracy', 'F1-score', 'RMSE', 'MAE', 'Log loss'],
         evaluation: '',
-        public: '',
-        data_description: '',
-        data: '',
-        solution: ''
+        data_description: ''
       },
       placeholder: ''
     }
@@ -131,71 +87,37 @@ export default {
   },
   methods: {
     init () {
-      this.getProblem()
+      this.getContestProblem()
       this.placeholder = this.problem.title
     },
-    async getProblem () {
+    async getContestProblem () {
       try {
-        const res = await api.getProblem(this.problemID)
+        const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         Object.assign(this.problem, res.data)
-
-        this.problem.data = ''
-        this.problem.solution = ''
       } catch (err) {
         console.log(err)
       }
     },
     async submitForm () {
       try {
-        const formData = new FormData()
-        formData.append('data', this.problem.data)
-        formData.append('solution', this.problem.solution)
-
         const data = {
           title: this.problem.title,
           description: this.problem.description,
           evaluation: this.problem.evaluation,
-          data_description: this.problem.data_description,
-          public: this.problem.public,
-          class_id: this.classID
+          data_description: this.problem.data_description
         }
-        for (const key in data) {
-          formData.append(`${key}`, data[key])
-        }
-        await api.editProblem(this.problemID, formData)
+        await api.editContestProblem(this.classID, this.contestID, this.contestProblemID, data)
 
         alert('저장이 완료되었습니다.')
         this.$router.push({
-          name: 'ClassAllProblem',
+          name: 'ClassContestProblemList',
           params: {
-            classID: this.classID
+            contestID: this.contestID
           }
         })
       } catch (err) {
         console.log(err)
       }
-    },
-    uploadFile (e) {
-      const files = e.target.files || e.dataTransfer.files
-      const id = e.target.id
-      if (id === 'data-file-input') {
-        this.problem.data = files[0]
-      } else {
-        this.problem.solution = files[0]
-      }
-    },
-    async downloadSolution () {
-      const FILE_TYPE = 'application/csv'
-      const response = await api.downloadSolutionfile(this.problemID)
-      const filename = response.headers['content-disposition'].split('filename=')[1]
-      const url = window.URL.createObjectURL(
-        new Blob([response.data], {
-          type: FILE_TYPE
-        })
-      )
-      const a = document.getElementById('solution-download')
-      a.download = filename
-      a.href = url
     }
   }
 }

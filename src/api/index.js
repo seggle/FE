@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:8000',
+      target: 'http://15.165.30.200:8000',
       changeOrigin: true
     }
   })
@@ -78,12 +78,15 @@ function deleteCompetition (competitionID) {
   return instance.delete(`/api/competitions/${competitionID}/`)
 }
 
-function getCompetitionTAList (competitionID) {
+function getCompetitionUserList (competitionID) {
   return instance.get(`/api/competitions/${competitionID}/participation`)
 }
 
 function submitCompetitionTAList (competitionID, data) {
-  return instance.post(`/api/competitions/${competitionID}/participation/ta`, data)
+  return instance.post(
+        `/api/competitions/${competitionID}/participation/ta`,
+        data
+  )
 }
 
 function getCompetitionsLeaderboard (competitionID) {
@@ -107,8 +110,12 @@ function getUserCompetitionSubmissions (competitionID, username) {
     }
   })
 }
+
 function selectProblemSubmission (classID, contestID, cpID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/${cpID}/check`, data)
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/${cpID}/check`,
+        data
+  )
 }
 
 function selectCompetitionSubmission (competitionID, data) {
@@ -177,8 +184,18 @@ function selectContestProblem (classID, contestID, data) {
   return instance.post(`/api/class/${classID}/contests/${contestID}`, data)
 }
 
-function editContestProblem (classID, contestID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/description`, data)
+function editContestProblem (classID, contestID, contestProblemID, data) {
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/${contestProblemID}/description`,
+        data
+  )
+}
+
+function editContestProblemOrder (classID, contestID, data) {
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/order`,
+        data
+  )
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
@@ -315,7 +332,7 @@ function getAnnouncement (page, keyword) {
 }
 
 function getAnnouncementDetail (id) {
-  return instance.get('/api/announcements/' + id)
+  return instance.get(`/api/announcements/${id}`)
 }
 
 function getProposal (page) {
@@ -324,7 +341,7 @@ function getProposal (page) {
 }
 
 function getProposalDetail (id) {
-  return instance.get('/api/proposals/' + id)
+  return instance.get(`/api/proposals/${id}`)
 }
 
 function createProposal (data) {
@@ -391,8 +408,8 @@ function submitClassTAList (classID, data) {
   return instance.post(`/api/class/${classID}/ta`, data)
 }
 
-function examStart (classID, contestID, data) {
-  return instance.post(`/api/class/${classID}/contests/${contestID}/exam/`, data)
+function examStart (classID, contestID) {
+  return instance.post(`/api/class/${classID}/contests/${contestID}/exam/`)
 }
 
 function examInfo (classID, contestID, page) {
@@ -447,7 +464,7 @@ export default {
   joinCompetition,
   getCompetitions,
   deleteCompetition,
-  getCompetitionTAList,
+  getCompetitionUserList,
   submitCompetitionTAList,
   getCompetitionsLeaderboard,
   getUserProblemSubmissions,
@@ -522,5 +539,6 @@ export default {
   downloadDataFile,
   downloadSolutionFile,
   downloadCsvFile,
-  downloadIpynbFile
+  downloadIpynbFile,
+  editContestProblemOrder
 }

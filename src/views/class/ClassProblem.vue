@@ -67,7 +67,6 @@ export default {
   name: 'ClassProblem',
   data () {
     return {
-      userID: this.$store.state.userid,
       problemID: this.$route.params.problemID,
       problem: [],
       dataLink: ''

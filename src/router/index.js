@@ -28,6 +28,7 @@ import ClassProblem from '@/views/class/ClassProblem.vue'
 import ClassContestProblem from '@/views/class/ClassContestProblem.vue'
 import CreateClassProblem from '@/views/class/CreateClassProblem.vue'
 import EditClassProblem from '@/views/class/EditClassProblem.vue'
+import EditClassContestProblem from '@/views/class/EditClassContestProblem.vue'
 
 import Login from '@/views/users/Login.vue'
 import Register from '@/views/users/Register.vue'
@@ -136,6 +137,12 @@ const routes = [{
       name: 'ClassContestProblemListEdit',
       component: ClassContestProblemListEdit,
       meta: { isAdmin: true }
+    },
+    {
+      path: ':contestID/edit/:contestProblemID',
+      name: 'EditClassContestProblem',
+      component: EditClassContestProblem,
+      meta: { isAdmin: true }
     }
     ]
   }
@@ -222,7 +229,7 @@ const routes = [{
   name: 'EditCompetition',
   component: EditCompetition,
   meta: { isAdmin: true },
-  beforeEnter: requireAdminAuth()
+  beforeEnter: requireCompetitionAdminAuth()
 },
 
 {

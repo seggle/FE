@@ -20,11 +20,7 @@
             <td scope="row">{{ users.user }}</td>
             <td>{{ users.ip_address }}</td>
             <td>
-              {{
-                users.start_time.slice(0, 10) +
-                " " +
-                users.start_time.slice(11, 19)
-              }}
+              {{ users.start_time }}
             </td>
             <td>
               <button
@@ -50,12 +46,14 @@
       </table>
     </div>
   </div>
-  <Pagination :pagination="PageValue" @get-page="getPage" />
+  <Pagination :pagination="PageValue" @get-page="getExamUserList" />
 </template>
 
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
+import { GMTtoLocale } from '@/utils/time.js'
+
 export default {
   name: 'ClassExamManage',
   components: {
@@ -74,35 +72,30 @@ export default {
   },
   mounted () {
     this.getContestTitle()
-    this.getUserList()
+    this.getExamUserList(1)
     this.init()
   },
   methods: {
     /* contestTitle 저장 */
     init () {
-      this.getUserList(1)
+      this.getExamUserList(1)
     },
     async getContestTitle () {
       try {
         const res = await api.getContestList(this.classID)
         this.contestList = res.data
-        console.log(this.contestList)
-        for (var i = 0; i < this.contestList.length; i++) {
-          console.log(this.contestList[i].id)
-          if (this.contestList[i].id === parseInt(this.contestID)) {
-            this.contestTitle = this.contestList[i].name
+        for (const contest of this.contestList) {
+          if (contest.id === parseInt(this.contestID)) {
+            this.contestTitle = contest.name
+            break
           }
         }
-        console.log(this.contestTitle)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
-    getPage (page) {
-      this.getUserList(page)
-    },
     /* 응시자 리스트 저장 */
-    async getUserList (page) {
+    async getExamUserList (page) {
       try {
         this.currentPage = page
         this.PageValue = []
@@ -112,25 +105,25 @@ export default {
           currentPage: this.currentPage
         })
         this.userList = res.data.results
-        this.userList = this.userList.reverse()
-        console.log(this.userList)
-      } catch (error) {
-        console.log(error)
+        for (const user of this.userList) {
+          user.start_time = GMTtoLocale(user.start_time)
+        }
+        this.userList.reverse()
+      } catch (err) {
+        console.log(err)
       }
     },
     async resetIP (contestID, examID) {
       if (confirm('리셋하시겠습니까?')) {
-        const res = await api.resetExam(this.classID, contestID, examID)
-        console.log(res.data)
-        alert('리셋 완료')
+        await api.resetExam(this.classID, contestID, examID)
+        alert('리셋 완료되었습니다.')
         this.$router.go()
       } else {
       }
     },
     async exceptIP (contestID, examID) {
       if (confirm('예외처리하시겠습니까?')) {
-        const res = await api.exceptUser(this.classID, contestID, examID)
-        console.log(res.data)
+        await api.exceptUser(this.classID, contestID, examID)
         alert('리셋 완료')
         this.$router.go()
       } else {
