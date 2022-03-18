@@ -210,7 +210,7 @@
                 </tbody>
               </table>
             </div>
-            <Pagination :pagination="PageValue" @get-page="getPage" />
+            <Pagination :pagination="PageValue" @get-page="getUserSubmissions" />
             <button class="btn" @click="selectSubmission">제출</button>
           </div>
         </div>
@@ -275,12 +275,12 @@ export default {
     async getUserStatus () {
       try {
         const res = await api.getCompetitionUserList(this.competitionID)
-        const competitionList = res.data
-        for (const competition of competitionList) {
-          if (String(competition.username) === this.userID) {
+        const competitionUserList = res.data
+        for (const competitionUser of competitionUserList) {
+          if (competitionUser.username === this.userID) {
             this.joinText = '참여중'
             this.alreadyJoined = true
-            this.privilege = competition.privilege
+            this.privilege = competitionUser.privilege
           }
         }
       } catch (err) {
@@ -314,7 +314,6 @@ export default {
     async getLeaderboard () {
       try {
         const res = await api.getCompetitionsLeaderboard(this.competitionID)
-        console.log(res.data)
         this.leaderboardList = res.data
         for (const user of this.leaderboardList) {
           user.created_time = GMTtoLocale(user.created_time)
@@ -336,9 +335,6 @@ export default {
       } catch (err) {
         alert(err.response.data.error)
       }
-    },
-    getPage (page) {
-      this.getUserSubmissions(page)
     },
     /* 제출할 파일이 이미 리더보드에 있는지 확인 */
     alreadyChecked () {

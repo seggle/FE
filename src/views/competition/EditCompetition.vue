@@ -225,7 +225,7 @@ export default {
           formData.append(`${key}`, data[key])
         }
 
-        await api.editGeneralProblem(this.competitionID, formData)
+        await api.editCompetitionProblem(this.competitionID, formData)
 
         alert('저장이 완료되었습니다.')
         this.$router.push({ name: 'CompetitionList' })

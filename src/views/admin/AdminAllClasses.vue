@@ -30,7 +30,6 @@
             <td colspan="5">등록된 수업이 없습니다.</td>
           </tr>
           <tr
-            :loading="loading"
             v-for="Class in classList"
             :key="Class"
             @click="goClass(Class.id)"
@@ -44,7 +43,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage" />
+    <Pagination :pagination="PageValue" @get-page="getClassList" />
   </div>
 </template>
 
@@ -59,7 +58,6 @@ export default {
     return {
       keyword: '',
       count: 0,
-      loading: false,
       classList: [],
       currentPage: 1,
       PageValue: []
@@ -73,25 +71,20 @@ export default {
     init () {
       this.getClassList(1)
     },
-    getPage (page) {
-      this.getClassList(page)
-    },
     /* 페이지값으로 전체수업 리스트 불러오기 */
     async getClassList (page) {
       try {
-        this.loading = true
         this.currentPage = page
         this.PageValue = []
         const res = await api.getAdminClassList(page, this.keyword)
         this.count = res.data.count
-        this.loading = false
         this.PageValue.push({
-          count: res.data.count,
+          count: this.count,
           currentPage: this.currentPage
         })
         this.classList = res.data.results
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 해당 수업으로 이동 */

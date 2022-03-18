@@ -47,8 +47,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="problems in contestProblemList" :key="problems">
-            <th scope="row">{{ problems.id }}</th>
+          <tr v-for="(problems, i) in contestProblemList" :key="problems">
+            <th scope="row">{{ i + 1 }}</th>
             <td>
               <a
                 @click="

@@ -25,7 +25,7 @@
           </tr>
         </tbody>
       </table>
-    <Pagination :pagination="PageValue" @get-page="getPage" />
+    <Pagination :pagination="PageValue" @get-page="getProposal" />
   </div>
 </template>
 <script>
@@ -51,9 +51,6 @@ export default {
   methods: {
     init () {
       this.getProposal(1)
-    },
-    getPage (page) {
-      this.getProposal(page)
     },
     goCreate () {
       this.$router.push({

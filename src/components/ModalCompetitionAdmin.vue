@@ -81,30 +81,31 @@ export default {
   methods: {
     init () {
       this.userInfo()
-      this.getGeneralList()
+      this.getCompetitionList()
     },
     async userInfo () {
       try {
         const res = await api.getUserInfo(this.$store.state.userid)
-        for (var i = 0; i < res.data.competition.length; i++) {
-          this.userCompetitionList.push(res.data.competition[i].competition_id)
+        const userJoinCompetitonList = res.data.competition
+        for (const userJoinCompetition of userJoinCompetitonList) {
+          this.userCompetitionList.push(userJoinCompetition.competition_id)
         }
       } catch (err) {
         console.log(err)
       }
     },
-    async getGeneralList () {
+    async getCompetitionList () {
       try {
         this.competitionList = []
         const res = await api.getCompetitionList()
-        for (var i = 0; i < res.data.length; i++) {
-          if (this.userCompetitionList.includes(res.data[i].id)) {
-            this.competitionList.push(res.data[i])
+        for (const competition of res.data) {
+          if (this.userCompetitionList.includes(competition.id)) {
+            this.competitionList.push(competition)
           }
         }
         this.competitionList.reverse()
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     async deleteCompetition (competitionID) {
@@ -112,9 +113,9 @@ export default {
         if (confirm('삭제하시겠습니까?')) {
           await api.deleteCompetition(competitionID)
         }
-        this.getGeneralList()
-      } catch (error) {
-        console.log(error)
+        this.getCompetitionList()
+      } catch (err) {
+        console.log(err)
       }
     },
     goEditCompetition (competitionID) {

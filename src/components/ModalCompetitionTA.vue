@@ -54,20 +54,23 @@ export default {
       try {
         const res = await api.getCompetitionUserList(this.competition_id)
         this.talist = ''
-        for (var i = 0; i < res.data.length; i++) {
-          if (res.data[i].privilege === 1) {
-            this.talist += res.data[i].username + '\n'
+        for (const user of res.data) {
+          if (this.isCompetitionTA()) {
+            this.talist += user.username + '\n'
           }
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
+    },
+    isCompetitionTA (Privilege) {
+      return (Privilege === 1)
     },
     async submitTAList () {
       const data = []
       const tmp = this.talist.split('\n')
-      for (var i = 0; i < tmp.length; i++) {
-        data.push({ username: tmp[i] })
+      for (const ta of tmp) {
+        data.push({ username: ta })
       }
       await api.submitCompetitionTAList(this.competition_id, data)
       alert('TA 등록이 완료되었습니다.')

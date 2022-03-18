@@ -27,7 +27,6 @@
         <tbody>
           <tr v-if="count===0"><td></td><td style="text-align: center;">게시물이 없습니다.</td><td></td><td></td></tr>
           <tr
-            :loading="loading"
             v-for="announce in announcementImportantList"
             :key="announce"
             @click="goAnnouncementDetail(announce.id)"
@@ -39,7 +38,6 @@
             <td>관리자</td>
           </tr>
           <tr
-            :loading="loading"
             v-for="announce in announcementList"
             :key="announce"
             @click="goAnnouncementDetail(announce.id)"
@@ -52,7 +50,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage"/>
+    <Pagination :pagination="PageValue" @get-page="getAnnouncement"/>
   </div>
 </template>
 <script>
@@ -69,7 +67,6 @@ export default {
       announcementList: [],
       announcementImportantList: [],
       keyword: '',
-      loading: false,
       PageValue: [],
       currentPage: 1,
       count: 0
@@ -82,23 +79,16 @@ export default {
     init () {
       this.getAnnouncement(1)
     },
-    getPage (page) {
-      this.getAnnouncement(page)
-    },
     async getAnnouncement (page) {
       try {
-        this.loading = true
         this.currentPage = page
         this.PageValue = []
         this.announcementList = []
         this.announcementImportantList = []
         const res = await api.getAnnouncement(page, this.keyword)
         this.count = res.data.count
-        this.loading = false
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
-        if (res.data.count !== 0) {
-          this.total = parseInt((res.data.count - 1) / 15) + 1
-        }
+        this.PageValue.push({ count: this.count, currentPage: this.currentPage })
+        this.total = parseInt((res.data.count - 1) / 15) + 1
         const tmp = res.data.results
         for (var i = 0; i < tmp.length; i++) {
           tmp[i].created_time = tmp[i].created_time.slice(0, 10)
