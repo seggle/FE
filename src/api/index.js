@@ -42,8 +42,16 @@ function findPassword (data) {
   return instance.post('/api/users/password/', data)
 }
 
-function resetPassword (username, data) {
-  return instance.patch(`/api/users/${username}/`, data)
+function resetPassword (data) {
+  return instance.post('/api/reset_password/', data)
+}
+
+function applyResetPassword (data) {
+  return instance.post('/api/apply_reset_password/', data)
+}
+
+function validateToken (data) {
+  return instance.post('/api/reset_password_token_vaild/', data)
 }
 
 function resignUser (username, data) {
@@ -324,7 +332,7 @@ function getAnnouncement (page, keyword) {
 }
 
 function getAnnouncementDetail (id) {
-  return instance.get('/api/announcements/' + id)
+  return instance.get(`/api/announcements/${id}`)
 }
 
 function getProposal (page) {
@@ -333,19 +341,19 @@ function getProposal (page) {
 }
 
 function getProposalDetail (id) {
-  return instance.get('/api/proposals/' + id)
+  return instance.get(`/api/proposals/${id}`)
 }
 
 function createProposal (data) {
   return instance.post('/api/proposals/', data)
 }
 
-function editProposal (id, data) {
-  return instance.patch('/api/proposals/' + id, data)
+function editProposal (proposalID, data) {
+  return instance.patch(`/api/proposals/${proposalID}`, data)
 }
 
-function deleteProposal (id) {
-  return instance.delete('/api/proposals/' + id)
+function deleteProposal (proposalID) {
+  return instance.delete(`/api/proposals/${proposalID}`)
 }
 
 function getProblemList (page, keyword) {
@@ -373,17 +381,11 @@ function changeProblemSwitch (id) {
 }
 
 function submitFileProblem (classID, contestID, cpID, username, data) {
-  return formDataInstance.post(
-        `/api/class/${classID}/contests/${contestID}/${cpID}/${username}`,
-        data
-  )
+  return formDataInstance.post(`/api/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
 }
 
 function submitFileCompetition (competitionID, username, data) {
-  return formDataInstance.post(
-        `/api/competitions/${competitionID}/${username}/`,
-        data
-  )
+  return formDataInstance.post(`/api/competitions/${competitionID}/${username}/`, data)
 }
 
 function createCompetitionProblem (data) {
@@ -428,6 +430,23 @@ function exceptUser (classID, contestID, examID) {
         `/api/class/${classID}/contests/${contestID}/exam/${examID}/exception`
   )
 }
+
+function downloadDataFile (problemID) {
+  return instance.get(`/api/problems/${problemID}/download/data`, { responseType: 'blob' })
+}
+
+function downloadSolutionFile (problemID) {
+  return instance.get(`/api/problems/${problemID}/download/solution`, { responseType: 'blob' })
+}
+
+function downloadCsvFile (submissionID) {
+  return instance.get(`api/submissions/class/${submissionID}/download/1`)
+}
+
+function downloadIpynbFile (submissionID) {
+  return instance.get(`api/submissions/class/${submissionID}/download/2`)
+}
+
 export default {
   registerUser,
   loginUser,
@@ -437,6 +456,8 @@ export default {
   checkUserIDorEmail,
   findPassword,
   resetPassword,
+  applyResetPassword,
+  validateToken,
   resignUser,
   getCompetitionList,
   getUserCompetitionList,
@@ -515,5 +536,9 @@ export default {
   resetExam,
   exceptUser,
   editCompetitionProblem,
+  downloadDataFile,
+  downloadSolutionFile,
+  downloadCsvFile,
+  downloadIpynbFile,
   editContestProblemOrder
 }
