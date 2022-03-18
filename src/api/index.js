@@ -176,9 +176,16 @@ function selectContestProblem (classID, contestID, data) {
   return instance.post(`/api/class/${classID}/contests/${contestID}`, data)
 }
 
-function editContestProblem (classID, contestID, data) {
+function editContestProblem (classID, contestID, contestProblemID, data) {
   return instance.patch(
-        `/api/class/${classID}/contests/${contestID}/description`,
+        `/api/class/${classID}/contests/${contestID}/${contestProblemID}/description`,
+        data
+  )
+}
+
+function editContestProblemOrder (classID, contestID, data) {
+  return instance.patch(
+        `/api/class/${classID}/contests/${contestID}/order`,
         data
   )
 }
@@ -507,5 +514,6 @@ export default {
   examInfo,
   resetExam,
   exceptUser,
-  editGeneralProblem
+  editGeneralProblem,
+  editContestProblemOrder
 }
