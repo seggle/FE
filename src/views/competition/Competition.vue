@@ -84,11 +84,13 @@
             role="tabpanel"
             aria-labelledby="list-data-list"
           >
-            <h5 class="list-title">
-              데이터 설명
-              <button class="btn" :disabled="alreadyJoined == false">
-                <a :href="problem.data">다운로드</a>
-              </button>
+            <h5 class="list-title">데이터 설명
+              <a id="zip-download">
+                <button class="btn"
+                        :disabled="alreadyJoined == false"
+                        @click="downloadDataFile"
+                >다운로드</button>
+              </a>
             </h5>
             <p class="list-content">
               <span v-html="problem.data_description"></span>
@@ -128,20 +130,24 @@
                     {{ user.created_time }}
                   </td>
                   <td v-if="IsContestAdminCheck">
-                    <button
-                      class="download-btn"
-                      @click="downloadFile(user.ipynb)"
-                    >
-                      <font-awesome-icon icon="file-arrow-down" />
-                    </button>
+                    <a id="ipynb-download">
+                      <button
+                        class="download-btn"
+                        @click="downloadIpynbFile(user.id)"
+                      >
+                        <font-awesome-icon icon="file-arrow-down" />
+                      </button>
+                    </a>
                   </td>
                   <td v-if="IsContestAdminCheck">
-                    <button
-                      class="download-btn"
-                      @click="downloadFile(user.csv)"
-                    >
-                      <font-awesome-icon icon="file-arrow-down" />
-                    </button>
+                    <a id="csv-download">
+                      <button
+                        class="download-btn"
+                        @click="downloadCsvFile(user.id)"
+                      >
+                        <font-awesome-icon icon="file-arrow-down" />
+                      </button>
+                    </a>
                   </td>
                 </tr>
               </tbody>
@@ -322,10 +328,6 @@ export default {
         console.log(err)
       }
     },
-    /* 제출한 파일 다운로드 */
-    downloadFile (url) {
-      location.href = url
-    },
     /* 대회 참여하기 */
     async joinCompetition () {
       try {
@@ -426,6 +428,31 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    downloadFile (response, FILE_TYPE) {
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: `application/${FILE_TYPE}`
+        })
+      )
+      const a = document.getElementById(`${FILE_TYPE}-download`)
+      a.href = url
+      a.download = filename
+      a.click()
+    },
+    async downloadDataFile () {
+      const response = await api.downloadDataFile(this.problem.problem_id)
+      this.downloadFile(response, 'zip')
+    },
+    async downloadCsvFile (submissionID) {
+      const response = await api.downloadCompetitionCsvFile(submissionID)
+      this.downloadFile(response, 'csv')
+    },
+    async downloadIpynbFile (submissionID) {
+      console.log(submissionID)
+      const response = await api.downloadCompetitionIpynbFile(submissionID)
+      this.downloadFile(response, 'ipynb')
     }
   }
 }

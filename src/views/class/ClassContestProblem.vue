@@ -87,16 +87,20 @@
                   <td>{{ users.score }}</td>
                   <td>{{ users.created_time }}</td>
                   <td v-if="isTAOverPrivilege()">
-                    <button class="download-btn"
-                      @click="downloadIpynbFile">
-                      <font-awesome-icon icon="file-arrow-down" />
-                    </button>
+                    <a id="ipynb-download">
+                      <button class="download-btn"
+                        @click="downloadIpynbFile(users.id)">
+                        <font-awesome-icon icon="file-arrow-down" />
+                      </button>
+                    </a>
                   </td>
                   <td v-if="isTAOverPrivilege()">
-                    <button class="download-btn"
-                      @click="downloadCsvFile">
-                      <font-awesome-icon icon="file-arrow-down" />
-                    </button>
+                    <a id="csv-download">
+                      <button class="download-btn"
+                        @click="downloadCsvFile(users.id)">
+                        <font-awesome-icon icon="file-arrow-down" />
+                      </button>
+                    </a>
                   </td>
                 </tr>
               </tbody>
@@ -333,6 +337,7 @@ export default {
         })
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
+      console.log(a)
       a.href = url
       a.download = filename
       a.click()
@@ -342,11 +347,11 @@ export default {
       this.downloadFile(response, 'zip')
     },
     async downloadCsvFile (submissionID) {
-      const response = await api.downloadCsvFile(submissionID)
+      const response = await api.downloadClassCsvFile(submissionID)
       this.downloadFile(response, 'csv')
     },
     async downloadIpynbFile (submissionID) {
-      const response = await api.downloadIpynbFile(submissionID)
+      const response = await api.downloadClassIpynbFile(submissionID)
       this.downloadFile(response, 'ipynb')
     }
   }

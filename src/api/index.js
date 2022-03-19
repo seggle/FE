@@ -439,12 +439,20 @@ function downloadSolutionFile (problemID) {
   return instance.get(`/api/problems/${problemID}/download/solution`, { responseType: 'blob' })
 }
 
-function downloadCsvFile (submissionID) {
-  return instance.get(`api/submissions/class/${submissionID}/download/1`)
+function downloadClassCsvFile (submissionID) {
+  return instance.get(`/api/submissions/class/${submissionID}/download/1`)
 }
 
-function downloadIpynbFile (submissionID) {
-  return instance.get(`api/submissions/class/${submissionID}/download/2`)
+function downloadClassIpynbFile (submissionID) {
+  return instance.get(`/api/submissions/class/${submissionID}/download/2`)
+}
+
+function downloadCompetitionCsvFile (submissionID) {
+  return instance.get(`/api/submissions/competition/${submissionID}/download/1`)
+}
+
+function downloadCompetitionIpynbFile (submissionID) {
+  return instance.get(`/api/submissions/competition/${submissionID}/download/2`)
 }
 
 export default {
@@ -538,7 +546,9 @@ export default {
   editCompetitionProblem,
   downloadDataFile,
   downloadSolutionFile,
-  downloadCsvFile,
-  downloadIpynbFile,
+  downloadClassCsvFile,
+  downloadClassIpynbFile,
+  downloadCompetitionCsvFile,
+  downloadCompetitionIpynbFile,
   editContestProblemOrder
 }

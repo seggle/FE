@@ -114,7 +114,11 @@
                   <label class="file-upload-btn" for="data-file-input"
                     >업로드</label
                   >
-                  <a class="file-download-btn" :href="problem.data">다운로드</a>
+                  <a class="file-download-btn"
+                     id="zip-download"
+                     @click="downloadDataFile"
+                     >다운로드</a
+                    >
                   <input
                     id="data-file-input"
                     type="file"
@@ -132,7 +136,9 @@
                   <label class="file-upload-btn" for="solution-file-input"
                     >업로드</label
                   >
-                  <a class="file-download-btn" :href="problem.solution"
+                  <a class="file-download-btn"
+                     id="csv-download"
+                     @click="downloadSolutionFile"
                     >다운로드</a
                   >
                   <input
@@ -242,6 +248,25 @@ export default {
       } else {
         this.problem.solution = files[0]
       }
+    },
+    downloadFile (response, FILE_TYPE) {
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: `application/${FILE_TYPE}`
+        })
+      )
+      const a = document.getElementById(`${FILE_TYPE}-download`)
+      a.href = url
+      a.download = filename
+    },
+    async downloadDataFile () {
+      const response = await api.downloadDataFile(this.problem.problem_id)
+      this.downloadFile(response, 'zip')
+    },
+    async downloadSolutionFile () {
+      const response = await api.downloadSolutionFile(this.problem.problem_id)
+      this.downloadFile(response, 'csv')
     }
   }
 }
