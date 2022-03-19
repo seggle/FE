@@ -191,6 +191,8 @@ textarea {
 
 .button-group {
   margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
 }
 .btn {
   @media (max-width: 767px) {
@@ -199,7 +201,5 @@ textarea {
   }
   margin-top: 30px;
   margin-right: 0px;
-  display: flex;
-  justify-content: flex-end;
 }
 </style>
