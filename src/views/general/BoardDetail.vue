@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <header class="board-detail-header">
-      <button class="btn"
-              @click="goProposalList">
+      <button class="btn" @click="goProposalList">
         <font-awesome-icon icon="angle-left" />
         목록
       </button>
@@ -32,14 +31,16 @@
     </div>
 
     <div class="button-group">
-      <button v-if="privilege.edit"
-              class="btn"
-              @click="goEditProposal(this.proposalID)"
-      >편집</button>
-      <button v-if="privilege.delete"
-              class="btn"
-              @click="deleteProposal"
-      >삭제</button>
+      <button
+        v-if="privilege.edit"
+        class="btn"
+        @click="goEditProposal(this.proposalID)"
+      >
+        편집
+      </button>
+      <button v-if="privilege.delete" class="btn" @click="deleteProposal">
+        삭제
+      </button>
     </div>
   </div>
 </template>
@@ -79,8 +80,11 @@ export default {
       this.content.created_time = this.content.created_time.slice(0, 10)
     },
     setPrivilege () {
-      this.privilege.edit = this.$store.state.userid === this.content.created_user
-      this.privilege.delete = this.$store.state.userid === this.content.created_user || this.$store.getters.isSuperAdmin
+      this.privilege.edit =
+        this.$store.state.userid === this.content.created_user
+      this.privilege.delete =
+        this.$store.state.userid === this.content.created_user ||
+        this.$store.getters.isSuperAdmin
     },
     async deleteProposal () {
       try {
@@ -127,8 +131,7 @@ header {
 
 pre {
   background: transparent;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 17px;
 }
 
 textarea {
@@ -187,6 +190,15 @@ textarea {
 }
 
 .button-group {
+  margin-left: auto;
+}
+.btn {
+  @media (max-width: 767px) {
+    margin-right: 0px;
+    font-size: calc(0.5rem + 2vw);
+  }
+  margin-top: 30px;
+  margin-right: 0px;
   display: flex;
   justify-content: flex-end;
 }

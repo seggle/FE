@@ -13,13 +13,22 @@
           </div>
 
           <div class="modal-body">
-            <form class="class-TA-form">
-              <textarea id="class-TA" class="form-control mb-3 p-3" width="100%" rows="10" v-model="talist" placeholder="관리자를 등록하세요."></textarea>
+            <form class="competition-TA-form">
+              <textarea
+                id="competition-TA"
+                class="form-control mb-3 p-3"
+                width="100%"
+                rows="10"
+                v-model="talist"
+                placeholder="관리자를 등록하세요."
+              ></textarea>
             </form>
           </div>
 
           <div class="modal-footer">
-            <button class="btn" type="submit" @click="submitTAList">저장</button>
+            <button class="btn" type="submit" @click="submitTAList">
+              저장
+            </button>
           </div>
         </form>
       </div>
@@ -39,7 +48,7 @@ export default {
   },
   data () {
     return {
-      talist: '',
+      taList: '',
       showModal: false
     }
   },
@@ -50,6 +59,7 @@ export default {
     init () {
       this.getCompetitionTAList()
     },
+    /* 일반대회 관리자(TA) 리스트 불러오기 */
     async getCompetitionTAList () {
       try {
         const res = await api.getCompetitionUserList(this.competition_id)
@@ -64,7 +74,7 @@ export default {
       }
     },
     isCompetitionTA (Privilege) {
-      return (Privilege === 1)
+      return Privilege === 1
     },
     async submitTAList () {
       const data = []
@@ -82,7 +92,7 @@ export default {
 
 <style scoped lang="scss">
 .modal-mask {
-  background-color: rgba(0, 0, 0, 0.1)
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .modal-container {
   @media (max-width: 383px) {

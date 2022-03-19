@@ -23,7 +23,7 @@
           </li>
         </ul>
         <!-- <a class="icon" @click="showModal = true">&#8942;</a> -->
-        <ModalContestList
+        <ModalContestCreate
           v-if="showModal"
           @close="showModal = false"
           :mode="'create'"
@@ -49,20 +49,20 @@
       @click="problemModal = true">
       목록 편집
     </button> -->
-    <ModalProblemList v-if="problemModal" @close="problemModal = false" />
+    <ModalContestListEdit v-if="problemModal" @close="problemModal = false" />
   </div>
 </template>
 
 <script>
-import ModalContestList from '@/components/ModalContestList.vue'
-import ModalProblemList from '@/components/ModalProblemList.vue'
+import ModalContestListEdit from '@/components/ModalContestListEdit.vue'
+import ModalContestCreate from '@/components/ModalContestCreate.vue'
 import api from '@/api/index.js'
 
 export default {
   name: 'ClassContestNav',
   components: {
-    ModalContestList,
-    ModalProblemList
+    ModalContestListEdit,
+    ModalContestCreate
   },
   data () {
     return {

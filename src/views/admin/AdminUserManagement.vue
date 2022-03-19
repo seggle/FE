@@ -2,7 +2,7 @@
   <div class="container">
     <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">사용자 관리</h1>
-      <div class="">
+      <div>
         <form>
           <input
             class="form-control"
