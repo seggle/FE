@@ -48,7 +48,7 @@
                       >
                         <font-awesome-icon icon="pen" />
                       </button>
-                      <ModalContestList
+                      <ModalContestCreate
                         v-if="showModal"
                         @close="showModal = false"
                         :editContestInfo="contestList[rowIndex]"
@@ -56,7 +56,10 @@
                       />
                     </td>
                     <td>
-                      <button class="delete-btn" @click="onRemove(contest.id)">
+                      <button
+                        class="delete-btn"
+                        @click="onRemove(contest.id, contest.name)"
+                      >
                         <font-awesome-icon icon="trash-can" />
                       </button>
                     </td>
@@ -65,10 +68,6 @@
               </table>
             </div>
           </div>
-
-          <!-- <div class="modal-footer">
-            <button class="btn" type="submit">저장</button>
-          </div> -->
         </form>
       </div>
     </div>
@@ -76,13 +75,13 @@
 </template>
 
 <script>
-import ModalContestList from '@/components/ModalContestList.vue'
+import ModalContestCreate from '@/components/ModalContestCreate.vue'
 import api from '@/api/index.js'
 
 export default {
-  name: 'ModalProblemList',
+  name: 'ModalContestListEdit',
   components: {
-    ModalContestList
+    ModalContestCreate
   },
   data () {
     return {
@@ -99,6 +98,7 @@ export default {
     init () {
       this.getContestList()
     },
+    /* 대회 리스트 불러오기 */
     async getContestList () {
       try {
         const res = await api.getContestList(this.classID)
@@ -107,29 +107,23 @@ export default {
         console.log(error)
       }
     },
-    // onEdit (contestID) {
-    //   var id = contestID
-    //   if (confirm('저장하시겠습니까?')) {
-    //     alert(id + ' 저장 완료')
-    //   } else {
-    //   }
-    // },
-    async onRemove (contestID) {
-      var id = contestID
+    /* 해당 대회 삭제 */
+    async onRemove (contestID, contestName) {
       if (confirm('삭제하시겠습니까?')) {
         // contest 삭제 api
         const res = await api.deleteContest(this.classID, contestID)
         console.log(res.data)
-        alert(id + ' 삭제 완료')
+        alert(contestName + ' 삭제 완료')
         this.$router.go(this.$router.currentRoute)
       }
     },
+    /* 해당 대회 공개 설정 바꾸기 */
     async changePublic (contestID) {
       try {
         const res = await api.changeContestPublic(this.classID, contestID)
         console.log(res)
         alert('공개 설정 완료')
-        this.$router.go(this.$router.currentRoute)
+        this.$router.go(this.$router.currentRoute) // 새로고침
       } catch (err) {
         console.log(err)
       }

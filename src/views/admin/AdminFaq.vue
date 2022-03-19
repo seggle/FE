@@ -162,13 +162,9 @@ export default {
       try {
         const res = await api.getFAQList()
         this.faqList = res.data
-        for (var i = 0; i < this.faqList.length; i++) {
-          this.faqList[i].created_time = GMTtoLocale(
-            this.faqList[i].created_time
-          )
-          this.faqList[i].last_modified = GMTtoLocale(
-            this.faqList[i].last_modified
-          )
+        for (const faq of this.faqList) {
+          faq.created_time = GMTtoLocale(faq.created_time)
+          faq.last_modified = GMTtoLocale(faq.last_modified)
         }
       } catch (error) {
         console.log(error)

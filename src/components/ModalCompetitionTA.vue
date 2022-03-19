@@ -13,13 +13,22 @@
           </div>
 
           <div class="modal-body">
-            <form class="class-TA-form">
-              <textarea id="class-TA" class="form-control mb-3 p-3" width="100%" rows="10" v-model="talist" placeholder="관리자를 등록하세요."></textarea>
+            <form class="competition-TA-form">
+              <textarea
+                id="competition-TA"
+                class="form-control mb-3 p-3"
+                width="100%"
+                rows="10"
+                v-model="talist"
+                placeholder="관리자를 등록하세요."
+              ></textarea>
             </form>
           </div>
 
           <div class="modal-footer">
-            <button class="btn" type="submit" @click="submitTAList">저장</button>
+            <button class="btn" type="submit" @click="submitTAList">
+              저장
+            </button>
           </div>
         </form>
       </div>
@@ -39,7 +48,7 @@ export default {
   },
   data () {
     return {
-      talist: '',
+      taList: '',
       showModal: false
     }
   },
@@ -50,24 +59,26 @@ export default {
     init () {
       this.getCompetitionTAList()
     },
+    /* 일반대회 관리자(TA) 리스트 불러오기 */
     async getCompetitionTAList () {
       try {
         const res = await api.getCompetitionTAList(this.competition_id)
-        this.talist = ''
-        for (var i = 0; i < res.data.length; i++) {
-          if (res.data[i].privilege === 1) {
-            this.talist += res.data[i].username + '\n'
+        this.taList = ''
+        for (const data of res.data) {
+          if (data.privilege === 1) {
+            this.taList += data.username + '\n'
           }
         }
       } catch (error) {
         console.log(error)
       }
     },
+    /* 관리자(TA) 등록 */
     async submitTAList () {
       const data = []
-      const tmp = this.talist.split('\n')
-      for (var i = 0; i < tmp.length; i++) {
-        data.push({ username: tmp[i] })
+      const TA = this.taList.split('\n')
+      for (const item of TA) {
+        data.push({ username: item })
       }
       await api.submitCompetitionTAList(this.competition_id, data)
       alert('TA 등록이 완료되었습니다.')
@@ -79,7 +90,7 @@ export default {
 
 <style scoped lang="scss">
 .modal-mask {
-  background-color: rgba(0, 0, 0, 0.1)
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .modal-container {
   @media (max-width: 383px) {

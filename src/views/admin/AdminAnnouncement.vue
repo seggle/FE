@@ -245,13 +245,9 @@ export default {
           currentPage: this.currentPage
         })
         this.announcementList = res.data.results
-        for (var i = 0; i < this.announcementList.length; i++) {
-          this.announcementList[i].created_time = GMTtoLocale(
-            this.announcementList[i].created_time
-          )
-          this.announcementList[i].last_modified = GMTtoLocale(
-            this.announcementList[i].last_modified
-          )
+        for (const announcement of this.announcementList) {
+          announcement.created_time = GMTtoLocale(announcement.created_time)
+          announcement.last_modified = GMTtoLocale(announcement.last_modified)
         }
       } catch (error) {
         console.log(error)

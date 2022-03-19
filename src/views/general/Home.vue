@@ -1,16 +1,16 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Seggle" />
+    <MainHome msg="Welcome to Seggle" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import MainHome from '@/components/MainHome.vue'
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    MainHome
   }
 }
 </script>

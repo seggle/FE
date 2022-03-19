@@ -88,7 +88,7 @@
 import api from '@/api/index.js'
 import { GMTtoLocale } from '@/utils/time.js'
 export default {
-  name: 'ModalContestList',
+  name: 'ModalContestCreate',
   props: {
     editContestInfo: Object,
     mode: String

@@ -4,7 +4,7 @@
       <h1 id="title">일반 대회</h1>
       <div v-if="this.$store.getters.isAdmin">
         <button class="btn" @click="showModal = true">대회 관리</button>
-        <ModalCompetitionAdmin v-if="showModal" @close="showModal = false" />
+        <ModalCompetitionManage v-if="showModal" @close="showModal = false" />
         <button class="btn" @click="goCreateProblem">대회 생성</button>
       </div>
     </header>
@@ -58,12 +58,12 @@
 
 <script>
 import api from '@/api/index.js'
-import ModalCompetitionAdmin from '@/components/ModalCompetitionAdmin.vue'
+import ModalCompetitionManage from '@/components/ModalCompetitionManage.vue'
 
 export default {
   name: 'CompetitionList',
   components: {
-    ModalCompetitionAdmin
+    ModalCompetitionManage
   },
   data () {
     return {

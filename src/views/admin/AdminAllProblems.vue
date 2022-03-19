@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           <tr v-if="count === 0">
-            <td colspan="5">게시물이 없습니다.</td>
+            <td colspan="5">등록된 문제가 없습니다.</td>
           </tr>
           <tr :loading="loading" v-for="problem in problemList" :key="problem">
             <th scope="row">{{ problem.id }}</th>
@@ -90,10 +90,8 @@ export default {
           currentPage: this.currentPage
         })
         this.problemList = res.data.results
-        for (var i = 0; i < this.problemList.length; i++) {
-          this.problemList[i].created_time = GMTtoLocale(
-            this.problemList[i].created_time
-          )
+        for (const problem of this.problemList) {
+          problem.created_time = GMTtoLocale(problem.created_time)
         }
       } catch (error) {
         console.log(error)
@@ -142,6 +140,7 @@ a {
   cursor: pointer;
 }
 h1 {
+  font-weight: bold;
   width: 40%;
   text-align: left;
   font-size: calc(1rem + 2vw);

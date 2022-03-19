@@ -2,7 +2,7 @@
   <div class="container">
     <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">사용자 관리</h1>
-      <div class="">
+      <div>
         <form>
           <input
             class="form-control"
@@ -184,16 +184,14 @@ export default {
           currentPage: this.currentPage
         })
         this.userList = res.data.results
-        for (var i = 0; i < this.userList.length; i++) {
-          this.userList[i].date_joined = GMTtoLocale(
-            this.userList[i].date_joined
-          )
-          if (this.userList[i].privilege === 0) {
-            this.userList[i].privilege = '학생'
-          } else if (this.userList[i].privilege === 1) {
-            this.userList[i].privilege = '교수'
+        for (const user of this.userList) {
+          user.date_joined = GMTtoLocale(user.date_joined)
+          if (user.privilege === 0) {
+            user.privilege = '학생'
+          } else if (user.privilege === 1) {
+            user.privilege = '교수'
           } else {
-            this.userList[i].privilege = '관리자'
+            user.privilege = '관리자'
           }
         }
       } catch (error) {

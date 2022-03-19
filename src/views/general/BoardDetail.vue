@@ -123,8 +123,7 @@ h1 {
 }
 pre {
   background: transparent;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 17px;
 }
 textarea {
   width: 100%;
@@ -172,7 +171,7 @@ textarea {
     margin-right: 0px;
     font-size: calc(0.5rem + 2vw);
   }
-  margin-top: 50px;
+  margin-top: 30px;
   margin-right: 0px;
 }
 </style>
