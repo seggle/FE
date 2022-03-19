@@ -127,7 +127,6 @@
           </tr>
           <tr
             v-else
-            :loading="loading"
             v-for="announcement in announcementList"
             :key="announcement"
           >
@@ -191,7 +190,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage" />
+    <Pagination :pagination="PageValue" @get-page="getAnnouncementList" />
   </div>
 </template>
 
@@ -214,7 +213,6 @@ export default {
       announcementVisible: true,
       announcementImportant: false,
       announcementList: [],
-      loading: false,
       keyword: '',
       count: 0,
       currentPage: 1,
@@ -228,17 +226,12 @@ export default {
     init () {
       this.getAnnouncementList(1)
     },
-    getPage (page) {
-      this.getAnnouncementList(page)
-    },
     /* 공지사항 리스트 불러오기 */
     async getAnnouncementList (page) {
       try {
-        this.loading = true
         const res = await api.getAnnouncementList(page, this.keyword)
         this.currentPage = page
         this.PageValue = []
-        this.loading = false
         this.count = res.data.count
         this.PageValue.push({
           count: res.data.count,
@@ -249,8 +242,8 @@ export default {
           announcement.created_time = GMTtoLocale(announcement.created_time)
           announcement.last_modified = GMTtoLocale(announcement.last_modified)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 공지사항 삭제 */
@@ -269,8 +262,8 @@ export default {
           }
           this.getAnnouncementList(this.currentPage)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 공지사항 열람 */
@@ -287,14 +280,13 @@ export default {
           this.currentAnnouncementID = announcementID
           this.createMode = false
           const res = await api.editAnnouncement(announcementID)
-          console.log(res)
           this.announcementTitle = res.data.title
           this.announcementContext = res.data.context
           this.announcementVisible = res.data.visible
           this.announcementImportant = res.data.important
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 공지사항 작성 후 제출 */
@@ -313,8 +305,8 @@ export default {
           await api.submitEditAnnouncement(this.currentAnnouncementID, data)
         }
         this.getAnnouncementList(this.currentPage)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 공지사항 공개, 중요 여부 설정 */
@@ -325,8 +317,8 @@ export default {
           important: important
         }
         await api.changeAnnouncementSwitch(announcementID, data)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
   },

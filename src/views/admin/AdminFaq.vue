@@ -146,8 +146,7 @@ export default {
       faqQuestion: '',
       faqAnswer: '',
       faqVisible: true,
-      faqList: [],
-      loading: false
+      faqList: []
     }
   },
   mounted () {
@@ -166,8 +165,8 @@ export default {
           faq.created_time = GMTtoLocale(faq.created_time)
           faq.last_modified = GMTtoLocale(faq.last_modified)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* FAQ 삭제 */
@@ -177,8 +176,8 @@ export default {
           await api.deleteFAQ(faqID)
           this.getFAQList()
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* FAQ 열람 */
@@ -198,8 +197,8 @@ export default {
           this.faqAnswer = res.data.answer
           this.faqVisible = res.data.visible
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* FAQ 작성 후 제출 */
@@ -217,16 +216,16 @@ export default {
           await api.submitEditFAQ(this.currentFaqID, data)
         }
         this.getFAQList()
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* FAQ 공개 여부 설정 */
     async changeSwitch (faqID) {
       try {
         await api.changeFAQSwitch(faqID)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
   }

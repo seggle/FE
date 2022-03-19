@@ -84,11 +84,13 @@
             role="tabpanel"
             aria-labelledby="list-data-list"
           >
-            <h5 class="list-title">
-              데이터 설명
-              <button class="btn" :disabled="alreadyJoined == false">
-                <a :href="problem.data">다운로드</a>
-              </button>
+            <h5 class="list-title">데이터 설명
+              <a id="zip-download">
+                <button class="btn"
+                        :disabled="alreadyJoined == false"
+                        @click="downloadDataFile"
+                >다운로드</button>
+              </a>
             </h5>
             <p class="list-content">
               <span v-html="problem.data_description"></span>
@@ -128,20 +130,24 @@
                     {{ user.created_time }}
                   </td>
                   <td v-if="IsContestAdminCheck">
-                    <button
-                      class="download-btn"
-                      @click="downloadFile(user.ipynb)"
-                    >
-                      <font-awesome-icon icon="file-arrow-down" />
-                    </button>
+                    <a id="ipynb-download">
+                      <button
+                        class="download-btn"
+                        @click="downloadIpynbFile(user.id)"
+                      >
+                        <font-awesome-icon icon="file-arrow-down" />
+                      </button>
+                    </a>
                   </td>
                   <td v-if="IsContestAdminCheck">
-                    <button
-                      class="download-btn"
-                      @click="downloadFile(user.csv)"
-                    >
-                      <font-awesome-icon icon="file-arrow-down" />
-                    </button>
+                    <a id="csv-download">
+                      <button
+                        class="download-btn"
+                        @click="downloadCsvFile(user.id)"
+                      >
+                        <font-awesome-icon icon="file-arrow-down" />
+                      </button>
+                    </a>
                   </td>
                 </tr>
               </tbody>
@@ -210,7 +216,7 @@
                 </tbody>
               </table>
             </div>
-            <Pagination :pagination="PageValue" @get-page="getPage" />
+            <Pagination :pagination="PageValue" @get-page="getUserSubmissions" />
             <button class="btn" @click="selectSubmission">제출</button>
           </div>
         </div>
@@ -274,13 +280,13 @@ export default {
     /* 대회 관리자 리스트 불러오기 */
     async getUserStatus () {
       try {
-        const res = await api.getCompetitionTAList(this.competitionID)
-        const competitionList = res.data
-        for (const competition of competitionList) {
-          if (String(competition.username) === this.userID) {
+        const res = await api.getCompetitionUserList(this.competitionID)
+        const competitionUserList = res.data
+        for (const competitionUser of competitionUserList) {
+          if (competitionUser.username === this.userID) {
             this.joinText = '참여중'
             this.alreadyJoined = true
-            this.privilege = competition.privilege
+            this.privilege = competitionUser.privilege
           }
         }
       } catch (err) {
@@ -314,7 +320,6 @@ export default {
     async getLeaderboard () {
       try {
         const res = await api.getCompetitionsLeaderboard(this.competitionID)
-        console.log(res.data)
         this.leaderboardList = res.data
         for (const user of this.leaderboardList) {
           user.created_time = GMTtoLocale(user.created_time)
@@ -322,10 +327,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-    },
-    /* 제출한 파일 다운로드 */
-    downloadFile (url) {
-      location.href = url
     },
     /* 대회 참여하기 */
     async joinCompetition () {
@@ -336,9 +337,6 @@ export default {
       } catch (err) {
         alert(err.response.data.error)
       }
-    },
-    getPage (page) {
-      this.getUserSubmissions(page)
     },
     /* 제출할 파일이 이미 리더보드에 있는지 확인 */
     alreadyChecked () {
@@ -430,6 +428,31 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    downloadFile (response, FILE_TYPE) {
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: `application/${FILE_TYPE}`
+        })
+      )
+      const a = document.getElementById(`${FILE_TYPE}-download`)
+      a.href = url
+      a.download = filename
+      a.click()
+    },
+    async downloadDataFile () {
+      const response = await api.downloadDataFile(this.problem.problem_id)
+      this.downloadFile(response, 'zip')
+    },
+    async downloadCsvFile (submissionID) {
+      const response = await api.downloadCompetitionCsvFile(submissionID)
+      this.downloadFile(response, 'csv')
+    },
+    async downloadIpynbFile (submissionID) {
+      console.log(submissionID)
+      const response = await api.downloadCompetitionIpynbFile(submissionID)
+      this.downloadFile(response, 'ipynb')
     }
   }
 }

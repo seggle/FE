@@ -208,7 +208,7 @@ export default {
           formData.append(`${key}`, data[key])
         }
 
-        await api.createGeneralProblem(formData)
+        await api.createCompetitionProblem(formData)
 
         alert('저장이 완료되었습니다.')
         this.$router.push({ name: 'CompetitionList' })

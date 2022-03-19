@@ -29,7 +29,7 @@
           <tr v-if="count === 0">
             <td colspan="5">등록된 문제가 없습니다.</td>
           </tr>
-          <tr :loading="loading" v-for="problem in problemList" :key="problem">
+          <tr v-for="problem in problemList" :key="problem">
             <th scope="row">{{ problem.id }}</th>
             <td>{{ problem.title }}</td>
             <td>{{ problem.created_time }}</td>
@@ -43,7 +43,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage" />
+    <Pagination :pagination="PageValue" @get-page="getProblemList" />
   </div>
 </template>
 
@@ -59,11 +59,9 @@ export default {
     return {
       keyword: '',
       count: 0,
-      loading: false,
       problemList: [],
       currentPage: 1,
       PageValue: []
-      // total: 0
     }
   },
   mounted () {
@@ -73,28 +71,22 @@ export default {
     init () {
       this.getProblemList(1)
     },
-    getPage (page) {
-      this.getProblemList(page)
-    },
     /* 전체문제 리스트 불러오기 */
     async getProblemList (page) {
       try {
-        this.loading = true
         this.currentPage = page
         const res = await api.getAdminProblemList(page, this.keyword)
-        console.log(res.data)
         this.count = res.data.count
-        this.loading = false
         this.PageValue.push({
-          count: res.data.count,
+          count: this.count,
           currentPage: this.currentPage
         })
         this.problemList = res.data.results
         for (const problem of this.problemList) {
           problem.created_time = GMTtoLocale(problem.created_time)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 문제 삭제 */
@@ -113,8 +105,8 @@ export default {
           }
           this.getProblemList(this.currentPage)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
   },

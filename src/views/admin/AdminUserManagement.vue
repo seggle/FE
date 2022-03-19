@@ -107,7 +107,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr :loading="loading" v-for="user in userList" :key="user">
+          <tr v-for="user in userList" :key="user">
             <th scope="row">{{ user.id }}</th>
             <td>{{ user.username }}</td>
             <td>{{ user.name }}</td>
@@ -133,7 +133,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getPage" />
+    <Pagination :pagination="PageValue" @get-page="getUserList" />
   </div>
 </template>
 
@@ -151,14 +151,12 @@ export default {
     return {
       keyword: '',
       selected: '',
-      loading: false,
       userList: [],
       Name: '',
       userEmail: '',
       userName: '',
       currentPage: 1,
       PageValue: []
-      // currentid: ''
     }
   },
   mounted () {
@@ -168,17 +166,12 @@ export default {
     init () {
       this.getUserList(1)
     },
-    getPage (page) {
-      this.getUserList(page)
-    },
     /* 사용자 정보 리스트 불러오기 */
     async getUserList (page) {
       try {
-        this.loading = true
         this.currentPage = page
         this.PageValue = []
         const res = await api.getUserList(page, this.keyword)
-        this.loading = false
         this.PageValue.push({
           count: res.data.count,
           currentPage: this.currentPage
@@ -194,8 +187,8 @@ export default {
             user.privilege = '관리자'
           }
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 사용자 정보 열람 */
@@ -213,8 +206,8 @@ export default {
         this.userName = res.data.username
         this.Name = res.data.name
         this.userEmail = res.data.email
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 사용자 정보 제출 */
@@ -232,8 +225,8 @@ export default {
         }
         await api.submitUser(this.currentName, data)
         this.getUserList(1)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
     /* 사용자 삭제 */
@@ -250,8 +243,8 @@ export default {
           }
           this.getUserList(this.currentPage)
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
   },

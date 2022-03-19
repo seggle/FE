@@ -120,8 +120,7 @@ export default {
     /* 해당 대회 공개 설정 바꾸기 */
     async changePublic (contestID) {
       try {
-        const res = await api.changeContestPublic(this.classID, contestID)
-        console.log(res)
+        await api.changeContestPublic(this.classID, contestID)
         alert('공개 설정 완료')
         this.$router.go(this.$router.currentRoute) // 새로고침
       } catch (err) {

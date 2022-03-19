@@ -62,23 +62,25 @@ export default {
     /* 일반대회 관리자(TA) 리스트 불러오기 */
     async getCompetitionTAList () {
       try {
-        const res = await api.getCompetitionTAList(this.competition_id)
-        this.taList = ''
-        for (const data of res.data) {
-          if (data.privilege === 1) {
-            this.taList += data.username + '\n'
+        const res = await api.getCompetitionUserList(this.competition_id)
+        this.talist = ''
+        for (const user of res.data) {
+          if (this.isCompetitionTA()) {
+            this.talist += user.username + '\n'
           }
         }
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     },
-    /* 관리자(TA) 등록 */
+    isCompetitionTA (Privilege) {
+      return Privilege === 1
+    },
     async submitTAList () {
       const data = []
-      const TA = this.taList.split('\n')
-      for (const item of TA) {
-        data.push({ username: item })
+      const tmp = this.talist.split('\n')
+      for (const ta of tmp) {
+        data.push({ username: ta })
       }
       await api.submitCompetitionTAList(this.competition_id, data)
       alert('TA 등록이 완료되었습니다.')
