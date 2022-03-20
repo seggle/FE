@@ -10,6 +10,7 @@ import {
 
 import Admin from '@/views/admin/Admin.vue'
 import AdminAllProblems from '@/views/admin/AdminAllProblems.vue'
+import AdminProblemDetail from '@/views/admin/AdminProblemDetail.vue'
 import AdminAnnouncment from '@/views/admin/AdminAnnouncement.vue'
 import AdminFaq from '@/views/admin/AdminFaq.vue'
 import AdminUserManagement from '@/views/admin/AdminUserManagement.vue'
@@ -156,26 +157,37 @@ const routes = [{
   beforeEnter: requireAuth(),
   children: [{
     path: 'all-problems',
+    name: 'AdminAllProblems',
     component: AdminAllProblems,
     meta: { isSuperAdmin: true }
   },
   {
+    path: 'all-problems/:problemID',
+    name: 'AdminProblemDetail',
+    component: AdminProblemDetail,
+    meta: { isSuperAdmin: true }
+  },
+  {
     path: 'all-classes',
+    name: 'AdminAllClasses',
     component: AdminAllClasses,
     meta: { isSuperAdmin: true }
   },
   {
     path: 'announcements',
+    name: 'AdminAnnouncement',
     component: AdminAnnouncment,
     meta: { isSuperAdmin: true }
   },
   {
     path: 'faqs',
+    name: 'AdminFaq',
     component: AdminFaq,
     meta: { isSuperAdmin: true }
   },
   {
     path: 'user-management',
+    name: 'AdminUserManagement',
     component: AdminUserManagement,
     meta: { isSuperAdmin: true }
   }

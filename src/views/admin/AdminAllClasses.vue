@@ -90,7 +90,7 @@ export default {
     /* 해당 수업으로 이동 */
     goClass (classID) {
       this.$router.push({
-        name: 'Class',
+        name: 'ClassContest',
         params: { classID: classID }
       })
     }
@@ -118,7 +118,7 @@ export default {
   text-align: left;
   tbody {
     tr:hover {
-      cursor: default;
+      cursor: pointer;
     }
     td.email {
       text-overflow: ellipsis;

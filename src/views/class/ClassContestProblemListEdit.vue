@@ -57,7 +57,7 @@
   <!---다음 버튼 누르면-->
   <div v-else class="container">
     <div class="d-flex mb-2 mt-3 justify-content-end">
-      <h2 class="me-auto">문제 순서 및 제목 수정</h2>
+      <h2 class="me-auto">문제 순서 수정</h2>
       <div>
         <button class="btn" id="problem-create" @click="SaveContestProblem">
           저장
