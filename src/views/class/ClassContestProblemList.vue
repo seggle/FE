@@ -47,26 +47,33 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(problems, i) in contestProblemList" :key="problems">
-            <th scope="row">{{ i + 1 }}</th>
-            <td>
-              <a
-                @click="
+          <tr v-for="(problem, i) in contestProblemList" :key="problem">
+            <th scope="row" @click="
                   goContestProblem(
-                    problems.id,
-                    problems.start_time,
-                    problems.end_time
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
                   )
-                "
-                >{{ problems.title }}</a
-              >
-            </td>
-            <td>{{ problems.end_time }}</td>
+                ">{{ i + 1 }}</th>
+            <td @click="
+                  goContestProblem(
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
+                  )
+                ">{{ problem.title }} </td>
+            <td @click="
+                  goContestProblem(
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
+                  )
+                ">{{ problem.end_time }}</td>
             <td scope="row">
                 <button
                   v-if="isTAOverPrivilege()"
                   class="edit-btn"
-                  @click="EditClassContestProblem(problems.id)"
+                  @click="EditClassContestProblem(problem.id)"
                 >
                   <font-awesome-icon icon="pen" />
                 </button>
@@ -75,7 +82,7 @@
               <button
                 v-if="isTAOverPrivilege()"
                 class="delete-btn"
-                @click="deleteContestProblem(problems.id)"
+                @click="deleteContestProblem(problem.id)"
               >
                 <font-awesome-icon icon="trash-can" />
               </button>

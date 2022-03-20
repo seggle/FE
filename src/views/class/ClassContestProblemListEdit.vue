@@ -23,7 +23,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col"><font-awesome-icon icon="check" /></th>
+            <th class="col-1" scope="col"><font-awesome-icon icon="check" /></th>
             <th scope="col">제목</th>
           </tr>
         </thead>
@@ -79,7 +79,7 @@
               v-for="problem in contestProblemList"
               :key="problem"
             >
-              <th scope="row">{{ problem.problem_id }}</th>
+              <th class="id" scope="row">{{ problem.problem_id }}</th>
               <td> {{ problem.title }} </td>
             </tr>
           </draggable>
@@ -222,6 +222,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.table-div .table {
+  min-width: 0px;
+  .id {
+    width: 30px;
+  }
+}
 h5 {
   margin-top: 5px;
 }

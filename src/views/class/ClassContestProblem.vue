@@ -225,8 +225,8 @@ export default {
         console.log(err)
       }
     },
-    isTAOverPrivilege (userPrivilege) {
-      return (userPrivilege > 0)
+    isTAOverPrivilege () {
+      return (this.userPrivilege > 0)
     },
     async getProblem () {
       try {

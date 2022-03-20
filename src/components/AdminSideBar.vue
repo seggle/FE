@@ -46,17 +46,22 @@ ul {
   width: 100%;
 }
 
-.router-link-active {
-  background-color: #060c20;
-  border-radius: 30px;
-  color: white;
-  font-weight: bold;
-}
-
-.nav-item {
-  &:hover {
-    .nav-link{
+nav {
+  .nav-link {
+    color: black;
+    &:hover {
+      color: black;
       font-weight: bold;
+    }
+  }
+  .router-link-active {
+    background-color: #060c20;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    &:hover {
+      color: white;
+      font-weight:bold;
     }
   }
 }
