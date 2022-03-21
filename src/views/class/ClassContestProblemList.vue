@@ -1,11 +1,8 @@
 <!--시험모드인 contest이면서 학생인 경우-->
 <template>
-  <div
-    v-if="beforeTest() && isClassStudent()"
-    class="container"
-  >
+  <div v-if="beforeTest() && isClassStudent()" class="container">
     <div class="d-flex">
-      <h1 class="me-auto">{{ contestTitle }}</h1>
+      <h1>{{ contestTitle }}</h1>
     </div>
     <div class="test">
       <h3 class="datetime">{{ time }}</h3>
@@ -15,7 +12,7 @@
     </div>
   </div>
   <div v-else class="container">
-    <div class="d-flex">
+    <header>
       <h1 class="me-auto">{{ contestTitle }}</h1>
       <div class="button-group" v-if="isTAOverPrivilege()">
         <button
@@ -34,7 +31,7 @@
           문제 편집
         </button>
       </div>
-    </div>
+    </header>
     <div class="table-div">
       <table class="table">
         <thead>
@@ -42,11 +39,15 @@
             <th scope="col" class="col-md-1">#</th>
             <th scope="col">제목</th>
             <th scope="col">마감기한</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <th scope="col" v-if="isTAOverPrivilege()"></th>
+            <th scope="col" v-if="isTAOverPrivilege()"></th>
           </tr>
         </thead>
         <tbody>
+          <tr v-if="count === 0">
+            <td colspan="5">등록된 문제가 없습니다.</td>
+          </tr>
+
           <tr v-for="(problems, i) in contestProblemList" :key="problems">
             <th scope="row">{{ i + 1 }}</th>
             <td>
@@ -62,18 +63,16 @@
               >
             </td>
             <td>{{ problems.end_time }}</td>
-            <td scope="row">
-                <button
-                  v-if="isTAOverPrivilege()"
-                  class="edit-btn"
-                  @click="EditClassContestProblem(problems.id)"
-                >
-                  <font-awesome-icon icon="pen" />
-                </button>
-              </td>
-            <td scope="row">
+            <td scope="row" v-if="isTAOverPrivilege()">
               <button
-                v-if="isTAOverPrivilege()"
+                class="edit-btn"
+                @click="EditClassContestProblem(problems.id)"
+              >
+                <font-awesome-icon icon="pen" />
+              </button>
+            </td>
+            <td scope="row" v-if="isTAOverPrivilege()">
+              <button
                 class="delete-btn"
                 @click="deleteContestProblem(problems.id)"
               >
@@ -102,7 +101,8 @@ export default {
       testStart: localStorage.getItem('test'),
       date: new Date(),
       examUserList: [],
-      userPrivilege: 0
+      userPrivilege: 0,
+      count: 0
     }
   },
   created () {
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     beforeTest () {
-      return (this.testMode && this.testStart === null)
+      return this.testMode && this.testStart === null
     },
     async getClassUserList () {
       const res = await api.getClassUserList(this.classID)
@@ -124,10 +124,10 @@ export default {
       }
     },
     isClassStudent () {
-      return (this.userPrivilege === 0)
+      return this.userPrivilege === 0
     },
     isTAOverPrivilege () {
-      return (this.userPrivilege > 0)
+      return this.userPrivilege > 0
     },
     onEverySecond () {
       this.date = new Date()
@@ -146,7 +146,10 @@ export default {
       console.log(contestProblemID)
       this.$router.push({
         name: 'EditClassContestProblem',
-        params: { contestID: this.contestID, contestProblemID: contestProblemID }
+        params: {
+          contestID: this.contestID,
+          contestProblemID: contestProblemID
+        }
       })
     },
     async getContestInfo (contestID) {
@@ -166,6 +169,7 @@ export default {
       try {
         const res = await api.getContestProblemList(this.classID, contestID)
         this.contestProblemList = res.data
+        this.count = res.data.length
         for (const contestProblem of this.contestProblemList) {
           contestProblem.end_time = contestProblem.end_time.slice(0, 10)
         }
@@ -194,7 +198,10 @@ export default {
       const today = new Date()
       const startTime = new Date(start)
       const endTime = new Date(end)
-      return (startTime.getTime() <= today.getTime() && today.getTime() <= endTime.getTime())
+      return (
+        startTime.getTime() <= today.getTime() &&
+        today.getTime() <= endTime.getTime()
+      )
     },
     async alreadyExist (username) {
       try {
@@ -250,6 +257,7 @@ export default {
     $route (to, from) {
       if (to.path !== from.path) {
         if (this.$route.params.contestID !== undefined) {
+          this.getContestInfo(this.$route.params.contestID)
           this.getContestProblemList(this.$route.params.contestID)
         }
       }
@@ -265,5 +273,30 @@ a {
 }
 .test {
   margin: 30px;
+}
+.container {
+  padding: 3rem 3rem;
+  @media (max-width: 420px) {
+    padding: 1rem 1rem;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem 0rem;
+    @media (max-width: 768px) {
+      display: block;
+      h1 {
+        font-size: 20px;
+      }
+      padding: 1rem 0rem;
+    }
+  }
+
+  .btn {
+    @media (max-width: 420px) {
+      font-size: 14px;
+    }
+  }
 }
 </style>
