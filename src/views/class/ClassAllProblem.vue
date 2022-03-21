@@ -31,12 +31,12 @@
     </thead>
     <tbody>
       <tr v-for="problem in problemList" :key="problem">
-        <th scope="row">{{ problem.id }}</th>
-        <td>
-          <a @click="goProblemDetail(problem.id)">{{ problem.title }}</a>
+        <th @click="goProblemDetail(problem.id)" scope="row">{{ problem.id }}</th>
+        <td @click="goProblemDetail(problem.id)">
+          <a>{{ problem.title }}</a>
         </td>
-        <td>{{ problem.created_time }}</td>
-        <td>{{ problem.created_user }}</td>
+        <td @click="goProblemDetail(problem.id)">{{ problem.created_time }}</td>
+        <td @click="goProblemDetail(problem.id)">{{ problem.created_user }}</td>
         <td>
           <div style="display: inline-block" class="form-check form-switch">
             <input class="form-check-input"

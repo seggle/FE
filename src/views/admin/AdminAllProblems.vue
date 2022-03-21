@@ -30,10 +30,10 @@
             <td colspan="5">등록된 문제가 없습니다.</td>
           </tr>
           <tr v-for="problem in problemList" :key="problem">
-            <th scope="row">{{ problem.id }}</th>
-            <td>{{ problem.title }}</td>
-            <td>{{ problem.created_time }}</td>
-            <td>{{ problem.created_user }}</td>
+            <th @click="goProblemDetail(problem.id)" scope="row">{{ problem.id }}</th>
+            <td @click="goProblemDetail(problem.id)">{{ problem.title }}</td>
+            <td @click="goProblemDetail(problem.id)">{{ problem.created_time }}</td>
+            <td @click="goProblemDetail(problem.id)">{{ problem.created_user }}</td>
             <td scope="row">
               <button class="delete-btn" @click="deleteProblem(problem.id)">
                 <font-awesome-icon icon="trash-can" />
@@ -108,6 +108,14 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    goProblemDetail (problemID) {
+      this.$router.push({
+        name: 'AdminProblemDetail',
+        params: {
+          problemID: problemID
+        }
+      })
     }
   },
   watch: {

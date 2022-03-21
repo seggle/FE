@@ -108,6 +108,9 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 3rem 3rem;
+  @media (max-width: 991px) {
+    padding: 2rem 2rem;
+  }
   @media (max-width: 420px) {
     padding: 1rem 1rem;
   }
@@ -149,30 +152,31 @@ header {
     text-align: left;
   }
 
+  th:nth-child(3),
+  td:nth-child(3) {
+    @media (max-width: 991px) {
+      width: 100px;
+    }
+    @media (max-width: 420px) {
+      width: 70px;
+    }
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    @media (max-width: 991px) {
+      width: 120px;
+    }
+    @media (max-width: 420px) {
+      display: none;
+    }
+  }
+
   tr {
     @media (max-width: 420px) {
       font-size: calc(0.55rem + 2vw);
       padding: 0px;
     }
-  }
-}
-
-@media (max-width: 420px) {
-  th:nth-child(3),
-  td:nth-child(3) {
-    width: 70px;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    display: none;
-  }
-}
-
-@media (max-width: 991px) {
-  th:nth-child(4),
-  td:nth-child(4) {
-    width: 100px;
   }
 }
 </style>

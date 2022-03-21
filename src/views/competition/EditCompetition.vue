@@ -75,7 +75,7 @@
                   <div class="form-start-time">
                     <label class="form-label">시작 시간</label>
                     <Datepicker
-                      v-model="problem.startTime"
+                      v-model="problem.start_time"
                       placeholder="시작 시간"
                       textInput
                     />
@@ -84,7 +84,7 @@
                   <div class="form-end-time">
                     <label class="form-label">종료 시간</label>
                     <Datepicker
-                      v-model="problem.endTime"
+                      v-model="problem.end_time"
                       placeholder="종료 시간"
                       textInput
                     />
@@ -182,8 +182,8 @@ export default {
           'Log loss'
         ],
         evaluation: '',
-        startTime: '',
-        endTime: '',
+        start_time: '',
+        end_time: '',
         data_description: '',
         data: '',
         solution: ''
@@ -203,8 +203,9 @@ export default {
     async getProblem () {
       try {
         const res = await api.getCompetitions(this.competitionID)
+        console.log(res.data)
         Object.assign(this.problem, res.data)
-
+        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {

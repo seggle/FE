@@ -1,7 +1,7 @@
 <!--시험모드인 contest이면서 학생인 경우-->
 <template>
   <div v-if="beforeTest() && isClassStudent()" class="container">
-    <div class="d-flex">
+    <div class="title">
       <h1>{{ contestTitle }}</h1>
     </div>
     <div class="test">
@@ -12,8 +12,8 @@
     </div>
   </div>
   <div v-else class="container">
-    <header>
-      <h1 class="me-auto">{{ contestTitle }}</h1>
+    <div class="title">
+      <h1>{{ contestTitle }}</h1>
       <div class="button-group" v-if="isTAOverPrivilege()">
         <button
           v-if="testMode"
@@ -31,7 +31,7 @@
           문제 편집
         </button>
       </div>
-    </header>
+    </div>
     <div class="table-div">
       <table class="table">
         <thead>
@@ -54,9 +54,9 @@
               <a
                 @click="
                   goContestProblem(
-                    problems.id,
-                    problems.start_time,
-                    problems.end_time
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
                   )
                 "
                 >{{ problems.title }}</a
@@ -74,7 +74,7 @@
             <td scope="row" v-if="isTAOverPrivilege()">
               <button
                 class="delete-btn"
-                @click="deleteContestProblem(problems.id)"
+                @click="deleteContestProblem(problem.id)"
               >
                 <font-awesome-icon icon="trash-can" />
               </button>
@@ -271,32 +271,28 @@ a {
   color: black;
   cursor: pointer;
 }
+
 .test {
   margin: 30px;
 }
-.container {
-  padding: 3rem 3rem;
-  @media (max-width: 420px) {
-    padding: 1rem 1rem;
-  }
 
-  header {
-    display: flex;
-    justify-content: space-between;
-    padding: 3rem 0rem;
-    @media (max-width: 768px) {
-      display: block;
-      h1 {
-        font-size: 20px;
-      }
-      padding: 1rem 0rem;
-    }
+.title {
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 500px) {
+    display: block;
   }
+}
 
-  .btn {
-    @media (max-width: 420px) {
-      font-size: 14px;
-    }
+h1 {
+  display: block;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: 500px) {
+    max-width: 100%;
   }
 }
 </style>

@@ -123,12 +123,6 @@ header {
   text-align: right;
 }
 
-.btn {
-  @media (max-width: 420px) {
-    font-size: calc(0.5rem + 1.5vw);
-  }
-}
-
 pre {
   background: transparent;
   font-size: 17px;
@@ -197,7 +191,7 @@ textarea {
 .btn {
   @media (max-width: 767px) {
     margin-right: 0px;
-    font-size: calc(0.5rem + 2vw);
+    font-size: calc(0.5rem + 1vw);
   }
   margin-top: 30px;
   margin-right: 0px;

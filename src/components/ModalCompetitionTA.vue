@@ -19,7 +19,7 @@
                 class="form-control mb-3 p-3"
                 width="100%"
                 rows="10"
-                v-model="talist"
+                v-model="taList"
                 placeholder="관리자를 등록하세요."
               ></textarea>
             </form>
@@ -63,10 +63,10 @@ export default {
     async getCompetitionTAList () {
       try {
         const res = await api.getCompetitionUserList(this.competition_id)
-        this.talist = ''
+        this.taList = ''
         for (const user of res.data) {
-          if (this.isCompetitionTA()) {
-            this.talist += user.username + '\n'
+          if (this.isCompetitionTA(user.privilege)) {
+            this.taList += user.username + '\n'
           }
         }
       } catch (err) {
@@ -74,11 +74,11 @@ export default {
       }
     },
     isCompetitionTA (Privilege) {
-      return Privilege === 1
+      return (Privilege === 1)
     },
     async submitTAList () {
       const data = []
-      const tmp = this.talist.split('\n')
+      const tmp = this.taList.split('\n')
       for (const ta of tmp) {
         data.push({ username: ta })
       }

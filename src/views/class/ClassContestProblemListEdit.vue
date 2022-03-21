@@ -23,7 +23,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col"><font-awesome-icon icon="check" /></th>
+            <th class="col-1" scope="col"><font-awesome-icon icon="check" /></th>
             <th scope="col">제목</th>
           </tr>
         </thead>
@@ -57,7 +57,7 @@
   <!---다음 버튼 누르면-->
   <div v-else class="container">
     <div class="d-flex mb-2 mt-3 justify-content-end">
-      <h2 class="me-auto">문제 순서 및 제목 수정</h2>
+      <h2 class="me-auto">문제 순서 수정</h2>
       <div>
         <button class="btn" id="problem-create" @click="SaveContestProblem">
           저장
@@ -79,7 +79,7 @@
               v-for="problem in contestProblemList"
               :key="problem"
             >
-              <th scope="row">{{ problem.problem_id }}</th>
+              <th class="id" scope="row">{{ problem.problem_id }}</th>
               <td> {{ problem.title }} </td>
             </tr>
           </draggable>
@@ -222,6 +222,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.table-div .table {
+  min-width: 0px;
+  .id {
+    width: 30px;
+  }
+}
 h5 {
   margin-top: 5px;
 }
