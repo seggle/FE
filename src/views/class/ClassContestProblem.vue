@@ -306,8 +306,15 @@ export default {
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
       const id = e.target.id
+
+      const fileSize = files[0].size
+      const maxSize = 10 * 1024 * 1024
       if (id === 'csv-file-input') {
-        this.csv = files[0]
+        if (fileSize > maxSize) {
+          alert('첨부파일은 10MB 이내로 등록 가능합니다.')
+        } else {
+          this.csv = files[0]
+        }
       } else {
         this.ipynb = files[0]
       }
