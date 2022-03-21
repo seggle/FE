@@ -24,7 +24,7 @@
               />
             </div>
             <div class="row">
-              <div class="col-6" data-backdrop="static">
+              <div class="col-6 start-time" data-backdrop="static">
                 <label class="form-label">시작시간</label>
                 <Datepicker
                   v-model="contestInfo.startTime"
@@ -32,7 +32,7 @@
                   textInput
                 />
               </div>
-              <div class="col-6" data-backdrop="static">
+              <div class="col-6 end-time" data-backdrop="static">
                 <label class="form-label">종료시간</label>
                 <Datepicker
                   v-model="contestInfo.endTime"
@@ -149,4 +149,17 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.start-time,
+.end-time {
+  padding: 0;
+  @media (max-width: 420px) {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.exam-checkbox {
+  padding: 1rem;
+}
+</style>

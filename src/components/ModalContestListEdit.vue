@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="(contest, i) in contestList" :key="contest">
-                    <td>{{ contest.name }}</td>
+                    <td class="contest-name">{{ contest.name }}</td>
                     <td>
                       <div class="form-check form-switch">
                         <input
@@ -132,8 +132,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.modal-container {
+  min-width: 500px;
+
+  @media (max-width: 500px) {
+    max-width: 300px;
+    min-width: 300px;
+  }
+}
+
 .row {
   overflow-x: auto;
+
+  .contest-name {
+    display: block;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+  }
 
   td {
     padding: 0.5rem 1rem;

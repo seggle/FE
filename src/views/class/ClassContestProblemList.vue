@@ -4,8 +4,8 @@
     v-if="beforeTest() && isClassStudent()"
     class="container"
   >
-    <div class="d-flex">
-      <h1 class="me-auto">{{ contestTitle }}</h1>
+    <div class="title">
+      <h1>{{ contestTitle }}</h1>
     </div>
     <div class="test">
       <h3 class="datetime">{{ time }}</h3>
@@ -15,8 +15,8 @@
     </div>
   </div>
   <div v-else class="container">
-    <div class="d-flex">
-      <h1 class="me-auto">{{ contestTitle }}</h1>
+    <div class="title">
+      <h1>{{ contestTitle }}</h1>
       <div class="button-group" v-if="isTAOverPrivilege()">
         <button
           v-if="testMode"
@@ -270,7 +270,28 @@ a {
   color: black;
   cursor: pointer;
 }
+
 .test {
   margin: 30px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 500px) {
+    display: block;
+  }
+}
+
+h1 {
+  display: block;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: 500px) {
+    max-width: 100%;
+  }
 }
 </style>

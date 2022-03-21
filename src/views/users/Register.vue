@@ -115,8 +115,21 @@ export default {
         }
         const res = await api.registerUser(data)
         console.log(res)
+        alert('회원가입이 완료되었습니다!')
+        this.$router.push('/login')
       } catch (err) {
-        console.log(err)
+        const status = err.response.status
+        const response = err.response.data
+
+        if (status === 400) {
+          if (response.username) {
+            this.feedback.userID = '이미 존재하는 아이디입니다.'
+            this.invalidID = true
+          } else if (response.email) {
+            this.feedback.email = '이미 존재하는 이메일입니다.'
+            this.invalidEmail = true
+          }
+        }
       }
     },
     async checkUserExist () { // 아이디, 이메일 중복 검사
@@ -174,7 +187,6 @@ export default {
     handleRegister () {
       if (this.checkFormValid()) {
         this.submitForm()
-        this.$router.push('/login')
       } else {
         this.validated = true
       }
