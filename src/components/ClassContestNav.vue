@@ -2,7 +2,7 @@
   <div class="contest-nav-bar">
     <nav class="nav flex-column px-4 py-4">
       <div class="nav-header px-1 py-2">
-        <span id="title">문제</span>
+        <span id="title">목록</span>
         <span
           id="dropdownMenuButton"
           data-bs-toggle="dropdown"
@@ -11,7 +11,7 @@
         >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li>
-            <a class="dropdown-item" @click="showModal = true">문제 생성</a>
+            <a class="dropdown-item" @click="showModal = true">문제 목록 생성</a>
           </li>
           <li>
             <a

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="d-flex flex-wrap mb-2 mt-3">
+    <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">공지사항</h1>
       <div>
         <form>
@@ -13,7 +13,9 @@
           />
         </form>
       </div>
-      <div>
+    </div>
+    <div>
+      <div class="button">
         <button
           class="btn"
           id="announce-create"
@@ -23,85 +25,85 @@
         >
           + 글쓰기
         </button>
-        <div
-          class="modal fade"
-          id="announceModal"
-          tabindex="-1"
-          aria-labelledby="announceModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 v-if="createMode">공지사항 생성</h5>
-                <h5 v-else>공지사항 수정</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <h5 style="float: left">제목</h5>
-                <textarea
-                  v-model="announcementTitle"
-                  id="announce-title"
-                  class="form-control mb-3 p-2"
-                  cols="100"
-                  rows="1"
-                  placeholder="제목을 입력하세요"
-                ></textarea>
-                <h5 style="float: left">내용</h5>
-                <v-md-editor
-                  v-model="announcementContext"
-                  height="400px"
-                ></v-md-editor>
-                <div class="mt-2">
-                  <p style="float: left">공개여부</p>
-                  <span
-                    class="form-check form-switch"
-                    style="float: left; margin-left: 10px"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckChecked"
-                      v-model="announcementVisible"
-                    />
-                  </span>
-                  <p style="float: left">중요여부</p>
-                  <span
-                    class="form-check form-switch"
-                    style="float: left; margin-left: 10px"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckChecked"
-                      v-model="announcementImportant"
-                    />
-                  </span>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
+      </div>
+      <div
+        class="modal fade"
+        id="announceModal"
+        tabindex="-1"
+        aria-labelledby="announceModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 v-if="createMode">공지사항 생성</h5>
+              <h5 v-else>공지사항 수정</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <h5 style="float: left">제목</h5>
+              <textarea
+                v-model="announcementTitle"
+                id="announce-title"
+                class="form-control mb-3 p-2"
+                cols="100"
+                rows="1"
+                placeholder="제목을 입력하세요"
+              ></textarea>
+              <h5 style="float: left">내용</h5>
+              <v-md-editor
+                v-model="announcementContext"
+                height="400px"
+              ></v-md-editor>
+              <div class="mt-2">
+                <p style="float: left">공개여부</p>
+                <span
+                  class="form-check form-switch"
+                  style="float: left; margin-left: 10px"
                 >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  id="announce-save"
-                  data-bs-dismiss="modal"
-                  @click="submitAnnouncement"
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="flexSwitchCheckChecked"
+                    v-model="announcementVisible"
+                  />
+                </span>
+                <p style="float: left">중요여부</p>
+                <span
+                  class="form-check form-switch"
+                  style="float: left; margin-left: 10px"
                 >
-                  저장
-                </button>
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="flexSwitchCheckChecked"
+                    v-model="announcementImportant"
+                  />
+                </span>
               </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="announce-save"
+                data-bs-dismiss="modal"
+                @click="submitAnnouncement"
+              >
+                저장
+              </button>
             </div>
           </div>
         </div>
@@ -360,6 +362,8 @@ h1 {
   width: 50%;
   text-align: left;
   @media (max-width: 420px) {
+    width: 30%;
+    margin-left: 0px;
     font-size: calc(1.2rem + 2vw);
   }
 }
@@ -367,5 +371,8 @@ h1 {
   @media (max-width: 767px) {
     font-size: calc(0.5rem + 2vw);
   }
+}
+.button {
+  text-align: right;
 }
 </style>

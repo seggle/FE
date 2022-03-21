@@ -18,33 +18,19 @@
           <th scope="col">문제제목</th>
           <th scope="col">시작 날짜</th>
           <th scope="col"></th>
-          <th scope="col"></th>
           <th scope="col">마감 날짜</th>
           <th scope="col">등수</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="(problems, i) in problemList"
+          v-for="problems in problemList"
           :key="problems"
           @click="goProblem(problems.id)"
         >
           <td>{{ problemList.indexOf(problems, 0) + 1 }}</td>
           <td>{{ problems.title }}</td>
           <td>{{ problems.start_time }}</td>
-          <td>
-            <div class="progress">
-              <div
-                class="progress-bar"
-                :class="this.problemList[i].progressBar.type"
-                role="progressbar"
-                :style="{ width: this.problemList[i].progressBar.value + '%' }"
-                :aria-valuenow="this.problemList[i].progressBar.value"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
-            </div>
-          </td>
           <td>{{ problems.dday }}</td>
           <td>{{ problems.end_time }}</td>
           <td>{{ problems.rank }}/{{ problems.user_total }}</td>
@@ -91,7 +77,6 @@ export default {
         this.problemList = res.data.reverse()
         console.log(res.data)
         this.setTime()
-        this.setProgressBar()
         this.problemList.sort((a, b) => {
           if (a.start_end < b.start_end) return 1
           else if (a.start_end > b.start_end) return -1
@@ -102,7 +87,6 @@ export default {
             else if (a.diffDay < b.diffDay) return -1
           }
         })
-        console.log(this.problemList)
       } catch (error) {
         console.log(error)
       }
@@ -154,32 +138,6 @@ export default {
           this.problemList[i].dday = '종료'
           this.problemList[i].diffDay = -1
         }
-      }
-    },
-    setProgressBar () {
-      for (let i = 0; i < this.problemList.length; i++) {
-        const progress = {}
-        if (this.problemList[i].start_end === -1) {
-          progress.value = 0
-          progress.type = 'bg-secondary'
-        } else if (this.problemList[i].start_end === -2) {
-          progress.value = 100
-          progress.type = 'bg-secondary'
-        } else {
-          progress.value =
-            100 -
-            (this.problemList[i].diffDay / this.problemList[i].start_end) * 100
-          if (progress.value <= 50) {
-            progress.type = 'bg-info'
-          } else if (progress.value <= 70) {
-            progress.type = 'bg-warning'
-          } else if (progress.value === 100) {
-            progress.type = 'bg-success'
-          } else {
-            progress.type = 'bg-danger'
-          }
-        }
-        this.problemList[i].progressBar = progress
       }
     },
     goProblem (problemID) {
