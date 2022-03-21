@@ -125,7 +125,7 @@
         </thead>
         <tbody>
           <tr v-if="count === 0">
-            <td colspan="5">게시물이 없습니다.</td>
+            <td colspan="8">게시물이 없습니다.</td>
           </tr>
           <tr
             v-else
