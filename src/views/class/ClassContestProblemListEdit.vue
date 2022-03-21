@@ -1,6 +1,6 @@
 <template>
   <div v-if="firstPage" class="container">
-    <div class="d-flex mb-2 mt-3 justify-content-end">
+    <header class="d-flex mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 등록</h2>
       <div>
         <form>
@@ -13,17 +13,20 @@
           />
         </form>
       </div>
-      <div>
-        <button class="btn" id="problem-create" @click="selectClassProblem">
-          다음
-        </button>
-      </div>
+    </header>
+
+    <div class="button">
+      <button class="btn" id="problem-create" @click="selectClassProblem">
+        다음
+      </button>
     </div>
     <div class="table-div">
       <table class="table">
         <thead>
           <tr>
-            <th class="col-1" scope="col"><font-awesome-icon icon="check" /></th>
+            <th class="col-1" scope="col">
+              <font-awesome-icon icon="check" />
+            </th>
             <th scope="col">제목</th>
           </tr>
         </thead>
@@ -56,20 +59,20 @@
   </div>
   <!---다음 버튼 누르면-->
   <div v-else class="container">
-    <div class="d-flex mb-2 mt-3 justify-content-end">
-      <h2 class="me-auto">문제 순서 수정</h2>
+    <header class="d-flex mb-2 mt-3 justify-content-end">
+      <h3 class="me-auto">문제 순서 수정</h3>
       <div>
         <button class="btn" id="problem-create" @click="SaveContestProblem">
           저장
         </button>
       </div>
-    </div>
+    </header>
     <div class="table-div">
-      <table class="table">
+      <table class="table" id="two">
         <thead>
           <div class="detail">* 드래그하여 순서를 변경할 수 있습니다</div>
         </thead>
-        <tbody>
+        <tbody class="drag-tbody">
           <draggable
             class="dragArea list-group w-full"
             :list="contestProblemList"
@@ -80,7 +83,7 @@
               :key="problem"
             >
               <th class="id" scope="row">{{ problem.problem_id }}</th>
-              <td> {{ problem.title }} </td>
+              <td>{{ problem.title }}</td>
             </tr>
           </draggable>
         </tbody>
@@ -131,7 +134,10 @@ export default defineComponent({
         this.PageValue = []
         const res = await api.getProblemList(page, this.keyword)
         this.problemList = res.data.results
-        this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
+        this.PageValue.push({
+          count: res.data.count,
+          currentPage: this.currentPage
+        })
         this.total = parseInt((res.data.count - 1) / 15) + 1
       } catch (err) {
         console.log(err)
@@ -224,16 +230,39 @@ export default defineComponent({
 <style lang="scss" scoped>
 .table-div .table {
   min-width: 0px;
-  .id {
-    width: 30px;
+}
+header {
+  margin-bottom: 0px;
+  h2 {
+    width: 30%;
+    text-align: left;
+
+    @media (max-width: 420px) {
+      margin-left: 0px;
+      font-size: calc(0.8rem + 2vw);
+    }
+  }
+  h3 {
+    width: 45%;
+    text-align: left;
+
+    @media (max-width: 420px) {
+      margin-left: 0px;
+      font-size: calc(0.8rem + 2vw);
+    }
+  }
+  .form-control {
+    float: right;
+    width: 80%;
+    height: 100%;
+  }
+  .btn {
+    @media (max-width: 767px) {
+      font-size: calc(0.4rem + 2vw);
+    }
   }
 }
-h5 {
-  margin-top: 5px;
-}
-select {
-  height: 100%;
-}
+
 a {
   color: black;
   cursor: pointer;
@@ -242,12 +271,16 @@ a {
 .modal-dialog {
   max-width: 80%;
 }
-.list-group-item {
-  display: flex;
-  justify-content: space-around;
-}
+
 .detail {
-  font-size: 8px;
+  font-size: 11px;
   color: gray;
+}
+.button {
+  text-align: right;
+}
+.list-group-item {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
 }
 </style>
