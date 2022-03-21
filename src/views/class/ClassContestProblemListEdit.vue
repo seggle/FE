@@ -1,8 +1,8 @@
 <template>
   <div v-if="firstPage" class="container">
-    <div class="d-flex mb-2 mt-3 justify-content-end">
+    <header class="mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 등록</h2>
-      <div>
+      <div class="search-bar">
         <form>
           <input
             class="form-control"
@@ -12,13 +12,12 @@
             v-model="keyword"
           />
         </form>
+        <button class="btn"
+                id="problem-create"
+                @click="selectClassProblem"
+        ><font-awesome-icon icon="circle-right" /></button>
       </div>
-      <div>
-        <button class="btn" id="problem-create" @click="selectClassProblem">
-          다음
-        </button>
-      </div>
-    </div>
+    </header>
     <div class="table-div">
       <table class="table">
         <thead>
@@ -249,5 +248,16 @@ a {
 .detail {
   font-size: 8px;
   color: gray;
+}
+header {
+  display: flex;
+  @media (max-width: 500px) {
+    display: block;
+  }
+}
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
