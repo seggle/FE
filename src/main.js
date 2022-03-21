@@ -21,6 +21,9 @@ import Prism from 'prismjs'
 // highlight code
 import 'prismjs/components/prism-json'
 // font-awesome
+import { VueShowdownPlugin } from 'vue-showdown'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -42,5 +45,17 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')
 app.use(VMdEditor)
+app.use(mavonEditor)
+
+app.use(VueShowdownPlugin, {
+  options: {
+    emoji: true,
+    tables: true,
+    parseImgDimensions: true,
+    omitExtraWLInCodeBlocks: true,
+    simpleLineBreaks: true,
+    splitAdjacentBlockquotes: true
+  }
+})
 
 global.$ = jQuery
