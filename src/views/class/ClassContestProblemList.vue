@@ -1,9 +1,9 @@
 <!--시험모드인 contest이면서 학생인 경우-->
 <template>
   <div v-if="beforeTest() && isClassStudent()" class="container">
-    <div class="title">
+    <header class="title">
       <h1>{{ contestTitle }}</h1>
-    </div>
+    </header>
     <div class="test">
       <h3 class="datetime">{{ time }}</h3>
       <button class="btn btn-primary px-4 me-sm-3" @click="examStart">
@@ -12,7 +12,7 @@
     </div>
   </div>
   <div v-else class="container">
-    <div class="title">
+    <header class="title">
       <h1>{{ contestTitle }}</h1>
       <div class="button-group" v-if="isTAOverPrivilege()">
         <button
@@ -31,7 +31,7 @@
           문제 편집
         </button>
       </div>
-    </div>
+    </header>
     <div class="table-div">
       <table class="table">
         <thead>
