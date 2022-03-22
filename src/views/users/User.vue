@@ -168,4 +168,12 @@ export default {
 .map {
   background-color: gainsboro;
 }
+svg.vch__wrapper .vch__months__labels__wrapper text.vch__month__label {
+  font-size: 7px;
+}
+
+svg.vch__wrapper .vch__days__labels__wrapper text.vch__day__label,
+svg.vch__wrapper .vch__legend__wrapper text {
+  font-size: 5px;
+}
 </style>
