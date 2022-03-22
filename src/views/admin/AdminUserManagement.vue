@@ -237,7 +237,8 @@ export default {
           const res = await api.getUserList(1, this.keyword)
           if (
             this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage
+            res.data.count / 15 < this.currentPage &&
+            res.data.count % 15 === 0
           ) {
             this.currentPage = this.currentPage - 1
           }

@@ -195,7 +195,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getAnnouncementList" />
+    <Pagination :pagination="PageValue" @get-page="getPage" />
   </div>
 </template>
 
@@ -230,6 +230,9 @@ export default {
   methods: {
     init () {
       this.getAnnouncementList(1)
+    },
+    getPage (page) {
+      this.getAnnouncementList(page)
     },
     handleUploadImage (event, insertImage, files) {
       // Get the files and upload them to the file server, then insert the corresponding content into the editor
@@ -273,7 +276,8 @@ export default {
           // 마지막 page의 유일한 공지사항을 지운 경우, 현재 페이지값 재조정
           if (
             this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage
+            res.data.count / 15 < this.currentPage &&
+            res.data.count % 15 === 0
           ) {
             this.currentPage = this.currentPage - 1
           }

@@ -109,6 +109,14 @@ export default {
       try {
         if (confirm('삭제하시겠습니까?')) {
           await api.deleteProblem(problemID)
+          const res = await api.getProblemList(1, this.keyword)
+          if (
+            this.currentPage !== 1 &&
+            res.data.count / 15 < this.currentPage &&
+            res.data.count % 15 === 0
+          ) {
+            this.currentPage = this.currentPage - 1
+          }
           this.getProblemList(this.currentPage)
         }
       } catch (err) {
