@@ -15,7 +15,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">문제제목</th>
+          <th scope="col">대회 제목</th>
           <th scope="col">시작 날짜</th>
           <th scope="col"></th>
           <th scope="col">마감 날짜</th>
@@ -23,17 +23,19 @@
         </tr>
       </thead>
       <tbody>
+            <tr v-if="count===0"><td colspan="6">참가한 대회가 없습니다.</td></tr>
+
         <tr
-          v-for="problems in problemList"
-          :key="problems"
-          @click="goProblem(problems.id)"
+          v-for="problem in problemList"
+          :key="problem"
+          @click="goProblem(problem.id)"
         >
-          <td>{{ problemList.indexOf(problems, 0) + 1 }}</td>
-          <td>{{ problems.title }}</td>
-          <td>{{ problems.start_time }}</td>
-          <td>{{ problems.dday }}</td>
-          <td>{{ problems.end_time }}</td>
-          <td>{{ problems.rank }}/{{ problems.user_total }}</td>
+          <td>{{ problemList.indexOf(problem, 0) + 1 }}</td>
+          <td>{{ problem.title }}</td>
+          <td>{{ problem.start_time }}</td>
+          <td>{{ problem.dday }}</td>
+          <td>{{ problem.end_time }}</td>
+          <td>{{ problem.rank }}/{{ problem.user_total }}</td>
         </tr>
       </tbody>
     </table>
@@ -52,7 +54,8 @@ export default {
       problemList: [],
       heatmapValues: [],
       d_day: [],
-      endDate: '2022-11-21'
+      endDate: '2022-11-21',
+      count: 0
     }
   },
   created () {
@@ -74,8 +77,7 @@ export default {
       const username = this.$store.state.userid
       try {
         const res = await api.showUserCompetition(username)
-        console.log(res.data)
-
+        this.count = this.problemList.length
         this.problemList = res.data.reverse()
         console.log(res.data)
         this.setTime()

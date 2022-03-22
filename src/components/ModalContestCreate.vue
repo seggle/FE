@@ -14,12 +14,12 @@
 
           <div class="modal-body">
             <div class="row">
-              <label class="form-label">문제</label>
+              <label class="form-label">문제 목록</label>
               <input
                 class="form-control"
                 type="text"
                 v-model="contestInfo.title"
-                placeholder="문제명"
+                placeholder="문제 목록명"
                 required
               />
             </div>
@@ -114,9 +114,9 @@ export default {
     init () {
       console.log(this.editContestInfo)
       if (this.mode === 'create') {
-        this.modalHeader = '문제 생성'
+        this.modalHeader = '문제 목록 생성'
       } else if (this.mode === 'edit') {
-        this.modalHeader = '문제 편집'
+        this.modalHeader = '문제 목록 편집'
         this.contestInfo.id = this.editContestInfo.id
         this.contestInfo.title = this.editContestInfo.name
         this.contestInfo.startTime = this.editContestInfo.start_time

@@ -125,7 +125,8 @@ header {
 
 pre {
   background: transparent;
-  font-size: 17px;
+  font-size: 16px;
+  font-family: Consolas;
 }
 
 textarea {
