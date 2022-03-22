@@ -48,19 +48,16 @@
             <td colspan="5">등록된 문제가 없습니다.</td>
           </tr>
 
-          <tr v-for="(problems, i) in contestProblemList" :key="problems">
+          <tr
+            v-for="(problems, i) in contestProblemList"
+            :key="problems"
+            @click="
+              goContestProblem(problem.id, problem.start_time, problem.end_time)
+            "
+          >
             <th scope="row">{{ i + 1 }}</th>
             <td>
-              <a
-                @click="
-                  goContestProblem(
-                    problem.id,
-                    problem.start_time,
-                    problem.end_time
-                  )
-                "
-                >{{ problems.title }}</a
-              >
+              {{ problems.title }}
             </td>
             <td>{{ problems.end_time }}</td>
             <td scope="row" v-if="isTAOverPrivilege()">

@@ -74,6 +74,8 @@ export default {
       const username = this.$store.state.userid
       try {
         const res = await api.showUserCompetition(username)
+        console.log(res.data)
+
         this.problemList = res.data.reverse()
         console.log(res.data)
         this.setTime()
@@ -163,5 +165,13 @@ export default {
 
 .map {
   background-color: gainsboro;
+}
+svg.vch__wrapper .vch__months__labels__wrapper text.vch__month__label {
+  font-size: 7px;
+}
+
+svg.vch__wrapper .vch__days__labels__wrapper text.vch__day__label,
+svg.vch__wrapper .vch__legend__wrapper text {
+  font-size: 5px;
 }
 </style>
