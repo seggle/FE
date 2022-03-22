@@ -14,12 +14,12 @@
 
           <div class="modal-body">
             <div class="row">
-              <label class="form-label">문제</label>
+              <label class="form-label">문제 목록</label>
               <input
                 class="form-control"
                 type="text"
                 v-model="contestInfo.title"
-                placeholder="문제명"
+                placeholder="문제 목록명"
                 required
               />
             </div>

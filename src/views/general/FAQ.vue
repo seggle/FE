@@ -5,30 +5,30 @@
     </header>
 
     <div class="accordion py-3" id="accordionExample">
-      <div v-for="(faqs, index) in faqList"
+      <div v-for="(faq, index) in faqList"
            :key="index"
            class="accordion-item">
         <h2 class="accordion-header"
-            :id="`heading${faqs.id}`">
+            :id="`heading${faq.id}`">
           <button
             class="accordion-button collapsed"
             type="button"
             data-bs-toggle="collapse"
-            :data-bs-target="`#collapse${faqs.id}`"
+            :data-bs-target="`#collapse${faq.id}`"
             aria-expanded="false"
-            :aria-controls="`collapse${faqs.id}`"
+            :aria-controls="`collapse${faq.id}`"
           >
-            Q. {{ faqs.question }}
+            Q. {{ faq.question }}
           </button>
         </h2>
         <div
-          :id="`collapse${faqs.id}`"
+          :id="`collapse${faq.id}`"
           class="accordion-collapse collapse"
-          :aria-labelledby="`heading${faqs.id}`"
+          :aria-labelledby="`heading${faq.id}`"
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            <span v-html="faqs.answer"></span>
+            <span><VueShowdown :markdown="faq.answer"></VueShowdown></span>
           </div>
         </div>
       </div>
@@ -38,12 +38,11 @@
 
 <script>
 import api from '@/api/index.js'
-
-const showdown = require('showdown')
-const converter = new showdown.Converter()
+import VueShowdown from 'vue-showdown'
 
 export default {
   name: 'FAQ',
+  components: VueShowdown,
   data () {
     return {
       faqList: []
@@ -51,7 +50,6 @@ export default {
   },
   created () {
     this.getfaqList()
-    this.setAnswer()
   },
   methods: {
     async getfaqList () {
@@ -60,11 +58,6 @@ export default {
         this.faqList = res.data
       } catch (error) {
         console.log(error)
-      }
-    },
-    setAnswer () {
-      for (const faq of this.faqList) {
-        faq.answer = converter.makeHtml(faq.answer)
       }
     }
   }

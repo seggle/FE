@@ -9,7 +9,7 @@ import jQuery from 'jquery'
 import Datepicker from 'vue3-date-time-picker'
 import 'vue3-date-time-picker/dist/main.css'
 
-import '@/styles/_index.scss'
+import '@/styles/index.scss'
 
 import VMdEditor from '@kangc/v-md-editor'
 import '@kangc/v-md-editor/lib/style/base-editor.css'
@@ -22,8 +22,6 @@ import Prism from 'prismjs'
 import 'prismjs/components/prism-json'
 // font-awesome
 import { VueShowdownPlugin } from 'vue-showdown'
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -45,7 +43,7 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')
 app.use(VMdEditor)
-app.use(mavonEditor)
+// app.use(mavonEditor)
 
 app.use(VueShowdownPlugin, {
   options: {

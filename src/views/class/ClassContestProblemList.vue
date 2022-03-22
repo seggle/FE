@@ -49,20 +49,29 @@
           </tr>
 
           <tr v-for="(problems, i) in contestProblemList" :key="problems">
-            <th scope="row">{{ i + 1 }}</th>
-            <td>
-              <a
-                @click="
+            <th @click="
                   goContestProblem(
-                    problem.id,
-                    problem.start_time,
-                    problem.end_time
+                    problems.id,
+                    problems.start_time,
+                    problems.end_time
                   )
-                "
-                >{{ problems.title }}</a
-              >
+                " scope="row">{{ i + 1 }}</th>
+            <td @click="
+                  goContestProblem(
+                    problems.id,
+                    problems.start_time,
+                    problems.end_time
+                  )
+                ">
+              <a>{{ problems.title }}</a>
             </td>
-            <td>{{ problems.end_time }}</td>
+            <td @click="
+                  goContestProblem(
+                    problems.id,
+                    problems.start_time,
+                    problems.end_time
+                  )
+                ">{{ problems.end_time }}</td>
             <td scope="row" v-if="isTAOverPrivilege()">
               <button
                 class="edit-btn"
@@ -143,7 +152,6 @@ export default {
       })
     },
     EditClassContestProblem (contestProblemID) {
-      console.log(contestProblemID)
       this.$router.push({
         name: 'EditClassContestProblem',
         params: {
