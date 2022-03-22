@@ -28,7 +28,7 @@
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            <span><VueShowdown :markdown="faq.answer"></VueShowdown></span>
+            <span><VueShowdown class="v-show-down" :markdown="faq.answer"></VueShowdown></span>
           </div>
         </div>
       </div>

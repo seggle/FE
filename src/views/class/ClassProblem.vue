@@ -35,7 +35,7 @@
               문제 설명
             </h5>
             <p class="list-content">
-              <span v-html="problem.description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
             </p>
           </div>
         <!-- 데이터 -->
@@ -48,7 +48,7 @@
               </button>
             </h5>
             <p class="list-content">
-              <span v-html="problem.data_description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
             </p>
           </div>
         </div>

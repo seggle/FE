@@ -22,12 +22,7 @@
         </tr>
         <tr>
           <td><h5>내용</h5></td>
-          <!-- <vue-marked>{{content.context}}</vue-marked> -->
-          <!-- <v-md-editor :model-value="content.context" mode="preview"></v-md-editor> -->
-          <!-- <td class="context" colspan="3"
-              v-html="this.content.context"
-          ></td> -->
-          <td class="context" colspan="3"><VueShowdown :markdown="content.context"></VueShowdown></td>
+          <td class="context" colspan="3"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></td>
         </tr>
       </tbody>
     </table>

@@ -64,7 +64,7 @@
           >
             <h5 class="list-title">문제 설명</h5>
             <p class="list-content">
-              <span v-html="problem.description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
             </p>
             <div class="period">
               <h5>시작 시간</h5>
@@ -93,7 +93,7 @@
               </a>
             </h5>
             <p class="list-content">
-              <span v-html="problem.data_description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
             </p>
           </div>
           <!-- 리더보드 -->
