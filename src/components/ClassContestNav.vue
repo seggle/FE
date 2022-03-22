@@ -7,11 +7,17 @@
           id="dropdownMenuButton"
           data-bs-toggle="dropdown"
           aria-expanded="false"
+          v-if="this.$store.getters.isAdmin"
           >+</span
         >
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li>
-            <a class="dropdown-item" @click="showModal = true">문제 목록 생성</a>
+            <a
+              class="dropdown-item"
+              v-if="this.$store.getters.isAdmin"
+              @click="showModal = true"
+              >문제 목록 생성</a
+            >
           </li>
           <li>
             <a
