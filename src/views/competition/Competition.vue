@@ -135,7 +135,7 @@
                     <a id="ipynb-download">
                       <button
                         class="download-btn"
-                        @click="downloadIpynbFile(user.id)"
+                        @click="downloadIpynbFile(user.submission_id)"
                       >
                         <font-awesome-icon icon="file-arrow-down" />
                       </button>
@@ -145,7 +145,7 @@
                     <a id="csv-download">
                       <button
                         class="download-btn"
-                        @click="downloadCsvFile(user.id)"
+                        @click="downloadCsvFile(user.submission_id)"
                       >
                         <font-awesome-icon icon="file-arrow-down" />
                       </button>
@@ -211,8 +211,8 @@
                         :true-value="submit.id"
                       />
                     </th>
-                    <td>{{ submit.csv }}</td>
-                    <td>{{ submit.ipynb }}</td>
+                    <td><a class="filelink" @click="downloadCsvFile(submit.id)">csv</a></td>
+                    <td><a class="filelink" @click="downloadIpynbFile(submit.id)">ipynb</a></td>
                     <td>{{ submit.score }}</td>
                     <td>{{ submit.success }}</td>
                     <td>{{ submit.created_time }}</td>
@@ -323,6 +323,7 @@ export default {
         for (const user of this.leaderboardList) {
           user.created_time = GMTtoLocale(user.created_time)
         }
+        console.log(this.leaderboardList)
       } catch (err) {
         console.log(err)
       }
@@ -371,6 +372,7 @@ export default {
         )
         this.count = res.data.length
         this.submitList = res.data.results
+        console.log(this.submitList)
         for (const submit of this.submitList) {
           if (submit.status === 1) {
             submit.success = '파일 오류'
@@ -466,6 +468,7 @@ export default {
       this.downloadFile(response, 'csv')
     },
     async downloadIpynbFile (submissionID) {
+      console.log(submissionID)
       const response = await api.downloadCompetitionIpynbFile(submissionID)
       this.downloadFile(response, 'ipynb')
     }
@@ -481,6 +484,12 @@ export default {
         cursor: default;
       }
     }
+  }
+}
+.filelink {
+  color: black;
+  &:hover {
+    text-decoration: underline;
   }
 }
 </style>

@@ -42,7 +42,6 @@
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
             <h5 class="list-title">데이터 설명
               <button class="btn"
-                      :disabled="alreadyJoined == false"
                       @click="downloadDataFile">
                 <a id="data-download">다운로드</a>
               </button>
