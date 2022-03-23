@@ -1,25 +1,28 @@
-// .dp__menu {
-//     position: absolute;
-//     background: var(--dp-background-color);
-//     border-radius: $dp__border_radius;
-//     min-width: $dp__menu_min_width;
-//     font-family: $dp__font_family;
-//     font-size: $dp__font_size;
-//     user-select: none;
-//     border: 1px solid var(--dp-menu-border-color);
-//     z-index: 99999;
-//     box-sizing: border-box;
-  
-//     &::after {
-//       box-sizing: border-box;
-//     }
-  
-//     &::before {
-//       box-sizing: border-box;
-//     }
-  
-//     &:focus {
-//       border: 1px solid var(--dp-menu-border-color);
-//       outline: none;
-//     }
-//   }
+.dp__menu {
+  @media (max-height: 800px) {
+    transform: translate(-50%, -70%) !important;
+  }
+}
+
+.dp__input_icon,
+.dp__clear_icon {
+  top: 70%;
+}
+
+.dp__calendar_row {
+  margin: 0;
+}
+
+.dp__month_year_row,
+.dp__calendar_wrap,
+.dp__action_buttons {
+  font-size: 14px;
+}
+
+.dp__button {
+  height: 5px;
+}
+
+.dp__action_buttons {
+  display: flex;
+}
