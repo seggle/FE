@@ -104,10 +104,10 @@ header {
 .grid-section{
   margin-top:20px;
   display: grid;
-  grid-template-columns: 2fr 3fr 2fr 3fr;
+  grid-template-columns: 2fr 2fr 2fr 3fr;
   grid-template-rows: 1fr 1fr auto;
   //grid-gap: 0;
-  gap: 7px;
+  //gap: 1px;
   text-align: left;
   //border-left: 2px solid #aaa;
   h5{
@@ -123,7 +123,7 @@ header {
   span{
       padding: 0.7rem;
       //border-right: 2px solid #aaa;
-      //border-bottom: 2px solid #aaa;
+      border-bottom: 0.7px solid #E5E5E5;
       @media (max-width: 420px) {
        font-size: 0.7rem;
     }
