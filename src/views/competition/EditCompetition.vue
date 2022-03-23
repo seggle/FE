@@ -203,9 +203,7 @@ export default {
     async getProblem () {
       try {
         const res = await api.getCompetitions(this.competitionID)
-        console.log(res.data)
         Object.assign(this.problem, res.data)
-        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {

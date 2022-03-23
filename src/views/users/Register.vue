@@ -140,7 +140,6 @@ export default {
         }
         const res = await api.checkUserIDorEmail(data)
         if (res.data.user_id === this.formRegister.userID) {
-          console.log('존재하는 아이디')
           this.feedback.userID = '이미 존재하는 아이디입니다.'
           this.invalidID = true
         }
@@ -156,7 +155,6 @@ export default {
     checkUserID () {
       // this.checkUserExist()
       if (!(validator.validateID(this.formRegister.userID))) {
-        console.log('유효하지 않은 아이디입니다.')
         this.feedback.userID = '아이디 형식이 올바르지 않습니다.'
         this.invalidID = true
       }
@@ -170,7 +168,6 @@ export default {
     },
     checkPasswordAgain () { // 비밀번호 재확인
       if (this.formRegister.passwordAgain !== this.formRegister.password) {
-        console.log('비밀번호 일치하지 않음')
         this.feedback.passwordAgain = '비밀번호가 일치하지 않습니다.'
         this.invalidPasswordAgain = true
       }
@@ -180,7 +177,6 @@ export default {
       if (Object.values(this.formRegister).includes('') || this.invalidID || this.invalidEmail || this.invalidPasswordAgain) {
         return false
       } else {
-        console.log('통과')
         return true
       }
     },

@@ -288,16 +288,13 @@ export default {
       try {
         const res = await api.getCompetitionUserList(this.competitionID)
         const competitionUserList = res.data
-        console.log(competitionUserList)
         for (const competitionUser of competitionUserList) {
           if (competitionUser.username === this.userID) {
-            console.log(competitionUser.username)
             this.joinText = '참여중'
             this.alreadyJoined = true
             this.privilege = competitionUser.privilege
           }
         }
-        console.log(this.privilege === null)
       } catch (err) {
         console.log(err.response.data)
       }
@@ -381,7 +378,6 @@ export default {
         )
         this.count = res.data.length
         this.submitList = res.data.results
-        console.log(this.submitList)
         for (const submit of this.submitList) {
           if (submit.status === 1) {
             submit.success = '파일 오류'
@@ -477,7 +473,6 @@ export default {
       this.downloadFile(response, 'csv')
     },
     async downloadIpynbFile (submissionID) {
-      console.log(submissionID)
       const response = await api.downloadCompetitionIpynbFile(submissionID)
       this.downloadFile(response, 'ipynb')
     }

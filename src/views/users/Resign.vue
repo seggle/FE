@@ -66,7 +66,6 @@ export default {
       } catch (err) {
         console.log(err)
         console.log(err.response.data.error)
-        console.log(this.formResign.currentPassword)
         this.invalid.currentPassword = true
         this.feedback.currentPassword = '현재 비밀번호가 일치하지 않습니다.'
       }

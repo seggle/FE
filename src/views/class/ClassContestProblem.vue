@@ -246,7 +246,6 @@ export default {
         for (const leaderboard of this.leaderboardList) {
           leaderboard.created_time = GMTtoLocale(leaderboard.created_time)
         }
-        console.log(this.leaderboardList.length)
       } catch (err) {
         console.log(err)
       }
@@ -324,7 +323,6 @@ export default {
       } else {
         this.ipynb = files[0]
       }
-      console.log(this.csv)
     },
     async selectSubmission () {
       try {
@@ -351,7 +349,6 @@ export default {
         })
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
-      console.log(a)
       a.href = url
       a.download = filename
       a.click()

@@ -192,7 +192,6 @@ export default defineComponent({
       }
     },
     EditClassContestProblem (contestProblemID) {
-      console.log(contestProblemID)
       this.$router.push({
         name: 'EditClassContestProblem',
         params: { contestProblemID: contestProblemID }

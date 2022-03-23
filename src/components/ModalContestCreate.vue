@@ -112,7 +112,6 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.editContestInfo)
       if (this.mode === 'create') {
         this.modalHeader = '문제 목록 생성'
       } else if (this.mode === 'edit') {
