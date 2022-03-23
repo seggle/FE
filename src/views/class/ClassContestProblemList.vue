@@ -287,6 +287,7 @@ a {
 .title {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   @media (max-width: 500px) {
     display: block;
   }
@@ -298,7 +299,6 @@ h1 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-
   @media (max-width: 500px) {
     max-width: 100%;
   }

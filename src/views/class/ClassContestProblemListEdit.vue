@@ -2,7 +2,7 @@
   <div v-if="firstPage" class="container">
     <header class="d-flex mb-2 mt-3 justify-content-end">
       <h2 class="me-auto">문제 등록</h2>
-      <div>
+      <div class="search-bar">
         <form>
           <input
             class="form-control"
@@ -12,6 +12,10 @@
             v-model="keyword"
           />
         </form>
+        <button class="btn"
+                id="problem-create"
+                @click="selectClassProblem"
+        ><font-awesome-icon icon="circle-right" /></button>
       </div>
     </header>
 
