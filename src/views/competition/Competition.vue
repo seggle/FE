@@ -301,7 +301,7 @@ export default {
     },
     /* 대회 관리자인지 체크 */
     IsContestAdminCheck () {
-      if (this.privilege !== 0 || this.privilege === null) {
+      if (this.privilege === 0 || this.privilege === null) {
         return false
       } else {
         return true
