@@ -108,17 +108,12 @@ h1 {
   }
   .nav-link {
     border-radius: 30px;
-    // background-color: #060c20;
   }
   .active {
     background-color: #060c20;
   }
   .nav-item {
     padding: 0.5rem 1.5rem;
-
-    // &:hover {
-    //   background-color: var(--bs-light);
-    // }
   }
 }
 </style>

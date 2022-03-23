@@ -147,20 +147,17 @@ export default {
           this.feedback.email = '이미 존재하는 이메일입니다.'
           this.invalidEmail = true
         }
-        // return res.data.user_id === this.formRegister.userID || res.data.user_email === this.formRegister.email
       } catch (err) {
         console.log(err)
       }
     },
     checkUserID () {
-      // this.checkUserExist()
       if (!(validator.validateID(this.formRegister.userID))) {
         this.feedback.userID = '아이디 형식이 올바르지 않습니다.'
         this.invalidID = true
       }
     },
     checkUserEmail () {
-      // this.checkUserExist()
       if (!(validator.validateEmail(this.formRegister.email))) {
         this.feedback.email = '이메일 형식이 올바르지 않습니다.'
         this.invalidEmail = true

@@ -96,7 +96,6 @@ const routes = [{
   meta: { auth: true }
 },
 {
-  // 수업
   path: '/class/:classID',
   name: 'Class',
   beforeEnter: requireClassAuth(),
