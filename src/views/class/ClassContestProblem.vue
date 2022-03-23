@@ -91,7 +91,7 @@
                   <td v-if="isTAOverPrivilege()">
                     <a id="ipynb-download">
                       <button class="download-btn"
-                        @click="downloadIpynbFile(users.id)">
+                        @click="downloadIpynbFile(users.submission_id)">
                         <font-awesome-icon icon="file-arrow-down" />
                       </button>
                     </a>
@@ -99,7 +99,7 @@
                   <td v-if="isTAOverPrivilege()">
                     <a id="csv-download">
                       <button class="download-btn"
-                        @click="downloadCsvFile(users.id)">
+                        @click="downloadCsvFile(users.submission_id)">
                         <font-awesome-icon icon="file-arrow-down" />
                       </button>
                     </a>
@@ -151,8 +151,8 @@
                             :true-value="submit.id"
                       />
                     </th>
-                    <td>{{ submit.csv }}</td>
-                    <td>{{ submit.ipynb }}</td>
+                    <td><a @click="downloadCsvFile(submit.id)">csv</a></td>
+                    <td><a @click="downloadIpynbFile(submit.id)">ipynb</a></td>
                     <td>{{ submit.score }}</td>
                     <td>{{ submit.success }}</td>
                     <td>{{ submit.created_time }}</td>

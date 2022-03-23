@@ -114,7 +114,7 @@ export default {
       count: 0
     }
   },
-  created () {
+  mounted () {
     this.getContestInfo(this.$route.params.contestID)
     this.getClassUserList()
     this.getContestProblemList(this.$route.params.contestID)
@@ -264,6 +264,7 @@ export default {
     $route (to, from) {
       if (to.path !== from.path) {
         if (this.$route.params.contestID !== undefined) {
+          this.contestID = this.$route.params.contestID
           this.getContestInfo(this.$route.params.contestID)
           this.getContestProblemList(this.$route.params.contestID)
         }
