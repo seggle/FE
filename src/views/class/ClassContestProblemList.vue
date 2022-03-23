@@ -193,7 +193,6 @@ export default {
         this.$router.push({
           name: 'ClassContestProblem',
           params: {
-            classID: this.classID,
             contestID: this.contestID,
             contestProblemID: problemID
           }
