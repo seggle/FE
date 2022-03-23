@@ -199,7 +199,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   name: 'AdminAnnouncement',
@@ -244,8 +244,8 @@ export default {
         })
         this.announcementList = res.data.results
         for (const announcement of this.announcementList) {
-          announcement.created_time = GMTtoLocale(announcement.created_time)
-          announcement.last_modified = GMTtoLocale(announcement.last_modified)
+          announcement.created_time = formatTime(announcement.created_time)
+          announcement.last_modified = formatTime(announcement.last_modified)
         }
       } catch (err) {
         console.log(err)

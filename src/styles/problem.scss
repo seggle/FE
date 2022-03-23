@@ -134,6 +134,7 @@
     
           .form-time {
             display: flex;
+            justify-content: space-around;
           }
     
           .form-metrics,
@@ -155,12 +156,6 @@
             display: block;
           }
         }
-    
-        // .form-check-input {
-        //   width: 5em;
-        //   height: 2em;
-        //   margin: 0em 1em;
-        // }
 
         .btn {
           display: block;
@@ -173,21 +168,6 @@
             font-size: 14px;
           }
         }
-    
-        // .btn {
-        //   float: right;
-        //   padding: 0.5rem 1.5rem;
-        //   font-weight: bold;
-        //   font-size: 16px;
-        //   margin-bottom: 2rem;
-        // }
-    
-        // .form-control {
-        //   padding: 2rem;
-        //   margin-bottom: 1rem;
-        //   height: 20rem;
-        //   resize: none;
-        // }
     
         #data-file-input,
         #solution-file-input {

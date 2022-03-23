@@ -12,10 +12,6 @@
             v-model="keyword"
           />
         </form>
-        <button class="btn"
-                id="problem-create"
-                @click="selectClassProblem"
-        ><font-awesome-icon icon="circle-right" /></button>
       </div>
     </header>
 

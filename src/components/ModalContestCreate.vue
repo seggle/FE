@@ -86,7 +86,7 @@
 
 <script>
 import api from '@/api/index.js'
-import { GMTtoLocale } from '@/utils/time.js'
+import { UTCtoKST } from '@/utils/time.js'
 export default {
   name: 'ModalContestCreate',
   props: {
@@ -128,8 +128,8 @@ export default {
       try {
         const data = {
           name: this.contestInfo.title,
-          start_time: GMTtoLocale(this.contestInfo.startTime),
-          end_time: GMTtoLocale(this.contestInfo.endTime),
+          start_time: UTCtoKST(this.contestInfo.startTime),
+          end_time: UTCtoKST(this.contestInfo.endTime),
           is_exam: this.contestInfo.checkedExam,
           visible: this.contestInfo.checkedVisible
         }

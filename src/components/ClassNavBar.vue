@@ -16,7 +16,6 @@
           </div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- Pills navs -->
           <ul class="nav nav-pills mb-2 mb-lg-0" role="tablist">
             <li class="nav-item">
               <a
@@ -75,21 +74,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1 {
-  padding: 0px 0rem;
-  margin-bottom: 0rem;
-
-  display: block;
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  @media (max-width: 992px) {
-    width: 50%;
-    padding: 0rem;
-  }
-}
 .navbar-toggler {
   &:focus {
     box-shadow: 0 0 0 0rem;
@@ -108,17 +92,12 @@ h1 {
   }
   .nav-link {
     border-radius: 30px;
-    // background-color: #060c20;
   }
   .active {
     background-color: #060c20;
   }
   .nav-item {
     padding: 0.5rem 1.5rem;
-
-    // &:hover {
-    //   background-color: var(--bs-light);
-    // }
   }
 }
 </style>

@@ -52,7 +52,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   name: 'ClassExamManage',
@@ -106,7 +106,7 @@ export default {
         })
         this.userList = res.data.results
         for (const user of this.userList) {
-          user.start_time = GMTtoLocale(user.start_time)
+          user.start_time = formatTime(user.start_time)
         }
         this.userList.reverse()
       } catch (err) {
