@@ -41,7 +41,7 @@
     </table>
   </div>
   <div class="container-sm px-5 py-5">
-    <calendar-heatmap :values="heatmapValues" :end-date="endDate" />
+    <calendar-heatmap class="v-heatmap" :values="heatmapValues" :end-date="endDate" />
   </div>
 </template>
 <script>
@@ -61,8 +61,14 @@ export default {
   created () {
     this.showUserCompetition()
     this.showUserHeatmap()
+    this.setTodayDate()
   },
   methods: {
+    setTodayDate () {
+      let date = new Date().toISOString()
+      date = date.slice(0, 10)
+      this.endDate = date
+    },
     goResign () {
       this.$router.push({
         name: 'Resign'
@@ -167,13 +173,5 @@ export default {
 
 .map {
   background-color: gainsboro;
-}
-svg.vch__wrapper .vch__months__labels__wrapper text.vch__month__label {
-  font-size: 7px;
-}
-
-svg.vch__wrapper .vch__days__labels__wrapper text.vch__day__label,
-svg.vch__wrapper .vch__legend__wrapper text {
-  font-size: 5px;
 }
 </style>
