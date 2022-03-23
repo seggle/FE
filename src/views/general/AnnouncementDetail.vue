@@ -7,7 +7,17 @@
         <font-awesome-icon icon="angle-left" /> 목록
       </button>
     </header>
-
+    <section class="grid-section">
+      <span><h5>제목</h5></span>
+      <span class="title">{{content.title}}</span>
+      <span><h5>작성자</h5></span>
+      <span>{{ content.created_user }}</span>
+      <span><h5>작성일</h5></span>
+      <span>{{ content.created_time }}</span>
+      <span><h5>내용</h5></span>
+      <span class="content"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></span>
+    </section>
+    <!---table로>
     <table class="table">
       <tbody>
         <tr>
@@ -26,6 +36,7 @@
         </tr>
       </tbody>
     </table>
+    <!-->
   </div>
 </template>
 <script>
@@ -76,7 +87,6 @@ export default {
     padding: 1rem 1rem;
   }
 }
-
 header {
   padding: 2rem 0rem;
   @media (max-width: 768px) {
@@ -91,52 +101,43 @@ header {
   }
 }
 
-.table {
-  min-width: 0px;
+.grid-section{
+  margin-top:20px;
+  display: grid;
+  grid-template-columns: 2fr 3fr 2fr 3fr;
+  grid-template-rows: 1fr 1fr auto;
+  //grid-gap: 0;
+  gap: 7px;
   text-align: left;
-  white-space: normal;
-
-  h5 {
-    text-align: center;
+  //border-left: 2px solid #aaa;
+  h5{
     font-weight: bold;
+    text-align: center;
+    @media (max-width: 768px) {
+      font-size:1.1rem;
+    }
     @media (max-width: 420px) {
-      font-size: calc(0.7rem + 1.5vw);
+      font-size: 0.7rem;
     }
   }
-  tr {
-    border-bottom: 1px solid gray;
-    &:hover {
-      background-color: transparent;
-      cursor: default;
-    }
-
-    &:nth-child(2) {
-      td {
-        @media (max-width: 420px) {
-          padding: 0.2rem;
-        }
-      }
-    }
-    .context {
-      text-align: left;
-    }
-    td {
-      width: 50px;
-      border-width: 0;
+  span{
+      padding: 0.7rem;
+      //border-right: 2px solid #aaa;
+      //border-bottom: 2px solid #aaa;
       @media (max-width: 420px) {
-        font-size: calc(0.55rem + 1.5vw);
-      }
-
-      .title {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
+       font-size: 0.7rem;
     }
+  }
 
-    .context {
-      height: 300px;
-    }
+  .title{
+    grid-column: 2 / 5;
+    grid-row: 1 / 2;
+  }
+
+  .content{
+  grid-column: 2 / 5;
+  grid-row: 3 / 4;
+  padding: 1.1rem;
   }
 }
 </style>
