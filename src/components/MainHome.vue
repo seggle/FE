@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
@@ -90,15 +89,7 @@ export default {
     msg: String
   },
   mounted () {
-    var windowWidth = $(window).width()
-    console.log(windowWidth)
-    if (window.matchMedia('(max-width: 768px)').matches) {
-      // do functionality on screens smaller than 768px
-      // 768px-> iPad Mini
-      console.log('smaller than 768px')
-    } else {
-      this.animationOne()
-    }
+    this.animationOne()
     this.animationTwo()
   },
   methods: {
@@ -302,8 +293,6 @@ section:nth-of-type(even) {
 }
 section.horizontal {
   overflow-x: hidden;
-}
-@media screen and (max-width: 768px) {
 }
 section.horizontal .pin-wrap,
 section.horizontal .animation-wrap {

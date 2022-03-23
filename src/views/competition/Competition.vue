@@ -64,7 +64,7 @@
           >
             <h5 class="list-title">문제 설명</h5>
             <p class="list-content">
-              <span v-html="problem.description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
             </p>
             <div class="period">
               <h5>시작 시간</h5>
@@ -93,7 +93,7 @@
               </a>
             </h5>
             <p class="list-content">
-              <span v-html="problem.data_description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
             </p>
           </div>
           <!-- 리더보드 -->
@@ -110,11 +110,13 @@
                   <th scope="col">이름</th>
                   <th scope="col">점수</th>
                   <th scope="col">제출 날짜</th>
-                  <th v-if="IsContestAdminCheck" scope="col">코드(.ipynb)</th>
-                  <th v-if="IsContestAdminCheck" scope="col">답안(.csv)</th>
+                  <th v-if="IsContestAdminCheck()" scope="col">코드(.ipynb)</th>
+                  <th v-if="IsContestAdminCheck()" scope="col">답안(.csv)</th>
                 </tr>
               </thead>
               <tbody>
+                <tr v-if="IsContestAdminCheck() && leaderboardList.length === 0"><td colspan="6">아직 아무도 제출하지 않았어요.</td></tr>
+                <tr v-else-if="!IsContestAdminCheck() && leaderboardList.length === 0"><td colspan="4">아직 아무도 제출하지 않았어요.</td></tr>
                 <tr
                   v-for="(user, i) in leaderboardList"
                   :key="user"
@@ -129,7 +131,7 @@
                   <td>
                     {{ user.created_time }}
                   </td>
-                  <td v-if="IsContestAdminCheck">
+                  <td v-if="IsContestAdminCheck()">
                     <a id="ipynb-download">
                       <button
                         class="download-btn"
@@ -139,7 +141,7 @@
                       </button>
                     </a>
                   </td>
-                  <td v-if="IsContestAdminCheck">
+                  <td v-if="IsContestAdminCheck()">
                     <a id="csv-download">
                       <button
                         class="download-btn"
@@ -192,6 +194,7 @@
                     <th scope="col">csv 파일</th>
                     <th scope="col">ipynb 파일</th>
                     <th scope="col">점수</th>
+                    <th scope="col">상태</th>
                     <th scope="col">제출 날짜</th>
                   </tr>
                 </thead>
@@ -201,7 +204,7 @@
                   </tr>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
-                      <input
+                      <input v-if="submit.status===0"
                         class="form-check-input"
                         type="checkbox"
                         v-model="submitRowIndex"
@@ -211,13 +214,14 @@
                     <td>{{ submit.csv }}</td>
                     <td>{{ submit.ipynb }}</td>
                     <td>{{ submit.score }}</td>
+                    <td>{{ submit.success }}</td>
                     <td>{{ submit.created_time }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <Pagination :pagination="PageValue" @get-page="getUserSubmissions" />
-            <button class="btn" @click="selectSubmission">제출</button>
+            <button class="btn" @click="selectSubmission">저장</button>
           </div>
         </div>
       </div>
@@ -229,14 +233,16 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { GMTtoLocale } from '@/utils/time.js'
+import VueShowdown from 'vue-showdown'
 
-const showdown = require('showdown')
-const converter = new showdown.Converter()
+// const showdown = require('showdown')
+// const converter = new showdown.Converter()
 
 export default {
   name: 'Competition',
   components: {
-    Pagination
+    Pagination,
+    VueShowdown
   },
   data () {
     return {
@@ -258,7 +264,7 @@ export default {
       PageValue: [],
       count: 0,
       currentPage: 1,
-      privilege: 0
+      privilege: null
     }
   },
   mounted () {
@@ -295,7 +301,7 @@ export default {
     },
     /* 대회 관리자인지 체크 */
     IsContestAdminCheck () {
-      if (this.privilege !== 0) {
+      if (this.privilege !== 0 || this.privilege === null) {
         return false
       } else {
         return true
@@ -307,10 +313,10 @@ export default {
         const res = await api.getCompetitions(this.competitionID)
         res.data.start_time = GMTtoLocale(res.data.start_time)
         res.data.end_time = GMTtoLocale(res.data.end_time)
-        res.data.description = converter.makeHtml(res.data.description)
-        res.data.data_description = converter.makeHtml(
-          res.data.data_description
-        )
+        // res.data.description = converter.makeHtml(res.data.description)
+        // res.data.data_description = converter.makeHtml(
+        //   res.data.data_description
+        // )
         this.problem = res.data
       } catch (err) {
         console.log(err)
@@ -366,11 +372,19 @@ export default {
         this.PageValue = []
 
         const res = await api.getUserCompetitionSubmissions(
+          page,
           this.competitionID,
           this.userID
         )
         this.count = res.data.length
         this.submitList = res.data.results
+        for (const submit of this.submitList) {
+          if (submit.status === 1) {
+            submit.success = '파일 오류'
+          } else {
+            submit.success = '정상 제출'
+          }
+        }
         this.alreadyChecked()
         this.changeSubmissionListName()
 
@@ -389,17 +403,19 @@ export default {
     /* 파일 제출 */
     async submitFile () {
       try {
-        const formData = new FormData()
-        formData.append('csv', this.csv)
-        formData.append('ipynb', this.ipynb)
-
-        await api.submitFileCompetition(
-          this.competitionID,
-          this.userID,
-          formData
-        )
-
-        alert('파일 제출이 완료되었습니다.')
+        if (this.privilege !== null) {
+          const formData = new FormData()
+          formData.append('csv', this.csv)
+          formData.append('ipynb', this.ipynb)
+          await api.submitFileCompetition(
+            this.competitionID,
+            this.userID,
+            formData
+          )
+          alert('파일 제출이 완료되었습니다.')
+        } else {
+          alert('대회를 참가한 후 제출해주시기 바랍니다.')
+        }
         this.getUserSubmissions(1)
       } catch (err) {
         console.log(err)
@@ -457,7 +473,6 @@ export default {
       this.downloadFile(response, 'csv')
     },
     async downloadIpynbFile (submissionID) {
-      console.log(submissionID)
       const response = await api.downloadCompetitionIpynbFile(submissionID)
       this.downloadFile(response, 'ipynb')
     }
@@ -465,4 +480,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.table-div {
+  .table {
+    tbody {
+      tr:hover {
+        cursor: default;
+      }
+    }
+  }
+}
+</style>

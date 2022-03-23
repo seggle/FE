@@ -276,7 +276,7 @@ const routes = [{
   name: 'EditClassProblem',
   component: EditClassProblem,
   meta: { isAdmin: true },
-  beforeEnter: requireCompetitionAdminAuth()
+  beforeEnter: requireClassAdminAuth()
 },
 {
   path: '/:pathMatch(.*)*',

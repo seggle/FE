@@ -35,7 +35,7 @@
               문제 설명
             </h5>
             <p class="list-content">
-              <span v-html="problem.description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
             </p>
           </div>
         <!-- 데이터 -->
@@ -48,7 +48,7 @@
               </button>
             </h5>
             <p class="list-content">
-              <span v-html="problem.data_description"></span>
+              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
             </p>
           </div>
         </div>
@@ -59,12 +59,14 @@
 
 <script>
 import api from '@/api/index.js'
+import VueShowdown from 'vue-showdown'
 
-const showdown = require('showdown')
-const converter = new showdown.Converter()
+// const showdown = require('showdown')
+// const converter = new showdown.Converter()
 
 export default {
   name: 'AdminProblemDetail',
+  components: VueShowdown,
   data () {
     return {
       problemID: this.$route.params.problemID,
@@ -82,8 +84,6 @@ export default {
     async getProblem () {
       try {
         const res = await api.getProblem(this.problemID)
-        res.data.description = converter.makeHtml(res.data.description)
-        res.data.data_description = converter.makeHtml(res.data.data_description)
         this.problem = res.data
       } catch (err) {
         console.log(err)

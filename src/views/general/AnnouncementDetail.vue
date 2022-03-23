@@ -22,9 +22,7 @@
         </tr>
         <tr>
           <td><h5>내용</h5></td>
-          <td class="context" colspan="3"
-              v-html="this.content.context"
-          ></td>
+          <td class="context" colspan="3"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></td>
         </tr>
       </tbody>
     </table>
@@ -32,16 +30,20 @@
 </template>
 <script>
 import api from '@/api/index.js'
+import VueShowdown from 'vue-showdown'
 
-const showdown = require('showdown')
-const converter = new showdown.Converter()
+// const showdown = require('showdown')
+// const converter = new showdown.Converter()
+// converter.setOption({ parseImgDimensions: true, omitExtraWLInCodeBlocks: true, tables: true, tablesHeaderId: true, simpleLineBreaks: true, emoji: true, underline: true })
+// converter.setOption({ tables: true })
 
 export default {
   name: 'AnnouncementDetail',
+  components: VueShowdown,
   data () {
     return {
       announcementID: this.$route.params.id,
-      content: {}
+      content: { context: null }
     }
   },
   created () {
@@ -64,7 +66,7 @@ export default {
       this.content.created_time = this.content.created_time.slice(0, 10)
     },
     setContext () {
-      this.content.context = converter.makeHtml(this.content.context)
+      // this.content.context = converter.makeHtml(this.content.context)
     },
     goAnnouncementList () {
       this.$router.push({ name: 'Announcement' })
@@ -106,8 +108,8 @@ header {
       font-size: calc(0.7rem + 1.5vw);
     }
   }
-
   tr {
+    border-bottom: 1px solid gray;
     &:hover {
       background-color: transparent;
       cursor: default;
@@ -115,14 +117,17 @@ header {
 
     &:nth-child(2) {
       td {
-        @media (max-width: 300px) {
-          padding: 0.4rem;
+        @media (max-width: 420px) {
+          padding: 0.2rem;
         }
       }
     }
-
-    td {
+    .context {
       text-align: left;
+    }
+    td {
+      width: 50px;
+      border-width: 0;
       @media (max-width: 420px) {
         font-size: calc(0.55rem + 1.5vw);
       }

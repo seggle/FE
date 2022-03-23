@@ -71,12 +71,16 @@ export default {
     init () {
       this.getProblemList(1)
     },
+    getPage (page) {
+      this.getProblemList(page)
+    },
     /* 전체문제 리스트 불러오기 */
     async getProblemList (page) {
       try {
-        this.currentPage = page
         const res = await api.getAdminProblemList(page, this.keyword)
+        this.currentPage = page
         this.count = res.data.count
+        this.PageValue = []
         this.PageValue.push({
           count: this.count,
           currentPage: this.currentPage
@@ -99,7 +103,8 @@ export default {
           // 마지막 page의 유일한 문제를 지운 경우, 현재 페이지값 재조정
           if (
             this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage
+            res.data.count / 15 < this.currentPage &&
+            res.data.count % 15 === 0
           ) {
             this.currentPage = this.currentPage - 1
           }

@@ -103,9 +103,10 @@ function getUserProblemSubmissions (page, username, contestProblemID) {
   })
 }
 
-function getUserCompetitionSubmissions (competitionID, username) {
+function getUserCompetitionSubmissions (page, competitionID, username) {
   return instance.get(`/api/competitions/${competitionID}/submissions`, {
     params: {
+      page: page,
       username: username
     }
   })
@@ -440,19 +441,19 @@ function downloadSolutionFile (problemID) {
 }
 
 function downloadClassCsvFile (submissionID) {
-  return instance.get(`/api/submissions/class/${submissionID}/download/1`)
+  return instance.get(`/api/submissions/class/${submissionID}/download/csv`)
 }
 
 function downloadClassIpynbFile (submissionID) {
-  return instance.get(`/api/submissions/class/${submissionID}/download/2`)
+  return instance.get(`/api/submissions/class/${submissionID}/download/ipynb`)
 }
 
 function downloadCompetitionCsvFile (submissionID) {
-  return instance.get(`/api/submissions/competition/${submissionID}/download/1`)
+  return instance.get(`/api/submissions/competition/${submissionID}/download/csv`)
 }
 
 function downloadCompetitionIpynbFile (submissionID) {
-  return instance.get(`/api/submissions/competition/${submissionID}/download/2`)
+  return instance.get(`/api/submissions/competition/${submissionID}/download/ipynb`)
 }
 
 export default {

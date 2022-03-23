@@ -30,7 +30,7 @@
               aria-labelledby="navbarDropdown"
             >
               <li>
-                <a class="dropdown-item" href="/competition">일반</a>
+                <a class="dropdown-item" href="/competition">대회</a>
               </li>
               <li>
                 <a class="dropdown-item" href="/class">수업 및 시험</a>

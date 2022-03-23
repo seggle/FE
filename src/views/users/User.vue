@@ -15,7 +15,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">문제제목</th>
+          <th scope="col">대회 제목</th>
           <th scope="col">시작 날짜</th>
           <th scope="col"></th>
           <th scope="col">마감 날짜</th>
@@ -23,23 +23,25 @@
         </tr>
       </thead>
       <tbody>
+            <tr v-if="count===0"><td colspan="6">참가한 대회가 없습니다.</td></tr>
+
         <tr
-          v-for="problems in problemList"
-          :key="problems"
-          @click="goProblem(problems.id)"
+          v-for="problem in problemList"
+          :key="problem"
+          @click="goProblem(problem.id)"
         >
-          <td>{{ problemList.indexOf(problems, 0) + 1 }}</td>
-          <td>{{ problems.title }}</td>
-          <td>{{ problems.start_time }}</td>
-          <td>{{ problems.dday }}</td>
-          <td>{{ problems.end_time }}</td>
-          <td>{{ problems.rank }}/{{ problems.user_total }}</td>
+          <td>{{ problemList.indexOf(problem, 0) + 1 }}</td>
+          <td>{{ problem.title }}</td>
+          <td>{{ problem.start_time }}</td>
+          <td>{{ problem.dday }}</td>
+          <td>{{ problem.end_time }}</td>
+          <td>{{ problem.rank }}/{{ problem.user_total }}</td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="container-sm px-5 py-5">
-    <calendar-heatmap :values="heatmapValues" :end-date="endDate" />
+    <calendar-heatmap class="v-heatmap" :values="heatmapValues" :end-date="endDate" />
   </div>
 </template>
 <script>
@@ -52,14 +54,21 @@ export default {
       problemList: [],
       heatmapValues: [],
       d_day: [],
-      endDate: '2022-11-21'
+      endDate: '2022-11-21',
+      count: 0
     }
   },
   created () {
     this.showUserCompetition()
     this.showUserHeatmap()
+    this.setTodayDate()
   },
   methods: {
+    setTodayDate () {
+      let date = new Date().toISOString()
+      date = date.slice(0, 10)
+      this.endDate = date
+    },
     goResign () {
       this.$router.push({
         name: 'Resign'
@@ -75,7 +84,7 @@ export default {
       try {
         const res = await api.showUserCompetition(username)
         this.problemList = res.data.reverse()
-        console.log(res.data)
+        this.count = this.problemList.length
         this.setTime()
         this.problemList.sort((a, b) => {
           if (a.start_end < b.start_end) return 1
@@ -97,7 +106,6 @@ export default {
       try {
         const res = await api.showUserHeatmap(username)
         this.heatmapValues = res.data
-        console.log(res.data)
       } catch (error) {
         console.log(error)
       }

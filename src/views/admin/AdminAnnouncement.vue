@@ -125,7 +125,7 @@
         </thead>
         <tbody>
           <tr v-if="count === 0">
-            <td colspan="5">게시물이 없습니다.</td>
+            <td colspan="8">게시물이 없습니다.</td>
           </tr>
           <tr
             v-else
@@ -192,7 +192,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination :pagination="PageValue" @get-page="getAnnouncementList" />
+    <Pagination :pagination="PageValue" @get-page="getPage" />
   </div>
 </template>
 
@@ -228,6 +228,9 @@ export default {
     init () {
       this.getAnnouncementList(1)
     },
+    getPage (page) {
+      this.getAnnouncementList(page)
+    },
     /* 공지사항 리스트 불러오기 */
     async getAnnouncementList (page) {
       try {
@@ -258,7 +261,8 @@ export default {
           // 마지막 page의 유일한 공지사항을 지운 경우, 현재 페이지값 재조정
           if (
             this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage
+            res.data.count / 15 < this.currentPage &&
+            res.data.count % 15 === 0
           ) {
             this.currentPage = this.currentPage - 1
           }

@@ -78,7 +78,7 @@ export default {
     async getProposal (page) {
       try {
         const res = await api.getProposal(page)
-        this.proposalList = res.data.results
+        this.proposalList = res.data.results.reverse()
         this.proposalList.reverse()
 
         this.count = res.data.count
