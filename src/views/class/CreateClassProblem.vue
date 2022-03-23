@@ -102,7 +102,7 @@
 import api from '@/api/index.js'
 
 export default {
-  name: 'ClassContestProblem',
+  name: 'CreateClassProblem',
   data () {
     return {
       mode: this.$route.params.mode,

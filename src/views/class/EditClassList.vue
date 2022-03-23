@@ -148,7 +148,6 @@ export default {
     }
   }
   .table {
-    // text-align: left;
     p {
       margin-bottom: 0;
       @media (max-width: 420px) {

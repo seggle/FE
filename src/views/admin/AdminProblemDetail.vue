@@ -61,9 +61,6 @@
 import api from '@/api/index.js'
 import VueShowdown from 'vue-showdown'
 
-// const showdown = require('showdown')
-// const converter = new showdown.Converter()
-
 export default {
   name: 'AdminProblemDetail',
   components: VueShowdown,

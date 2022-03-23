@@ -96,7 +96,6 @@ const routes = [{
   meta: { auth: true }
 },
 {
-  // 수업
   path: '/class/:classID',
   name: 'Class',
   beforeEnter: requireClassAuth(),
@@ -109,41 +108,67 @@ const routes = [{
     beforeEnter: requireClassAdminAuth()
   },
   {
+    path: ':problemID',
+    name: 'ClassProblem',
+    component: ClassProblem,
+    beforeEnter: requireClassAdminAuth()
+  },
+  {
+    path: 'create',
+    name: 'CreateClassProblem',
+    component: CreateClassProblem,
+    meta: { auth: true },
+    beforeEnter: requireClassAdminAuth()
+  },
+  {
+    path: 'edit/:problemID',
+    name: 'EditClassProblem',
+    component: EditClassProblem,
+    meta: { auth: true },
+    beforeEnter: requireClassAdminAuth()
+  },
+  {
     path: 'student-manage',
     name: 'ClassStudentManage',
     component: ClassStudentManage,
-    meta: { isAdmin: true },
+    meta: { auth: true },
     beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'exam-manage/:contestID',
     name: 'ClassExamManage',
     component: ClassExamManage,
-    meta: { isAdmin: true },
+    meta: { auth: true },
     beforeEnter: requireClassAdminAuth()
   },
   {
     path: 'class-contest',
     name: 'ClassContest',
     component: ClassContest,
-    meta: { isAdmin: true },
+    meta: { auth: true },
     children: [{
       path: ':contestID',
       name: 'ClassContestProblemList',
       component: ClassContestProblemList,
-      meta: { isAdmin: true }
+      meta: { auth: true }
+    },
+    {
+      path: ':contestID/:contestProblemID',
+      name: 'ClassContestProblem',
+      component: ClassContestProblem,
+      meta: { auth: true }
     },
     {
       path: ':contestID/edit-list',
       name: 'ClassContestProblemListEdit',
       component: ClassContestProblemListEdit,
-      meta: { isAdmin: true }
+      beforeEnter: requireClassAdminAuth()
     },
     {
       path: ':contestID/edit/:contestProblemID',
       name: 'EditClassContestProblem',
       component: EditClassContestProblem,
-      meta: { isAdmin: true }
+      beforeEnter: requireClassAdminAuth()
     }
     ]
   }
@@ -237,7 +262,7 @@ const routes = [{
   beforeEnter: requireAdminAuth()
 },
 {
-  path: '/competition/edit/:competitionID',
+  path: '/competition/:competitionID/edit',
   name: 'EditCompetition',
   component: EditCompetition,
   meta: { isAdmin: true },
@@ -250,33 +275,9 @@ const routes = [{
   component: ClassList
 },
 {
-  path: '/problem/edit-class',
+  path: '/class/edit-class',
   name: 'EditClassList',
   component: EditClassList
-},
-{
-  path: '/class/:problemID',
-  name: 'ClassProblem',
-  component: ClassProblem
-},
-{
-  path: '/class/:classID/:contestID/:contestProblemID',
-  name: 'ClassContestProblem',
-  component: ClassContestProblem
-},
-{
-  path: '/class/create/:classID',
-  name: 'CreateClassProblem',
-  component: CreateClassProblem,
-  meta: { isAdmin: true },
-  beforeEnter: requireAdminAuth()
-},
-{
-  path: '/class/edit/:classID/:problemID',
-  name: 'EditClassProblem',
-  component: EditClassProblem,
-  meta: { isAdmin: true },
-  beforeEnter: requireClassAdminAuth()
 },
 {
   path: '/:pathMatch(.*)*',
