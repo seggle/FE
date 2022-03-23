@@ -15,22 +15,16 @@
         <button class="btn"
                 id="problem-create"
                 @click="selectClassProblem"
-        ><font-awesome-icon icon="circle-right" /></button>
+        ><font-awesome-icon icon="circle-right" />다음</button>
       </div>
     </header>
 
-    <div class="button">
-      <button class="btn" id="problem-create" @click="selectClassProblem">
-        다음
-      </button>
-    </div>
     <div class="table-div">
       <table class="table">
         <thead>
           <tr>
             <th class="col-1" scope="col">
-              <font-awesome-icon icon="check" />
-            </th>
+              <input type="checkbox" @click="selectAll" v-model="allSelected"></th>
             <th scope="col">제목</th>
           </tr>
         </thead>

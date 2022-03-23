@@ -50,7 +50,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '../../components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   components: { Pagination },
@@ -87,7 +87,7 @@ export default {
         })
         this.problemList = res.data.results
         for (const problem of this.problemList) {
-          problem.created_time = GMTtoLocale(problem.created_time)
+          problem.created_time = formatTime(problem.created_time)
         }
       } catch (err) {
         console.log(err)

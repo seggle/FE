@@ -172,7 +172,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 import VueShowdown from 'vue-showdown'
 
 export default {
@@ -231,6 +231,13 @@ export default {
     isTAOverPrivilege () {
       return (this.userPrivilege > 0)
     },
+    isEndProblem () {
+      const now = new Date()
+      const time = this.problem.end_time.replace(/-/gi, '/').replace(' ', '/')
+      const endTime = new Date(time)
+
+      return endTime <= now
+    },
     async getProblem () {
       try {
         const res = await api.getContestProblem(this.problemID, this.contestID, this.contestProblemID)
@@ -244,7 +251,7 @@ export default {
         const res = await api.getClassLeaderboard(this.contestProblemID)
         this.leaderboardList = res.data
         for (const leaderboard of this.leaderboardList) {
-          leaderboard.created_time = GMTtoLocale(leaderboard.created_time)
+          leaderboard.created_time = formatTime(leaderboard.created_time)
         }
       } catch (err) {
         console.log(err)
@@ -265,7 +272,7 @@ export default {
 
         submission.csv = csvName.split('/').pop()
         submission.ipynb = ipynbName.split('/').pop()
-        submission.created_time = GMTtoLocale(submitDate)
+        submission.created_time = formatTime(submitDate)
       }
     },
     async getUserSubmissions (page) {
@@ -291,6 +298,12 @@ export default {
     },
     async submitFile () {
       try {
+        if (this.isEndProblem()) {
+          alert('제출 시간이 지났습니다.')
+          this.$router.push(this.$router.currentRoute)
+          return
+        }
+
         const formData = new FormData()
         formData.append('csv', this.csv)
         formData.append('ipynb', this.ipynb)

@@ -96,7 +96,6 @@ export default {
       try {
         this.$store.dispatch('Logout')
         this.$router.push('/login')
-        localStorage.removeItem('test')
       } catch (err) {
         console.log(err)
       }

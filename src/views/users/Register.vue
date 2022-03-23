@@ -113,8 +113,8 @@ export default {
           password: this.formRegister.password,
           password2: this.formRegister.passwordAgain
         }
-        const res = await api.registerUser(data)
-        console.log(res)
+        await api.registerUser(data)
+
         alert('회원가입이 완료되었습니다!')
         this.$router.push('/login')
       } catch (err) {

@@ -6,6 +6,7 @@
 @import "./problem.scss";
 @import "./vueshowdown.scss";
 @import "./heatmap.scss";
+
 //button 
 .btn {
     background: #060c20;
@@ -74,4 +75,9 @@ a {
             width: 6rem;
         }
     }
+}
+
+textarea,
+.form-control {
+  resize: none;
 }

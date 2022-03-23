@@ -140,7 +140,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   name: 'AdminUser',
@@ -178,7 +178,7 @@ export default {
         })
         this.userList = res.data.results
         for (const user of this.userList) {
-          user.date_joined = GMTtoLocale(user.date_joined)
+          user.date_joined = formatTime(user.date_joined)
           if (user.privilege === 0) {
             user.privilege = '학생'
           } else if (user.privilege === 1) {

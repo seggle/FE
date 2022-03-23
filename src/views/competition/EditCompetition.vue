@@ -71,7 +71,7 @@
                   </select>
                 </div>
 
-                <div class="form-time col-5">
+                <div class="form-time col-8">
                   <div class="form-start-time">
                     <label class="form-label">시작 시간</label>
                     <Datepicker
@@ -162,7 +162,7 @@
 
 <script>
 import api from '@/api/index.js'
-import { GMTtoLocale } from '@/utils/time.js'
+import { UTCtoKST } from '@/utils/time.js'
 
 export default {
   name: 'EditCompetition',
@@ -204,6 +204,7 @@ export default {
       try {
         const res = await api.getCompetitions(this.competitionID)
         Object.assign(this.problem, res.data)
+
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
@@ -222,8 +223,8 @@ export default {
           description: this.problem.description,
           evaluation: this.problem.evaluation,
           data_description: this.problem.data_description,
-          start_time: GMTtoLocale(this.problem.startTime),
-          end_time: GMTtoLocale(this.problem.endTime)
+          start_time: UTCtoKST(this.problem.start_time),
+          end_time: UTCtoKST(this.problem.end_time)
         }
 
         for (const key in data) {

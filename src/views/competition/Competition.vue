@@ -232,7 +232,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 import VueShowdown from 'vue-showdown'
 
 export default {
@@ -304,12 +304,20 @@ export default {
         return true
       }
     },
+    isEndProblem () {
+      const now = new Date()
+      const time = this.problem.end_time.replace(/-/gi, '/').replace(' ', '/')
+      const endTime = new Date(time)
+
+      return endTime <= now
+    },
     /* 대회문제 불러오기 */
     async getProblem () {
       try {
         const res = await api.getCompetitions(this.competitionID)
-        res.data.start_time = GMTtoLocale(res.data.start_time)
-        res.data.end_time = GMTtoLocale(res.data.end_time)
+        res.data.start_time = formatTime(res.data.start_time)
+        res.data.end_time = formatTime(res.data.end_time)
+
         this.problem = res.data
       } catch (err) {
         console.log(err)
@@ -321,7 +329,7 @@ export default {
         const res = await api.getCompetitionsLeaderboard(this.competitionID)
         this.leaderboardList = res.data
         for (const user of this.leaderboardList) {
-          user.created_time = GMTtoLocale(user.created_time)
+          user.created_time = formatTime(user.created_time)
         }
         console.log(this.leaderboardList)
       } catch (err) {
@@ -356,7 +364,7 @@ export default {
 
         submit.csv = csvName.split('/').pop()
         submit.ipynb = ipynbName.split('/').pop()
-        submit.created_time = GMTtoLocale(submitDate)
+        submit.created_time = formatTime(submitDate)
       }
     },
     /* 대회참여자의 제출물 불러오기 */
@@ -398,6 +406,11 @@ export default {
     /* 파일 제출 */
     async submitFile () {
       try {
+        if (this.isEndProblem()) {
+          alert('제출 시간이 지났습니다.')
+          this.$router.push(this.$router.currentRoute)
+          return
+        }
         if (this.privilege !== null) {
           const formData = new FormData()
           formData.append('csv', this.csv)

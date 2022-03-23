@@ -17,26 +17,6 @@
       <span><h5>내용</h5></span>
       <span class="content"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></span>
     </section>
-    <!---table로>
-    <table class="table">
-      <tbody>
-        <tr>
-          <td><h5>제목</h5></td>
-          <td class="title" colspan="3">{{ content.title }}</td>
-        </tr>
-        <tr>
-          <td><h5>작성자</h5></td>
-          <td>{{ content.created_user }}</td>
-          <td><h5>작성일</h5></td>
-          <td>{{ content.created_time }}</td>
-        </tr>
-        <tr>
-          <td><h5>내용</h5></td>
-          <td class="context" colspan="3"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></td>
-        </tr>
-      </tbody>
-    </table>
-    <!-->
   </div>
 </template>
 <script>
@@ -57,7 +37,6 @@ export default {
   },
   beforeUpdate () {
     this.setCreatedTime()
-    this.setContext()
   },
   methods: {
     async getContent () {
@@ -70,9 +49,6 @@ export default {
     },
     setCreatedTime () {
       this.content.created_time = this.content.created_time.slice(0, 10)
-    },
-    setContext () {
-      // this.content.context = converter.makeHtml(this.content.context)
     },
     goAnnouncementList () {
       this.$router.push({ name: 'Announcement' })
@@ -104,12 +80,9 @@ header {
 .grid-section{
   margin-top:20px;
   display: grid;
-  grid-template-columns: 2fr 3fr 2fr 3fr;
+  grid-template-columns: 2fr 2fr 2fr 3fr;
   grid-template-rows: 1fr 1fr auto;
-  //grid-gap: 0;
-  gap: 7px;
   text-align: left;
-  //border-left: 2px solid #aaa;
   h5{
     font-weight: bold;
     text-align: center;
@@ -122,8 +95,7 @@ header {
   }
   span{
       padding: 0.7rem;
-      //border-right: 2px solid #aaa;
-      //border-bottom: 2px solid #aaa;
+      border-bottom: 0.7px solid #E5E5E5;
       @media (max-width: 420px) {
        font-size: 0.7rem;
     }
