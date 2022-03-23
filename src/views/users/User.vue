@@ -83,9 +83,8 @@ export default {
       const username = this.$store.state.userid
       try {
         const res = await api.showUserCompetition(username)
-        this.count = this.problemList.length
         this.problemList = res.data.reverse()
-        console.log(res.data)
+        this.count = this.problemList.length
         this.setTime()
         this.problemList.sort((a, b) => {
           if (a.start_end < b.start_end) return 1
@@ -107,7 +106,6 @@ export default {
       try {
         const res = await api.showUserHeatmap(username)
         this.heatmapValues = res.data
-        console.log(res.data)
       } catch (error) {
         console.log(error)
       }

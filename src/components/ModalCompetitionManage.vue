@@ -107,7 +107,6 @@ export default {
         for (const item of res.data.competition) {
           this.userCompetitionList.push(item.competition_id)
         }
-        console.log(this.userCompetitionList)
       } catch (err) {
         console.log(err)
       }
@@ -122,7 +121,6 @@ export default {
             this.competitionList.push(item)
           }
         }
-        console.log(this.competitionList)
         this.competitionList.reverse()
       } catch (error) {
         console.log(error)

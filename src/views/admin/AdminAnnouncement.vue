@@ -58,11 +58,8 @@
               <h5 style="float: left">내용</h5>
               <v-md-editor
                 v-model="announcementContext"
-                :disabled-menus="[]"
-                @upload-image="handleUploadImage"
                 height="400px"
               ></v-md-editor>
-              <!-- <mavon-editor v-model="announcementContext"/> -->
               <div class="mt-2">
                 <p style="float: left">공개여부</p>
                 <span
@@ -233,18 +230,6 @@ export default {
     },
     getPage (page) {
       this.getAnnouncementList(page)
-    },
-    handleUploadImage (event, insertImage, files) {
-      // Get the files and upload them to the file server, then insert the corresponding content into the editor
-      console.log(files)
-
-      // Here is just an example
-      insertImage({
-        url: files.name,
-        desc: 'desc',
-        width: 'auto',
-        height: 'auto'
-      })
     },
     /* 공지사항 리스트 불러오기 */
     async getAnnouncementList (page) {

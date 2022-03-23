@@ -111,8 +111,7 @@ export default {
     async onRemove (contestID, contestName) {
       if (confirm('삭제하시겠습니까?')) {
         // contest 삭제 api
-        const res = await api.deleteContest(this.classID, contestID)
-        console.log(res.data)
+        await api.deleteContest(this.classID, contestID)
         alert(contestName + ' 삭제 완료')
         this.$router.go(this.$router.currentRoute)
       }

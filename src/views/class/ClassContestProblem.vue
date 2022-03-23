@@ -81,7 +81,9 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success': this.userID === users.username }">
+                <tr v-if="isTAOverPrivilege() && leaderboardList.length === 0"><td colspan="6">아직 아무도 제출하지 않았어요.</td></tr>
+                <tr v-else-if="!isTAOverPrivilege() && leaderboardList.length === 0"><td colspan="4">아직 아무도 제출하지 않았어요.</td></tr>
+                <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success p-2 text-dark bg-opacity-50': this.userID === users.username }">
                   <th scope="row">{{ i + 1 }}</th>
                   <td>{{ users.username }}</td>
                   <td>{{ users.score }}</td>
@@ -115,7 +117,7 @@
                      type="file"
                      class="form-control"
                      accept=".csv"
-                     @change="uploadFile()">
+                     @change="uploadFile">
 
               <h5 class="list-title">ipynb 파일 제출</h5>
               <p class="file-desc">하나의 ipynb 파일만 업로드 가능합니다</p>
@@ -123,7 +125,7 @@
                      type="file"
                      class="form-control"
                      accept=".ipynb"
-                     @change="uploadFile()">
+                     @change="uploadFile">
               <button class="btn" @click="submitFile()">파일 제출</button>
             </div>
             <div class="table-div">
@@ -136,13 +138,14 @@
                     <th scope="col">csv 파일</th>
                     <th scope="col">ipynb 파일</th>
                     <th scope="col">점수</th>
+                    <th scope="col">Status</th>
                     <th scope="col">제출 날짜</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
-                      <input class="form-check-input"
+                      <input v-if="submit.status===0" class="form-check-input"
                             type="checkbox"
                             v-model="submitRowIndex"
                             :true-value="submit.id"
@@ -151,13 +154,14 @@
                     <td>{{ submit.csv }}</td>
                     <td>{{ submit.ipynb }}</td>
                     <td>{{ submit.score }}</td>
+                    <td>{{ submit.success }}</td>
                     <td>{{ submit.created_time }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <Pagination :pagination="PageValue" @get-page="getUserSubmissions" />
-            <button class="btn" @click="selectSubmission">제출</button>
+            <button class="btn" @click="selectSubmission">저장</button>
           </div>
         </div>
       </div>
@@ -170,9 +174,6 @@ import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { GMTtoLocale } from '@/utils/time.js'
 import VueShowdown from 'vue-showdown'
-
-// const showdown = require('showdown')
-// const converter = new showdown.Converter()
 
 export default {
   name: 'ClassContestProblem',
@@ -271,15 +272,19 @@ export default {
       try {
         this.currentPage = page
         this.PageValue = []
-
         const res = await api.getUserProblemSubmissions(page, this.userID, this.contestProblemID)
         this.submitList = res.data.results
-
+        for (const submit of this.submitList) {
+          if (submit.status === 1) {
+            submit.success = '파일 오류'
+          } else {
+            submit.success = '정상 제출'
+          }
+        }
         this.alreadyChecked()
         this.changeSubmissionListName()
 
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
-        this.total = parseInt((res.data.count - 1) / 15) + 1
       } catch (err) {
         console.log(err)
       }
@@ -344,7 +349,6 @@ export default {
         })
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
-      console.log(a)
       a.href = url
       a.download = filename
       a.click()
@@ -366,4 +370,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.table-div {
+  .table {
+    tbody {
+      tr:hover {
+        cursor: default;
+      }
+    }
+  }
+}
 </style>
