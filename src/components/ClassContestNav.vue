@@ -28,7 +28,6 @@
             >
           </li>
         </ul>
-        <!-- <a class="icon" @click="showModal = true">&#8942;</a> -->
         <ModalContestCreate
           v-if="showModal"
           @close="showModal = false"
@@ -48,13 +47,6 @@
         </li>
       </ul>
     </nav>
-
-    <!-- <button
-      v-if="this.$store.getters.isAdmin"
-      class="btn"
-      @click="problemModal = true">
-      목록 편집
-    </button> -->
     <ModalContestListEdit v-if="problemModal" @close="problemModal = false" />
   </div>
 </template>
@@ -155,9 +147,7 @@ nav {
     }
     .dropdown-item {
       &:hover {
-        // background: rgb(0 0 0 / 80%);
         background: none;
-        // color: white;
         font-weight: bold;
       }
     }

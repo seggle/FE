@@ -235,9 +235,6 @@ import Pagination from '@/components/Pagination.vue'
 import { GMTtoLocale } from '@/utils/time.js'
 import VueShowdown from 'vue-showdown'
 
-// const showdown = require('showdown')
-// const converter = new showdown.Converter()
-
 export default {
   name: 'Competition',
   components: {
@@ -251,7 +248,7 @@ export default {
       alreadyJoined: false,
       isClassUser: false,
 
-      competitionID: this.$route.params.competitionID, // 대회 문제 아이디, 수업 아이디
+      competitionID: this.$route.params.competitionID,
 
       problem: [],
       leaderboardList: [],
@@ -313,10 +310,6 @@ export default {
         const res = await api.getCompetitions(this.competitionID)
         res.data.start_time = GMTtoLocale(res.data.start_time)
         res.data.end_time = GMTtoLocale(res.data.end_time)
-        // res.data.description = converter.makeHtml(res.data.description)
-        // res.data.data_description = converter.makeHtml(
-        //   res.data.data_description
-        // )
         this.problem = res.data
       } catch (err) {
         console.log(err)

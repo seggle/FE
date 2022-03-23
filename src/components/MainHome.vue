@@ -116,9 +116,7 @@ export default {
               pin: thisPinWrap,
               pinSpacing: true,
               invalidateOnRefresh: true,
-              // anticipatePin: 1,
               scrub: true
-              // markers: true,
             }
           }
         )
@@ -230,7 +228,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import url("https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap");
 

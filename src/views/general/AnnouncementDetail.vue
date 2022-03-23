@@ -43,11 +43,6 @@
 import api from '@/api/index.js'
 import VueShowdown from 'vue-showdown'
 
-// const showdown = require('showdown')
-// const converter = new showdown.Converter()
-// converter.setOption({ parseImgDimensions: true, omitExtraWLInCodeBlocks: true, tables: true, tablesHeaderId: true, simpleLineBreaks: true, emoji: true, underline: true })
-// converter.setOption({ tables: true })
-
 export default {
   name: 'AnnouncementDetail',
   components: VueShowdown,
