@@ -242,7 +242,7 @@ export default {
           count: res.data.count,
           currentPage: this.currentPage
         })
-        this.announcementList = res.data.results
+        this.announcementList = res.data.results.reverse()
         for (const announcement of this.announcementList) {
           announcement.created_time = GMTtoLocale(announcement.created_time)
           announcement.last_modified = GMTtoLocale(announcement.last_modified)

@@ -151,8 +151,8 @@
                             :true-value="submit.id"
                       />
                     </th>
-                    <td><a @click="downloadCsvFile(submit.id)">csv</a></td>
-                    <td><a @click="downloadIpynbFile(submit.id)">ipynb</a></td>
+                    <td><a class="filelink" @click="downloadCsvFile(submit.id)">csv</a></td>
+                    <td><a class="filelink" @click="downloadIpynbFile(submit.id)">ipynb</a></td>
                     <td>{{ submit.score }}</td>
                     <td>{{ submit.success }}</td>
                     <td>{{ submit.created_time }}</td>
@@ -377,6 +377,12 @@ export default {
         cursor: default;
       }
     }
+  }
+}
+.filelink {
+  color: black;
+  &:hover {
+    text-decoration: underline;
   }
 }
 </style>
