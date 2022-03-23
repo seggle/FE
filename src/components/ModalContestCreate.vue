@@ -13,7 +13,7 @@
           </div>
 
           <div class="modal-body">
-            <div class="row">
+            <div class="row list-name">
               <label class="form-label">문제 목록</label>
               <input
                 class="form-control"
@@ -26,7 +26,7 @@
             <div class="row">
               <div class="col-6 start-time" data-backdrop="static">
                 <label class="form-label">시작시간</label>
-                <Datepicker
+                <Datepicker class="v-datepicker"
                   v-model="contestInfo.startTime"
                   placeholder="시작 시간"
                   textInput
@@ -34,7 +34,7 @@
               </div>
               <div class="col-6 end-time" data-backdrop="static">
                 <label class="form-label">종료시간</label>
-                <Datepicker
+                <Datepicker class="v-datepicker"
                   v-model="contestInfo.endTime"
                   placeholder="종료 시간"
                   textInput
