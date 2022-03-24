@@ -97,6 +97,8 @@
 
 <script>
 import api from '@/api/index.js'
+import { formatTime } from '@/utils/time.js'
+
 export default {
   name: 'ClassContestProblemList',
   data () {
@@ -179,7 +181,7 @@ export default {
         this.contestProblemList = res.data
         this.count = res.data.length
         for (const contestProblem of this.contestProblemList) {
-          contestProblem.end_time = contestProblem.end_time.slice(0, 10)
+          contestProblem.end_time = formatTime(contestProblem.end_time)
         }
         this.contestProblemList.sort(function (a, b) {
           return a.order - b.order
