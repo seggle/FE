@@ -97,7 +97,7 @@ export default {
     async deleteProblem (problemID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          await api.deleteAdminProblem(problemID)
+          await api.deleteProblem(problemID)
           // 문제 삭제 후 page=1
           const res = await api.getProblemList(1, this.keyword)
           // 마지막 page의 유일한 문제를 지운 경우, 현재 페이지값 재조정

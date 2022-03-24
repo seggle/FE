@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:8000',
+      target: 'http://3.37.186.158:7777',
       changeOrigin: true
     }
   })
@@ -292,10 +292,6 @@ function getAdminProblemList (page, keyword) {
   return instance.get('/api/admin/problems', { params: params })
 }
 
-function deleteAdminProblem (problemID) {
-  return instance.delete(`/api/admin/problems/${problemID}`)
-}
-
 function changeAdminProblemSwitch (problemID) {
   return instance.put('/api/admin/problems/check', { params: { problemID } })
 }
@@ -504,7 +500,6 @@ export default {
   getAdminClassList,
   getAdminProblemList,
   changeAdminProblemSwitch,
-  deleteAdminProblem,
   deleteUser,
   submitUser,
   editUser,

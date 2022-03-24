@@ -131,9 +131,9 @@ export default {
 
 <style lang="scss" scoped>
 .modal-container {
-  min-width: 500px;
+  min-width: 600px;
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
     max-width: 300px;
     min-width: 300px;
   }
@@ -144,7 +144,7 @@ export default {
 
   .contest-name {
     display: block;
-    max-width: 100px;
+    max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -153,6 +153,13 @@ export default {
 
   td {
     padding: 0.5rem 1rem;
+  }
+}
+
+.form-switch {
+  padding-left: 6em;
+  @media (max-width: 600px) {
+    padding-left: 2.5em;
   }
 }
 </style>

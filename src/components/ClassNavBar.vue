@@ -24,7 +24,7 @@
                 data-bs-toggle="pill"
                 role="tab"
                 @click="handleRoute('ClassAllProblem')"
-                >전체 문제</a
+                >전체 문제 목록</a
               >
             </li>
             <li class="nav-item">
@@ -44,7 +44,7 @@
                 data-bs-toggle="pill"
                 role="tab"
                 @click="handleRoute('ClassContest')"
-                >문제</a
+                >과제 및 시험</a
               >
             </li>
           </ul>

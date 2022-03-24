@@ -16,7 +16,7 @@
               class="dropdown-item"
               v-if="this.$store.getters.isAdmin"
               @click="showModal = true"
-              >문제 목록 생성</a
+              >과제 및 시험 목록 생성</a
             >
           </li>
           <li>
@@ -24,7 +24,7 @@
               class="dropdown-item"
               v-if="this.$store.getters.isAdmin"
               @click="problemModal = true"
-              >문제 목록 편집</a
+              >과제 및 시험 목록 편집</a
             >
           </li>
         </ul>

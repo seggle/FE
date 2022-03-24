@@ -23,8 +23,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="col-1" scope="col">
-              <input type="checkbox" @click="selectAll" v-model="allSelected"></th>
+            <th class="col-1" scope="col"></th>
             <th scope="col">제목</th>
           </tr>
         </thead>

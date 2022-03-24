@@ -226,6 +226,17 @@ export default {
         this.problem.solution = files[0]
       }
     }
+  },
+  watch: {
+    'problem.endTime' () {
+      const date = new Date()
+      if (this.problem.endTime !== '') {
+        if (date > this.problem.endTime || this.problem.startTime > this.problem.endTime) {
+          alert('종료 시간을 다시 설정해주세요.')
+          this.problem.endTime = ''
+        }
+      }
+    }
   }
 }
 </script>

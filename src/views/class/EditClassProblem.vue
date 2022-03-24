@@ -70,7 +70,8 @@
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
                   <a class="file-download-btn"
                      id="zip-download"
-                     @click="downloadDataFile">다운로드</a>
+                     @click="downloadDataFile"
+                  >다운로드</a>
                   <input id="data-file-input"
                          type="file"
                          accept=".zip"
@@ -197,11 +198,11 @@ export default {
       a.download = filename
     },
     async downloadDataFile () {
-      const response = await api.downloadDataFile(this.problem.problem_id)
+      const response = await api.downloadDataFile(this.problemID)
       this.downloadFile(response, 'zip')
     },
     async downloadSolutionFile () {
-      const response = await api.downloadSolutionFile(this.problem.problem_id)
+      const response = await api.downloadSolutionFile(this.problemID)
       this.downloadFile(response, 'csv')
     }
   }
