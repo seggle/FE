@@ -30,7 +30,7 @@
           :key="problem"
           @click="goProblem(problem.id)"
         >
-          <td>{{ problemList.indexOf(problem, 0) + 1 }}</td>
+          <td>{{ problemList.id}}</td>
           <td>{{ problem.title }}</td>
           <td>{{ problem.start_time }}</td>
           <td>{{ problem.dday }}</td>
@@ -83,8 +83,13 @@ export default {
       const username = this.$store.state.userid
       try {
         const res = await api.showUserCompetition(username)
-        this.problemList = res.data.reverse()
+        console.log(res.data)
+        this.problemList = res.data
         this.count = this.problemList.length
+        console.log(this.count)
+        this.problemList = this.problemList.reverse()
+        console.log(this.problemList)
+
         this.setTime()
         this.problemList.sort((a, b) => {
           if (a.start_end < b.start_end) return 1
