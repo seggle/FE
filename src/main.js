@@ -9,6 +9,8 @@ import jQuery from 'jquery'
 import Datepicker from 'vue3-date-time-picker'
 import 'vue3-date-time-picker/dist/main.css'
 
+import Notifications from '@kyvg/vue3-notification'
+
 import '@/styles/index.scss'
 
 import VMdEditor from '@kangc/v-md-editor'
@@ -36,6 +38,7 @@ const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(VueCalendarHeatMap)
+app.use(Notifications)
 // app.component('apexchart', VueApexCharts)
 // app.use(VueApexCharts)
 app.component('Datepicker', Datepicker)

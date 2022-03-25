@@ -85,6 +85,11 @@
                   <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
                   <label class="form-label">정답 파일</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
+                  <!-- <a id="csv-download">
+                    <button class="file-download-btn"
+                      @click="downloadSolutionFile">다운로드
+                    </button>
+                  </a> -->
                   <a class="file-download-btn"
                      id="csv-download"
                      @click="downloadSolutionFile"
@@ -187,7 +192,7 @@ export default {
       }
     },
     downloadFile (response, FILE_TYPE) {
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {
           type: `application/${FILE_TYPE}`
@@ -195,7 +200,8 @@ export default {
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
       a.href = url
-      a.download = filename
+      a.download = decodeURI(filename)
+      a.click()
     },
     async downloadDataFile () {
       const response = await api.downloadDataFile(this.problemID)

@@ -384,7 +384,7 @@ export default {
       try {
         this.currentPage = page
         this.PageValue = []
-
+        console.log(this.userID)
         const res = await api.getUserCompetitionSubmissions(
           page,
           this.competitionID,
@@ -422,16 +422,21 @@ export default {
           this.$router.push(this.$router.currentRoute)
           return
         }
-        if (this.privilege !== null) {
-          const formData = new FormData()
-          formData.append('csv', this.csv)
-          formData.append('ipynb', this.ipynb)
-          await api.submitFileCompetition(
-            this.competitionID,
-            this.userID,
-            formData
-          )
-          alert('파일 제출이 완료되었습니다.')
+        if (this.privilege !== -1) {
+          if (this.csv === '') {
+            alert('csv 파일을 제출해주세요.')
+          } else if (this.ipynb === '') {
+            alert('ipynb 파일을 제출해주세요.')
+          } else {
+            const formData = new FormData()
+            formData.append('csv', this.csv)
+            formData.append('ipynb', this.ipynb)
+            await api.submitFileCompetition(
+              this.competitionID,
+              formData
+            )
+            alert('파일 제출이 완료되었습니다.')
+          }
         } else {
           alert('대회를 참가한 후 제출해주시기 바랍니다.')
         }
@@ -472,7 +477,7 @@ export default {
       }
     },
     downloadFile (response, FILE_TYPE) {
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {
           type: `application/${FILE_TYPE}`
@@ -480,7 +485,7 @@ export default {
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
       a.href = url
-      a.download = filename
+      a.download = decodeURI(filename)
       a.click()
     },
     async downloadDataFile () {

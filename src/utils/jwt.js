@@ -20,6 +20,7 @@ function deleteUserInfo () {
   window.localStorage.removeItem('UserType')
   window.localStorage.removeItem('Classes')
   window.localStorage.removeItem('Competitions')
+  window.localStorage.removeItem('test')
 }
 
 export {

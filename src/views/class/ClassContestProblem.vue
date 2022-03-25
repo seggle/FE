@@ -230,7 +230,6 @@ export default {
     },
     async getClassUserPrivilege () {
       try {
-        console.log(this.classID)
         const res = await api.classUserPrivilege(this.classID)
         this.userPrivilege = res.data.privilege
         if (this.userPrivilege >= 0) {
@@ -315,20 +314,24 @@ export default {
           this.$router.push(this.$router.currentRoute)
           return
         }
+        if (this.csv === '') {
+          alert('csv 파일을 제출해주세요.')
+        } else if (this.ipynb === '') {
+          alert('ipynb 파일을 제출해주세요.')
+        } else {
+          const formData = new FormData()
+          formData.append('csv', this.csv)
+          formData.append('ipynb', this.ipynb)
 
-        const formData = new FormData()
-        formData.append('csv', this.csv)
-        formData.append('ipynb', this.ipynb)
+          await api.submitFileProblem(
+            this.classID,
+            this.contestID,
+            this.contestProblemID,
+            formData)
 
-        await api.submitFileProblem(
-          this.classID,
-          this.contestID,
-          this.contestProblemID,
-          this.userID,
-          formData)
-
-        alert('파일 제출이 완료되었습니다.')
-        this.getUserSubmissions(1)
+          alert('파일 제출이 완료되었습니다.')
+          this.getUserSubmissions(1)
+        }
       } catch (err) {
         console.log(err)
       }
@@ -367,19 +370,19 @@ export default {
       }
     },
     downloadFile (response, FILE_TYPE) {
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {
           type: `application/${FILE_TYPE}`
         })
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
-      a.download = filename
+      a.download = decodeURI(filename)
       a.href = url
       a.click()
     },
     async downloadDataFile () {
-      const response = await api.downloadDataFile(this.problemID)
+      const response = await api.downloadDataFile(this.contestProblemID)
       this.downloadFile(response, 'zip')
     },
     async downloadCsvFile (submissionID) {

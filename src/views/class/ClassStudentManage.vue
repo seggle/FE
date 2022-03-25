@@ -51,28 +51,29 @@ export default {
     },
     async getClassUserList () {
       try {
+        const res = await api.classUserPrivilege(this.classID)
+        this.userPrivilege = res.data.privilege
         this.taList = ''
         this.studentList = ''
-        const res = await api.getClassUserList(this.classID)
-        this.classUserList = res.data
-        this.setUserList()
-        this.getPrivilege()
+        if (this.userPrivilege === 2) {
+          this.setTAUserList()
+        }
+        this.setStudentUserList()
       } catch (err) {
         console.log(err)
       }
     },
-    setUserList () {
-      for (const classUser of this.classUserList) {
-        if (classUser.privilege === 0) {
-          this.studentList += classUser.username + '\n'
-        } else if (classUser.privilege === 1) {
-          this.taList += classUser.username + '\n'
-        }
+    async setStudentUserList () {
+      const res = await api.getClassStudentUserList(this.classID)
+      for (const StudentUser of res.data) {
+        this.studentList += StudentUser.username + '\n'
       }
     },
-    async getUserPrivilege () {
-      const res = await api.classUserPrivilege(this.classID)
-      this.userPrivilege = res.data.privilege
+    async setTAUserList () {
+      const res = await api.getClassTAUserList(this.classID)
+      for (const TAUser of res.data) {
+        this.taList += TAUser.username + '\n'
+      }
     },
     isProf () {
       return (this.userPrivilege > 1)

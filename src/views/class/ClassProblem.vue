@@ -95,15 +95,14 @@ export default {
     async downloadDataFile () {
       const response = await api.downloadDataFile(this.problemID)
       console.log(response)
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {
           type: 'application/zip'
         })
       )
       const a = document.getElementById('data-download')
-      console.log(a)
-      a.download = filename
+      a.download = decodeURI(filename)
       a.href = url
       a.click()
     }

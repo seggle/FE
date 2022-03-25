@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:7777',
+      target: 'http://15.165.30.200:8000',
       changeOrigin: true
     }
   })
@@ -15,11 +15,19 @@ const instance = createInstance(false)
 const formDataInstance = createInstance(true)
 
 function classUserPrivilege (classID) {
-  return instance.get(`/api/users/class/${classID}`)
+  return instance.get(`/api/users/class/${classID}/`)
 }
 
 function competitionUserPrivilege (competitionID) {
-  return instance.get(`/api/users/competition/${competitionID}`)
+  return instance.get(`/api/users/competition/${competitionID}/`)
+}
+
+function getClassStudentUserList (classID) {
+  return instance.get(`/api/class/${classID}/users/std/`)
+}
+
+function getClassTAUserList (classID) {
+  return instance.get(`/api/class/${classID}/users/ta/`)
 }
 
 function registerUser (data) {
@@ -87,18 +95,18 @@ function deleteCompetition (competitionID) {
 }
 
 function getCompetitionUserList (competitionID) {
-  return instance.get(`/api/competitions/${competitionID}/participation`)
+  return instance.get(`/api/competitions/${competitionID}/participation/`)
 }
 
 function submitCompetitionTAList (competitionID, data) {
   return instance.post(
-        `/api/competitions/${competitionID}/participation/ta`,
+        `/api/competitions/${competitionID}/participation/ta/`,
         data
   )
 }
 
 function getCompetitionsLeaderboard (competitionID) {
-  return instance.get(`/api/leaderboards/competitions/${competitionID}`)
+  return instance.get(`/api/leaderboards/competitions/${competitionID}/`)
 }
 
 function getUserProblemSubmissions (page, username, contestProblemID) {
@@ -112,7 +120,7 @@ function getUserProblemSubmissions (page, username, contestProblemID) {
 }
 
 function getUserCompetitionSubmissions (page, competitionID, username) {
-  return instance.get(`/api/competitions/${competitionID}/submissions`, {
+  return instance.get(`/api/competitions/${competitionID}/submissions/`, {
     params: {
       page: page,
       username: username
@@ -122,13 +130,13 @@ function getUserCompetitionSubmissions (page, competitionID, username) {
 
 function selectProblemSubmission (classID, contestID, cpID, data) {
   return instance.patch(
-        `/api/class/${classID}/contests/${contestID}/${cpID}/check`,
+        `/api/class/${classID}/contests/${contestID}/${cpID}/check/`,
         data
   )
 }
 
 function selectCompetitionSubmission (competitionID, data) {
-  return instance.patch(`/api/competitions/${competitionID}/check`, data)
+  return instance.patch(`/api/competitions/${competitionID}/check/`, data)
 }
 
 function createClass (data) {
@@ -136,85 +144,85 @@ function createClass (data) {
 }
 
 function getClass (classID) {
-  return instance.get(`/api/class/${classID}`)
+  return instance.get(`/api/class/${classID}/`)
 }
 
 function editClass (data, classID) {
-  return instance.patch(`/api/class/${classID}`, data)
+  return instance.patch(`/api/class/${classID}/`, data)
 }
 
 function removeClass (classID) {
-  return instance.delete(`/api/class/${classID}`)
+  return instance.delete(`/api/class/${classID}/`)
 }
 
 function getClassList () {
-  return instance.get('/api/users/class')
+  return instance.get('/api/users/class/')
 }
 
 function editClassList (data) {
-  return instance.patch('/api/users/class', data)
+  return instance.patch('/api/users/class/', data)
 }
 
 function getContestProblem (classID, contestID, contestProblemID) {
   return instance.get(
-        `/api/class/${classID}/contests/${contestID}/${contestProblemID}`
+        `/api/class/${classID}/contests/${contestID}/${contestProblemID}/`
   )
 }
 
 function getClassLeaderboard (contestProblemID) {
-  return instance.get(`/api/leaderboards/contest-problem/${contestProblemID}`)
+  return instance.get(`/api/leaderboards/contest-problem/${contestProblemID}/`)
 }
 
 function getClassUserList (classID) {
-  return instance.get(`/api/class/${classID}/users`)
+  return instance.get(`/api/class/${classID}/users/`)
 }
 
 function createContest (classID, data) {
-  return instance.post(`/api/class/${classID}/contests`, data)
+  return instance.post(`/api/class/${classID}/contests/`, data)
 }
 
 function editContest (classID, contestID, data) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}`, data)
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/`, data)
 }
 
 function getContestList (classID) {
-  return instance.get(`/api/class/${classID}/contests`)
+  return instance.get(`/api/class/${classID}/contests/`)
 }
 
 function deleteContest (classID, contestID) {
-  return instance.delete(`/api/class/${classID}/contests/${contestID}`)
+  return instance.delete(`/api/class/${classID}/contests/${contestID}/`)
 }
 
 function getContestProblemList (classID, contestID) {
-  return instance.get(`/api/class/${classID}/contests/${contestID}`)
+  return instance.get(`/api/class/${classID}/contests/${contestID}/`)
 }
 
 function selectContestProblem (classID, contestID, data) {
-  return instance.post(`/api/class/${classID}/contests/${contestID}`, data)
+  return instance.post(`/api/class/${classID}/contests/${contestID}/`, data)
 }
 
 function editContestProblem (classID, contestID, contestProblemID, data) {
   return instance.patch(
-        `/api/class/${classID}/contests/${contestID}/${contestProblemID}/description`,
+        `/api/class/${classID}/contests/${contestID}/${contestProblemID}/description/`,
         data
   )
 }
 
 function editContestProblemOrder (classID, contestID, data) {
   return instance.patch(
-        `/api/class/${classID}/contests/${contestID}/order`,
+        `/api/class/${classID}/contests/${contestID}/order/`,
         data
   )
 }
 
 function deleteContestProblem (classID, contestID, problemID) {
   return instance.delete(
-        `/api/class/${classID}/contests/${contestID}/${problemID}`
+        `/api/class/${classID}/contests/${contestID}/${problemID}/`
   )
 }
 
 function changeContestPublic (classID, contestID) {
-  return instance.patch(`/api/class/${classID}/contests/${contestID}/check`)
+  return instance.patch(`/api/class/${classID}/contests/${contestID}/check/`)
 }
 
 function getFAQList () {
@@ -222,15 +230,15 @@ function getFAQList () {
 }
 
 function deleteFAQ (faqID) {
-  return instance.delete('/api/admin/faqs/' + faqID)
+  return instance.delete('/api/admin/faqs/' + faqID + '/')
 }
 
 function editFAQ (faqID) {
-  return instance.get('/api/admin/faqs/' + faqID)
+  return instance.get('/api/admin/faqs/' + faqID + '/')
 }
 
 function submitEditFAQ (faqID, data) {
-  return instance.patch('/api/admin/faqs/' + faqID, data)
+  return instance.patch('/api/admin/faqs/' + faqID + '/', data)
 }
 
 function submitFAQ (data) {
@@ -253,11 +261,11 @@ function getAnnouncementList (page, keyword) {
 }
 
 function deleteAnnouncement (announcementID) {
-  return instance.delete('/api/admin/announcements/' + announcementID)
+  return instance.delete('/api/admin/announcements/' + announcementID + '/')
 }
 
 function editAnnouncement (announcementID) {
-  return instance.get(`/api/admin/announcements/${announcementID}`)
+  return instance.get(`/api/admin/announcements/${announcementID}/`)
 }
 
 function submitAnnouncement (data) {
@@ -265,11 +273,11 @@ function submitAnnouncement (data) {
 }
 
 function submitEditAnnouncement (announcementID, data) {
-  return instance.put('/api/admin/announcements/' + announcementID, data)
+  return instance.put('/api/admin/announcements/' + announcementID + '/', data)
 }
 
 function changeAnnouncementSwitch (announcementID, data) {
-  return instance.put(`/api/admin/announcements/${announcementID}/check`, data)
+  return instance.put(`/api/admin/announcements/${announcementID}/check/`, data)
 }
 
 function getUserList (page, keyword) {
@@ -281,7 +289,7 @@ function getUserList (page, keyword) {
 }
 
 function editUser (username) {
-  return instance.get('/api/admin/users/' + username)
+  return instance.get('/api/admin/users/' + username + '/')
 }
 
 function submitUser (username, data) {
@@ -289,7 +297,7 @@ function submitUser (username, data) {
 }
 
 function deleteUser (username) {
-  return instance.delete(`/api/admin/users/${username}`)
+  return instance.delete(`/api/admin/users/${username}/`)
 }
 
 function getAdminProblemList (page, keyword) {
@@ -297,11 +305,11 @@ function getAdminProblemList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/api/admin/problems', { params: params })
+  return instance.get('/api/admin/problems/', { params: params })
 }
 
 function changeAdminProblemSwitch (problemID) {
-  return instance.put('/api/admin/problems/check', { params: { problemID } })
+  return instance.put('/api/admin/problems/check/', { params: { problemID } })
 }
 
 function getAdminClassList (page, keyword) {
@@ -309,7 +317,7 @@ function getAdminClassList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/api/admin/class', { params: params })
+  return instance.get('/api/admin/class/', { params: params })
 }
 
 function deleteClass (classID) {
@@ -317,15 +325,15 @@ function deleteClass (classID) {
 }
 
 function showUserCompetition (username) {
-  return instance.get(`/api/users/${username}/competitions`)
+  return instance.get(`/api/users/${username}/competitions/`)
 }
 
 function showUserHeatmap (username) {
-  return instance.get(`/api/users/${username}/contributions`)
+  return instance.get(`/api/users/${username}/contributions/`)
 }
 
 function getFAQ () {
-  return instance.get('/api/faqs')
+  return instance.get('/api/faqs/')
 }
 
 function getAnnouncement (page, keyword) {
@@ -333,20 +341,20 @@ function getAnnouncement (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/api/announcements', { params: params })
+  return instance.get('/api/announcements/', { params: params })
 }
 
 function getAnnouncementDetail (id) {
-  return instance.get(`/api/announcements/${id}`)
+  return instance.get(`/api/announcements/${id}/`)
 }
 
 function getProposal (page) {
   const params = { page }
-  return instance.get('/api/proposals', { params: params })
+  return instance.get('/api/proposals/', { params: params })
 }
 
 function getProposalDetail (id) {
-  return instance.get(`/api/proposals/${id}`)
+  return instance.get(`/api/proposals/${id}/`)
 }
 
 function createProposal (data) {
@@ -354,11 +362,11 @@ function createProposal (data) {
 }
 
 function editProposal (proposalID, data) {
-  return instance.patch(`/api/proposals/${proposalID}`, data)
+  return instance.patch(`/api/proposals/${proposalID}/`, data)
 }
 
 function deleteProposal (proposalID) {
-  return instance.delete(`/api/proposals/${proposalID}`)
+  return instance.delete(`/api/proposals/${proposalID}/`)
 }
 
 function getProblemList (page, keyword) {
@@ -366,7 +374,7 @@ function getProblemList (page, keyword) {
   if (keyword) {
     params.keyword = keyword
   }
-  return instance.get('/api/problems', { params: params })
+  return instance.get('/api/problems/', { params: params })
 }
 
 function getProblem (id) {
@@ -378,19 +386,19 @@ function editProblem (id, data) {
 }
 
 function deleteProblem (id) {
-  return instance.delete(`/api/problems/${id}`)
+  return instance.delete(`/api/problems/${id}/`)
 }
 
 function changeProblemSwitch (id) {
-  return instance.post(`/api/problems/${id}/check`)
+  return instance.post(`/api/problems/${id}/check/`)
 }
 
-function submitFileProblem (classID, contestID, cpID, username, data) {
-  return formDataInstance.post(`/api/class/${classID}/contests/${contestID}/${cpID}/${username}`, data)
+function submitFileProblem (classID, contestID, cpID, data) {
+  return formDataInstance.post(`/api/class/${classID}/contests/${contestID}/${cpID}/submission/`, data)
 }
 
-function submitFileCompetition (competitionID, username, data) {
-  return formDataInstance.post(`/api/competitions/${competitionID}/${username}/`, data)
+function submitFileCompetition (competitionID, data) {
+  return formDataInstance.post(`/api/competitions/${competitionID}/submission/`, data)
 }
 
 function createCompetitionProblem (data) {
@@ -406,11 +414,11 @@ function createClassProblem (data) {
 }
 
 function submitClassStudentList (classID, data) {
-  return instance.post(`/api/class/${classID}/std`, data)
+  return instance.post(`/api/class/${classID}/std/`, data)
 }
 
 function submitClassTAList (classID, data) {
-  return instance.post(`/api/class/${classID}/ta`, data)
+  return instance.post(`/api/class/${classID}/ta/`, data)
 }
 
 function examStart (classID, contestID) {
@@ -419,48 +427,50 @@ function examStart (classID, contestID) {
 
 function examInfo (classID, contestID, page) {
   const params = { page }
-  return instance.get(`/api/class/${classID}/contests/${contestID}/exam`, {
+  return instance.get(`/api/class/${classID}/contests/${contestID}/exam/`, {
     params: params
   })
 }
 
 function resetExam (classID, contestID, examID) {
   return instance.post(
-        `/api/class/${classID}/contests/${contestID}/exam/${examID}/reset`
+        `/api/class/${classID}/contests/${contestID}/exam/${examID}/reset/`
   )
 }
 
 function exceptUser (classID, contestID, examID) {
   return instance.post(
-        `/api/class/${classID}/contests/${contestID}/exam/${examID}/exception`
+        `/api/class/${classID}/contests/${contestID}/exam/${examID}/exception/`
   )
 }
 
 function downloadDataFile (problemID) {
-  return instance.get(`/api/problems/${problemID}/download/data`, { responseType: 'blob' })
+  return instance.get(`/api/problems/${problemID}/download/data/`, { responseType: 'blob' })
 }
 
 function downloadSolutionFile (problemID) {
-  return instance.get(`/api/problems/${problemID}/download/solution`, { responseType: 'blob' })
+  return instance.get(`/api/problems/${problemID}/download/solution/`, { responseType: 'blob' })
 }
 
 function downloadClassCsvFile (submissionID) {
-  return instance.get(`/api/submissions/class/${submissionID}/download/csv`)
+  return instance.get(`/api/submissions/class/${submissionID}/download/csv/`)
 }
 
 function downloadClassIpynbFile (submissionID) {
-  return instance.get(`/api/submissions/class/${submissionID}/download/ipynb`)
+  return instance.get(`/api/submissions/class/${submissionID}/download/ipynb/`)
 }
 
 function downloadCompetitionCsvFile (submissionID) {
-  return instance.get(`/api/submissions/competition/${submissionID}/download/csv`)
+  return instance.get(`/api/submissions/competition/${submissionID}/download/csv/`)
 }
 
 function downloadCompetitionIpynbFile (submissionID) {
-  return instance.get(`/api/submissions/competition/${submissionID}/download/ipynb`)
+  return instance.get(`/api/submissions/competition/${submissionID}/download/ipynb/`)
 }
 
 export default {
+  getClassStudentUserList,
+  getClassTAUserList,
   competitionUserPrivilege,
   classUserPrivilege,
   registerUser,

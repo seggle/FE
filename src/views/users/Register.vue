@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+  <notifications position="bottom right" classes="my-custom-class" />
   <h1 id="title">Seggle에 오신 걸 환영합니다</h1>
   <form id="register-form" class="row" :key="formRegister"
         :class="{'was-validated': validated }"
@@ -78,6 +79,7 @@
 <script>
 import api from '@/api/index.js'
 import validator from '@/utils/validators.js'
+import { notify } from '@kyvg/vue3-notification'
 
 export default {
   name: 'Register',
@@ -114,8 +116,11 @@ export default {
           password2: this.formRegister.passwordAgain
         }
         await api.registerUser(data)
-
-        alert('회원가입이 완료되었습니다!')
+        notify({
+          title: 'Authorization',
+          text: 'You have been logged in!'
+        })
+        // alert('회원가입이 완료되었습니다!')
         this.$router.push('/login')
       } catch (err) {
         const status = err.response.status

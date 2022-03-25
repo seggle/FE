@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <header class="announcement-detail-header">
       <button class="btn"
               @click="goAnnouncementList">
@@ -30,7 +29,7 @@ export default {
   data () {
     return {
       announcementID: this.$route.params.id,
-      content: { context: null }
+      content: []
     }
   },
   created () {
