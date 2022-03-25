@@ -116,11 +116,11 @@ export default {
           password2: this.formRegister.passwordAgain
         }
         await api.registerUser(data)
-        notify({
-          title: 'Authorization',
-          text: 'You have been logged in!'
-        })
-        // alert('회원가입이 완료되었습니다!')
+        // notify({
+        //   title: 'Authorization',
+        //   text: 'You have been logged in!'
+        // })
+        alert('회원가입이 완료되었습니다!')
         this.$router.push('/login')
       } catch (err) {
         const status = err.response.status
