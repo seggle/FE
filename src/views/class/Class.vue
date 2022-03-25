@@ -37,12 +37,8 @@ export default {
     },
     async getUserPrevilege () {
       try {
-        const res = await api.getClassUserList(this.classID)
-        for (const classUser of res.data) {
-          if (classUser.username === this.$store.state.userid) {
-            this.userPrivilege = classUser.privilege
-          }
-        }
+        const res = await api.classUserPrivilege(this.classID)
+        this.userPrivilege = res.data.privilege
       } catch (err) {
         console.log(err)
       }

@@ -18,7 +18,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="col-1" scope="col" prop="id">#</th>
+            <th style="width: 40px" class="col-1" scope="col" prop="id">#</th>
             <th class="col-1" scope="col">연도</th>
             <th class="col-1" scope="col">학기</th>
             <th scope="col">수업이름</th>

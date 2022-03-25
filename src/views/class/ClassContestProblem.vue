@@ -49,7 +49,8 @@
               문제 설명
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span> -->
             </p>
           </div>
         <!-- 데이터 -->
@@ -57,14 +58,14 @@
             <h5 class="list-title">데이터 설명
               <a id="zip-download">
                 <button class="btn"
-                        :disabled="alreadyJoined == false"
                         @click="downloadDataFile">
                   다운로드
                 </button>
               </a>
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.data_description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span> -->
             </p>
           </div>
         <!-- 리더보드 -->
@@ -110,17 +111,6 @@
           </div>
         <!-- 제출 -->
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
-            <div v-if="isTAOverPrivilege()">
-              <h5 class="list-title">베이스라인 점수 제출</h5>
-              <input v-model="baseline"
-                     id="baseline-input"
-                     type="text"
-                     class="form-control"
-                     placeholder="베이스라인 점수를 입력해주세요."
-                     required
-                     >
-              <button class="btn" type="submit" @click="submitBaseline">제출</button>
-            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -198,13 +188,13 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
-import VueShowdown from 'vue-showdown'
+// import VueShowdown from 'vue-showdown'
 
 export default {
   name: 'ClassContestProblem',
   components: {
-    Pagination,
-    VueShowdown
+    Pagination
+    // VueShowdown
   },
   data () {
     return {
@@ -212,7 +202,7 @@ export default {
       isClassUser: false,
       userPrivilege: 0,
 
-      problemID: this.$route.params.classID,
+      classID: this.$route.params.classID,
       contestID: this.$route.params.contestID,
       contestProblemID: this.$route.params.contestProblemID,
 
@@ -225,8 +215,7 @@ export default {
       ipynb: '',
 
       PageValue: [],
-      currentPage: 1,
-      baseline: ''
+      currentPage: 1
     }
   },
   mounted () {
@@ -234,21 +223,18 @@ export default {
   },
   methods: {
     init () {
-      this.getClassUserList()
+      this.getClassUserPrivilege()
       this.getProblem()
       this.getUserSubmissions(1)
       this.getLeaderboard()
     },
-    async getClassUserList () {
+    async getClassUserPrivilege () {
       try {
-        const res = await api.getClassUserList(this.problemID)
-        const userList = res.data
-        for (const user of userList) {
-          if (String(user.username) === this.userID) {
-            this.isClassUser = true
-            this.alreadyJoined = true
-            this.userPrivilege = user.privilege
-          }
+        console.log(this.classID)
+        const res = await api.classUserPrivilege(this.classID)
+        this.userPrivilege = res.data.privilege
+        if (this.userPrivilege >= 0) {
+          this.isClassUser = true
         }
       } catch (err) {
         console.log(err)
@@ -256,9 +242,6 @@ export default {
     },
     isTAOverPrivilege () {
       return (this.userPrivilege > 0)
-    },
-    submitBaseline () {
-      this.baseline = parseFloat(this.baseline)
     },
     isEndProblem () {
       const now = new Date()
@@ -269,7 +252,7 @@ export default {
     },
     async getProblem () {
       try {
-        const res = await api.getContestProblem(this.problemID, this.contestID, this.contestProblemID)
+        const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
         console.log(err)
@@ -338,7 +321,7 @@ export default {
         formData.append('ipynb', this.ipynb)
 
         await api.submitFileProblem(
-          this.problemID,
+          this.classID,
           this.contestID,
           this.contestProblemID,
           this.userID,
@@ -372,7 +355,7 @@ export default {
           id: this.submitRowIndex
         }
         await api.selectProblemSubmission(
-          this.problemID,
+          this.classID,
           this.contestID,
           this.contestProblemID,
           data)

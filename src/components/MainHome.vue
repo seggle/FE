@@ -10,30 +10,28 @@
         <div class="animation-wrap to-right">
           <div class="item">
             <h5>Seggle에서 개최하는 다양한 대회를 만나보세요</h5>
-            <br /><strong>✔일반용✔</strong> Seggle 회원이라면 누구든지 참여
-            가능! 특정한 주제에 대한 예측 분석 모델을 만들고 정확도를 측정할 수
-            있어요. 인공지능을 훨씬 더 재밌게 경험하는 방법!
-            <strong>리더보드</strong>에서 여러분의 순위를 확인하고 인공지능
+            <br /><strong>✔일반용✔</strong><br> Seggle 회원이라면 누구든지 참여
+            가능! <br>특정한 주제에 대한 예측 분석 모델을 만들고 정확도를 측정하며 인공지능을 훨씬 더 재밌게 경험할 수 있어요.<br>
+            <strong>리더보드</strong>에서 여러분의 순위를 확인하고 인공지능<br>
             역량을 키워보세요⭐
           </div>
           <div class="item">
             <h5>우리 학교 수업 문제를 만날 수 있다고?</h5>
-            <br /><strong>✔세종대학교 학생이라면?✔</strong> 세종대학교에서
-            열리는 '머신러닝/인공지능' 수업에서 대회에 참여할 수 있어요!
+            <br /><strong>✔세종대학교 학생이라면?✔</strong><br> 세종대학교에서
+            열리는 '머신러닝/인공지능' 수업에서 실습, 과제, 시험 문제를 풀 수 있어요!<br>
             <span style="color: gray; font-size: 0.8rem"
-              >(해당 수업에서 제공하는 비밀번호를 가진 회원만 해당 대회에
+              >(해당 수업에 등록된 학생만 해당 수업에
               참여가능합니다.)</span
             >
           </div>
           <div class="item">
-            <h5>빨리 대회에 참가하고 싶어! 어떻게 해야하나요?</h5>
-            <br />대회에 참가하기 위해서는 먼저 Seggle에
-            <a href="/register">회원가입</a>을 해야 해요! 그다음 참가하고 싶은
-            대회를 선택하고,
-            <button type="button" class="btn btn-light">참가 버튼</button>을
-            누르면 데이터를 다운로드할 수 있어요. 데이터 분석 후
-            결과물(submission file)을 제출하면 자동으로 평가 점수를 부여해요!
-            <strong>과연 나의 점수는 몇점일지?</strong> ✨두근두근✨ 지금
+            <h5>빨리 대회에 참가하고 싶어!<br> 어떻게 해야하나요?</h5>
+            <br />먼저 Seggle에
+            <a href="/register">회원가입</a>을 해야 해요! <br><br>그 다음 참가하고 싶은
+            대회를 선택하고,<button type="button" class="btn btn-light">참여하기</button>를
+            누르면 데이터를 다운로드할 수 있어요. <br>데이터 분석 후
+            결과물(submission file)을 제출하면 자동으로 평가 점수를 부여해요!<br><br>
+            <strong>과연 나의 점수는 몇점일지?</strong><br>✨두근두근✨ 지금
             확인해보세요🔍
           </div>
           <div class="item">
@@ -51,8 +49,8 @@
             <br />Seggle은 이용자의 편의성과 원활한 서비스 구현을 위해 최선을
             다하고 있습니다. 서비스 이용 중에 불편함이 있거나, 더 나은 기능 및
             디자인이 생각나신다면 망설이지 말고
-            <a href="/proposals">피드백</a>을 남겨주세요! Seggle은 항상 여러분의
-            이야기에 귀기울이고 있어요!
+            <a href="/proposals">피드백</a>을 남겨주세요! <br><strong>Seggle은 항상 여러분의
+            이야기에 귀기울이고 있어요!</strong>
           </div>
         </div>
       </div>

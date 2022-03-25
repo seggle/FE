@@ -118,7 +118,7 @@ export default {
   },
   mounted () {
     this.getContestInfo(this.$route.params.contestID)
-    this.getClassUserList()
+    this.getClassUserPrivilege(this.$route.params.classID)
     this.getContestProblemList(this.$route.params.contestID)
     this.onEverySecond()
   },
@@ -126,13 +126,9 @@ export default {
     beforeTest () {
       return this.testMode && this.testStart === null
     },
-    async getClassUserList () {
-      const res = await api.getClassUserList(this.classID)
-      for (const classUser of res.data) {
-        if (classUser.username === this.$store.state.userid) {
-          this.userPrivilege = classUser.privilege
-        }
-      }
+    async getClassUserPrivilege (classID) {
+      const res = await api.classUserPrivilege(classID)
+      this.userPrivilege = res.data.privilege
     },
     isClassStudent () {
       return this.userPrivilege === 0

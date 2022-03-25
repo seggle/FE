@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+// import VueApexCharts from 'vue-apexcharts'
 import VueCalendarHeatMap from 'vue3-calendar-heatmap'
 import App from './App.vue'
 import router from './router'
@@ -15,11 +16,12 @@ import '@kangc/v-md-editor/lib/style/base-editor.css'
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css'
 import koKR from '@kangc/v-md-editor/lib/lang/ko-KR'
-
+// Prism
 import Prism from 'prismjs'
+// highlight code
 import 'prismjs/components/prism-json'
+// font-awesome
 import { VueShowdownPlugin } from 'vue-showdown'
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -34,11 +36,14 @@ const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(VueCalendarHeatMap)
+// app.component('apexchart', VueApexCharts)
+// app.use(VueApexCharts)
 app.component('Datepicker', Datepicker)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')
 app.use(VMdEditor)
+// app.use(mavonEditor)
 
 app.use(VueShowdownPlugin, {
   options: {

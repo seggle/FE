@@ -19,12 +19,9 @@ const requireAdminAuth = () => (to, from, next) => {
 
 const requireClassAuth = () => async (to, from, next) => {
   try {
-    const res = await api.getClassUserList(to.params.classID)
-    const classList = res.data
-    for (let i = 0; i < classList.length; i++) {
-      if (classList[i].username === store.state.userid) {
-        return next()
-      }
+    const res = await api.classUserPrivilege(to.params.classID)
+    if (res.data.privilege >= 0) {
+      return next()
     }
     alert('접근 권한이 없습니다.')
     next('/')
@@ -35,15 +32,12 @@ const requireClassAuth = () => async (to, from, next) => {
 
 const requireClassAdminAuth = () => async (to, from, next) => {
   try {
-    const res = await api.getClassUserList(to.params.classID)
-    const classUserList = res.data
-    for (const classUser of classUserList) {
-      if (classUser.username === store.state.userid && classUser.privilege > 0) {
-        return next()
-      }
+    const res = await api.classUserPrivilege(to.params.classID)
+    if (res.data.privilege >= 1) {
+      return next()
     }
     alert('접근 권한이 없습니다.')
-    next(`/class/${to.params.classID}`)
+    next(`/class/${to.params.classID}/class-contest`)
   } catch (err) {
     console.log(err)
   }
@@ -51,12 +45,9 @@ const requireClassAdminAuth = () => async (to, from, next) => {
 
 const requireCompetitionAdminAuth = () => async (to, from, next) => {
   try {
-    const res = await api.getCompetitionUserList(to.params.competitionID)
-    const competitionUserList = res.data
-    for (const competitionUser of competitionUserList) {
-      if (competitionUser.username === store.state.userid && competitionUser.privilege > 1) {
-        return next()
-      }
+    const res = await api.competitionUserPrivilege(to.params.competitionID)
+    if (res.data.privilege >= 1) {
+      return next()
     }
     alert('접근 권한이 없습니다.')
     next('/')

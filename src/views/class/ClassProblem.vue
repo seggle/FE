@@ -35,7 +35,8 @@
               문제 설명
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span> -->
             </p>
           </div>
         <!-- 데이터 -->
@@ -49,7 +50,8 @@
               </a>
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.data_description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span> -->
             </p>
           </div>
         </div>
@@ -61,8 +63,8 @@
 <script>
 import api from '@/api/index.js'
 
-const showdown = require('showdown')
-const converter = new showdown.Converter()
+// const showdown = require('showdown')
+// const converter = new showdown.Converter()
 
 export default {
   name: 'ClassProblem',
@@ -83,8 +85,8 @@ export default {
     async getProblem () {
       try {
         const res = await api.getProblem(this.problemID)
-        res.data.description = converter.makeHtml(res.data.description)
-        res.data.data_description = converter.makeHtml(res.data.data_description)
+        // res.data.description = converter.makeHtml(res.data.description)
+        // res.data.data_description = converter.makeHtml(res.data.data_description)
         this.problem = res.data
       } catch (err) {
         console.log(err)

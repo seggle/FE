@@ -70,13 +70,9 @@ export default {
         }
       }
     },
-    getPrivilege () {
-      for (const classUser of this.classUserList) {
-        if (classUser.username === this.$store.state.userid) {
-          this.userPrivilege = classUser.privilege
-          break
-        }
-      }
+    async getUserPrivilege () {
+      const res = await api.classUserPrivilege(this.classID)
+      this.userPrivilege = res.data.privilege
     },
     isProf () {
       return (this.userPrivilege > 1)

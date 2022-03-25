@@ -35,20 +35,21 @@
               문제 설명
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span> -->
             </p>
           </div>
         <!-- 데이터 -->
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
             <h5 class="list-title">데이터 설명
               <button class="btn"
-                      :disabled="alreadyJoined == false"
                       @click="downloadDataFile">
                 <a id="data-download">다운로드</a>
               </button>
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.data_description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span> -->
             </p>
           </div>
         </div>
@@ -59,11 +60,11 @@
 
 <script>
 import api from '@/api/index.js'
-import VueShowdown from 'vue-showdown'
+// import VueShowdown from 'vue-showdown'
 
 export default {
   name: 'AdminProblemDetail',
-  components: VueShowdown,
+  // components: VueShowdown,
   data () {
     return {
       problemID: this.$route.params.problemID,

@@ -14,6 +14,14 @@ function createInstance (formData) {
 const instance = createInstance(false)
 const formDataInstance = createInstance(true)
 
+function classUserPrivilege (classID) {
+  return instance.get(`/api/users/class/${classID}`)
+}
+
+function competitionUserPrivilege (competitionID) {
+  return instance.get(`/api/users/competition/${competitionID}`)
+}
+
 function registerUser (data) {
   return instance.post('/api/users/', data)
 }
@@ -453,6 +461,8 @@ function downloadCompetitionIpynbFile (submissionID) {
 }
 
 export default {
+  competitionUserPrivilege,
+  classUserPrivilege,
   registerUser,
   loginUser,
   logoutUser,
