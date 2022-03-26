@@ -135,7 +135,7 @@
 
 <script>
 import api from '@/api/index.js'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   name: 'AdminFAQ',
@@ -162,8 +162,8 @@ export default {
         const res = await api.getFAQList()
         this.faqList = res.data
         for (const faq of this.faqList) {
-          faq.created_time = GMTtoLocale(faq.created_time)
-          faq.last_modified = GMTtoLocale(faq.last_modified)
+          faq.created_time = formatTime(faq.created_time)
+          faq.last_modified = formatTime(faq.last_modified)
         }
       } catch (err) {
         console.log(err)

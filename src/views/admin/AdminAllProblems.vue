@@ -50,7 +50,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '../../components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   components: { Pagination },
@@ -87,7 +87,7 @@ export default {
         })
         this.problemList = res.data.results
         for (const problem of this.problemList) {
-          problem.created_time = GMTtoLocale(problem.created_time)
+          problem.created_time = formatTime(problem.created_time)
         }
       } catch (err) {
         console.log(err)
@@ -97,7 +97,7 @@ export default {
     async deleteProblem (problemID) {
       try {
         if (confirm('삭제하시겠습니까?')) {
-          await api.deleteAdminProblem(problemID)
+          await api.deleteProblem(problemID)
           // 문제 삭제 후 page=1
           const res = await api.getProblemList(1, this.keyword)
           // 마지막 page의 유일한 문제를 지운 경우, 현재 페이지값 재조정

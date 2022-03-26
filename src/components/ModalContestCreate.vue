@@ -14,12 +14,12 @@
 
           <div class="modal-body">
             <div class="row list-name">
-              <label class="form-label">문제 목록</label>
+              <label class="form-label">과제 및 시험 목록</label>
               <input
                 class="form-control"
                 type="text"
                 v-model="contestInfo.title"
-                placeholder="문제 목록명"
+                placeholder="과제 및 시험명"
                 required
               />
             </div>
@@ -86,7 +86,7 @@
 
 <script>
 import api from '@/api/index.js'
-import { GMTtoLocale } from '@/utils/time.js'
+import { UTCtoKST } from '@/utils/time.js'
 export default {
   name: 'ModalContestCreate',
   props: {
@@ -113,9 +113,9 @@ export default {
   methods: {
     init () {
       if (this.mode === 'create') {
-        this.modalHeader = '문제 목록 생성'
+        this.modalHeader = '과제 및 시험 목록 생성'
       } else if (this.mode === 'edit') {
-        this.modalHeader = '문제 목록 편집'
+        this.modalHeader = '과제 및 시험 목록 편집'
         this.contestInfo.id = this.editContestInfo.id
         this.contestInfo.title = this.editContestInfo.name
         this.contestInfo.startTime = this.editContestInfo.start_time
@@ -128,8 +128,8 @@ export default {
       try {
         const data = {
           name: this.contestInfo.title,
-          start_time: GMTtoLocale(this.contestInfo.startTime),
-          end_time: GMTtoLocale(this.contestInfo.endTime),
+          start_time: UTCtoKST(this.contestInfo.startTime),
+          end_time: UTCtoKST(this.contestInfo.endTime),
           is_exam: this.contestInfo.checkedExam,
           visible: this.contestInfo.checkedVisible
         }
@@ -142,6 +142,17 @@ export default {
         this.$router.go({ name: 'ClassContest' })
       } catch (err) {
         console.log(err)
+      }
+    }
+  },
+  watch: {
+    'contestInfo.endTime' () {
+      const date = new Date()
+      if (this.contestInfo.endTime !== '') {
+        if (date > this.contestInfo.endTime || this.contestInfo.startTime > this.contestInfo.endTime) {
+          alert('종료 시간을 다시 설정해주세요.')
+          this.contestInfo.endTime = ''
+        }
       }
     }
   }

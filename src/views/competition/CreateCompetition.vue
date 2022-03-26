@@ -71,7 +71,7 @@
                   </select>
                 </div>
 
-                <div class="form-time col-5">
+                <div class="form-time col-8">
                   <div class="form-start-time">
                     <label class="form-label">시작 시간</label>
                     <Datepicker
@@ -152,7 +152,7 @@
 
 <script>
 import api from '@/api/index.js'
-import { GMTtoLocale } from '@/utils/time.js'
+import { UTCtoKST } from '@/utils/time.js'
 
 export default {
   name: 'CreateCompetition',
@@ -200,8 +200,8 @@ export default {
           description: this.problem.description,
           evaluation: this.problem.evaluation,
           data_description: this.problem.data_description,
-          start_time: GMTtoLocale(this.problem.startTime),
-          end_time: GMTtoLocale(this.problem.endTime)
+          start_time: UTCtoKST(this.problem.startTime),
+          end_time: UTCtoKST(this.problem.endTime)
         }
 
         for (const key in data) {
@@ -224,6 +224,17 @@ export default {
         this.problem.data = files[0]
       } else {
         this.problem.solution = files[0]
+      }
+    }
+  },
+  watch: {
+    'problem.endTime' () {
+      const date = new Date()
+      if (this.problem.endTime !== '') {
+        if (date > this.problem.endTime || this.problem.startTime > this.problem.endTime) {
+          alert('종료 시간을 다시 설정해주세요.')
+          this.problem.endTime = ''
+        }
       }
     }
   }

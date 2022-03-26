@@ -3,7 +3,7 @@ function saveAccessToCookie (value) {
 }
 
 function saveRefreshToCookie (value) {
-  document.cookie = `til_refresh=${value}; path=/; max-age=86400`
+  document.cookie = `til_refresh=${value}; path=/; max-age=21600`
 }
 
 function saveUserToCookie (value) {

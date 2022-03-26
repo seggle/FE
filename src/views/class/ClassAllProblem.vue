@@ -69,7 +69,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 
 export default {
   name: 'ClassAllProblems',
@@ -98,7 +98,7 @@ export default {
         const res = await api.getProblemList(page, this.keyword)
         this.problemList = res.data.results
         for (const problem of this.problemList) {
-          problem.created_time = GMTtoLocale(problem.created_time)
+          problem.created_time = formatTime(problem.created_time)
         }
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
       } catch (err) {

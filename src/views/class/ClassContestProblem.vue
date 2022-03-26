@@ -110,6 +110,17 @@
           </div>
         <!-- 제출 -->
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
+            <div v-if="isTAOverPrivilege()">
+              <h5 class="list-title">베이스라인 점수 제출</h5>
+              <input v-model="baseline"
+                     id="baseline-input"
+                     type="text"
+                     class="form-control"
+                     placeholder="베이스라인 점수를 입력해주세요."
+                     required
+                     >
+              <button class="btn" type="submit" @click="submitBaseline">제출</button>
+            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -151,8 +162,22 @@
                             :true-value="submit.id"
                       />
                     </th>
-                    <td><a @click="downloadCsvFile(submit.id)">csv</a></td>
-                    <td><a @click="downloadIpynbFile(submit.id)">ipynb</a></td>
+                    <td>
+                      <a id="csv-download">
+                        <button class="download-btn"
+                          @click="downloadCsvFile(submit.id)">
+                          <font-awesome-icon icon="file-arrow-down" />
+                        </button>
+                      </a>
+                    </td>
+                    <td>
+                      <a id="ipynb-download">
+                        <button class="download-btn"
+                          @click="downloadIpynbFile(submit.id)">
+                          <font-awesome-icon icon="file-arrow-down" />
+                        </button>
+                      </a>
+                    </td>
                     <td>{{ submit.score }}</td>
                     <td>{{ submit.success }}</td>
                     <td>{{ submit.created_time }}</td>
@@ -172,7 +197,7 @@
 <script>
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
-import { GMTtoLocale } from '@/utils/time.js'
+import { formatTime } from '@/utils/time.js'
 import VueShowdown from 'vue-showdown'
 
 export default {
@@ -200,7 +225,8 @@ export default {
       ipynb: '',
 
       PageValue: [],
-      currentPage: 1
+      currentPage: 1,
+      baseline: ''
     }
   },
   mounted () {
@@ -231,6 +257,16 @@ export default {
     isTAOverPrivilege () {
       return (this.userPrivilege > 0)
     },
+    submitBaseline () {
+      this.baseline = parseFloat(this.baseline)
+    },
+    isEndProblem () {
+      const now = new Date()
+      const time = this.problem.end_time.replace(/-/gi, '/').replace(' ', '/')
+      const endTime = new Date(time)
+
+      return endTime <= now
+    },
     async getProblem () {
       try {
         const res = await api.getContestProblem(this.problemID, this.contestID, this.contestProblemID)
@@ -244,7 +280,7 @@ export default {
         const res = await api.getClassLeaderboard(this.contestProblemID)
         this.leaderboardList = res.data
         for (const leaderboard of this.leaderboardList) {
-          leaderboard.created_time = GMTtoLocale(leaderboard.created_time)
+          leaderboard.created_time = formatTime(leaderboard.created_time)
         }
       } catch (err) {
         console.log(err)
@@ -265,7 +301,7 @@ export default {
 
         submission.csv = csvName.split('/').pop()
         submission.ipynb = ipynbName.split('/').pop()
-        submission.created_time = GMTtoLocale(submitDate)
+        submission.created_time = formatTime(submitDate)
       }
     },
     async getUserSubmissions (page) {
@@ -291,6 +327,12 @@ export default {
     },
     async submitFile () {
       try {
+        if (this.isEndProblem()) {
+          alert('제출 시간이 지났습니다.')
+          this.$router.push(this.$router.currentRoute)
+          return
+        }
+
         const formData = new FormData()
         formData.append('csv', this.csv)
         formData.append('ipynb', this.ipynb)
@@ -349,8 +391,8 @@ export default {
         })
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
-      a.href = url
       a.download = filename
+      a.href = url
       a.click()
     },
     async downloadDataFile () {
@@ -378,5 +420,9 @@ export default {
       }
     }
   }
+}
+#baseline-input {
+  text-align: center;
+  display: initial;
 }
 </style>

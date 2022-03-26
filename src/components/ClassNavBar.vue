@@ -16,7 +16,6 @@
           </div>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- Pills navs -->
           <ul class="nav nav-pills mb-2 mb-lg-0" role="tablist">
             <li class="nav-item">
               <a
@@ -25,7 +24,7 @@
                 data-bs-toggle="pill"
                 role="tab"
                 @click="handleRoute('ClassAllProblem')"
-                >전체 문제</a
+                >전체 문제 목록</a
               >
             </li>
             <li class="nav-item">
@@ -45,7 +44,7 @@
                 data-bs-toggle="pill"
                 role="tab"
                 @click="handleRoute('ClassContest')"
-                >문제</a
+                >과제 및 시험</a
               >
             </li>
           </ul>
@@ -75,21 +74,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1 {
-  padding: 0px 0rem;
-  margin-bottom: 0rem;
-
-  display: block;
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  @media (max-width: 992px) {
-    width: 50%;
-    padding: 0rem;
-  }
-}
 .navbar-toggler {
   &:focus {
     box-shadow: 0 0 0 0rem;

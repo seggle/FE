@@ -83,10 +83,8 @@ export default {
       const username = this.$store.state.userid
       try {
         const res = await api.showUserCompetition(username)
-        console.log(res.data)
         this.problemList = res.data
         this.count = this.problemList.length
-        console.log(this.count)
         this.problemList = this.problemList.reverse()
         console.log(this.problemList)
 

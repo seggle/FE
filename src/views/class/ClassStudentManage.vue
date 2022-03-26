@@ -109,12 +109,11 @@ export default {
 #class-manager-form {
   justify-content: space-evenly;
 }
+
 label {
   font-weight: bold;
 }
-textarea {
-  resize: none;
-}
+
 .btn {
   float: right;
 }
