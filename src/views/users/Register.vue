@@ -79,7 +79,6 @@
 <script>
 import api from '@/api/index.js'
 import validator from '@/utils/validators.js'
-import { notify } from '@kyvg/vue3-notification'
 
 export default {
   name: 'Register',
