@@ -124,7 +124,7 @@ export default {
     async exceptIP (contestID, examID) {
       if (confirm('예외처리하시겠습니까?')) {
         await api.exceptUser(this.classID, contestID, examID)
-        alert('리셋 완료')
+        alert('예외처리가 완료되었습니다.')
         this.$router.go()
       } else {
       }

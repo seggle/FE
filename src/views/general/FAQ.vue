@@ -28,7 +28,15 @@
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            <span><VueShowdown class="v-show-down" :markdown="faq.answer"></VueShowdown></span>
+            <span><v-md-editor :model-value="faq.answer" mode="preview"></v-md-editor></span>
+            <!-- <span><VueShowdown class="v-show-down" :markdown="faq.answer" :options= "{
+              emoji: true,
+              tables: true,
+              parseImgDimensions: true,
+              omitExtraWLInCodeBlocks: true,
+              simpleLineBreaks: true,
+              splitAdjacentBlockquotes: true
+            }"></VueShowdown></span> -->
           </div>
         </div>
       </div>
@@ -38,11 +46,10 @@
 
 <script>
 import api from '@/api/index.js'
-import VueShowdown from 'vue-showdown'
-
+// import VueShowdown from 'vue-showdown'
 export default {
   name: 'FAQ',
-  components: VueShowdown,
+  // components: VueShowdown,
   data () {
     return {
       faqList: []
@@ -71,7 +78,6 @@ export default {
     padding: 1rem 1rem;
   }
 }
-
 header {
   display: flex;
   justify-content: space-between;
@@ -81,7 +87,6 @@ header {
     padding: 1rem 0rem;
   }
 }
-
 .accordion-button,
 .accordion-body {
   text-align: left;

@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@kangc/v-md-editor": "^2.3.13",
+        "@kyvg/vue3-notification": "^2.3.4",
         "@popperjs/core": "^2.11.2",
         "@vue/composition-api": "^1.4.3",
         "apexcharts": "^3.33.0",

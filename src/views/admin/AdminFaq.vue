@@ -85,7 +85,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="col-1" scope="col" prop="id">#</th>
+            <th style="width: 40px" class="col-1" scope="col" prop="id">#</th>
             <th scope="col">제목</th>
             <th scope="col">작성일</th>
             <th scope="col">마지막 수정일</th>
@@ -258,7 +258,7 @@ h1 {
   }
 }
 .btn {
-  @media (max-width: 767px) {
+  @media (max-width: 420px) {
     font-size: calc(0.5rem + 2vw);
   }
 }

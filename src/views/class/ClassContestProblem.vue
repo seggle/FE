@@ -49,7 +49,8 @@
               문제 설명
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.description"></VueShowdown></span> -->
             </p>
           </div>
         <!-- 데이터 -->
@@ -57,14 +58,14 @@
             <h5 class="list-title">데이터 설명
               <a id="zip-download">
                 <button class="btn"
-                        :disabled="alreadyJoined == false"
                         @click="downloadDataFile">
                   다운로드
                 </button>
               </a>
             </h5>
             <p class="list-content">
-              <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span>
+              <span><v-md-editor :model-value="problem.data_description" mode="preview"></v-md-editor></span>
+              <!-- <span><VueShowdown class="v-show-down" :markdown="problem.data_description"></VueShowdown></span> -->
             </p>
           </div>
         <!-- 리더보드 -->
@@ -110,17 +111,6 @@
           </div>
         <!-- 제출 -->
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
-            <div v-if="isTAOverPrivilege()">
-              <h5 class="list-title">베이스라인 점수 제출</h5>
-              <input v-model="baseline"
-                     id="baseline-input"
-                     type="text"
-                     class="form-control"
-                     placeholder="베이스라인 점수를 입력해주세요."
-                     required
-                     >
-              <button class="btn" type="submit" @click="submitBaseline">제출</button>
-            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -198,13 +188,13 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
-import VueShowdown from 'vue-showdown'
+// import VueShowdown from 'vue-showdown'
 
 export default {
   name: 'ClassContestProblem',
   components: {
-    Pagination,
-    VueShowdown
+    Pagination
+    // VueShowdown
   },
   data () {
     return {
@@ -212,7 +202,7 @@ export default {
       isClassUser: false,
       userPrivilege: 0,
 
-      problemID: this.$route.params.classID,
+      classID: this.$route.params.classID,
       contestID: this.$route.params.contestID,
       contestProblemID: this.$route.params.contestProblemID,
 
@@ -225,8 +215,7 @@ export default {
       ipynb: '',
 
       PageValue: [],
-      currentPage: 1,
-      baseline: ''
+      currentPage: 1
     }
   },
   mounted () {
@@ -234,21 +223,17 @@ export default {
   },
   methods: {
     init () {
-      this.getClassUserList()
+      this.getClassUserPrivilege()
       this.getProblem()
       this.getUserSubmissions(1)
       this.getLeaderboard()
     },
-    async getClassUserList () {
+    async getClassUserPrivilege () {
       try {
-        const res = await api.getClassUserList(this.problemID)
-        const userList = res.data
-        for (const user of userList) {
-          if (String(user.username) === this.userID) {
-            this.isClassUser = true
-            this.alreadyJoined = true
-            this.userPrivilege = user.privilege
-          }
+        const res = await api.classUserPrivilege(this.classID)
+        this.userPrivilege = res.data.privilege
+        if (this.userPrivilege >= 0) {
+          this.isClassUser = true
         }
       } catch (err) {
         console.log(err)
@@ -256,9 +241,6 @@ export default {
     },
     isTAOverPrivilege () {
       return (this.userPrivilege > 0)
-    },
-    submitBaseline () {
-      this.baseline = parseFloat(this.baseline)
     },
     isEndProblem () {
       const now = new Date()
@@ -269,7 +251,7 @@ export default {
     },
     async getProblem () {
       try {
-        const res = await api.getContestProblem(this.problemID, this.contestID, this.contestProblemID)
+        const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
         console.log(err)
@@ -332,20 +314,24 @@ export default {
           this.$router.push(this.$router.currentRoute)
           return
         }
+        if (this.csv === '') {
+          alert('csv 파일을 제출해주세요.')
+        } else if (this.ipynb === '') {
+          alert('ipynb 파일을 제출해주세요.')
+        } else {
+          const formData = new FormData()
+          formData.append('csv', this.csv)
+          formData.append('ipynb', this.ipynb)
 
-        const formData = new FormData()
-        formData.append('csv', this.csv)
-        formData.append('ipynb', this.ipynb)
+          await api.submitFileProblem(
+            this.classID,
+            this.contestID,
+            this.contestProblemID,
+            formData)
 
-        await api.submitFileProblem(
-          this.problemID,
-          this.contestID,
-          this.contestProblemID,
-          this.userID,
-          formData)
-
-        alert('파일 제출이 완료되었습니다.')
-        this.getUserSubmissions(1)
+          alert('파일 제출이 완료되었습니다.')
+          this.getUserSubmissions(1)
+        }
       } catch (err) {
         console.log(err)
       }
@@ -372,7 +358,7 @@ export default {
           id: this.submitRowIndex
         }
         await api.selectProblemSubmission(
-          this.problemID,
+          this.classID,
           this.contestID,
           this.contestProblemID,
           data)
@@ -384,19 +370,19 @@ export default {
       }
     },
     downloadFile (response, FILE_TYPE) {
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {
           type: `application/${FILE_TYPE}`
         })
       )
       const a = document.getElementById(`${FILE_TYPE}-download`)
-      a.download = filename
+      a.download = decodeURI(filename)
       a.href = url
       a.click()
     },
     async downloadDataFile () {
-      const response = await api.downloadDataFile(this.problemID)
+      const response = await api.downloadDataFile(this.contestProblemID)
       this.downloadFile(response, 'zip')
     },
     async downloadCsvFile (submissionID) {

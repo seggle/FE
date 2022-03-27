@@ -2,7 +2,7 @@
 <template>
   <div v-if="beforeTest() && isClassStudent()" class="container">
     <header class="title">
-      <h1>{{ contestTitle }}</h1>
+      <h2>{{ contestTitle }}</h2>
     </header>
     <div class="test">
       <h3 class="datetime">{{ time }}</h3>
@@ -13,7 +13,7 @@
   </div>
   <div v-else class="container">
     <header class="title">
-      <h1>{{ contestTitle }}</h1>
+      <h2>{{ contestTitle }}</h2>
       <div class="button-group" v-if="isTAOverPrivilege()">
         <button
           v-if="testMode"
@@ -25,7 +25,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-sm px-4 me-sm-3"
+          class="btn"
           @click="goContestProblemListEdit"
         >
           문제 편집
@@ -48,34 +48,34 @@
             <td colspan="5">등록된 문제가 없습니다.</td>
           </tr>
 
-          <tr v-for="(problems, i) in contestProblemList" :key="problems">
+          <tr v-for="(problem, i) in contestProblemList" :key="problem">
             <th @click="
                   goContestProblem(
-                    problems.id,
-                    problems.start_time,
-                    problems.end_time
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
                   )
                 " scope="row">{{ i + 1 }}</th>
             <td @click="
                   goContestProblem(
-                    problems.id,
-                    problems.start_time,
-                    problems.end_time
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
                   )
                 ">
-              <a>{{ problems.title }}</a>
+              <a>{{ problem.title }}</a>
             </td>
             <td @click="
                   goContestProblem(
-                    problems.id,
-                    problems.start_time,
-                    problems.end_time
+                    problem.id,
+                    problem.start_time,
+                    problem.end_time
                   )
-                ">{{ problems.end_time }}</td>
+                ">{{ problem.end_time }}</td>
             <td scope="row" v-if="isTAOverPrivilege()">
               <button
                 class="edit-btn"
-                @click="EditClassContestProblem(problems.id)"
+                @click="EditClassContestProblem(problem.id)"
               >
                 <font-awesome-icon icon="pen" />
               </button>
@@ -118,7 +118,7 @@ export default {
   },
   mounted () {
     this.getContestInfo(this.$route.params.contestID)
-    this.getClassUserList()
+    this.getClassUserPrivilege(this.$route.params.classID)
     this.getContestProblemList(this.$route.params.contestID)
     this.onEverySecond()
   },
@@ -126,13 +126,9 @@ export default {
     beforeTest () {
       return this.testMode && this.testStart === null
     },
-    async getClassUserList () {
-      const res = await api.getClassUserList(this.classID)
-      for (const classUser of res.data) {
-        if (classUser.username === this.$store.state.userid) {
-          this.userPrivilege = classUser.privilege
-        }
-      }
+    async getClassUserPrivilege (classID) {
+      const res = await api.classUserPrivilege(classID)
+      this.userPrivilege = res.data.privilege
     },
     isClassStudent () {
       return this.userPrivilege === 0
@@ -295,7 +291,7 @@ a {
   }
 }
 
-h1 {
+h2 {
   display: block;
   max-width: 300px;
   overflow: hidden;
@@ -303,6 +299,11 @@ h1 {
   white-space: nowrap;
   @media (max-width: 500px) {
     max-width: 100%;
+  }
+}
+.btn {
+  @media (max-width: 767px) {
+      font-size: calc(0.4rem + 2vw);
   }
 }
 </style>

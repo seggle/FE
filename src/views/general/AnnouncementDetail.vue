@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <header class="announcement-detail-header">
       <button class="btn"
               @click="goAnnouncementList">
@@ -15,21 +14,22 @@
       <span><h5>작성일</h5></span>
       <span>{{ content.created_time }}</span>
       <span><h5>내용</h5></span>
-      <span class="content"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></span>
+      <span class="content"><v-md-editor :model-value="content.context" mode="preview"></v-md-editor></span>
+      <!-- <span class="content"><VueShowdown class="v-show-down" :markdown="content.context"></VueShowdown></span> -->
     </section>
   </div>
 </template>
 <script>
 import api from '@/api/index.js'
-import VueShowdown from 'vue-showdown'
+// import VueShowdown from 'vue-showdown'
 
 export default {
   name: 'AnnouncementDetail',
-  components: VueShowdown,
+  // components: VueShowdown,
   data () {
     return {
       announcementID: this.$route.params.id,
-      content: { context: null }
+      content: []
     }
   },
   created () {
@@ -43,6 +43,7 @@ export default {
       try {
         const res = await api.getAnnouncementDetail(this.announcementID)
         this.content = res.data
+        this.setCreatedTime()
       } catch (error) {
         console.log(error)
       }

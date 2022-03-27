@@ -62,7 +62,6 @@
                   <select
                     class="form-select"
                     v-model="problem.evaluation"
-                    required
                   >
                     <option disabled value="">평가 지표</option>
                     <option v-for="item in problem.metrics" :key="item">
@@ -194,24 +193,38 @@ export default {
         const formData = new FormData()
         formData.append('data', this.problem.data)
         formData.append('solution', this.problem.solution)
+        if (this.problem.description === '') {
+          alert('문제 설명을 입력해주세요.')
+        } else if (this.problem.evaluation === '') {
+          alert('평가 방식을 입력해주세요.')
+        } else if (this.problem.startTime === '') {
+          alert('시작 시간을 선택해주세요.')
+        } else if (this.problem.endTime === '') {
+          alert('마감 시간을 선택해주세요.')
+        } else if (this.problem.data_description === '') {
+          alert('데이터 설명을 입력해주세요.')
+        } else if (this.problem.data === '') {
+          alert('데이터 파일을 올려주세요.')
+        } else if (this.problem.solution === '') {
+          alert('정답 파일을 올려주세요.')
+        } else {
+          const data = {
+            title: this.problem.title,
+            description: this.problem.description,
+            evaluation: this.problem.evaluation,
+            data_description: this.problem.data_description,
+            start_time: UTCtoKST(this.problem.startTime),
+            end_time: UTCtoKST(this.problem.endTime)
+          }
+          for (const key in data) {
+            formData.append(`${key}`, data[key])
+          }
 
-        const data = {
-          title: this.problem.title,
-          description: this.problem.description,
-          evaluation: this.problem.evaluation,
-          data_description: this.problem.data_description,
-          start_time: UTCtoKST(this.problem.startTime),
-          end_time: UTCtoKST(this.problem.endTime)
+          await api.createCompetitionProblem(formData)
+
+          alert('저장이 완료되었습니다.')
+          this.$router.push({ name: 'CompetitionList' })
         }
-
-        for (const key in data) {
-          formData.append(`${key}`, data[key])
-        }
-
-        await api.createCompetitionProblem(formData)
-
-        alert('저장이 완료되었습니다.')
-        this.$router.push({ name: 'CompetitionList' })
       } catch (err) {
         console.log(err)
       }

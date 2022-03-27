@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="d-flex flex-wrap mb-2 mt-3">
+    <div class="d-flex mb-2 mt-3">
       <h1 class="me-auto">전체 문제</h1>
       <div>
         <form>
@@ -18,7 +18,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col" prop="id">#</th>
+            <th style="width: 40px" scope="col" prop="id">#</th>
             <th scope="col">제목</th>
             <th scope="col">작성일</th>
             <th scope="col">작성자</th>
@@ -146,8 +146,10 @@ a {
 }
 h1 {
   font-weight: bold;
-  width: 40%;
+  width: 60%;
   text-align: left;
-  font-size: calc(1rem + 2vw);
+  @media (max-width: 420px) {
+    font-size: calc(1.2rem + 2vw);
+  }
 }
 </style>
