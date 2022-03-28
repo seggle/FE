@@ -27,7 +27,6 @@
           ><font-awesome-icon icon="circle-right" />다음</button>
         </div>
       </header>
-
       <div class="table-div">
         <table class="table">
           <thead>
@@ -37,7 +36,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="problem in problemList" :key="problem">
+            <tr v-for="problem in problemList" :key="problem" :class="{ 'bg-secondary bg-opacity-10': isAlreadyContestProblemExist(problem.id)}">
               <th scope="row">
                 <input
                   v-if="isAlreadyContestProblemExist(problem.id)"
@@ -53,7 +52,6 @@
                   type="checkbox"
                   :value="problem.id"
                   v-model="checkList"
-                  checked
                 />
               </th>
               <td>{{ problem.title }}</td>
@@ -294,6 +292,8 @@ header {
     @media (max-width: 767px) {
       font-size: calc(0.4rem + 2vw);
     }
+    float: right;
+    margin-top: 0.3rem;
   }
 }
 
