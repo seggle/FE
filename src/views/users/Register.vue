@@ -1,6 +1,5 @@
 <template>
 <div class="container">
-  <notifications position="bottom right" classes="my-custom-class" />
   <h1 id="title">Seggle에 오신 걸 환영합니다</h1>
   <form id="register-form" class="row" :key="formRegister"
         :class="{'was-validated': validated }"
@@ -71,7 +70,7 @@
         {{ this.feedback.passwordAgain }}
       </div>
     </div>
-    <button class="btn" type="submit">가입하기</button>
+    <button class="btn" type="submit" style="width: 30%">가입하기</button>
   </form>
 </div>
 </template>
@@ -79,7 +78,7 @@
 <script>
 import api from '@/api/index.js'
 import validator from '@/utils/validators.js'
-import { notify } from '@kyvg/vue3-notification'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'Register',
@@ -116,12 +115,17 @@ export default {
           password2: this.formRegister.passwordAgain
         }
         await api.registerUser(data)
-        // notify({
-        //   title: 'Authorization',
-        //   text: 'You have been logged in!'
-        // })
-        alert('회원가입이 완료되었습니다!')
-        this.$router.push('/login')
+        Swal.fire(
+          {
+            title: '회원가입이 완료되었습니다!',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/login')
+          }
+        })
       } catch (err) {
         const status = err.response.status
         const response = err.response.data

@@ -113,6 +113,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'EditContestProblem',
@@ -130,7 +131,18 @@ export default {
         data: '',
         solution: ''
       },
-      placeholder: ''
+      placeholder: '',
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -157,27 +169,66 @@ export default {
         const formData = new FormData()
         formData.append('data', this.problem.data)
         formData.append('solution', this.problem.solution)
-
-        const data = {
-          title: this.problem.title,
-          description: this.problem.description,
-          evaluation: this.problem.evaluation,
-          data_description: this.problem.data_description,
-          public: this.problem.public,
-          class_id: this.classID
-        }
-        for (const key in data) {
-          formData.append(`${key}`, data[key])
-        }
-        await api.editProblem(this.problemID, formData)
-
-        alert('저장이 완료되었습니다.')
-        this.$router.push({
-          name: 'ClassAllProblem',
-          params: {
-            classID: this.classID
+        if (this.problem.description === '') {
+          this.$notify({
+            group: 'message',
+            title: '문제 설명을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.evaluation === '') {
+          this.$notify({
+            group: 'message',
+            title: '평가 방식을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.data_description === '') {
+          this.$notify({
+            group: 'message',
+            title: '데이터 설명을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.data === '') {
+          this.$notify({
+            group: 'message',
+            title: '데이터 파일을 올려주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.solution === '') {
+          this.$notify({
+            group: 'message',
+            title: '정답 파일을 올려주세요.',
+            type: 'warn'
+          })
+        } else {
+          const data = {
+            title: this.problem.title,
+            description: this.problem.description,
+            evaluation: this.problem.evaluation,
+            data_description: this.problem.data_description,
+            public: this.problem.public,
+            class_id: this.classID
           }
-        })
+          for (const key in data) {
+            formData.append(`${key}`, data[key])
+          }
+          await api.editProblem(this.problemID, formData)
+          Swal.fire(
+            {
+              title: '저장이 완료되었습니다.',
+              icon: 'success',
+              confirmButtonText: '확인'
+            }
+          ).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassAllProblem',
+                params: {
+                  classID: this.classID
+                }
+              })
+            }
+          })
+        }
       } catch (err) {
         console.log(err)
       }

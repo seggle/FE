@@ -70,6 +70,7 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'ClassAllProblems',
@@ -107,18 +108,34 @@ export default {
     },
     async deleteProblem (problemID) {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteProblem(problemID)
-          const res = await api.getProblemList(1, this.keyword)
-          if (
-            this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage &&
-            res.data.count % 15 === 0
-          ) {
-            this.currentPage = this.currentPage - 1
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteProblem(problemID)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                api.getProblemList(1, this.keyword)
+                  .then(res => {
+                    if (this.currentPage !== 1 && res.data.count / 15 < this.currentPage && res.data.count % 15 === 0) {
+                      this.currentPage = this.currentPage - 1
+                    }
+                    this.getProblemList(this.currentPage)
+                  })
+              }
+            })
           }
-          this.getProblemList(this.currentPage)
-        }
+        })
       } catch (err) {
         console.log(err)
       }

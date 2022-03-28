@@ -83,7 +83,7 @@
             <td scope="row" v-if="isTAOverPrivilege()">
               <button
                 class="delete-btn"
-                @click="deleteContestProblem(problem.id)"
+                @click="deleteContestProblem(i+1, problems.id)"
               >
                 <font-awesome-icon icon="trash-can" />
               </button>
@@ -98,6 +98,8 @@
 <script>
 import api from '@/api/index.js'
 import { formatTime } from '@/utils/time.js'
+
+const Swal = require('sweetalert2')
 
 export default {
   name: 'ClassContestProblemList',
@@ -196,7 +198,11 @@ export default {
           }
         })
       } else {
-        alert('접근 시간이 아닙니다!')
+        Swal.fire({
+          title: '접근 시간이 아닙니다!',
+          icon: 'error',
+          confirmButtonText: '확인'
+        })
       }
     },
     isExamTime (start, end) {
@@ -237,17 +243,34 @@ export default {
       } else {
       }
     },
-    async deleteContestProblem (problemID) {
+    async deleteContestProblem (index, problemID) {
       try {
-        if (confirm(problemID + '번 문제를 삭제하시겠습니까?')) {
-          await api.deleteContestProblem(
-            this.classID,
-            this.contestID,
-            problemID
-          )
-          alert('삭제되었습니다.')
-          this.$router.go(this.$router.currentRoute)
-        }
+        await Swal.fire({
+          title: `${index}번 문제를 삭제하시겠습니까?`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteContestProblem(
+              this.classID,
+              this.contestID,
+              problemID
+            )
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.go(this.$router.currentRoute)
+              }
+            })
+          }
+        })
       } catch (err) {
         console.log(err)
       }

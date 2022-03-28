@@ -289,7 +289,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
+const Swal = require('sweetalert2')
 router.beforeEach(async (to, from, next) => {
   if (store.state.accessToken === '' && store.state.refreshToken !== '') {
     await store.dispatch('refreshAccessToken')
@@ -298,11 +298,33 @@ router.beforeEach(async (to, from, next) => {
     return next()
   }
   if (to.meta.auth && !store.getters.isLogin) {
-    alert('로그인이 필요합니다')
-    next({ name: 'Login' })
+    Swal.fire(
+      {
+        title: '로그인이 필요합니다.',
+        icon: 'warning',
+        confirmButtonText: '확인'
+      }
+    ).then((result) => {
+      if (result.isConfirmed) {
+        next({ name: 'Login' })
+      }
+    })
+    // alert('로그인이 필요합니다')
+    // next({ name: 'Login' })
   } else if (to.meta.isAdmin && !store.getters.isAdmin) {
-    alert('잘못된 접근입니다')
-    next({ name: 'NotFound' })
+    Swal.fire(
+      {
+        title: '잘못된 접근입니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      }
+    ).then((result) => {
+      if (result.isConfirmed) {
+        next({ name: 'NotFound' })
+      }
+    })
+    // alert('잘못된 접근입니다')
+    // next({ name: 'NotFound' })
   } else next()
 })
 

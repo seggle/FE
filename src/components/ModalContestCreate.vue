@@ -87,6 +87,8 @@
 <script>
 import api from '@/api/index.js'
 import { UTCtoKST } from '@/utils/time.js'
+const Swal = require('sweetalert2')
+
 export default {
   name: 'ModalContestCreate',
   props: {
@@ -138,8 +140,24 @@ export default {
         } else if (this.mode === 'edit') {
           await api.editContest(this.classID, this.contestInfo.id, data)
         }
-        alert(`${this.contestInfo.title}이(가) 등록되었습니다.`)
-        this.$router.go({ name: 'ClassContest' })
+        Swal.fire({
+          title: `${this.contestInfo.title}이(가) 등록되었습니다.`,
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.go({
+              name: 'ClassContest',
+              params: {
+                classID: this.classID
+              }
+            })
+          }
+        })
       } catch (err) {
         console.log(err)
       }
@@ -150,6 +168,11 @@ export default {
       const date = new Date()
       if (this.contestInfo.endTime !== '') {
         if (date > this.contestInfo.endTime || this.contestInfo.startTime > this.contestInfo.endTime) {
+          // this.$notify({
+          //   group: 'message',
+          //   title: '종료 시간을 다시 설정해주세요.',
+          //   type: 'warn'
+          // })
           alert('종료 시간을 다시 설정해주세요.')
           this.contestInfo.endTime = ''
         }

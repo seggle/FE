@@ -31,6 +31,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 export default {
   name: 'ClassStudentManager',
   data () {
@@ -80,15 +81,36 @@ export default {
     },
     async submitTAForm () {
       const data = this.makeClassUserData(this.taList)
-      await api.submitClassTAList(this.classID, data)
-      alert('TA 등록이 완료되었습니다.')
-      this.getClassUserList()
+      const res = await api.submitClassTAList(this.classID, data)
+      Swal.fire(
+        {
+          title: 'TA 등록이 완료되었습니다.',
+          text: `이미 존재하는 아이디: ${res.data.is_existed}`,
+          icon: 'success',
+          confirmButtonText: '확인'
+        }
+      ).then((result) => {
+        if (result.isConfirmed) {
+          this.getClassUserList()
+        }
+      })
     },
     async submitStudentForm () {
       const data = this.makeClassUserData(this.studentList)
-      await api.submitClassStudentList(this.classID, data)
-      alert('수강생 등록이 완료되었습니다.')
-      this.getClassUserList()
+      const res = await api.submitClassStudentList(this.classID, data)
+      Swal.fire(
+        {
+          title: '수강생 등록이 완료되었습니다.',
+          text: `이미 존재하는 아이디 : ${res.data.is_existed}`,
+          icon: 'success',
+          confirmButtonText: '확인'
+        }
+      ).then((result) => {
+        if (result.isConfirmed) {
+          this.getClassUserList()
+        }
+      })
+      // this.getClassUserList()
     },
     makeClassUserData (userList) {
       const data = []

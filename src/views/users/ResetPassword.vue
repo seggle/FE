@@ -52,6 +52,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 export default {
   name: 'ResetPassword',
   data () {
@@ -83,10 +84,18 @@ export default {
           new_password: this.formResetPassword.newPassword,
           new_password2: this.formResetPassword.newPasswordAgain
         }
-        const res = await api.resetPassword(this.userID, data)
-        console.log(res)
-        alert('비밀번호가 변경되었습니다.')
-        this.$router.push('/')
+        await api.resetPassword(this.userID, data)
+        Swal.fire(
+          {
+            title: '비밀번호가 변경되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/')
+          }
+        })
       } catch (err) {
         console.log(err.response.data.error)
         this.invalid.currentPassword = true

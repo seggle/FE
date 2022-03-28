@@ -1,90 +1,100 @@
 <template>
-  <div v-if="firstPage" class="container">
-    <header class="d-flex mb-2 mt-3 justify-content-end">
-      <h2 class="me-auto">문제 등록</h2>
-      <div class="search-bar">
-        <form>
-          <input
-            class="form-control"
-            type="search"
-            placeholder="검색"
-            aria-label="검색"
-            v-model="keyword"
-          />
-        </form>
-        <button class="btn"
-                id="problem-create"
-                @click="selectClassProblem"
-        ><font-awesome-icon icon="circle-right" />다음</button>
-      </div>
-    </header>
+  <div class="container">
+    <notifications group="message"
+                 position="top center"
+                 class="noti"
+                 animation-name="v-fade-left"
+                 :speed="50"
+                 :width="250"
+                 :max="3"
+                 :ignoreDuplicates="true"/>
+    <div v-if="firstPage">
+      <header class="d-flex mb-2 mt-3 justify-content-end">
+        <h2 class="me-auto">문제 등록</h2>
+        <div class="search-bar">
+          <form>
+            <input
+              class="form-control"
+              type="search"
+              placeholder="검색"
+              aria-label="검색"
+              v-model="keyword"
+            />
+          </form>
+          <button class="btn"
+                  id="problem-create"
+                  @click="selectClassProblem"
+          ><font-awesome-icon icon="circle-right" />다음</button>
+        </div>
+      </header>
 
-    <div class="table-div">
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="col-1" scope="col"></th>
-            <th scope="col">제목</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="problem in problemList" :key="problem">
-            <th scope="row">
-              <input
-                v-if="isAlreadyContestProblemExist(problem.id)"
-                class="form-check-input"
-                type="checkbox"
-                :value="problem.id"
-                v-model="checkList"
-                disabled
-              />
-              <input
-                v-else
-                class="form-check-input"
-                type="checkbox"
-                :value="problem.id"
-                v-model="checkList"
-                checked
-              />
-            </th>
-            <td>{{ problem.title }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <Pagination :pagination="PageValue" @get-page="getProblemList" />
-  </div>
-  <!---다음 버튼 누르면-->
-  <div v-else class="container">
-    <header class="d-flex mb-2 mt-3 justify-content-end">
-      <h3 class="me-auto">문제 순서 수정</h3>
-      <div>
-        <button class="btn" id="problem-create" @click="SaveContestProblem">
-          저장
-        </button>
-      </div>
-    </header>
-    <div class="table-div">
-      <table class="table" id="two">
-        <thead>
-          <div class="detail">* 드래그하여 순서를 변경할 수 있습니다</div>
-        </thead>
-        <tbody class="drag-tbody">
-          <draggable
-            class="dragArea list-group w-full"
-            :list="contestProblemList"
-          >
-            <tr
-              class="list-group-item"
-              v-for="problem in contestProblemList"
-              :key="problem"
-            >
-              <th class="id" scope="row">{{ problem.problem_id }}</th>
+      <div class="table-div">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="col-1" scope="col"></th>
+              <th scope="col">제목</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="problem in problemList" :key="problem">
+              <th scope="row">
+                <input
+                  v-if="isAlreadyContestProblemExist(problem.id)"
+                  class="form-check-input"
+                  type="checkbox"
+                  :value="problem.id"
+                  v-model="checkList"
+                  disabled
+                />
+                <input
+                  v-else
+                  class="form-check-input"
+                  type="checkbox"
+                  :value="problem.id"
+                  v-model="checkList"
+                  checked
+                />
+              </th>
               <td>{{ problem.title }}</td>
             </tr>
-          </draggable>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
+      <Pagination :pagination="PageValue" @get-page="getProblemList" />
+    </div>
+    <!---다음 버튼 누르면-->
+    <div v-else>
+      <header class="d-flex mb-2 mt-3 justify-content-end">
+        <h3 class="me-auto">문제 순서 수정</h3>
+        <div>
+          <button class="btn" id="problem-create" @click="SaveContestProblem">
+            저장
+          </button>
+        </div>
+      </header>
+      <div class="table-div">
+        <table class="table" id="two">
+          <thead>
+            <div class="detail">* 드래그하여 순서를 변경할 수 있습니다</div>
+          </thead>
+          <tbody class="drag-tbody">
+            <draggable
+              class="dragArea list-group w-full"
+              :list="contestProblemList"
+            >
+              <tr
+                class="list-group-item"
+                v-for="problem in contestProblemList"
+                :key="problem"
+              >
+                <th class="id" scope="row">{{ problem.problem_id }}</th>
+                <td>{{ problem.title }}</td>
+              </tr>
+            </draggable>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -94,6 +104,8 @@ import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { defineComponent } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
+
+const Swal = require('sweetalert2')
 
 export default defineComponent({
   name: 'ClassContestListEdit',
@@ -115,7 +127,18 @@ export default defineComponent({
       total: 0,
       currentPage: 1,
       firstPage: true,
-      PageValue: []
+      PageValue: [],
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -169,7 +192,11 @@ export default defineComponent({
           this.contestID,
           this.selectedProblem
         )
-        alert('변경사항이 저장되었습니다.')
+        this.$notify({
+          group: 'message',
+          title: '문제가 저장되었습니다.',
+          type: 'success'
+        })
         this.firstPage = false
         this.getContestProblemList()
       } catch (err) {
@@ -207,9 +234,20 @@ export default defineComponent({
           this.contestID,
           this.changedList
         )
-        alert('변경사항이 저장되었습니다.')
-        this.firstPage = true
-        this.$router.push({ name: 'ClassContestProblemList' })
+        Swal.fire({
+          title: '변경사항이 저장되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.firstPage = true
+            this.$router.push({ name: 'ClassContestProblemList' })
+          }
+        })
       } catch (err) {
         console.log(err)
       }
@@ -278,5 +316,8 @@ a {
 .list-group-item {
   display: grid;
   grid-template-columns: 1fr 2fr;
+}
+.noti {
+  padding-top: 100px;
 }
 </style>

@@ -141,6 +141,7 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'AdminUser',
@@ -232,18 +233,34 @@ export default {
     /* 사용자 삭제 */
     async deleteUser (userName) {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteUser(userName)
-          const res = await api.getUserList(1, this.keyword)
-          if (
-            this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage &&
-            res.data.count % 15 === 0
-          ) {
-            this.currentPage = this.currentPage - 1
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteUser(userName)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                api.getUserList(1, this.keyword)
+                  .then(res => {
+                    if (this.currentPage !== 1 && res.data.count / 15 < this.currentPage && res.data.count % 15 === 0) {
+                      this.currentPage = this.currentPage - 1
+                    }
+                    this.getUserList(this.currentPage)
+                  })
+              }
+            })
           }
-          this.getUserList(this.currentPage)
-        }
+        })
       } catch (err) {
         console.log(err)
       }

@@ -32,8 +32,9 @@
         tabindex="-1"
         aria-labelledby="announceModalLabel"
         aria-hidden="true"
+        data-bs-backdrop="static"
       >
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered" data-bs-backdrop="static">
           <div class="modal-content">
             <div class="modal-header">
               <h5 v-if="createMode">공지사항 생성</h5>
@@ -200,6 +201,7 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'AdminAnnouncement',
@@ -254,20 +256,34 @@ export default {
     /* 공지사항 삭제 */
     async deleteAnnouncement (announcementID) {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteAnnouncement(announcementID)
-          // 공지사항 삭제 후 page=1
-          const res = await api.getAnnouncementList(1, this.keyword)
-          // 마지막 page의 유일한 공지사항을 지운 경우, 현재 페이지값 재조정
-          if (
-            this.currentPage !== 1 &&
-            res.data.count / 15 < this.currentPage &&
-            res.data.count % 15 === 0
-          ) {
-            this.currentPage = this.currentPage - 1
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteAnnouncement(announcementID)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                api.getAnnouncementList(1, this.keyword)
+                  .then(res => {
+                    if (this.currentPage !== 1 && res.data.count / 15 < this.currentPage && res.data.count % 15 === 0) {
+                      this.currentPage = this.currentPage - 1
+                    }
+                    this.getAnnouncementList(this.currentPage)
+                  })
+              }
+            })
           }
-          this.getAnnouncementList(this.currentPage)
-        }
+        })
       } catch (err) {
         console.log(err)
       }
