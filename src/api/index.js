@@ -23,11 +23,11 @@ function competitionUserPrivilege (competitionID) {
 }
 
 function getClassStudentUserList (classID) {
-  return instance.get(`/api/class/${classID}/users/std/`)
+  return instance.get(`/api/class/${classID}/std/`)
 }
 
 function getClassTAUserList (classID) {
-  return instance.get(`/api/class/${classID}/users/ta/`)
+  return instance.get(`/api/class/${classID}/ta/`)
 }
 
 function registerUser (data) {
