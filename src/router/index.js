@@ -221,7 +221,13 @@ const routes = [{
 {
   path: '/login',
   name: 'Login',
-  component: Login
+  component: Login,
+  beforeEnter: (to, from, next) => {
+    if (store.getters.isLogin) {
+      return next('/')
+    }
+    return next()
+  }
 },
 {
   path: '/register',
