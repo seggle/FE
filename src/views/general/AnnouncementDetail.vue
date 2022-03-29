@@ -84,6 +84,10 @@ header {
   grid-template-columns: 2fr 2fr 2fr 3fr;
   grid-template-rows: 1fr 1fr auto;
   text-align: left;
+  @media (max-width: 420px) {
+    grid-template-columns: 3fr 2fr 3fr 5fr;
+  }
+
   h5{
     font-weight: bold;
     text-align: center;
@@ -91,26 +95,28 @@ header {
       font-size:1.1rem;
     }
     @media (max-width: 420px) {
-      font-size: 0.7rem;
-    }
-  }
-  span{
-      padding: 0.7rem;
-      border-bottom: 0.7px solid #E5E5E5;
-      @media (max-width: 420px) {
-       font-size: 0.7rem;
+      font-size: calc(0.7rem + 1.5vw);
     }
   }
 
-  .title{
+  span{
+    padding: 0.7rem;
+    border-bottom: 0.7px solid #E5E5E5;
+    @media (max-width: 420px) {
+      font-size: calc(0.55rem + 1.5vw);
+      padding: 0.4rem;
+    }
+  }
+
+  .title {
     grid-column: 2 / 5;
     grid-row: 1 / 2;
   }
 
-  .content{
-  grid-column: 2 / 5;
-  grid-row: 3 / 4;
-  padding: 1.1rem;
+  .content {
+    grid-column: 2 / 5;
+    grid-row: 3 / 4;
+    padding: 1.1rem;
   }
 }
 </style>
