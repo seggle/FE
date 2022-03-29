@@ -38,6 +38,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'ModalCompetitionTA',
@@ -83,7 +84,15 @@ export default {
         data.push({ username: ta })
       }
       await api.submitCompetitionTAList(this.competition_id, data)
-      alert('TA 등록이 완료되었습니다.')
+      Swal.fire({
+        title: 'TA 등록이 완료되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+        customClass: {
+          actions: 'my-actions',
+          confirmButton: 'order-2'
+        }
+      })
       this.getCompetitionTAList()
     }
   }

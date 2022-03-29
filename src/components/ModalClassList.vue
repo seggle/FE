@@ -47,6 +47,8 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
+
 export default {
   name: 'ModalClassList',
   props: {
@@ -99,8 +101,19 @@ export default {
           semester: this.classSemester
         }
         await api.createClass(data)
-        alert(`${this.classTitle} 수업이 등록되었습니다.`)
-        this.$router.go({ name: 'ClassList' })
+        Swal.fire({
+          title: `${this.classTitle} 수업이 등록되었습니다.`,
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.go({ name: 'ClassList' })
+          }
+        })
       } catch (err) {
         console.log(err)
       }
@@ -113,8 +126,19 @@ export default {
           semester: this.classSemester
         }
         await api.editClass(data, this.classID)
-        alert(`${this.classTitle} 수업이 수정되었습니다.`)
-        this.$router.go({ name: 'EditClassList' })
+        Swal.fire({
+          title: `${this.classTitle} 수업이 수정되었습니다.`,
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.go({ name: 'EditClassList' })
+          }
+        })
       } catch (err) {
         console.log(err)
       }
@@ -126,5 +150,8 @@ export default {
 <style lang="scss" scoped>
 .row {
   overflow-x: auto;
+}
+.swal2-container{
+  z-index: 9999 !important;
 }
 </style>

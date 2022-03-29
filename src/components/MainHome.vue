@@ -49,7 +49,7 @@
             <br />Seggle은 이용자의 편의성과 원활한 서비스 구현을 위해 최선을
             다하고 있습니다. 서비스 이용 중에 불편함이 있거나, 더 나은 기능 및
             디자인이 생각나신다면 망설이지 말고
-            <a href="/proposals">피드백</a>을 남겨주세요! <br><strong>Seggle은 항상 여러분의
+            <a href="/board">피드백</a>을 남겨주세요! <br><strong>Seggle은 항상 여러분의
             이야기에 귀기울이고 있어요!</strong>
           </div>
         </div>
@@ -298,7 +298,7 @@ section.horizontal .animation-wrap {
 }
 section.horizontal .item {
   position: relative;
-  padding: 150px 80px;
+  padding: 250px 80px;
   flex: 0 0 500px;
   height: 100vh;
   justify-content: space-around;

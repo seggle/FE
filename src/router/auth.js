@@ -1,20 +1,40 @@
 import api from '@/api/index.js'
 import store from '@/store'
 
+const Swal = require('sweetalert2')
+
 const requireAuth = () => (to, from, next) => {
   if (to.meta.isSuperAdmin && store.getters.isSuperAdmin) {
     return next()
   }
-  alert('접근 권한이 없습니다.')
-  next('/login')
+  Swal.fire(
+    {
+      title: '접근 권한이 없습니다.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    }
+  ).then((result) => {
+    if (result.isConfirmed) {
+      next('/login')
+    }
+  })
 }
 
 const requireAdminAuth = () => (to, from, next) => {
   if (to.meta.isAdmin && store.getters.isAdmin) {
     return next()
   }
-  alert('접근 권한이 없습니다.')
-  next('/login')
+  Swal.fire(
+    {
+      title: '접근 권한이 없습니다.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    }
+  ).then((result) => {
+    if (result.isConfirmed) {
+      next('/login')
+    }
+  })
 }
 
 const requireClassAuth = () => async (to, from, next) => {
@@ -23,8 +43,17 @@ const requireClassAuth = () => async (to, from, next) => {
     if (res.data.privilege >= 0) {
       return next()
     }
-    alert('접근 권한이 없습니다.')
-    next('/')
+    Swal.fire(
+      {
+        title: '접근 권한이 없습니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      }
+    ).then((result) => {
+      if (result.isConfirmed) {
+        next('/')
+      }
+    })
   } catch (err) {
     console.log(err)
   }
@@ -36,8 +65,17 @@ const requireClassAdminAuth = () => async (to, from, next) => {
     if (res.data.privilege >= 1) {
       return next()
     }
-    alert('접근 권한이 없습니다.')
-    next(`/class/${to.params.classID}/class-contest`)
+    Swal.fire(
+      {
+        title: '접근 권한이 없습니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      }
+    ).then((result) => {
+      if (result.isConfirmed) {
+        next(`/class/${to.params.classID}/class-contest`)
+      }
+    })
   } catch (err) {
     console.log(err)
   }
@@ -49,8 +87,17 @@ const requireCompetitionAdminAuth = () => async (to, from, next) => {
     if (res.data.privilege >= 1) {
       return next()
     }
-    alert('접근 권한이 없습니다.')
-    next('/')
+    Swal.fire(
+      {
+        title: '접근 권한이 없습니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      }
+    ).then((result) => {
+      if (result.isConfirmed) {
+        next('/')
+      }
+    })
   } catch (err) {
     console.log(err)
   }

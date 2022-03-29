@@ -77,6 +77,7 @@
 <script>
 import ModalContestCreate from '@/components/ModalContestCreate.vue'
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'ModalContestListEdit',
@@ -109,18 +110,52 @@ export default {
     },
     /* 해당 대회 삭제 */
     async onRemove (contestID, contestName) {
-      if (confirm('삭제하시겠습니까?')) {
-        await api.deleteContest(this.classID, contestID)
-        alert(contestName + ' 삭제 완료')
-        this.$router.go(this.$router.currentRoute)
-      }
+      await Swal.fire({
+        title: `${contestName} 삭제하시겠습니까?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText: '취소'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          api.deleteContest(this.classID, contestID)
+          Swal.fire(
+            {
+              title: `${contestName} 삭제가 완료되었습니다.`,
+              icon: 'success',
+              confirmButtonText: '확인'
+            }
+          ).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContest',
+                params: {
+                  classID: this.classID
+                }
+              })
+              this.getContestList()
+            }
+          })
+        }
+      })
     },
     /* 해당 대회 공개 설정 바꾸기 */
     async changePublic (contestID) {
       try {
         await api.changeContestPublic(this.classID, contestID)
-        alert('공개 설정 완료')
-        this.$router.go(this.$router.currentRoute) // 새로고침
+        Swal.fire({
+          title: '공개 설정이 완료되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.go(this.$router.currentRoute)
+          }
+        })
       } catch (err) {
         console.log(err)
       }

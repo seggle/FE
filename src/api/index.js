@@ -230,15 +230,15 @@ function getFAQList () {
 }
 
 function deleteFAQ (faqID) {
-  return instance.delete('/api/admin/faqs/' + faqID + '/')
+  return instance.delete(`/api/admin/faqs/${faqID}/`)
 }
 
 function editFAQ (faqID) {
-  return instance.get('/api/admin/faqs/' + faqID + '/')
+  return instance.get(`/api/admin/faqs/${faqID}/`)
 }
 
 function submitEditFAQ (faqID, data) {
-  return instance.patch('/api/admin/faqs/' + faqID + '/', data)
+  return instance.patch(`/api/admin/faqs/${faqID}/`, data)
 }
 
 function submitFAQ (data) {
@@ -261,7 +261,7 @@ function getAnnouncementList (page, keyword) {
 }
 
 function deleteAnnouncement (announcementID) {
-  return instance.delete('/api/admin/announcements/' + announcementID + '/')
+  return instance.delete(`/api/admin/announcements/${announcementID}/`)
 }
 
 function editAnnouncement (announcementID) {
@@ -273,7 +273,7 @@ function submitAnnouncement (data) {
 }
 
 function submitEditAnnouncement (announcementID, data) {
-  return instance.put('/api/admin/announcements/' + announcementID + '/', data)
+  return instance.put(`/api/admin/announcements/${announcementID}/`, data)
 }
 
 function changeAnnouncementSwitch (announcementID, data) {
@@ -289,7 +289,7 @@ function getUserList (page, keyword) {
 }
 
 function editUser (username) {
-  return instance.get('/api/admin/users/' + username + '/')
+  return instance.get(`/api/admin/users/${username}/`)
 }
 
 function submitUser (username, data) {
@@ -321,7 +321,7 @@ function getAdminClassList (page, keyword) {
 }
 
 function deleteClass (classID) {
-  return instance.delete('/api/admin/class/' + classID)
+  return instance.delete(`/api/admin/class/${classID}/`)
 }
 
 function showUserCompetition (username) {

@@ -77,6 +77,7 @@
 <script>
 import ModalCompetitionTA from '@/components/ModalCompetitionTA.vue'
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'ModalCompetitionManage',
@@ -129,10 +130,30 @@ export default {
     /* 일반대회 삭제 */
     async deleteCompetition (competitionID) {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteCompetition(competitionID)
-        }
-        this.getGeneralList()
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteCompetition(competitionID)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.go({
+                  name: 'CompetitionList'
+                })
+              }
+            })
+          }
+        })
       } catch (error) {
         console.log(error)
       }

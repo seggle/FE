@@ -18,8 +18,9 @@
           tabindex="-1"
           aria-labelledby="faqModalLabel"
           aria-hidden="true"
+          data-bs-backdrop="static"
         >
-          <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-dialog modal-dialog-centered" data-bs-backdrop="static">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 v-if="createMode">FAQ 생성</h5>
@@ -136,6 +137,7 @@
 <script>
 import api from '@/api/index.js'
 import { formatTime } from '@/utils/time.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'AdminFAQ',
@@ -172,10 +174,28 @@ export default {
     /* FAQ 삭제 */
     async deleteFAQ (faqID) {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteFAQ(faqID)
-          this.getFAQList()
-        }
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteFAQ(faqID)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.getFAQList()
+              }
+            })
+          }
+        })
       } catch (err) {
         console.log(err)
       }
