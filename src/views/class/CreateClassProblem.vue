@@ -215,11 +215,20 @@ export default {
         }
       } catch (err) {
         if (err.response.status === 400) {
-          this.$notify({
-            group: 'message',
-            title: '중복된 제목입니다. 다시 입력해주세요.',
-            type: 'error'
-          })
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
         }
       }
     },

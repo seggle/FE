@@ -325,7 +325,7 @@ h2 {
   }
 }
 .btn {
-  @media (max-width: 767px) {
+  @media (max-width: 420px) {
       font-size: calc(0.4rem + 2vw);
   }
 }

@@ -119,6 +119,14 @@
           </div>
         <!-- 제출 -->
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
+            <div class="progress">
+              <div class="progress-bar"
+                   role="progressbar"
+                   :style="{ width: `${percentCompleted}%` }"
+                   :aria-valuenow="percentCompleted"
+                   aria-valuemin="0"
+                   aria-valuemax="100">{{ `${percentCompleted}%` }}</div>
+            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -223,6 +231,8 @@ export default {
 
       PageValue: [],
       currentPage: 1,
+
+      percentCompleted: 0,
       animation: {
         enter: {
           opacity: [1, 0],
@@ -351,30 +361,51 @@ export default {
           const formData = new FormData()
           formData.append('csv', this.csv)
           formData.append('ipynb', this.ipynb)
+          this.percedntCompleted = 0
 
-          await api.submitFileProblem(
-            this.classID,
-            this.contestID,
-            this.contestProblemID,
-            formData)
-
-          Swal.fire({
-            title: '파일 제출이 완료되었습니다.',
-            icon: 'success',
-            confirmButtonText: '확인',
-            customClass: {
-              actions: 'my-actions',
-              confirmButton: 'order-2'
+          const formDataInstance = api.createInstance(true)
+          formDataInstance.post(`/api/class/${this.classID}/contests/${this.contestID}/${this.contestProblemID}/submission/`, formData, {
+            onUploadProgress: (progressEvent) => {
+              const percentage = (progressEvent.loaded * 100) / progressEvent.total
+              this.percentCompleted = Math.round(percentage)
+            }
+          }).then((result) => {
+            if (result.data.success === '성공했습니다' && this.percentCompleted === 100) {
+              Swal.fire({
+                title: '파일 제출이 완료되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인',
+                customClass: {
+                  actions: 'my-actions',
+                  confirmButton: 'order-2'
+                }
+              })
+              document.getElementById('csv-file-input').value = ''
+              document.getElementById('ipynb-file-input').value = ''
+              this.csv = ''
+              this.ipynb = ''
+              this.getUserSubmissions(1)
+            }
+          }).catch((err) => {
+            if (err.response.status === 400) {
+              if (err.response.data.title !== undefined) {
+                this.$notify({
+                  group: 'message',
+                  title: `${err.response.data.title}`,
+                  type: 'error'
+                })
+              }
+              if (err.response.data.error !== undefined) {
+                this.$notify({
+                  group: 'message',
+                  title: `${err.response.data.error}`,
+                  type: 'error'
+                })
+              }
             }
           })
-          document.getElementById('csv-file-input').value = ''
-          document.getElementById('ipynb-file-input').value = ''
-          this.csv = ''
-          this.ipynb = ''
-          this.getUserSubmissions(1)
         }
       } catch (err) {
-        console.log(err)
       }
     },
     uploadFile (e) {

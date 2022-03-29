@@ -4,7 +4,7 @@
                  class="noti"
                  animation-name="v-fade-left"
                  :speed="50"
-                 :width="200"
+                 :width="300"
                  :max="3"
                  :ignoreDuplicates="true"/>
   <div class="container problem-container">
@@ -122,11 +122,13 @@
                   <label class="file-upload-btn" for="data-file-input"
                     >업로드</label
                   >
-                  <a class="file-download-btn"
-                     id="zip-download"
-                     @click="downloadDataFile"
-                     >다운로드</a
+                  <a id="zip-download">
+                    <button class="file-download-btn"
+                            @click="downloadDataFile"
+                            type="button"
+                    >다운로드</button
                     >
+                  </a>
                   <input
                     id="data-file-input"
                     type="file"
@@ -144,11 +146,12 @@
                   <label class="file-upload-btn" for="solution-file-input"
                     >업로드</label
                   >
-                  <a class="file-download-btn"
-                     id="csv-download"
-                     @click="downloadSolutionFile"
-                    >다운로드</a
-                  >
+                  <a id="csv-download">
+                    <button class="file-download-btn"
+                            @click="downloadSolutionFile"
+                            type="button"
+                      >다운로드</button>
+                  </a>
                   <input
                     id="solution-file-input"
                     type="file"
@@ -307,11 +310,20 @@ export default {
         }
       } catch (err) {
         if (err.response.status === 400) {
-          this.$notify({
-            group: 'message',
-            title: '중복된 제목입니다.',
-            type: 'error'
-          })
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
         }
       }
     },
@@ -335,6 +347,7 @@ export default {
       const a = document.getElementById(`${FILE_TYPE}-download`)
       a.href = url
       a.download = decodeURI(filename)
+      a.click()
     },
     async downloadDataFile () {
       const response = await api.downloadDataFile(this.problem.problem_id)
