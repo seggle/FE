@@ -131,6 +131,7 @@ export default {
         const response = err.response.data
 
         if (status === 400) {
+          this.validated = false
           if (response.username) {
             this.feedback.userID = '이미 존재하는 아이디입니다.'
             this.invalidID = true
@@ -151,10 +152,12 @@ export default {
         if (res.data.user_id === this.formRegister.userID) {
           this.feedback.userID = '이미 존재하는 아이디입니다.'
           this.invalidID = true
+          this.validated = false
         }
         if (res.data.user_email === this.formRegister.email) {
           this.feedback.email = '이미 존재하는 이메일입니다.'
           this.invalidEmail = true
+          this.validated = false
         }
       } catch (err) {
         console.log(err)
@@ -164,18 +167,21 @@ export default {
       if (!(validator.validateID(this.formRegister.userID))) {
         this.feedback.userID = '아이디 형식이 올바르지 않습니다.'
         this.invalidID = true
+        this.validated = false
       }
     },
     checkUserEmail () {
       if (!(validator.validateEmail(this.formRegister.email))) {
         this.feedback.email = '이메일 형식이 올바르지 않습니다.'
         this.invalidEmail = true
+        this.validated = false
       }
     },
     checkPasswordAgain () { // 비밀번호 재확인
       if (this.formRegister.passwordAgain !== this.formRegister.password) {
         this.feedback.passwordAgain = '비밀번호가 일치하지 않습니다.'
         this.invalidPasswordAgain = true
+        this.validated = false
       }
     },
     checkFormValid () {
@@ -189,8 +195,6 @@ export default {
     handleRegister () {
       if (this.checkFormValid()) {
         this.submitForm()
-      } else {
-        this.validated = true
       }
     }
   }
