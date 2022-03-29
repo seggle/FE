@@ -68,10 +68,12 @@
                   <p class="file-desc">하나의 zip 파일만 업로드 가능합니다</p>
                   <label class="form-label">데이터 파일</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <a class="file-download-btn"
-                     id="zip-download"
-                     @click="downloadDataFile"
-                  >다운로드</a>
+                  <a id="zip-download">
+                    <button class="file-download-btn"
+                            @click="downloadDataFile"
+                            type="button"
+                    >다운로드</button>
+                  </a>
                   <input id="data-file-input"
                          type="file"
                          accept=".zip"
@@ -85,15 +87,12 @@
                   <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
                   <label class="form-label">정답 파일</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <!-- <a id="csv-download">
+                  <a id="csv-download">
                     <button class="file-download-btn"
-                      @click="downloadSolutionFile">다운로드
-                    </button>
-                  </a> -->
-                  <a class="file-download-btn"
-                     id="csv-download"
-                     @click="downloadSolutionFile"
-                  >다운로드</a>
+                      @click="downloadSolutionFile"
+                      type="button"
+                    >다운로드</button>
+                  </a>
                   <input id="solution-file-input"
                          type="file"
                          accept=".csv"
