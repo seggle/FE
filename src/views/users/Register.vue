@@ -135,7 +135,8 @@ export default {
           if (response.username) {
             this.feedback.userID = '이미 존재하는 아이디입니다.'
             this.invalidID = true
-          } else if (response.email) {
+          }
+          if (response.email) {
             this.feedback.email = '이미 존재하는 이메일입니다.'
             this.invalidEmail = true
           }
