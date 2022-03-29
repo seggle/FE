@@ -164,6 +164,14 @@
             role="tabpanel"
             aria-labelledby="list-submit-list"
           >
+            <div class="progress">
+              <div class="progress-bar"
+                   role="progressbar"
+                   :style="{ width: `${percentCompleted}%` }"
+                   :aria-valuenow="percentCompleted"
+                   aria-valuemin="0"
+                   aria-valuemax="100">{{ `${percentCompleted}%` }}</div>
+            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -277,7 +285,9 @@ export default {
       PageValue: [],
       count: 0,
       currentPage: 1,
-      privilege: -1
+      privilege: -1,
+
+      percentCompleted: 0
     }
   },
   mounted () {
@@ -431,11 +441,17 @@ export default {
             const formData = new FormData()
             formData.append('csv', this.csv)
             formData.append('ipynb', this.ipynb)
-            await api.submitFileCompetition(
-              this.competitionID,
-              formData
-            )
-            alert('파일 제출이 완료되었습니다.')
+
+            const formDataInstance = api.createInstance(true)
+            formDataInstance.post(`/api/competitions/${this.competitionID}/submission/`, formData, {
+              onUploadProgress: (progressEvent) => {
+                const percentage = (progressEvent.loaded * 100) / progressEvent.total
+                this.percentCompleted = Math.round(percentage)
+                console.log(this.percentCompleted + '%')
+              }
+            })
+
+            // alert('파일 제출이 완료되었습니다.')
           }
         } else {
           alert('대회를 참가한 후 제출해주시기 바랍니다.')

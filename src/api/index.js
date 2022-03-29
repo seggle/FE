@@ -566,5 +566,6 @@ export default {
   downloadClassIpynbFile,
   downloadCompetitionCsvFile,
   downloadCompetitionIpynbFile,
-  editContestProblemOrder
+  editContestProblemOrder,
+  createInstance
 }

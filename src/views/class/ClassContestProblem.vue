@@ -111,6 +111,14 @@
           </div>
         <!-- 제출 -->
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
+            <div class="progress">
+              <div class="progress-bar"
+                   role="progressbar"
+                   :style="{ width: `${percentCompleted}%` }"
+                   :aria-valuenow="percentCompleted"
+                   aria-valuemin="0"
+                   aria-valuemax="100">{{ `${percentCompleted}%` }}</div>
+            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -215,7 +223,9 @@ export default {
       ipynb: '',
 
       PageValue: [],
-      currentPage: 1
+      currentPage: 1,
+
+      percentCompleted: 0
     }
   },
   mounted () {
@@ -323,13 +333,15 @@ export default {
           formData.append('csv', this.csv)
           formData.append('ipynb', this.ipynb)
 
-          await api.submitFileProblem(
-            this.classID,
-            this.contestID,
-            this.contestProblemID,
-            formData)
-
-          alert('파일 제출이 완료되었습니다.')
+          const formDataInstance = api.createInstance(true)
+          formDataInstance.post(`/api/class/${this.classID}/contests/${this.contestID}/${this.contestProblemID}/submission/`, formData, {
+            onUploadProgress: (progressEvent) => {
+              const percentage = (progressEvent.loaded * 100) / progressEvent.total
+              this.percentCompleted = Math.round(percentage)
+              console.log(this.percentCompleted + '%')
+            }
+          })
+          // alert('파일 제출이 완료되었습니다.')
           this.getUserSubmissions(1)
         }
       } catch (err) {
