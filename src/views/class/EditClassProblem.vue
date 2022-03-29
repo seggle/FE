@@ -187,18 +187,6 @@ export default {
             title: '데이터 설명을 입력해주세요.',
             type: 'warn'
           })
-        } else if (this.problem.data === '') {
-          this.$notify({
-            group: 'message',
-            title: '데이터 파일을 올려주세요.',
-            type: 'warn'
-          })
-        } else if (this.problem.solution === '') {
-          this.$notify({
-            group: 'message',
-            title: '정답 파일을 올려주세요.',
-            type: 'warn'
-          })
         } else {
           const data = {
             title: this.problem.title,

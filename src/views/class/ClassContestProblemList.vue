@@ -83,7 +83,7 @@
             <td scope="row" v-if="isTAOverPrivilege()">
               <button
                 class="delete-btn"
-                @click="deleteContestProblem(i+1, problems.id)"
+                @click="deleteContestProblem(i+1, problem.id)"
               >
                 <font-awesome-icon icon="trash-can" />
               </button>

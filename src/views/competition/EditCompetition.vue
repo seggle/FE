@@ -224,7 +224,7 @@ export default {
       try {
         const res = await api.getCompetitions(this.competitionID)
         Object.assign(this.problem, res.data)
-
+        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
@@ -285,14 +285,14 @@ export default {
             description: this.problem.description,
             evaluation: this.problem.evaluation,
             data_description: this.problem.data_description,
-            start_time: UTCtoKST(this.problem.startTime),
-            end_time: UTCtoKST(this.problem.endTime)
+            start_time: UTCtoKST(this.problem.start_time),
+            end_time: UTCtoKST(this.problem.end_time)
           }
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
 
-          await api.createCompetitionProblem(formData)
+          await api.editCompetitionProblem(this.competitionID, formData)
           Swal.fire(
             {
               title: '저장이 완료되었습니다.',
