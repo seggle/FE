@@ -231,6 +231,19 @@ export default {
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'CompetitionList'
+              })
+            }
+          })
+        }
         console.log(err)
       }
     },

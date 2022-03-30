@@ -9,6 +9,7 @@
 <script>
 import api from '@/api/index.js'
 import ClassNavBar from '@/components/ClassNavBar.vue'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'Class',
@@ -32,7 +33,19 @@ export default {
         const res = await api.getClass(this.classID)
         this.classTitle = res.data.name
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassList'
+              })
+            }
+          })
+        }
       }
     },
     async getUserPrevilege () {
@@ -40,6 +53,20 @@ export default {
         const res = await api.classUserPrivilege(this.classID)
         this.userPrivilege = res.data.privilege
       } catch (err) {
+        if (err.response.status === 404) {
+          console.log(err.response.status)
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassList'
+              })
+            }
+          })
+        }
         console.log(err)
       }
     },

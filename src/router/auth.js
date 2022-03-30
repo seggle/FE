@@ -55,7 +55,17 @@ const requireClassAuth = () => async (to, from, next) => {
       }
     })
   } catch (err) {
-    console.log(err)
+    if (err.response.status === 404) {
+      await Swal.fire({
+        title: '잘못된 접근입니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          next('/class')
+        }
+      })
+    }
   }
 }
 
@@ -99,6 +109,17 @@ const requireCompetitionAdminAuth = () => async (to, from, next) => {
       }
     })
   } catch (err) {
+    if (err.response.status === 404) {
+      await Swal.fire({
+        title: '잘못된 접근입니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          next('/competition')
+        }
+      })
+    }
     console.log(err)
   }
 }

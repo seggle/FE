@@ -336,7 +336,19 @@ export default {
           this.privilege = res.data.privilege
         }
       } catch (err) {
-        console.log(err.response.data)
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'CompetitionList'
+              })
+            }
+          })
+        }
       }
     },
     /* 대회 관리자인지 체크 */

@@ -264,7 +264,7 @@ export default {
           this.isClassUser = true
         }
       } catch (err) {
-        console.log(err)
+        console.log(err.response.data)
       }
     },
     isTAOverPrivilege () {
@@ -282,7 +282,23 @@ export default {
         const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
+        }
       }
     },
     async getLeaderboard () {
