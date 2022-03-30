@@ -264,7 +264,7 @@ export default {
           this.isClassUser = true
         }
       } catch (err) {
-        console.log(err)
+        console.log(err.response.data)
       }
     },
     isTAOverPrivilege () {
@@ -282,7 +282,23 @@ export default {
         const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
+        }
       }
     },
     async getLeaderboard () {
@@ -361,34 +377,51 @@ export default {
           const formData = new FormData()
           formData.append('csv', this.csv)
           formData.append('ipynb', this.ipynb)
+          this.percedntCompleted = 0
 
           const formDataInstance = api.createInstance(true)
           formDataInstance.post(`/api/class/${this.classID}/contests/${this.contestID}/${this.contestProblemID}/submission/`, formData, {
             onUploadProgress: (progressEvent) => {
               const percentage = (progressEvent.loaded * 100) / progressEvent.total
               this.percentCompleted = Math.round(percentage)
-              console.log(this.percentCompleted + '%')
+            }
+          }).then((result) => {
+            if (result.data.success === '성공했습니다' && this.percentCompleted === 100) {
+              Swal.fire({
+                title: '파일 제출이 완료되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인',
+                customClass: {
+                  actions: 'my-actions',
+                  confirmButton: 'order-2'
+                }
+              })
+              document.getElementById('csv-file-input').value = ''
+              document.getElementById('ipynb-file-input').value = ''
+              this.csv = ''
+              this.ipynb = ''
+              this.getUserSubmissions(1)
+            }
+          }).catch((err) => {
+            if (err.response.status === 400) {
+              if (err.response.data.title !== undefined) {
+                this.$notify({
+                  group: 'message',
+                  title: `${err.response.data.title}`,
+                  type: 'error'
+                })
+              }
+              if (err.response.data.error !== undefined) {
+                this.$notify({
+                  group: 'message',
+                  title: `${err.response.data.error}`,
+                  type: 'error'
+                })
+              }
             }
           })
-          // alert('파일 제출이 완료되었습니다.')
-
-          Swal.fire({
-            title: '파일 제출이 완료되었습니다.',
-            icon: 'success',
-            confirmButtonText: '확인',
-            customClass: {
-              actions: 'my-actions',
-              confirmButton: 'order-2'
-            }
-          })
-          document.getElementById('csv-file-input').value = ''
-          document.getElementById('ipynb-file-input').value = ''
-          this.csv = ''
-          this.ipynb = ''
-          this.getUserSubmissions(1)
         }
       } catch (err) {
-        console.log(err)
       }
     },
     uploadFile (e) {

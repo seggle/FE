@@ -83,7 +83,7 @@
             <td scope="row" v-if="isTAOverPrivilege()">
               <button
                 class="delete-btn"
-                @click="deleteContestProblem(i+1, problems.id)"
+                @click="deleteContestProblem(i+1, problem.id)"
               >
                 <font-awesome-icon icon="trash-can" />
               </button>
@@ -185,6 +185,22 @@ export default {
           return a.order - b.order
         })
       } catch (err) {
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContest',
+                params: {
+                  classID: this.classID
+                }
+              })
+            }
+          })
+        }
         console.log(err)
       }
     },
@@ -325,7 +341,7 @@ h2 {
   }
 }
 .btn {
-  @media (max-width: 767px) {
+  @media (max-width: 420px) {
       font-size: calc(0.4rem + 2vw);
   }
 }

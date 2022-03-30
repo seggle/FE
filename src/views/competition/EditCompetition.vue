@@ -4,7 +4,7 @@
                  class="noti"
                  animation-name="v-fade-left"
                  :speed="50"
-                 :width="200"
+                 :width="300"
                  :max="3"
                  :ignoreDuplicates="true"/>
   <div class="container problem-container">
@@ -227,10 +227,23 @@ export default {
       try {
         const res = await api.getCompetitions(this.competitionID)
         Object.assign(this.problem, res.data)
-
+        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'CompetitionList'
+              })
+            }
+          })
+        }
         console.log(err)
       }
     },
@@ -288,14 +301,14 @@ export default {
             description: this.problem.description,
             evaluation: this.problem.evaluation,
             data_description: this.problem.data_description,
-            start_time: UTCtoKST(this.problem.startTime),
-            end_time: UTCtoKST(this.problem.endTime)
+            start_time: UTCtoKST(this.problem.start_time),
+            end_time: UTCtoKST(this.problem.end_time)
           }
           for (const key in data) {
             formData.append(`${key}`, data[key])
           }
 
-          await api.createCompetitionProblem(formData)
+          await api.editCompetitionProblem(this.competitionID, formData)
           Swal.fire(
             {
               title: '저장이 완료되었습니다.',
@@ -310,11 +323,20 @@ export default {
         }
       } catch (err) {
         if (err.response.status === 400) {
-          this.$notify({
-            group: 'message',
-            title: '중복된 제목입니다.',
-            type: 'error'
-          })
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
         }
       }
     },

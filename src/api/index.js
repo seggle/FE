@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:7777',
+      target: 'http://15.165.30.200:8000',
       changeOrigin: true
     }
   })
@@ -23,11 +23,11 @@ function competitionUserPrivilege (competitionID) {
 }
 
 function getClassStudentUserList (classID) {
-  return instance.get(`/api/class/${classID}/users/std/`)
+  return instance.get(`/api/class/${classID}/std/`)
 }
 
 function getClassTAUserList (classID) {
-  return instance.get(`/api/class/${classID}/users/ta/`)
+  return instance.get(`/api/class/${classID}/ta/`)
 }
 
 function registerUser (data) {

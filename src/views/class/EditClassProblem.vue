@@ -1,4 +1,12 @@
 <template>
+  <notifications group="message"
+                    position="top center"
+                    class="noti"
+                    animation-name="v-fade-left"
+                    :speed="50"
+                    :width="300"
+                    :max="3"
+                    :ignoreDuplicates="true"/>
   <div class="container problem-container">
     <form class="problem-form" @submit.prevent="submitForm">
       <div class="problem-header">
@@ -186,18 +194,6 @@ export default {
             title: '데이터 설명을 입력해주세요.',
             type: 'warn'
           })
-        } else if (this.problem.data === '') {
-          this.$notify({
-            group: 'message',
-            title: '데이터 파일을 올려주세요.',
-            type: 'warn'
-          })
-        } else if (this.problem.solution === '') {
-          this.$notify({
-            group: 'message',
-            title: '정답 파일을 올려주세요.',
-            type: 'warn'
-          })
         } else {
           const data = {
             title: this.problem.title,
@@ -229,7 +225,24 @@ export default {
           })
         }
       } catch (err) {
-        console.log(err)
+        console.log(err.response)
+        if (err.response.status === 400) {
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            console.log(err.response.data)
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
+        }
       }
     },
     uploadFile (e) {
@@ -266,4 +279,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.noti {
+  padding-top: 10%;
+}
 </style>

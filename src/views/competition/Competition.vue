@@ -336,7 +336,19 @@ export default {
           this.privilege = res.data.privilege
         }
       } catch (err) {
-        console.log(err.response.data)
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'CompetitionList'
+              })
+            }
+          })
+        }
       }
     },
     /* 대회 관리자인지 체크 */
@@ -498,23 +510,41 @@ export default {
                 this.percentCompleted = Math.round(percentage)
                 console.log(this.percentCompleted + '%')
               }
-            })
-
-            // alert('파일 제출이 완료되었습니다.')
-
-            Swal.fire({
-              title: '파일 제출이 완료되었습니다.',
-              icon: 'success',
-              confirmButtonText: '확인',
-              customClass: {
-                actions: 'my-actions',
-                confirmButton: 'order-2'
+            }).then((result) => {
+              if (result.data.success === '성공했습니다' && this.percentCompleted === 100) {
+                Swal.fire({
+                  title: '파일 제출이 완료되었습니다.',
+                  icon: 'success',
+                  confirmButtonText: '확인',
+                  customClass: {
+                    actions: 'my-actions',
+                    confirmButton: 'order-2'
+                  }
+                })
+                document.getElementById('csv-file-input').value = ''
+                document.getElementById('ipynb-file-input').value = ''
+                this.csv = ''
+                this.ipynb = ''
+                this.getUserSubmissions(1)
+              }
+            }).catch((err) => {
+              if (err.response.status === 400) {
+                if (err.response.data.title !== undefined) {
+                  this.$notify({
+                    group: 'message',
+                    title: `${err.response.data.title}`,
+                    type: 'error'
+                  })
+                }
+                if (err.response.data.error !== undefined) {
+                  this.$notify({
+                    group: 'message',
+                    title: `${err.response.data.error}`,
+                    type: 'error'
+                  })
+                }
               }
             })
-            document.getElementById('csv-file-input').value = ''
-            document.getElementById('ipynb-file-input').value = ''
-            this.csv = ''
-            this.ipynb = ''
           }
         } else {
           this.$notify({
@@ -523,9 +553,7 @@ export default {
             type: 'error'
           })
         }
-        this.getUserSubmissions(1)
       } catch (err) {
-        console.log(err)
       }
     },
     /* 파일 업로드 */
