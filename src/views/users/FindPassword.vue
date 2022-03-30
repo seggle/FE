@@ -207,7 +207,7 @@ export default {
           password1: this.formResetPassword.newPassword,
           password2: this.formResetPassword.newPasswordAgain
         }
-        await api.resetPassword(data)
+        await api.resetPasswordWithToken(data)
         Swal.fire(
           {
             title: '비밀번호가 변경되었습니다.',

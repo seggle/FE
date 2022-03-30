@@ -84,7 +84,8 @@ export default {
           new_password: this.formResetPassword.newPassword,
           new_password2: this.formResetPassword.newPasswordAgain
         }
-        await api.resetPassword(this.userID, data)
+        await api.resetPasswordWithID(this.userID, data)
+
         Swal.fire(
           {
             title: '비밀번호가 변경되었습니다.',
@@ -97,7 +98,6 @@ export default {
           }
         })
       } catch (err) {
-        console.log(err.response.data.error)
         this.invalid.currentPassword = true
         this.feedback.currentPassword = '현재 비밀번호가 일치하지 않습니다.'
       }
@@ -118,8 +118,6 @@ export default {
     handleResetPassword () {
       if (this.checkFormValid()) {
         this.submitForm()
-      } else {
-        this.validated = true
       }
     }
   }

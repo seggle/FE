@@ -58,8 +58,12 @@ function findPassword (data) {
   return instance.post('/api/users/password/', data)
 }
 
-function resetPassword (data) {
+function resetPasswordWithToken (data) {
   return instance.post('/api/reset_password/', data)
+}
+
+function resetPasswordWithID (username, data) {
+  return instance.patch(`/api/users/${username}/`, data)
 }
 
 function applyResetPassword (data) {
@@ -480,7 +484,8 @@ export default {
   getUserInfo,
   checkUserIDorEmail,
   findPassword,
-  resetPassword,
+  resetPasswordWithToken,
+  resetPasswordWithID,
   applyResetPassword,
   validateToken,
   resignUser,
