@@ -185,13 +185,14 @@ export default {
         title: '',
         description: '',
         metrics: [
+          'CategorizationAccuracy',
           'RSME',
-          'MSE',
-          'Accuracy',
-          'F1-score',
-          'RMSE',
           'MAE',
-          'Log loss'
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
         ],
         evaluation: '',
         start_time: '',

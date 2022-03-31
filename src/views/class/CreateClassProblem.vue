@@ -120,7 +120,16 @@ export default {
       problem: {
         title: '',
         description: '',
-        metrics: ['RSME', 'MSE', 'Accuracy', 'F1-score', 'RMSE', 'MAE', 'Log loss'],
+        metrics: [
+          'CategorizationAccuracy',
+          'RSME',
+          'MAE',
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
+        ],
         evaluation: '',
         public: '',
         data_description: '',
