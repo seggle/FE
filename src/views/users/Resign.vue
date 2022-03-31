@@ -33,6 +33,8 @@
 <script>
 import api from '@/api/index.js'
 import { deleteCookie } from '@/utils/cookies.js'
+const Swal = require('sweetalert2')
+
 export default {
   name: 'Resign',
   data () {
@@ -53,19 +55,43 @@ export default {
   methods: {
     async submitForm () {
       try {
+        const result = await Swal.fire({
+          title: '정말 탈퇴하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        })
+
+        if (!result.isConfirmed) {
+          return
+        }
+
+        this.deleteAccount()
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async deleteAccount () {
+      try {
         const data = {
           password: this.formResign.currentPassword
         }
-        if (confirm('정말 탈퇴하시겠습니까?')) {
-          const res = await api.resignUser(this.userID, data)
-          console.log(res)
-          alert('탈퇴 완료')
-          this.logout()
-          this.$router.push('/')
-        }
+        await api.resignUser(this.userID, data)
+
+        Swal.fire(
+          {
+            title: '탈퇴가 완료되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.logout()
+            this.$router.push('/')
+          }
+        })
       } catch (err) {
-        console.log(err)
-        console.log(err.response.data.error)
         this.invalid.currentPassword = true
         this.feedback.currentPassword = '현재 비밀번호가 일치하지 않습니다.'
       }
@@ -91,8 +117,6 @@ export default {
     handleResign () {
       if (this.checkFormValid()) {
         this.submitForm()
-      } else {
-        this.validated = true
       }
     }
   }

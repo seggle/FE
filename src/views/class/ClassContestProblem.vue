@@ -1,6 +1,14 @@
 <template>
   <div class="container problem-container" :key="problem"
        v-if="isClassUser">
+    <notifications group="message"
+                 position="top center"
+                 class="noti"
+                 animation-name="v-fade-left"
+                 :speed="50"
+                 :width="250"
+                 :max="3"
+                 :ignoreDuplicates="true"/>
     <div class="problem-header">
       <h1 id="title">
         {{ problem.title }}
@@ -111,6 +119,14 @@
           </div>
         <!-- 제출 -->
           <div class="tab-pane fade" id="list-submit" role="tabpanel" aria-labelledby="list-submit-list">
+            <div class="progress">
+              <div class="progress-bar"
+                   role="progressbar"
+                   :style="{ width: `${percentCompleted}%` }"
+                   :aria-valuenow="percentCompleted"
+                   aria-valuemin="0"
+                   aria-valuemax="100">{{ `${percentCompleted}%` }}</div>
+            </div>
             <div class="file-submit">
               <h5 class="list-title">csv 파일 제출</h5>
               <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
@@ -195,13 +211,12 @@
 import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
-// import VueShowdown from 'vue-showdown'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'ClassContestProblem',
   components: {
     Pagination
-    // VueShowdown
   },
   data () {
     return {
@@ -223,7 +238,20 @@ export default {
       ipynb: '',
 
       PageValue: [],
-      currentPage: 1
+      currentPage: 1,
+
+      percentCompleted: 0,
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -244,7 +272,7 @@ export default {
           this.isClassUser = true
         }
       } catch (err) {
-        console.log(err)
+        console.log(err.response.data)
       }
     },
     isTAOverPrivilege () {
@@ -262,7 +290,23 @@ export default {
         const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
+        }
       }
     },
     async getLeaderboard () {
@@ -323,30 +367,74 @@ export default {
     async submitFile () {
       try {
         if (this.isEndProblem()) {
-          alert('제출 시간이 지났습니다.')
-          this.$router.push(this.$router.currentRoute)
+          this.$notify({
+            group: 'message',
+            title: '제출 시간이 지났습니다.',
+            type: 'warn'
+          })
           return
         }
         if (this.csv === '') {
-          alert('csv 파일을 제출해주세요.')
+          this.$notify({
+            group: 'message',
+            title: 'csv 파일을 제출해주세요.',
+            type: 'error'
+          })
         } else if (this.ipynb === '') {
-          alert('ipynb 파일을 제출해주세요.')
+          this.$notify({
+            group: 'message',
+            title: 'ipynb 파일을 제출해주세요.',
+            type: 'error'
+          })
         } else {
           const formData = new FormData()
           formData.append('csv', this.csv)
           formData.append('ipynb', this.ipynb)
+          this.percedntCompleted = 0
 
-          await api.submitFileProblem(
-            this.classID,
-            this.contestID,
-            this.contestProblemID,
-            formData)
-
-          alert('파일 제출이 완료되었습니다.')
-          this.getUserSubmissions(1)
+          const formDataInstance = api.createInstance(true)
+          formDataInstance.post(`/api/class/${this.classID}/contests/${this.contestID}/${this.contestProblemID}/submission/`, formData, {
+            onUploadProgress: (progressEvent) => {
+              const percentage = (progressEvent.loaded * 100) / progressEvent.total
+              this.percentCompleted = Math.round(percentage)
+            }
+          }).then((result) => {
+            if (result.data.success === '성공했습니다' && this.percentCompleted === 100) {
+              Swal.fire({
+                title: '파일 제출이 완료되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인',
+                customClass: {
+                  actions: 'my-actions',
+                  confirmButton: 'order-2'
+                }
+              })
+              document.getElementById('csv-file-input').value = ''
+              document.getElementById('ipynb-file-input').value = ''
+              this.csv = ''
+              this.ipynb = ''
+              this.getUserSubmissions(1)
+            }
+          }).catch((err) => {
+            if (err.response.status === 400) {
+              if (err.response.data.title !== undefined) {
+                this.$notify({
+                  group: 'message',
+                  title: `${err.response.data.title}`,
+                  type: 'error'
+                })
+              }
+              if (err.response.data.error !== undefined) {
+                this.$notify({
+                  group: 'message',
+                  title: `${err.response.data.error}`,
+                  type: 'error'
+                })
+              }
+            }
+          })
         }
       } catch (err) {
-        console.log(err)
       }
     },
     uploadFile (e) {
@@ -357,7 +445,12 @@ export default {
       const maxSize = 10 * 1024 * 1024
       if (id === 'csv-file-input') {
         if (fileSize > maxSize) {
-          alert('첨부파일은 10MB 이내로 등록 가능합니다.')
+          this.$notify({
+            group: 'message',
+            title: '첨부파일은 10MB 이내로 등록 가능합니다.',
+            type: 'error'
+          })
+          e.target.value = ''
         } else {
           this.csv = files[0]
         }
@@ -379,8 +472,15 @@ export default {
           this.contestID,
           this.contestProblemID,
           selectedSubmission)
-        console.log(selectedSubmission)
-        alert('제출이 완료되었습니다.')
+        Swal.fire({
+          title: '제출이 완료되었습니다. 리더보드를 확인해주세요.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        })
         this.getLeaderboard()
       } catch (err) {
         console.log(this.submitList)
@@ -426,8 +526,8 @@ export default {
     }
   }
 }
-#baseline-input {
-  text-align: center;
-  display: initial;
+
+.noti {
+  padding-top: 100px;
 }
 </style>

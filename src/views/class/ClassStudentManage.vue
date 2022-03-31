@@ -31,6 +31,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 export default {
   name: 'ClassStudentManager',
   data () {
@@ -80,21 +81,76 @@ export default {
     },
     async submitTAForm () {
       const data = this.makeClassUserData(this.taList)
-      await api.submitClassTAList(this.classID, data)
-      alert('TA 등록이 완료되었습니다.')
-      this.getClassUserList()
+      const res = await api.submitClassTAList(this.classID, data)
+      const msg = `존재하지 않는 아이디: ${res.data.does_not_exist}`
+      const msg2 = `이미 존재하는 아이디 : ${res.data.is_existed}`
+      if (res.data.success === undefined) {
+        Swal.fire(
+          {
+            title: 'TA 등록이 완료되었습니다.',
+            html: `${msg} <br> ${msg2}`,
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.getClassUserList()
+          }
+        })
+      } else {
+        Swal.fire(
+          {
+            title: 'TA 등록이 완료되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.getClassUserList()
+          }
+        })
+      }
     },
     async submitStudentForm () {
       const data = this.makeClassUserData(this.studentList)
-      await api.submitClassStudentList(this.classID, data)
-      alert('수강생 등록이 완료되었습니다.')
-      this.getClassUserList()
+      const res = await api.submitClassStudentList(this.classID, data)
+      const msg = `존재하지 않는 아이디: ${res.data.does_not_exist}`
+      const msg2 = `이미 존재하는 아이디 : ${res.data.is_existed}`
+      if (res.data.success === undefined) {
+        Swal.fire(
+          {
+            title: '수강생 등록이 완료되었습니다.',
+            html: `${msg} <br> ${msg2}`,
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.getClassUserList()
+          }
+        })
+      } else {
+        Swal.fire(
+          {
+            title: '수강생 등록이 완료되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.getClassUserList()
+          }
+        })
+      }
+      // this.getClassUserList()
     },
     makeClassUserData (userList) {
       const data = []
       const tmp = userList.split('\n')
       for (const user of tmp) {
-        data.push({ username: user })
+        if (user !== '') {
+          data.push({ username: user })
+        }
       }
       return data
     }

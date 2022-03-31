@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:7777',
+      target: 'http://15.165.30.200:8000',
       changeOrigin: true
     }
   })
@@ -23,11 +23,11 @@ function competitionUserPrivilege (competitionID) {
 }
 
 function getClassStudentUserList (classID) {
-  return instance.get(`/api/class/${classID}/users/std/`)
+  return instance.get(`/api/class/${classID}/std/`)
 }
 
 function getClassTAUserList (classID) {
-  return instance.get(`/api/class/${classID}/users/ta/`)
+  return instance.get(`/api/class/${classID}/ta/`)
 }
 
 function registerUser (data) {
@@ -58,8 +58,12 @@ function findPassword (data) {
   return instance.post('/api/users/password/', data)
 }
 
-function resetPassword (data) {
+function resetPasswordWithToken (data) {
   return instance.post('/api/reset_password/', data)
+}
+
+function resetPasswordWithID (username, data) {
+  return instance.patch(`/api/users/${username}/`, data)
 }
 
 function applyResetPassword (data) {
@@ -230,15 +234,15 @@ function getFAQList () {
 }
 
 function deleteFAQ (faqID) {
-  return instance.delete('/api/admin/faqs/' + faqID + '/')
+  return instance.delete(`/api/admin/faqs/${faqID}/`)
 }
 
 function editFAQ (faqID) {
-  return instance.get('/api/admin/faqs/' + faqID + '/')
+  return instance.get(`/api/admin/faqs/${faqID}/`)
 }
 
 function submitEditFAQ (faqID, data) {
-  return instance.patch('/api/admin/faqs/' + faqID + '/', data)
+  return instance.patch(`/api/admin/faqs/${faqID}/`, data)
 }
 
 function submitFAQ (data) {
@@ -261,7 +265,7 @@ function getAnnouncementList (page, keyword) {
 }
 
 function deleteAnnouncement (announcementID) {
-  return instance.delete('/api/admin/announcements/' + announcementID + '/')
+  return instance.delete(`/api/admin/announcements/${announcementID}/`)
 }
 
 function editAnnouncement (announcementID) {
@@ -273,7 +277,7 @@ function submitAnnouncement (data) {
 }
 
 function submitEditAnnouncement (announcementID, data) {
-  return instance.put('/api/admin/announcements/' + announcementID + '/', data)
+  return instance.put(`/api/admin/announcements/${announcementID}/`, data)
 }
 
 function changeAnnouncementSwitch (announcementID, data) {
@@ -289,7 +293,7 @@ function getUserList (page, keyword) {
 }
 
 function editUser (username) {
-  return instance.get('/api/admin/users/' + username + '/')
+  return instance.get(`/api/admin/users/${username}/`)
 }
 
 function submitUser (username, data) {
@@ -321,7 +325,7 @@ function getAdminClassList (page, keyword) {
 }
 
 function deleteClass (classID) {
-  return instance.delete('/api/admin/class/' + classID)
+  return instance.delete(`/api/admin/class/${classID}/`)
 }
 
 function showUserCompetition (username) {
@@ -480,7 +484,8 @@ export default {
   getUserInfo,
   checkUserIDorEmail,
   findPassword,
-  resetPassword,
+  resetPasswordWithToken,
+  resetPasswordWithID,
   applyResetPassword,
   validateToken,
   resignUser,
@@ -566,5 +571,6 @@ export default {
   downloadClassIpynbFile,
   downloadCompetitionCsvFile,
   downloadCompetitionIpynbFile,
-  editContestProblemOrder
+  editContestProblemOrder,
+  createInstance
 }

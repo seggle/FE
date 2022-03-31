@@ -47,6 +47,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'BoardDetail',
@@ -72,8 +73,20 @@ export default {
       try {
         const res = await api.getProposalDetail(this.proposalID)
         this.content = res.data
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'Board'
+              })
+            }
+          })
+        }
       }
     },
     setCreatedTime () {
@@ -88,11 +101,28 @@ export default {
     },
     async deleteProposal () {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.deleteProposal(this.proposalID)
-          alert('삭제되었습니다.')
-          this.goProposalList()
-        }
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.deleteProposal(this.proposalID)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.goProposalList()
+              }
+            })
+          }
+        })
       } catch (error) {
         console.log(error)
       }

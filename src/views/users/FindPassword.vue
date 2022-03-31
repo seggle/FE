@@ -90,6 +90,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'FindPassword',
@@ -137,10 +138,18 @@ export default {
           email: this.formFindPassword.useremail
         }
         await api.applyResetPassword(data)
-        alert('이메일을 전송하였습니다.')
-
-        this.changeButtonDisabled()
-        this.showForm('token-form')
+        Swal.fire(
+          {
+            title: '이메일을 전송하였습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.changeButtonDisabled()
+            this.showForm('token-form')
+          }
+        })
       } catch (err) {
         console.log(err)
         this.feedback.email = err.response.data.error
@@ -154,11 +163,19 @@ export default {
           token: this.formFindPassword.token
         }
         await api.validateToken(data)
-        alert('인증코드가 확인되었습니다.')
-
-        this.hideForm('email-form')
-        this.hideForm('token-form')
-        this.showForm('reset-password-form')
+        Swal.fire(
+          {
+            title: '인증코드가 확인되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.hideForm('email-form')
+            this.hideForm('token-form')
+            this.showForm('reset-password-form')
+          }
+        })
       } catch (err) {
         console.log(err)
       }
@@ -190,9 +207,18 @@ export default {
           password1: this.formResetPassword.newPassword,
           password2: this.formResetPassword.newPasswordAgain
         }
-        await api.resetPassword(data)
-        alert('비밀번호가 변경되었습니다.')
-        this.$router.push('/')
+        await api.resetPasswordWithToken(data)
+        Swal.fire(
+          {
+            title: '비밀번호가 변경되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/')
+          }
+        })
       } catch (err) {
         console.log(err.response.data.error)
       }

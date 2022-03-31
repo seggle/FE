@@ -64,6 +64,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'EditClassContestProblem',
@@ -75,7 +76,16 @@ export default {
       problem: {
         title: '',
         description: '',
-        metrics: ['RSME', 'MSE', 'Accuracy', 'F1-score', 'RMSE', 'MAE', 'Log loss'],
+        metrics: [
+          'CategorizationAccuracy',
+          'RSME',
+          'MAE',
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
+        ],
         evaluation: '',
         data_description: ''
       },
@@ -107,12 +117,20 @@ export default {
           data_description: this.problem.data_description
         }
         await api.editContestProblem(this.classID, this.contestID, this.contestProblemID, data)
-
-        alert('저장이 완료되었습니다.')
-        this.$router.push({
-          name: 'ClassContestProblemList',
-          params: {
-            contestID: this.contestID
+        Swal.fire(
+          {
+            title: '저장이 완료되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push({
+              name: 'ClassContestProblemList',
+              params: {
+                contestID: this.contestID
+              }
+            })
           }
         })
       } catch (err) {

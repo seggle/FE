@@ -1,4 +1,12 @@
 <template>
+  <notifications group="message"
+                    position="top center"
+                    class="noti"
+                    animation-name="v-fade-left"
+                    :speed="50"
+                    :width="300"
+                    :max="3"
+                    :ignoreDuplicates="true"/>
   <div class="container problem-container">
     <form class="problem-form" @submit.prevent="submitForm">
       <div class="problem-header">
@@ -68,10 +76,12 @@
                   <p class="file-desc">하나의 zip 파일만 업로드 가능합니다</p>
                   <label class="form-label">데이터 파일</label>
                   <label class="file-upload-btn" for="data-file-input">업로드</label>
-                  <a class="file-download-btn"
-                     id="zip-download"
-                     @click="downloadDataFile"
-                  >다운로드</a>
+                  <a id="zip-download">
+                    <button class="file-download-btn"
+                            @click="downloadDataFile"
+                            type="button"
+                    >다운로드</button>
+                  </a>
                   <input id="data-file-input"
                          type="file"
                          accept=".zip"
@@ -85,15 +95,12 @@
                   <p class="file-desc">하나의 csv 파일만 업로드 가능합니다</p>
                   <label class="form-label">정답 파일</label>
                   <label class="file-upload-btn" for="solution-file-input">업로드</label>
-                  <!-- <a id="csv-download">
+                  <a id="csv-download">
                     <button class="file-download-btn"
-                      @click="downloadSolutionFile">다운로드
-                    </button>
-                  </a> -->
-                  <a class="file-download-btn"
-                     id="csv-download"
-                     @click="downloadSolutionFile"
-                  >다운로드</a>
+                      @click="downloadSolutionFile"
+                      type="button"
+                    >다운로드</button>
+                  </a>
                   <input id="solution-file-input"
                          type="file"
                          accept=".csv"
@@ -113,6 +120,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'EditContestProblem',
@@ -123,14 +131,34 @@ export default {
       problem: {
         title: '',
         description: '',
-        metrics: ['RSME', 'MSE', 'Accuracy', 'F1-score', 'RMSE', 'MAE', 'Log loss'],
+        metrics: [
+          'CategorizationAccuracy',
+          'RSME',
+          'MAE',
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
+        ],
         evaluation: '',
         public: '',
         data_description: '',
         data: '',
         solution: ''
       },
-      placeholder: ''
+      placeholder: '',
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -157,29 +185,73 @@ export default {
         const formData = new FormData()
         formData.append('data', this.problem.data)
         formData.append('solution', this.problem.solution)
-
-        const data = {
-          title: this.problem.title,
-          description: this.problem.description,
-          evaluation: this.problem.evaluation,
-          data_description: this.problem.data_description,
-          public: this.problem.public,
-          class_id: this.classID
-        }
-        for (const key in data) {
-          formData.append(`${key}`, data[key])
-        }
-        await api.editProblem(this.problemID, formData)
-
-        alert('저장이 완료되었습니다.')
-        this.$router.push({
-          name: 'ClassAllProblem',
-          params: {
-            classID: this.classID
+        if (this.problem.description === '') {
+          this.$notify({
+            group: 'message',
+            title: '문제 설명을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.evaluation === '') {
+          this.$notify({
+            group: 'message',
+            title: '평가 방식을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.data_description === '') {
+          this.$notify({
+            group: 'message',
+            title: '데이터 설명을 입력해주세요.',
+            type: 'warn'
+          })
+        } else {
+          const data = {
+            title: this.problem.title,
+            description: this.problem.description,
+            evaluation: this.problem.evaluation,
+            data_description: this.problem.data_description,
+            public: this.problem.public,
+            class_id: this.classID
           }
-        })
+          for (const key in data) {
+            formData.append(`${key}`, data[key])
+          }
+          await api.editProblem(this.problemID, formData)
+          Swal.fire(
+            {
+              title: '저장이 완료되었습니다.',
+              icon: 'success',
+              confirmButtonText: '확인'
+            }
+          ).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassAllProblem',
+                params: {
+                  classID: this.classID
+                }
+              })
+            }
+          })
+        }
       } catch (err) {
-        console.log(err)
+        console.log(err.response)
+        if (err.response.status === 400) {
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            console.log(err.response.data)
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
+        }
       }
     },
     uploadFile (e) {
@@ -216,4 +288,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.noti {
+  padding-top: 10%;
+}
 </style>

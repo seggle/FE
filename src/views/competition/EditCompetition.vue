@@ -1,4 +1,12 @@
 <template>
+<notifications group="message"
+                 position="top center"
+                 class="noti"
+                 animation-name="v-fade-left"
+                 :speed="50"
+                 :width="300"
+                 :max="3"
+                 :ignoreDuplicates="true"/>
   <div class="container problem-container">
     <form class="problem-form" @submit.prevent="submitForm">
       <header class="problem-header">
@@ -114,11 +122,13 @@
                   <label class="file-upload-btn" for="data-file-input"
                     >업로드</label
                   >
-                  <a class="file-download-btn"
-                     id="zip-download"
-                     @click="downloadDataFile"
-                     >다운로드</a
+                  <a id="zip-download">
+                    <button class="file-download-btn"
+                            @click="downloadDataFile"
+                            type="button"
+                    >다운로드</button
                     >
+                  </a>
                   <input
                     id="data-file-input"
                     type="file"
@@ -136,11 +146,12 @@
                   <label class="file-upload-btn" for="solution-file-input"
                     >업로드</label
                   >
-                  <a class="file-download-btn"
-                     id="csv-download"
-                     @click="downloadSolutionFile"
-                    >다운로드</a
-                  >
+                  <a id="csv-download">
+                    <button class="file-download-btn"
+                            @click="downloadSolutionFile"
+                            type="button"
+                      >다운로드</button>
+                  </a>
                   <input
                     id="solution-file-input"
                     type="file"
@@ -163,6 +174,7 @@
 <script>
 import api from '@/api/index.js'
 import { UTCtoKST } from '@/utils/time.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'EditCompetition',
@@ -173,13 +185,14 @@ export default {
         title: '',
         description: '',
         metrics: [
+          'CategorizationAccuracy',
           'RSME',
-          'MSE',
-          'Accuracy',
-          'F1-score',
-          'RMSE',
           'MAE',
-          'Log loss'
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
         ],
         evaluation: '',
         start_time: '',
@@ -188,7 +201,18 @@ export default {
         data: '',
         solution: ''
       },
-      placeholder: ''
+      placeholder: '',
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -204,10 +228,23 @@ export default {
       try {
         const res = await api.getCompetitions(this.competitionID)
         Object.assign(this.problem, res.data)
-
+        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
+        if (err.response.status === 404) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'CompetitionList'
+              })
+            }
+          })
+        }
         console.log(err)
       }
     },
@@ -217,26 +254,91 @@ export default {
         const formData = new FormData()
         formData.append('data', this.problem.data)
         formData.append('solution', this.problem.solution)
+        if (this.problem.description === '') {
+          this.$notify({
+            group: 'message',
+            title: '대회 설명을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.evaluation === '') {
+          this.$notify({
+            group: 'message',
+            title: '평가 방식을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.startTime === '') {
+          this.$notify({
+            group: 'message',
+            title: '시작 시간을 선택해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.endTime === '') {
+          this.$notify({
+            group: 'message',
+            title: '종료 시간을 선택해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.data_description === '') {
+          this.$notify({
+            group: 'message',
+            title: '데이터 설명을 입력해주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.data === '') {
+          this.$notify({
+            group: 'message',
+            title: '데이터 파일을 올려주세요.',
+            type: 'warn'
+          })
+        } else if (this.problem.solution === '') {
+          this.$notify({
+            group: 'message',
+            title: '정답 파일을 올려주세요.',
+            type: 'warn'
+          })
+        } else {
+          const data = {
+            title: this.problem.title,
+            description: this.problem.description,
+            evaluation: this.problem.evaluation,
+            data_description: this.problem.data_description,
+            start_time: UTCtoKST(this.problem.start_time),
+            end_time: UTCtoKST(this.problem.end_time)
+          }
+          for (const key in data) {
+            formData.append(`${key}`, data[key])
+          }
 
-        const data = {
-          title: this.problem.title,
-          description: this.problem.description,
-          evaluation: this.problem.evaluation,
-          data_description: this.problem.data_description,
-          start_time: UTCtoKST(this.problem.start_time),
-          end_time: UTCtoKST(this.problem.end_time)
+          await api.editCompetitionProblem(this.competitionID, formData)
+          Swal.fire(
+            {
+              title: '저장이 완료되었습니다.',
+              icon: 'success',
+              confirmButtonText: '확인'
+            }
+          ).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({ name: 'CompetitionList' })
+            }
+          })
         }
-
-        for (const key in data) {
-          formData.append(`${key}`, data[key])
-        }
-
-        await api.editCompetitionProblem(this.competitionID, formData)
-
-        alert('저장이 완료되었습니다.')
-        this.$router.push({ name: 'CompetitionList' })
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
+        }
       }
     },
     /* 데이터 파일, 솔루션 파일 업로드 */
@@ -259,6 +361,7 @@ export default {
       const a = document.getElementById(`${FILE_TYPE}-download`)
       a.href = url
       a.download = decodeURI(filename)
+      a.click()
     },
     async downloadDataFile () {
       const response = await api.downloadDataFile(this.problem.problem_id)
@@ -268,8 +371,27 @@ export default {
       const response = await api.downloadSolutionFile(this.problem.problem_id)
       this.downloadFile(response, 'csv')
     }
+  },
+  watch: {
+    'problem.end_time' () {
+      const date = new Date()
+      if (this.problem.end_time !== '') {
+        if (date > this.problem.end_time || this.problem.start_time > this.problem.end_time) {
+          this.$notify({
+            group: 'message',
+            title: '종료 시간을 다시 설정해주세요.',
+            type: 'warn'
+          })
+          this.problem.end_time = ''
+        }
+      }
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.noti {
+  padding-top: 10%;
+}
+</style>

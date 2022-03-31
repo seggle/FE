@@ -59,6 +59,7 @@
 <script>
 import api from '@/api/index.js'
 import ModalClassList from '@/components/ModalClassList.vue'
+const Swal = require('sweetalert2')
 export default {
   name: 'EditClassList',
   components: {
@@ -100,19 +101,47 @@ export default {
           data.push(item)
         }
         await api.editClassList(data)
-        alert('변경사항이 저장되었습니다.')
-        this.$router.push({ name: 'ClassList' })
+        Swal.fire({
+          title: '변경사항이 저장되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-2'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push({ name: 'ClassList' })
+          }
+        })
       } catch (err) {
         console.log(err)
       }
     },
     async removeClass (classID) {
       try {
-        if (confirm('삭제하시겠습니까?')) {
-          await api.removeClass(classID)
-          alert('삭제되었습니다.')
-          this.$router.push({ name: 'ClassList' })
-        }
+        await Swal.fire({
+          title: '삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            api.removeClass(classID)
+            Swal.fire(
+              {
+                title: '삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              }
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push({ name: 'ClassList' })
+              }
+            })
+          }
+        })
       } catch (err) {
         console.log(err)
       }

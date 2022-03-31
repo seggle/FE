@@ -1,4 +1,12 @@
 <template>
+  <notifications group="message"
+                 position="top center"
+                 class="noti"
+                 animation-name="v-fade-left"
+                 :speed="50"
+                 :width="300"
+                 :max="3"
+                 :ignoreDuplicates="true"/>
   <div class="container problem-container">
     <form class="problem-form" @submit.prevent="submitForm">
       <header class="problem-header">
@@ -25,7 +33,7 @@
               id="list-info-list"
               href="#list-info"
               aria-controls="list-info"
-              >문제 설명</a
+              >대회 설명</a
             >
             <a
               class="list-group-item list-group-item-action"
@@ -49,11 +57,11 @@
               aria-labelledby="list-info-list"
               :key="problem"
             >
-              <h5 class="list-title">문제 설명</h5>
+              <h5 class="list-title">대회 설명</h5>
               <v-md-editor
                 v-model="problem.description"
                 height="400px"
-                placeholder="문제 설명을 입력하세요."
+                placeholder="대회 설명을 입력하세요."
               />
 
               <div class="form-option">
@@ -153,6 +161,7 @@
 import api from '@/api/index.js'
 import { UTCtoKST } from '@/utils/time.js'
 
+const Swal = require('sweetalert2')
 export default {
   name: 'CreateCompetition',
   data () {
@@ -162,13 +171,14 @@ export default {
         title: '',
         description: '',
         metrics: [
+          'CategorizationAccuracy',
           'RSME',
-          'MSE',
-          'Accuracy',
-          'F1-score',
-          'RMSE',
           'MAE',
-          'Log loss'
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
         ],
         evaluation: '',
         startTime: '',
@@ -177,7 +187,18 @@ export default {
         data: '',
         solution: ''
       },
-      placeholder: ''
+      placeholder: '',
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -185,7 +206,7 @@ export default {
   },
   methods: {
     init () {
-      this.placeholder = '문제 이름을 입력하세요.'
+      this.placeholder = '대회 이름을 입력하세요.'
     },
     /* 대회 문제 등록 */
     async submitForm () {
@@ -194,19 +215,47 @@ export default {
         formData.append('data', this.problem.data)
         formData.append('solution', this.problem.solution)
         if (this.problem.description === '') {
-          alert('문제 설명을 입력해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '대회 설명을 입력해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.evaluation === '') {
-          alert('평가 방식을 입력해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '평가 방식을 입력해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.startTime === '') {
-          alert('시작 시간을 선택해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '시작 시간을 선택해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.endTime === '') {
-          alert('마감 시간을 선택해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '종료 시간을 선택해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.data_description === '') {
-          alert('데이터 설명을 입력해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '데이터 설명을 입력해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.data === '') {
-          alert('데이터 파일을 올려주세요.')
+          this.$notify({
+            group: 'message',
+            title: '데이터 파일을 올려주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.solution === '') {
-          alert('정답 파일을 올려주세요.')
+          this.$notify({
+            group: 'message',
+            title: '정답 파일을 올려주세요.',
+            type: 'warn'
+          })
         } else {
           const data = {
             title: this.problem.title,
@@ -221,12 +270,35 @@ export default {
           }
 
           await api.createCompetitionProblem(formData)
-
-          alert('저장이 완료되었습니다.')
-          this.$router.push({ name: 'CompetitionList' })
+          Swal.fire(
+            {
+              title: '저장이 완료되었습니다.',
+              icon: 'success',
+              confirmButtonText: '확인'
+            }
+          ).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({ name: 'CompetitionList' })
+            }
+          })
         }
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
+        }
       }
     },
     /* 데이터 파일, 솔루션 파일 업로드 */
@@ -245,7 +317,11 @@ export default {
       const date = new Date()
       if (this.problem.endTime !== '') {
         if (date > this.problem.endTime || this.problem.startTime > this.problem.endTime) {
-          alert('종료 시간을 다시 설정해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '종료 시간을 다시 설정해주세요.',
+            type: 'warn'
+          })
           this.problem.endTime = ''
         }
       }
@@ -254,4 +330,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.block {
+  display: flex;
+}
+
+.noti {
+  padding-top: 10%;
+}
+</style>

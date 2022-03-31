@@ -85,8 +85,6 @@ export default {
     async getProblem () {
       try {
         const res = await api.getProblem(this.problemID)
-        // res.data.description = converter.makeHtml(res.data.description)
-        // res.data.data_description = converter.makeHtml(res.data.data_description)
         this.problem = res.data
       } catch (err) {
         console.log(err)

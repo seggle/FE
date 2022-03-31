@@ -1,4 +1,12 @@
 <template>
+  <notifications group="message"
+                  position="top center"
+                  class="noti"
+                  animation-name="v-fade-left"
+                  :speed="50"
+                  :width="300"
+                  :max="3"
+                  :ignoreDuplicates="true"/>
   <div class="container problem-container">
     <form class="problem-form" @submit.prevent="submitForm">
       <div class="problem-header">
@@ -100,6 +108,7 @@
 
 <script>
 import api from '@/api/index.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'CreateClassProblem',
@@ -111,14 +120,34 @@ export default {
       problem: {
         title: '',
         description: '',
-        metrics: ['RSME', 'MSE', 'Accuracy', 'F1-score', 'RMSE', 'MAE', 'Log loss'],
+        metrics: [
+          'CategorizationAccuracy',
+          'RSME',
+          'MAE',
+          'MSE',
+          'F1-score',
+          'Log-loss',
+          'RMSLE',
+          'mAP'
+        ],
         evaluation: '',
         public: '',
         data_description: '',
         data: '',
         solution: ''
       },
-      placeholder: ''
+      placeholder: '',
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
+      }
     }
   },
   mounted () {
@@ -134,15 +163,35 @@ export default {
         formData.append('data', this.problem.data)
         formData.append('solution', this.problem.solution)
         if (this.problem.description === '') {
-          alert('문제 설명을 입력해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '문제 설명을 입력해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.evaluation === '') {
-          alert('평가 방식을 입력해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '평가 방식을 입력해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.data_description === '') {
-          alert('데이터 설명을 입력해주세요.')
+          this.$notify({
+            group: 'message',
+            title: '데이터 설명을 입력해주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.data === '') {
-          alert('데이터 파일을 올려주세요.')
+          this.$notify({
+            group: 'message',
+            title: '데이터 파일을 올려주세요.',
+            type: 'warn'
+          })
         } else if (this.problem.solution === '') {
-          alert('정답 파일을 올려주세요.')
+          this.$notify({
+            group: 'message',
+            title: '정답 파일을 올려주세요.',
+            type: 'warn'
+          })
         } else {
           const data = {
             title: this.problem.title,
@@ -156,17 +205,40 @@ export default {
             formData.append(`${key}`, data[key])
           }
           await api.createClassProblem(formData)
-
-          alert('저장이 완료되었습니다.')
-          this.$router.push({
-            name: 'ClassAllProblem',
-            params: {
-              classID: this.classID
+          Swal.fire(
+            {
+              title: '저장이 완료되었습니다.',
+              icon: 'success',
+              confirmButtonText: '확인'
+            }
+          ).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassAllProblem',
+                params: {
+                  classID: this.classID
+                }
+              })
             }
           })
         }
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          if (err.response.data.title !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.title}`,
+              type: 'error'
+            })
+          }
+          if (err.response.data.error !== undefined) {
+            this.$notify({
+              group: 'message',
+              title: `${err.response.data.error}`,
+              type: 'error'
+            })
+          }
+        }
       }
     },
     uploadFile (e) {
@@ -183,4 +255,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.noti {
+  padding-top: 10%;
+}
 </style>

@@ -1,6 +1,5 @@
 <template>
 <div class="container">
-  <notifications position="bottom right" classes="my-custom-class" />
   <h1 id="title">Seggle에 오신 걸 환영합니다</h1>
   <form id="register-form" class="row" :key="formRegister"
         :class="{'was-validated': validated }"
@@ -71,7 +70,7 @@
         {{ this.feedback.passwordAgain }}
       </div>
     </div>
-    <button class="btn" type="submit">가입하기</button>
+    <button class="btn" type="submit" style="width: 30%">가입하기</button>
   </form>
 </div>
 </template>
@@ -79,6 +78,7 @@
 <script>
 import api from '@/api/index.js'
 import validator from '@/utils/validators.js'
+const Swal = require('sweetalert2')
 
 export default {
   name: 'Register',
@@ -115,21 +115,28 @@ export default {
           password2: this.formRegister.passwordAgain
         }
         await api.registerUser(data)
-        // notify({
-        //   title: 'Authorization',
-        //   text: 'You have been logged in!'
-        // })
-        alert('회원가입이 완료되었습니다!')
-        this.$router.push('/login')
+        Swal.fire(
+          {
+            title: '회원가입이 완료되었습니다!',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/login')
+          }
+        })
       } catch (err) {
         const status = err.response.status
         const response = err.response.data
 
         if (status === 400) {
+          this.validated = false
           if (response.username) {
             this.feedback.userID = '이미 존재하는 아이디입니다.'
             this.invalidID = true
-          } else if (response.email) {
+          }
+          if (response.email) {
             this.feedback.email = '이미 존재하는 이메일입니다.'
             this.invalidEmail = true
           }
@@ -146,10 +153,12 @@ export default {
         if (res.data.user_id === this.formRegister.userID) {
           this.feedback.userID = '이미 존재하는 아이디입니다.'
           this.invalidID = true
+          this.validated = false
         }
         if (res.data.user_email === this.formRegister.email) {
           this.feedback.email = '이미 존재하는 이메일입니다.'
           this.invalidEmail = true
+          this.validated = false
         }
       } catch (err) {
         console.log(err)
@@ -159,18 +168,21 @@ export default {
       if (!(validator.validateID(this.formRegister.userID))) {
         this.feedback.userID = '아이디 형식이 올바르지 않습니다.'
         this.invalidID = true
+        this.validated = false
       }
     },
     checkUserEmail () {
       if (!(validator.validateEmail(this.formRegister.email))) {
         this.feedback.email = '이메일 형식이 올바르지 않습니다.'
         this.invalidEmail = true
+        this.validated = false
       }
     },
     checkPasswordAgain () { // 비밀번호 재확인
       if (this.formRegister.passwordAgain !== this.formRegister.password) {
         this.feedback.passwordAgain = '비밀번호가 일치하지 않습니다.'
         this.invalidPasswordAgain = true
+        this.validated = false
       }
     },
     checkFormValid () {
@@ -184,8 +196,6 @@ export default {
     handleRegister () {
       if (this.checkFormValid()) {
         this.submitForm()
-      } else {
-        this.validated = true
       }
     }
   }
