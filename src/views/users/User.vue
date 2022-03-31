@@ -86,7 +86,6 @@ export default {
         this.problemList = res.data
         this.count = this.problemList.length
         this.problemList = this.problemList.reverse()
-        console.log(this.problemList)
 
         this.setTime()
         this.problemList.sort((a, b) => {
