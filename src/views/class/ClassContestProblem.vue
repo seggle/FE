@@ -162,11 +162,18 @@
                 <tbody>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
-                      <input v-if="submit.status===0" class="form-check-input"
+                      <input v-if="isTAOverPrivilege() && submit.status===0" class="form-check-input"
                             type="checkbox"
-                            v-model="submitRowIndex"
-                            :true-value="submit.id"
-                      />
+                            :value="submit.id"
+                            v-model="checkList"
+                            :checked ="submit.on_leaderboard"
+                            />
+                      <input v-else-if="submit.status===0" class="form-check-input"
+                            type="radio"
+                            :value="submit.id"
+                            v-model="checkList"
+                            :checked ="submit.on_leaderboard"
+                            />
                     </th>
                     <td>
                       <a id="csv-download">
@@ -225,6 +232,7 @@ export default {
       leaderboardList: [],
 
       submitList: [],
+      checkList: [],
       submitRowIndex: '',
       csv: '',
       ipynb: '',
@@ -312,13 +320,18 @@ export default {
         console.log(err)
       }
     },
-    alreadyChecked () {
-      for (const submission of this.submitList) {
-        if (submission.on_leaderboard) {
-          this.submitRowIndex = submission.id
-        }
-      }
-    },
+    // alreadyChecked (submitID) {
+    //   // is_show이면 체크되어있어야함
+    //   for (const submit of this.submitList) {
+    //     if (submitID === submit.id) {
+    //       if (submit.on_leaderboard) {
+    //         return true
+    //       } else {
+    //         return false
+    //       }
+    //     }
+    //   }
+    // },
     changeSubmissionListName () {
       for (const submission of this.submitList) {
         const csvName = submission.csv
@@ -343,7 +356,7 @@ export default {
             submit.success = '정상 제출'
           }
         }
-        this.alreadyChecked()
+        // this.alreadyChecked()
         this.changeSubmissionListName()
 
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
@@ -446,15 +459,19 @@ export default {
       }
     },
     async selectSubmission () {
-      try {
-        const data = {
-          id: this.submitRowIndex
-        }
+      const selectedSubmission = []
+      for (const checkedSubmission of this.checkList) {
+        const item = {}
+        const id = parseInt(checkedSubmission)
+        console.log(typeof id)
+        item.id = id
+        selectedSubmission.push(item)
+      } try {
         await api.selectProblemSubmission(
           this.classID,
           this.contestID,
           this.contestProblemID,
-          data)
+          selectedSubmission)
         Swal.fire({
           title: '제출이 완료되었습니다. 리더보드를 확인해주세요.',
           icon: 'success',
@@ -466,6 +483,8 @@ export default {
         })
         this.getLeaderboard()
       } catch (err) {
+        console.log(this.submitList)
+        console.log(selectedSubmission)
         console.log(err)
       }
     },

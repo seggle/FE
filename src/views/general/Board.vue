@@ -19,10 +19,7 @@
       </thead>
       <tbody>
         <tr v-if="count === 0">
-          <td></td>
-          <td>등록된 게시물이 없습니다.</td>
-          <td></td>
-          <td></td>
+          <td colspan="4">등록된 게시물이 없습니다.</td>
         </tr>
 
         <tr v-for="proposal in proposalList"

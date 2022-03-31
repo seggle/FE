@@ -222,11 +222,19 @@
                   </tr>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
-                      <input v-if="submit.status===0"
+                        <input v-if="IsContestAdminCheck() && submit.status===0"
                         class="form-check-input"
                         type="checkbox"
-                        v-model="submitRowIndex"
-                        :true-value="submit.id"
+                        :value="submit.id"
+                        v-model="checkList"
+                        :checked ="submit.on_leaderboard"
+                        />
+                      <input v-else-if="submit.status===0"
+                        class="form-check-input"
+                        type="radio"
+                        :value="submit.id"
+                        v-model="checkList"
+                        :checked ="submit.on_leaderboard"
                       />
                     </th>
                     <td>
@@ -286,6 +294,7 @@ export default {
       leaderboardList: [],
 
       submitList: [],
+      checkList: [],
       submitRowIndex: '',
       csv: '',
       ipynb: '',
@@ -419,14 +428,18 @@ export default {
       }
     },
     /* 제출할 파일이 이미 리더보드에 있는지 확인 */
-    alreadyChecked () {
-      // is_show이면 체크되어있어야함
-      for (const submit of this.submitList) {
-        if (submit.on_leaderboard) {
-          this.submitRowIndex = submit.id
-        }
-      }
-    },
+    // alreadyChecked (submitID) {
+    //   // is_show이면 체크되어있어야함
+    //   for (const submit of this.submitList) {
+    //     if (submitID === submit.id) {
+    //       if (submit.on_leaderboard) {
+    //         return true
+    //       } else {
+    //         return false
+    //       }
+    //     }
+    //   }
+    // },
     /* 제출내역의 파일명 바꾸기 */
     changeSubmissionListName () {
       for (const submit of this.submitList) {
@@ -458,7 +471,7 @@ export default {
             submit.success = '정상 제출'
           }
         }
-        this.alreadyChecked()
+        // this.alreadyChecked()
         this.changeSubmissionListName()
 
         this.PageValue.push({
@@ -580,11 +593,15 @@ export default {
     },
     /* 제출할 파일 선택 */
     async selectSubmission () {
-      try {
-        const data = {
-          id: this.submitRowIndex
-        }
-        await api.selectCompetitionSubmission(this.competitionID, data)
+      const selectedSubmission = []
+      // console.log(this.checkList)
+      for (const checkedSubmission of this.checkList) {
+        const item = {}
+        item.id = checkedSubmission
+        selectedSubmission.push(item)
+      } try {
+        await api.selectCompetitionSubmission(this.competitionID, selectedSubmission)
+        console.log(selectedSubmission)
         Swal.fire({
           title: '제출이 완료되었습니다. 리더보드를 확인해주세요.',
           icon: 'success',
@@ -596,6 +613,8 @@ export default {
         })
         this.getLeaderboard()
       } catch (err) {
+        console.log(this.submitList)
+        console.log(selectedSubmission)
         console.log(err)
       }
     },

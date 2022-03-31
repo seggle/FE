@@ -96,6 +96,9 @@
           </tr>
         </thead>
         <tbody>
+          <tr v-if="count === 0">
+            <td colspan="7">등록된 FAQ가 없습니다.</td>
+          </tr>
           <tr v-for="faq in faqList" :key="faq">
             <th scope="row">{{ faq.id }}</th>
             <td class="title">{{ faq.question }}</td>
@@ -148,7 +151,8 @@ export default {
       faqQuestion: '',
       faqAnswer: '',
       faqVisible: true,
-      faqList: []
+      faqList: [],
+      count: 0
     }
   },
   mounted () {
@@ -163,6 +167,7 @@ export default {
       try {
         const res = await api.getFAQList()
         this.faqList = res.data
+        this.count = this.faqList.length
         for (const faq of this.faqList) {
           faq.created_time = formatTime(faq.created_time)
           faq.last_modified = formatTime(faq.last_modified)
