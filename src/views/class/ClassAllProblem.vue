@@ -30,6 +30,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr v-if="count === 0">
+          <td colspan="7">등록된 문제가 없습니다.</td>
+      </tr>
       <tr v-for="problem in problemList" :key="problem">
         <th @click="goProblemDetail(problem.id)" scope="row">{{ problem.id }}</th>
         <td @click="goProblemDetail(problem.id)">
@@ -81,7 +84,8 @@ export default {
       problemList: [],
       keyword: '',
       currentPage: 1,
-      PageValue: []
+      PageValue: [],
+      count: 0
     }
   },
   mounted () {
@@ -97,6 +101,7 @@ export default {
         this.PageValue = []
         const res = await api.getProblemList(page, this.keyword)
         this.problemList = res.data.results
+        this.count = this.problemList.length
         for (const problem of this.problemList) {
           problem.created_time = formatTime(problem.created_time)
         }
