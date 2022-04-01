@@ -81,19 +81,39 @@ export default {
       const data = []
       const tmp = this.taList.split('\n')
       for (const ta of tmp) {
-        data.push({ username: ta })
-      }
-      await api.submitCompetitionTAList(this.competition_id, data)
-      Swal.fire({
-        title: 'TA 등록이 완료되었습니다.',
-        icon: 'success',
-        confirmButtonText: '확인',
-        customClass: {
-          actions: 'my-actions',
-          confirmButton: 'order-2'
+        if (ta !== '') {
+          data.push({ username: ta })
         }
-      })
-      this.getCompetitionTAList()
+      }
+      const res = await api.submitCompetitionTAList(this.competition_id, data)
+      const msg = `존재하지 않는 아이디: ${res.data.does_not_exist}`
+      const msg2 = `이미 존재하는 아이디 : ${res.data.is_existed}`
+      if (res.data.success === undefined) {
+        Swal.fire(
+          {
+            title: '관리자 등록이 완료되었습니다.',
+            html: `${msg} <br> ${msg2}`,
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.getCompetitionTAList()
+          }
+        })
+      } else {
+        Swal.fire(
+          {
+            title: '관리자 등록이 완료되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+          }
+        ).then((result) => {
+          if (result.isConfirmed) {
+            this.getCompetitionTAList()
+          }
+        })
+      }
     }
   }
 }

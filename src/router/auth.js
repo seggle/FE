@@ -110,7 +110,7 @@ const requireCompetitionAdminAuth = () => async (to, from, next) => {
     })
   } catch (err) {
     if (err.response.status === 404) {
-      await Swal.fire({
+      Swal.fire({
         title: '잘못된 접근입니다.',
         icon: 'error',
         confirmButtonText: '확인'
