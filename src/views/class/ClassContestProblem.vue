@@ -273,7 +273,6 @@ export default {
           this.isClassUser = true
         }
       } catch (err) {
-        console.log(err.response.data)
       }
     },
     isTAOverPrivilege () {
@@ -291,8 +290,8 @@ export default {
         const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
-        if (err.response.status === 400) {
-          await Swal.fire({
+        if (err.response.status === 404 || err.response.status === 400) {
+          Swal.fire({
             title: '잘못된 접근입니다.',
             icon: 'error',
             confirmButtonText: '확인'
@@ -318,7 +317,23 @@ export default {
           leaderboard.created_time = formatTime(leaderboard.created_time)
         }
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 404 || err.response.status === 400) {
+          Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
+        }
       }
     },
     // alreadyChecked (submitID) {
@@ -362,7 +377,23 @@ export default {
 
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 404 || err.response.status === 400) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
+        }
       }
     },
     async submitFile () {
@@ -418,13 +449,6 @@ export default {
             }
           }).catch((err) => {
             if (err.response.status === 400) {
-              if (err.response.data.title !== undefined) {
-                this.$notify({
-                  group: 'message',
-                  title: `${err.response.data.title}`,
-                  type: 'error'
-                })
-              }
               if (err.response.data.error !== undefined) {
                 this.$notify({
                   group: 'message',
@@ -494,8 +518,6 @@ export default {
         console.log(this.submitList)
         this.getLeaderboard()
       } catch (err) {
-        console.log(this.submitList)
-        console.log(selectedSubmission)
         console.log(err)
       }
     },

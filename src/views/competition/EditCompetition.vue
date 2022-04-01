@@ -22,6 +22,15 @@
         </div>
       </header>
 
+      <div class="progress">
+        <div class="progress-bar"
+              role="progressbar"
+              :style="{ width: `${percentCompleted}%` }"
+              :aria-valuenow="percentCompleted"
+              aria-valuemin="0"
+              aria-valuemax="100">{{ `${percentCompleted}%` }}</div>
+      </div>
+
       <div class="problem-content row">
         <!-- 세로 메뉴 탭 -->
         <div class="problem-tab col-2">
@@ -186,7 +195,7 @@ export default {
         description: '',
         metrics: [
           'CategorizationAccuracy',
-          'RSME',
+          'RMSE',
           'MAE',
           'MSE',
           'F1-score',
@@ -212,7 +221,8 @@ export default {
           opacity: 0,
           height: 0
         }
-      }
+      },
+      percentCompleted: 0
     }
   },
   mounted () {
@@ -228,7 +238,6 @@ export default {
       try {
         const res = await api.getCompetitions(this.competitionID)
         Object.assign(this.problem, res.data)
-        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
@@ -309,7 +318,15 @@ export default {
             formData.append(`${key}`, data[key])
           }
 
-          await api.editCompetitionProblem(this.competitionID, formData)
+          const instance = api.createInstance(false)
+          instance.put(`/api/competitions/${this.competitionID}/`, formData, {
+            onUploadProgress: (progressEvent) => {
+              const percentage = (progressEvent.loaded * 100) / progressEvent.total
+              this.percentCompleted = Math.round(percentage)
+            }
+          })
+
+          // await api.editCompetitionProblem(this.competitionID, formData)
           Swal.fire(
             {
               title: '저장이 완료되었습니다.',

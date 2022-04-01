@@ -199,7 +199,6 @@
                 accept=".ipynb"
                 @change="uploadFile"
               />
-              <progress max="100" :value.prop="uploadPercentage"></progress>
               <button class="btn" @click="submitFile">파일 제출</button>
             </div>
             <div class="table-div">
@@ -521,7 +520,6 @@ export default {
               onUploadProgress: (progressEvent) => {
                 const percentage = (progressEvent.loaded * 100) / progressEvent.total
                 this.percentCompleted = Math.round(percentage)
-                console.log(this.percentCompleted + '%')
               }
             }).then((result) => {
               if (result.data.success === '성공했습니다' && this.percentCompleted === 100) {
@@ -594,6 +592,7 @@ export default {
     /* 제출할 파일 선택 */
     async selectSubmission () {
       const selectedSubmission = []
+<<<<<<< HEAD
       const item = {}
       if (this.userPrivilege > 0) {
         for (const checkedSubmission of this.checkList) {
@@ -604,11 +603,15 @@ export default {
       } else {
         const id = parseInt(this.submitRowIndex)
         item.id = id
+=======
+      for (const checkedSubmission of this.checkList) {
+        const item = {}
+        item.id = checkedSubmission
+>>>>>>> 2e86fe40cf2724acbdc59430296384fe9141db15
         selectedSubmission.push(item)
       }
       try {
         await api.selectCompetitionSubmission(this.competitionID, selectedSubmission)
-        console.log(selectedSubmission)
         Swal.fire({
           title: '제출이 완료되었습니다. 리더보드를 확인해주세요.',
           icon: 'success',
@@ -620,8 +623,6 @@ export default {
         })
         this.getLeaderboard()
       } catch (err) {
-        console.log(this.submitList)
-        console.log(selectedSubmission)
         console.log(err)
       }
     },
