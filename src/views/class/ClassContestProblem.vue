@@ -171,7 +171,7 @@
                       <input v-else-if="submit.status===0" class="form-check-input"
                             type="radio"
                             :value="submit.id"
-                            v-model="checkList"
+                            v-model="submitRowIndex"
                             :checked ="submit.on_leaderboard"
                             />
                     </th>
@@ -233,6 +233,7 @@ export default {
 
       submitList: [],
       checkList: [],
+      checkedBoolean: true,
       submitRowIndex: '',
       csv: '',
       ipynb: '',
@@ -482,14 +483,24 @@ export default {
         this.ipynb = files[0]
       }
     },
+    addCheckList (submitIndex) {
+      this.checkList.append(submitIndex)
+    },
     async selectSubmission () {
       const selectedSubmission = []
-      for (const checkedSubmission of this.checkList) {
-        const item = {}
-        const id = parseInt(checkedSubmission)
+      const item = {}
+      if (this.userPrivilege > 0) {
+        for (const checkedSubmission of this.checkList) {
+          const id = parseInt(checkedSubmission)
+          item.id = id
+          selectedSubmission.push(item)
+        }
+      } else {
+        const id = parseInt(this.submitRowIndex)
         item.id = id
         selectedSubmission.push(item)
-      } try {
+      }
+      try {
         await api.selectProblemSubmission(
           this.classID,
           this.contestID,
@@ -504,6 +515,7 @@ export default {
             confirmButton: 'order-2'
           }
         })
+        console.log(this.submitList)
         this.getLeaderboard()
       } catch (err) {
         console.log(err)
