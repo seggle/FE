@@ -13,6 +13,16 @@
           >저장</button>
         </div>
       </div>
+
+      <div class="progress">
+        <div class="progress-bar"
+              role="progressbar"
+              :style="{ width: `${percentCompleted}%` }"
+              :aria-valuenow="percentCompleted"
+              aria-valuemin="0"
+              aria-valuemax="100">{{ `${percentCompleted}%` }}</div>
+      </div>
+
       <div class="problem-content row">
       <!-- 세로 메뉴 탭 -->
         <div class="problem-tab col-2">
@@ -89,7 +99,8 @@ export default {
         evaluation: '',
         data_description: ''
       },
-      placeholder: ''
+      placeholder: '',
+      percentCompleted: 0
     }
   },
   mounted () {
@@ -116,7 +127,15 @@ export default {
           evaluation: this.problem.evaluation,
           data_description: this.problem.data_description
         }
-        await api.editContestProblem(this.classID, this.contestID, this.contestProblemID, data)
+
+        const instance = api.createInstance(false)
+        instance.patch(`/api/class/${this.classID}/contests/${this.contestID}/${this.contestProblemID}/description/`, data, {
+          onUploadProgress: (progressEvent) => {
+            const percentage = (progressEvent.loaded * 100) / progressEvent.total
+            this.percentCompleted = Math.round(percentage)
+          }
+        })
+        // await api.editContestProblem(this.classID, this.contestID, this.contestProblemID, data)
         Swal.fire(
           {
             title: '저장이 완료되었습니다.',

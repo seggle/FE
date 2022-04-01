@@ -508,7 +508,6 @@ export default {
               onUploadProgress: (progressEvent) => {
                 const percentage = (progressEvent.loaded * 100) / progressEvent.total
                 this.percentCompleted = Math.round(percentage)
-                console.log(this.percentCompleted + '%')
               }
             }).then((result) => {
               if (result.data.success === '성공했습니다' && this.percentCompleted === 100) {
