@@ -162,11 +162,18 @@
                 <tbody>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
-                      <input v-if="submit.status===0" class="form-check-input"
+                      <input v-if="isTAOverPrivilege() && submit.status===0" class="form-check-input"
                             type="checkbox"
-                            v-model="submitRowIndex"
-                            :true-value="submit.id"
-                      />
+                            :value="submit.id"
+                            v-model="checkList"
+                            :checked ="submit.on_leaderboard"
+                            />
+                      <input v-else-if="submit.status===0" class="form-check-input"
+                            type="radio"
+                            :value="submit.id"
+                            v-model="checkList"
+                            :checked ="submit.on_leaderboard"
+                            />
                     </th>
                     <td>
                       <a id="csv-download">
@@ -225,6 +232,7 @@ export default {
       leaderboardList: [],
 
       submitList: [],
+      checkList: [],
       submitRowIndex: '',
       csv: '',
       ipynb: '',
@@ -264,7 +272,6 @@ export default {
           this.isClassUser = true
         }
       } catch (err) {
-        console.log(err.response.data)
       }
     },
     isTAOverPrivilege () {
@@ -282,8 +289,8 @@ export default {
         const res = await api.getContestProblem(this.classID, this.contestID, this.contestProblemID)
         this.problem = res.data
       } catch (err) {
-        if (err.response.status === 400) {
-          await Swal.fire({
+        if (err.response.status === 404 || err.response.status === 400) {
+          Swal.fire({
             title: '잘못된 접근입니다.',
             icon: 'error',
             confirmButtonText: '확인'
@@ -309,16 +316,37 @@ export default {
           leaderboard.created_time = formatTime(leaderboard.created_time)
         }
       } catch (err) {
-        console.log(err)
-      }
-    },
-    alreadyChecked () {
-      for (const submission of this.submitList) {
-        if (submission.on_leaderboard) {
-          this.submitRowIndex = submission.id
+        if (err.response.status === 404 || err.response.status === 400) {
+          Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
         }
       }
     },
+    // alreadyChecked (submitID) {
+    //   // is_show이면 체크되어있어야함
+    //   for (const submit of this.submitList) {
+    //     if (submitID === submit.id) {
+    //       if (submit.on_leaderboard) {
+    //         return true
+    //       } else {
+    //         return false
+    //       }
+    //     }
+    //   }
+    // },
     changeSubmissionListName () {
       for (const submission of this.submitList) {
         const csvName = submission.csv
@@ -343,12 +371,28 @@ export default {
             submit.success = '정상 제출'
           }
         }
-        this.alreadyChecked()
+        // this.alreadyChecked()
         this.changeSubmissionListName()
 
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 404 || err.response.status === 400) {
+          await Swal.fire({
+            title: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push({
+                name: 'ClassContestProblemList',
+                params: {
+                  classID: this.classID,
+                  contestID: this.contestID
+                }
+              })
+            }
+          })
+        }
       }
     },
     async submitFile () {
@@ -404,13 +448,6 @@ export default {
             }
           }).catch((err) => {
             if (err.response.status === 400) {
-              if (err.response.data.title !== undefined) {
-                this.$notify({
-                  group: 'message',
-                  title: `${err.response.data.title}`,
-                  type: 'error'
-                })
-              }
               if (err.response.data.error !== undefined) {
                 this.$notify({
                   group: 'message',
@@ -446,15 +483,18 @@ export default {
       }
     },
     async selectSubmission () {
-      try {
-        const data = {
-          id: this.submitRowIndex
-        }
+      const selectedSubmission = []
+      for (const checkedSubmission of this.checkList) {
+        const item = {}
+        const id = parseInt(checkedSubmission)
+        item.id = id
+        selectedSubmission.push(item)
+      } try {
         await api.selectProblemSubmission(
           this.classID,
           this.contestID,
           this.contestProblemID,
-          data)
+          selectedSubmission)
         Swal.fire({
           title: '제출이 완료되었습니다. 리더보드를 확인해주세요.',
           icon: 'success',

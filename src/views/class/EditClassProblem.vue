@@ -254,7 +254,6 @@ export default {
           })
         }
       } catch (err) {
-        console.log(err.response)
         if (err.response.status === 400) {
           if (err.response.data.title !== undefined) {
             this.$notify({
@@ -264,7 +263,6 @@ export default {
             })
           }
           if (err.response.data.error !== undefined) {
-            console.log(err.response.data)
             this.$notify({
               group: 'message',
               title: `${err.response.data.error}`,

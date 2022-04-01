@@ -92,7 +92,6 @@ export default {
     },
     async downloadDataFile () {
       const response = await api.downloadDataFile(this.problemID)
-      console.log(response)
       const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {

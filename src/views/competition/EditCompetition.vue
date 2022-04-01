@@ -238,7 +238,6 @@ export default {
       try {
         const res = await api.getCompetitions(this.competitionID)
         Object.assign(this.problem, res.data)
-        console.log(this.problem)
         this.problem.data = ''
         this.problem.solution = ''
       } catch (err) {
