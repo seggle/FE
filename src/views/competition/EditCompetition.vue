@@ -195,7 +195,7 @@ export default {
         description: '',
         metrics: [
           'CategorizationAccuracy',
-          'RSME',
+          'RMSE',
           'MAE',
           'MSE',
           'F1-score',
