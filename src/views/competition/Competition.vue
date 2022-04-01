@@ -233,7 +233,7 @@
                         class="form-check-input"
                         type="radio"
                         :value="submit.id"
-                        v-model="checkList"
+                        v-model="submitRowIndex"
                         :checked ="submit.on_leaderboard"
                       />
                     </th>
@@ -594,12 +594,19 @@ export default {
     /* 제출할 파일 선택 */
     async selectSubmission () {
       const selectedSubmission = []
-      // console.log(this.checkList)
-      for (const checkedSubmission of this.checkList) {
-        const item = {}
-        item.id = checkedSubmission
+      const item = {}
+      if (this.userPrivilege > 0) {
+        for (const checkedSubmission of this.checkList) {
+          const id = parseInt(checkedSubmission)
+          item.id = id
+          selectedSubmission.push(item)
+        }
+      } else {
+        const id = parseInt(this.submitRowIndex)
+        item.id = id
         selectedSubmission.push(item)
-      } try {
+      }
+      try {
         await api.selectCompetitionSubmission(this.competitionID, selectedSubmission)
         console.log(selectedSubmission)
         Swal.fire({
