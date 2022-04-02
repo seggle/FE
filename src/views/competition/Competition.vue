@@ -127,14 +127,15 @@
                 <tr v-if="IsContestAdminCheck() && leaderboardList.length === 0"><td colspan="6">아직 아무도 제출하지 않았어요.</td></tr>
                 <tr v-else-if="!IsContestAdminCheck() && leaderboardList.length === 0"><td colspan="4">아직 아무도 제출하지 않았어요.</td></tr>
                 <tr
-                  v-for="(user, i) in leaderboardList"
+                  v-for="user in leaderboardList"
                   :key="user"
                   :class="{
                     'bg-success p-2 text-dark bg-opacity-50':
                       this.userID === user.username,
                   }"
                 >
-                  <th scope="row">{{ i + 1 }}</th>
+                  <th v-if="user.id===0" scope="row"><font-awesome-icon icon="flag" /></th>
+                  <th v-else scope="row">{{ user.rank }}</th>
                   <td>{{ user.username }}</td>
                   <td>{{ user.score }}</td>
                   <td>
@@ -291,6 +292,7 @@ export default {
 
       problem: [],
       leaderboardList: [],
+      rank: 0,
 
       submitList: [],
       checkList: [],
@@ -393,6 +395,10 @@ export default {
         this.leaderboardList = res.data
         for (const user of this.leaderboardList) {
           user.created_time = formatTime(user.created_time)
+          if (user.id !== 0) {
+            this.rank += 1
+            user.rank = this.rank
+          }
         }
       } catch (err) {
         console.log(err)
@@ -592,9 +598,17 @@ export default {
     /* 제출할 파일 선택 */
     async selectSubmission () {
       const selectedSubmission = []
-      for (const checkedSubmission of this.checkList) {
+      if (this.privilege > 0) {
+        for (const checkedSubmission of this.checkList) {
+          const item = {}
+          const id = parseInt(checkedSubmission)
+          item.id = id
+          selectedSubmission.push(item)
+        }
+      } else {
         const item = {}
-        item.id = checkedSubmission
+        const id = parseInt(this.submitRowIndex)
+        item.id = id
         selectedSubmission.push(item)
       }
       try {
@@ -609,6 +623,7 @@ export default {
           }
         })
         this.getLeaderboard()
+        console.log(this.leaderboardList)
       } catch (err) {
         console.log(err)
       }

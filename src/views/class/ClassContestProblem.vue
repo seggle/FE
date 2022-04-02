@@ -92,15 +92,16 @@
               <tbody>
                 <tr v-if="isTAOverPrivilege() && leaderboardList.length === 0"><td colspan="6">아직 아무도 제출하지 않았어요.</td></tr>
                 <tr v-else-if="!isTAOverPrivilege() && leaderboardList.length === 0"><td colspan="4">아직 아무도 제출하지 않았어요.</td></tr>
-                <tr v-for="(users, i) in leaderboardList" :key="users" :class="{ 'bg-success p-2 text-dark bg-opacity-50': this.userID === users.username }">
-                  <th scope="row">{{ i + 1 }}</th>
-                  <td>{{ users.username }}</td>
-                  <td>{{ users.score }}</td>
-                  <td>{{ users.created_time }}</td>
+                <tr v-for="user in leaderboardList" :key="user" :class="{ 'bg-success p-2 text-dark bg-opacity-50': this.userID === user.username }">
+                  <th v-if="user.id===0" scope="row"><font-awesome-icon icon="flag" /></th>
+                  <th v-else scope="row">{{ user.rank }}</th>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.score }}</td>
+                  <td>{{ user.created_time }}</td>
                   <td v-if="isTAOverPrivilege()">
                     <a id="ipynb-download">
                       <button class="download-btn"
-                        @click="downloadIpynbFile(users.submission_id)">
+                        @click="downloadIpynbFile(user.submission_id)">
                         <font-awesome-icon icon="file-arrow-down" />
                       </button>
                     </a>
@@ -108,7 +109,7 @@
                   <td v-if="isTAOverPrivilege()">
                     <a id="csv-download">
                       <button class="download-btn"
-                        @click="downloadCsvFile(users.submission_id)">
+                        @click="downloadCsvFile(user.submission_id)">
                         <font-awesome-icon icon="file-arrow-down" />
                       </button>
                     </a>
@@ -230,6 +231,7 @@ export default {
 
       problem: [],
       leaderboardList: [],
+      rank: 0,
 
       submitList: [],
       checkList: [],
@@ -313,8 +315,12 @@ export default {
       try {
         const res = await api.getClassLeaderboard(this.contestProblemID)
         this.leaderboardList = res.data
-        for (const leaderboard of this.leaderboardList) {
-          leaderboard.created_time = formatTime(leaderboard.created_time)
+        for (const user of this.leaderboardList) {
+          user.created_time = formatTime(user.created_time)
+          if (user.id !== 0) {
+            this.rank += 1
+            user.rank = this.rank
+          }
         }
       } catch (err) {
         if (err.response.status === 404 || err.response.status === 400) {
@@ -488,14 +494,15 @@ export default {
     },
     async selectSubmission () {
       const selectedSubmission = []
-      const item = {}
       if (this.userPrivilege > 0) {
         for (const checkedSubmission of this.checkList) {
+          const item = {}
           const id = parseInt(checkedSubmission)
           item.id = id
           selectedSubmission.push(item)
         }
       } else {
+        const item = {}
         const id = parseInt(this.submitRowIndex)
         item.id = id
         selectedSubmission.push(item)
@@ -515,8 +522,10 @@ export default {
             confirmButton: 'order-2'
           }
         })
-        console.log(this.submitList)
+        // console.log(selectedSubmission)
+        // console.log(this.submitList)
         this.getLeaderboard()
+        console.log(this.leaderboardList)
       } catch (err) {
         console.log(err)
       }

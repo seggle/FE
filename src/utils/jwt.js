@@ -14,6 +14,7 @@ function saveUserInfo (usertype, classes, competitions) {
   window.localStorage.setItem('UserType', usertype)
   window.localStorage.setItem('Classes', classes)
   window.localStorage.setItem('Competitions', competitions)
+  window.localStorage.setItem('tab', 'all-problems')
 }
 
 function deleteUserInfo () {
@@ -21,6 +22,7 @@ function deleteUserInfo () {
   window.localStorage.removeItem('Classes')
   window.localStorage.removeItem('Competitions')
   window.localStorage.removeItem('test')
+  window.localStorage.removeItem('tab')
 }
 
 export {
