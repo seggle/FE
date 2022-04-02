@@ -21,6 +21,10 @@
     }
 }
 
+.navbar {
+    z-index: 7000 !important;
+}
+
 // table
 thead {
     background-color: black;

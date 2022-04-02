@@ -66,7 +66,7 @@
             <h5 class="list-title">데이터 설명
               <a id="zip-download">
                 <button class="btn"
-                        @click="downloadDataFile">
+                        @click="downloadDataFile(problem.problem_id)">
                   다운로드
                 </button>
               </a>
@@ -542,8 +542,8 @@ export default {
       a.href = url
       a.click()
     },
-    async downloadDataFile () {
-      const response = await api.downloadDataFile(this.contestProblemID)
+    async downloadDataFile (problemID) {
+      const response = await api.downloadDataFile(problemID)
       this.downloadFile(response, 'zip')
     },
     async downloadCsvFile (submissionID) {
