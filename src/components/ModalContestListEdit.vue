@@ -153,7 +153,7 @@ export default {
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.$router.go(this.$router.currentRoute)
+            this.$route.go(this.$router.currentRoute)
           }
         })
       } catch (err) {

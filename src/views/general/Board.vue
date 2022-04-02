@@ -18,9 +18,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="count === 0">
-          <td colspan="4">등록된 게시물이 없습니다.</td>
-        </tr>
+       <tr v-if="count===0">
+         <td></td>
+         <td>등록된 게시물이 없습니다.</td>
+         <td></td>
+         <td></td>
+       </tr>
 
         <tr v-for="proposal in proposalList"
             :key="proposal"
@@ -126,7 +129,7 @@ header {
     width: 6rem;
     height: 2.5rem;
     @media (max-width: 420px) {
-      width: 4rem;
+      width: 5rem;
       font-size: 14px;
     }
   }
@@ -176,4 +179,5 @@ header {
     }
   }
 }
+
 </style>

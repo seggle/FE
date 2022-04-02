@@ -77,7 +77,7 @@ export default {
       userCompetitionList: []
     }
   },
-  created () {
+  mounted () {
     this.init()
   },
   methods: {

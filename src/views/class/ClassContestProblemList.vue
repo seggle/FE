@@ -18,7 +18,7 @@
         <button
           v-if="testMode"
           type="button"
-          class="btn btn-sm px-4 me-sm-3"
+          class="btn"
           @click="goExamManage"
         >
           시험관리

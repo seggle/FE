@@ -232,7 +232,7 @@
                         class="form-check-input"
                         type="radio"
                         :value="submit.id"
-                        v-model="checkList"
+                        v-model="submitRowIndex"
                         :checked ="submit.on_leaderboard"
                       />
                     </th>
@@ -596,7 +596,8 @@ export default {
         const item = {}
         item.id = checkedSubmission
         selectedSubmission.push(item)
-      } try {
+      }
+      try {
         await api.selectCompetitionSubmission(this.competitionID, selectedSubmission)
         Swal.fire({
           title: '제출이 완료되었습니다. 리더보드를 확인해주세요.',
