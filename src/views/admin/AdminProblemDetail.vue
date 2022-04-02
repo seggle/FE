@@ -42,10 +42,12 @@
         <!-- 데이터 -->
           <div class="tab-pane fade" id="list-data" role="tabpanel" aria-labelledby="list-data-list">
             <h5 class="list-title">데이터 설명
+              <a id="data-download">
               <button class="btn"
                       @click="downloadDataFile">
-                <a id="data-download">다운로드</a>
+                다운로드
               </button>
+              </a>
             </h5>
             <p class="list-content">
               <span><v-md-editor :model-value="problem.data_description" mode="preview"></v-md-editor></span>
@@ -92,6 +94,7 @@ export default {
     },
     async downloadDataFile () {
       const response = await api.downloadDataFile(this.problemID)
+
       const filename = response.headers['content-disposition'].split('filename*=UTF-8\'\'')[1]
       const url = window.URL.createObjectURL(
         new Blob([response.data], {
@@ -101,6 +104,7 @@ export default {
       const a = document.getElementById('data-download')
       a.download = decodeURI(filename)
       a.href = url
+      a.click()
     }
   }
 }
