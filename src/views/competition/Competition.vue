@@ -218,7 +218,7 @@
                 </thead>
                 <tbody>
                   <tr v-if="count === 0">
-                    <td colspan="3">제출 내역이 없습니다.</td>
+                    <td colspan="6">제출 내역이 없습니다.</td>
                   </tr>
                   <tr v-for="(submit, i) in submitList" :key="i">
                     <th scope="row">
