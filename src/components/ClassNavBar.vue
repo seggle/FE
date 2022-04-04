@@ -64,15 +64,20 @@ export default {
   data () {
     return {
       tabDefault: true,
-      tabName: localStorage.getItem('tab')
+      tabName: localStorage.getItem('ClassTab'),
+      firstRender: false
     }
   },
-  mounted () {
-    if (this.tabName === null) {
-      localStorage.setItem('tab', 'all-problems')
-    }
+  created () {
+    localStorage.setItem('ClassTab', 'class-contest')
+    this.tabName = localStorage.getItem('ClassTab')
+    this.$router.push({
+      name: 'ClassContest',
+      params: this.$route.params.classID
+    })
     console.log(this.tabName)
   },
+  mounted () {},
   methods: {
     handleRoute (route) {
       this.$router.push({
@@ -80,11 +85,11 @@ export default {
         params: this.$route.params.classID
       })
       if (route === 'ClassAllProblem') {
-        localStorage.setItem('tab', 'all-problems')
+        localStorage.setItem('ClassTab', 'all-problems')
       } else if (route === 'ClassStudentManage') {
-        localStorage.setItem('tab', 'student-manage')
+        localStorage.setItem('ClassTab', 'student-manage')
       } else {
-        localStorage.setItem('tab', 'class-contest')
+        localStorage.setItem('ClassTab', 'class-contest')
       }
     }
   }

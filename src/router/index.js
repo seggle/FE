@@ -99,6 +99,9 @@ const routes = [{
   path: '/class/:classID',
   name: 'Class',
   beforeEnter: requireClassAuth(),
+  beforeRouteLeave (to, from, next) {
+    localStorage.setItem('ClassTab', 'class-contest')
+  },
   component: Class,
   meta: { auth: true },
   children: [{
@@ -304,13 +307,11 @@ router.beforeEach(async (to, from, next) => {
     return next()
   }
   if (to.meta.auth && !store.getters.isLogin) {
-    Swal.fire(
-      {
-        title: '로그인이 필요합니다.',
-        icon: 'warning',
-        confirmButtonText: '확인'
-      }
-    ).then((result) => {
+    Swal.fire({
+      title: '로그인이 필요합니다.',
+      icon: 'warning',
+      confirmButtonText: '확인'
+    }).then((result) => {
       if (result.isConfirmed) {
         next({ name: 'Login' })
       }
@@ -318,13 +319,11 @@ router.beforeEach(async (to, from, next) => {
     // alert('로그인이 필요합니다')
     // next({ name: 'Login' })
   } else if (to.meta.isAdmin && !store.getters.isAdmin) {
-    Swal.fire(
-      {
-        title: '잘못된 접근입니다.',
-        icon: 'error',
-        confirmButtonText: '확인'
-      }
-    ).then((result) => {
+    Swal.fire({
+      title: '잘못된 접근입니다.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    }).then((result) => {
       if (result.isConfirmed) {
         next({ name: 'NotFound' })
       }
