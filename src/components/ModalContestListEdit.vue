@@ -127,11 +127,9 @@ export default {
             }
           ).then((result) => {
             if (result.isConfirmed) {
-              this.$router.push({
+              this.$router.go({
                 name: 'ClassContest',
-                params: {
-                  classID: this.classID
-                }
+                params: this.classID
               })
               this.getContestList()
             }
@@ -156,6 +154,7 @@ export default {
             this.$route.go(this.$router.currentRoute)
           }
         })
+        this.$router.go()
       } catch (err) {
         console.log(err)
       }

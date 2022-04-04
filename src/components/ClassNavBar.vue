@@ -19,7 +19,7 @@
           <ul class="nav nav-pills mb-2 mb-lg-0" role="tablist">
             <li class="nav-item">
               <a
-                class="nav-link"
+                :class="{ 'nav-link active': tabName==='all-problems', 'nav-link':tabName!=='all-problems' }"
                 id="ClassAllProblem"
                 data-bs-toggle="pill"
                 role="tab"
@@ -29,7 +29,7 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link"
+                :class="{ 'nav-link active': tabName==='student-manage', 'nav-link':tabName!=='student-manage' }"
                 id="ClassStudentManage"
                 data-bs-toggle="pill"
                 role="tab"
@@ -39,7 +39,7 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link"
+                :class="{ 'nav-link active': tabName==='class-contest', 'nav-link':tabName!=='class-contest' }"
                 id="ClassProblem"
                 data-bs-toggle="pill"
                 role="tab"
@@ -61,6 +61,22 @@ export default {
   props: {
     className: String
   },
+  data () {
+    return {
+      tabDefault: true,
+      tabName: localStorage.getItem('ClassTab'),
+      firstRender: false
+    }
+  },
+  created () {
+    localStorage.setItem('ClassTab', 'class-contest')
+    this.tabName = localStorage.getItem('ClassTab')
+    this.$router.push({
+      name: 'ClassContest',
+      params: this.$route.params.classID
+    })
+    console.log(this.tabName)
+  },
   mounted () {},
   methods: {
     handleRoute (route) {
@@ -68,6 +84,13 @@ export default {
         name: route,
         params: this.$route.params.classID
       })
+      if (route === 'ClassAllProblem') {
+        localStorage.setItem('ClassTab', 'all-problems')
+      } else if (route === 'ClassStudentManage') {
+        localStorage.setItem('ClassTab', 'student-manage')
+      } else {
+        localStorage.setItem('ClassTab', 'class-contest')
+      }
     }
   }
 }
