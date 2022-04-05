@@ -220,7 +220,7 @@
                   <tr v-if="count === 0">
                     <td colspan="6">제출 내역이 없습니다.</td>
                   </tr>
-                  <tr v-for="(submit, i) in submitList" :key="i">
+                  <tr v-for="(submit, i) in submitList" :key="i" :class="{ 'bg-secondary bg-opacity-10': submit.on_leaderboard}">
                     <th scope="row">
                         <input v-if="IsContestAdminCheck() && submit.status===0"
                         class="form-check-input"
@@ -432,31 +432,6 @@ export default {
         // alert(err.response.data.error)
       }
     },
-    /* 제출할 파일이 이미 리더보드에 있는지 확인 */
-    // alreadyChecked (submitID) {
-    //   // is_show이면 체크되어있어야함
-    //   for (const submit of this.submitList) {
-    //     if (submitID === submit.id) {
-    //       if (submit.on_leaderboard) {
-    //         return true
-    //       } else {
-    //         return false
-    //       }
-    //     }
-    //   }
-    // },
-    /* 제출내역의 파일명 바꾸기 */
-    changeSubmissionListName () {
-      for (const submit of this.submitList) {
-        const csvName = submit.csv
-        const ipynbName = submit.ipynb
-        const submitDate = submit.created_time
-
-        submit.csv = csvName.split('/').pop()
-        submit.ipynb = ipynbName.split('/').pop()
-        submit.created_time = formatTime(submitDate)
-      }
-    },
     /* 대회참여자의 제출물 불러오기 */
     async getUserSubmissions (page) {
       try {
@@ -470,15 +445,13 @@ export default {
         this.count = res.data.length
         this.submitList = res.data.results
         for (const submit of this.submitList) {
+          submit.created_time = formatTime(submit.created_time)
           if (submit.status === 1) {
             submit.success = '파일 오류'
           } else {
             submit.success = '정상 제출'
           }
         }
-        // this.alreadyChecked()
-        this.changeSubmissionListName()
-
         this.PageValue.push({
           count: res.data.count,
           currentPage: this.currentPage

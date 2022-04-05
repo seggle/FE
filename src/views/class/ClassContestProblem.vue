@@ -161,7 +161,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(submit, i) in submitList" :key="i">
+                  <tr v-for="(submit, i) in submitList" :key="i" :class="{ 'bg-secondary bg-opacity-10': submit.on_leaderboard}">
                     <th scope="row">
                       <input v-if="isTAOverPrivilege() && submit.status===0" class="form-check-input"
                             type="checkbox"
@@ -228,6 +228,7 @@ export default {
       contestProblemID: this.$route.params.contestProblemID,
       problem: [],
       leaderboardList: [],
+      count: 0,
       rank: 0,
       submitList: [],
       checkList: [],
@@ -335,43 +336,21 @@ export default {
         }
       }
     },
-    // alreadyChecked (submitID) {
-    //   // is_show이면 체크되어있어야함
-    //   for (const submit of this.submitList) {
-    //     if (submitID === submit.id) {
-    //       if (submit.on_leaderboard) {
-    //         return true
-    //       } else {
-    //         return false
-    //       }
-    //     }
-    //   }
-    // },
-    changeSubmissionListName () {
-      for (const submission of this.submitList) {
-        const csvName = submission.csv
-        const ipynbName = submission.ipynb
-        const submitDate = submission.created_time
-        submission.csv = csvName.split('/').pop()
-        submission.ipynb = ipynbName.split('/').pop()
-        submission.created_time = formatTime(submitDate)
-      }
-    },
     async getUserSubmissions (page) {
       try {
         this.currentPage = page
         this.PageValue = []
         const res = await api.getUserProblemSubmissions(page, this.userID, this.contestProblemID)
         this.submitList = res.data.results
+        this.count = res.data.count
         for (const submit of this.submitList) {
+          submit.created_time = formatTime(submit.created_time)
           if (submit.status === 1) {
             submit.success = '파일 오류'
           } else {
             submit.success = '정상 제출'
           }
         }
-        // this.alreadyChecked()
-        this.changeSubmissionListName()
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
       } catch (err) {
         if (err.response.status === 404 || err.response.status === 400) {
@@ -390,6 +369,8 @@ export default {
               })
             }
           })
+        } else {
+          console.log(err)
         }
       }
     },
@@ -511,10 +492,7 @@ export default {
             confirmButton: 'order-2'
           }
         })
-        // console.log(selectedSubmission)
-        // console.log(this.submitList)
         this.getLeaderboard()
-        console.log(this.leaderboardList)
       } catch (err) {
         console.log(err)
       }
