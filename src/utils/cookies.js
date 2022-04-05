@@ -1,9 +1,9 @@
 function saveAccessToCookie (value) {
-  document.cookie = `til_access=${value}; path=/; max-age=1800`
+  document.cookie = `til_access=${value}; path=/; max-age=300`
 }
 
 function saveRefreshToCookie (value) {
-  document.cookie = `til_refresh=${value}; path=/; max-age=21600`
+  document.cookie = `til_refresh=${value}; path=/; max-age=1800`
 }
 
 function saveUserToCookie (value) {
