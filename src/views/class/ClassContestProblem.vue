@@ -213,7 +213,6 @@ import api from '@/api/index.js'
 import Pagination from '@/components/Pagination.vue'
 import { formatTime } from '@/utils/time.js'
 const Swal = require('sweetalert2')
-
 export default {
   name: 'ClassContestProblem',
   components: {
@@ -224,25 +223,20 @@ export default {
       userID: this.$store.state.userid,
       isClassUser: false,
       userPrivilege: 0,
-
       classID: this.$route.params.classID,
       contestID: this.$route.params.contestID,
       contestProblemID: this.$route.params.contestProblemID,
-
       problem: [],
       leaderboardList: [],
       rank: 0,
-
       submitList: [],
       checkList: [],
       checkedBoolean: true,
       submitRowIndex: '',
       csv: '',
       ipynb: '',
-
       PageValue: [],
       currentPage: 1,
-
       percentCompleted: 0,
       animation: {
         enter: {
@@ -284,7 +278,6 @@ export default {
       const now = new Date()
       const time = this.problem.end_time.replace(/-/gi, '/').replace(' ', '/')
       const endTime = new Date(time)
-
       return endTime <= now
     },
     async getProblem () {
@@ -359,7 +352,6 @@ export default {
         const csvName = submission.csv
         const ipynbName = submission.ipynb
         const submitDate = submission.created_time
-
         submission.csv = csvName.split('/').pop()
         submission.ipynb = ipynbName.split('/').pop()
         submission.created_time = formatTime(submitDate)
@@ -380,7 +372,6 @@ export default {
         }
         // this.alreadyChecked()
         this.changeSubmissionListName()
-
         this.PageValue.push({ count: res.data.count, currentPage: this.currentPage })
       } catch (err) {
         if (err.response.status === 404 || err.response.status === 400) {
@@ -429,7 +420,6 @@ export default {
           formData.append('csv', this.csv)
           formData.append('ipynb', this.ipynb)
           this.percedntCompleted = 0
-
           const formDataInstance = api.createInstance(true)
           formDataInstance.post(`/api/class/${this.classID}/contests/${this.contestID}/${this.contestProblemID}/submission/`, formData, {
             onUploadProgress: (progressEvent) => {
@@ -471,7 +461,6 @@ export default {
     uploadFile (e) {
       const files = e.target.files || e.dataTransfer.files
       const id = e.target.id
-
       const fileSize = files[0].size
       const maxSize = 10 * 1024 * 1024
       if (id === 'csv-file-input') {
@@ -568,7 +557,6 @@ export default {
     }
   }
 }
-
 .noti {
   padding-top: 100px;
 }
