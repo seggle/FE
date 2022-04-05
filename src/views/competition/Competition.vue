@@ -579,12 +579,13 @@ export default {
       const id = e.target.id
 
       const fileSize = files[0].size
-      const maxSize = 10 * 1024 * 1024
+      const csvMaxSize = 25 * 1024 * 1024
+      const ipynbMaxSize = 50 * 1024 * 1024
       if (id === 'csv-file-input') {
-        if (fileSize > maxSize) {
+        if (fileSize > csvMaxSize) {
           this.$notify({
             group: 'message',
-            title: '첨부파일은 10MB 이내로 등록 가능합니다.',
+            title: '첨부파일은 25MB 이내로 등록 가능합니다.',
             type: 'error'
           })
           e.target.value = ''
@@ -592,6 +593,14 @@ export default {
           this.csv = files[0]
         }
       } else {
+        if (fileSize > ipynbMaxSize) {
+          this.$notify({
+            group: 'message',
+            title: '첨부파일은 50MB 이내로 등록 가능합니다.',
+            type: 'error'
+          })
+          e.target.value = ''
+        }
         this.ipynb = files[0]
       }
     },
