@@ -78,7 +78,6 @@
 import ModalContestCreate from '@/components/ModalContestCreate.vue'
 import api from '@/api/index.js'
 const Swal = require('sweetalert2')
-
 export default {
   name: 'ModalContestListEdit',
   components: {
@@ -166,16 +165,13 @@ export default {
 <style lang="scss" scoped>
 .modal-container {
   min-width: 600px;
-
   @media (max-width: 600px) {
     max-width: 300px;
     min-width: 300px;
   }
 }
-
 .row {
   overflow-x: auto;
-
   .contest-name {
     display: block;
     max-width: 200px;
@@ -184,12 +180,10 @@ export default {
     white-space: nowrap;
     text-align: left;
   }
-
   td {
     padding: 0.5rem 1rem;
   }
 }
-
 .form-switch {
   padding-left: 6em;
   @media (max-width: 600px) {
