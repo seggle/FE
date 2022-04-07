@@ -1,7 +1,14 @@
 <template>
+<notifications group="message"
+                 position="top center"
+                 class="noti"
+                 animation-name="v-fade-left"
+                 :speed="50"
+                 :width="300"
+                 :max="3"
+                 :ignoreDuplicates="true"/>
 <div class="container">
   <h1 id="title">비밀번호 찾기</h1>
-
   <form id="email-form"
         :class="{ 'was-validated': validated }"
         @submit.prevent="submitEmailForm">
@@ -83,7 +90,7 @@
         {{ this.feedback.newPasswordAgain }}
       </div>
     </div>
-    <button class="btn" type="submit">비밀번호변경</button>
+    <button class="btn btn-change" type="submit">비밀번호변경</button>
   </form>
 </div>
 </template>
@@ -115,6 +122,17 @@ export default {
         email: '이메일을 입력하세요',
         newPassword: '새로운 비밀번호를 입력하세요',
         newPasswordAgain: '새로운 비밀번호를 입력하세요'
+      },
+      animation: {
+        enter: {
+          opacity: [1, 0],
+          translateX: [0, -300],
+          scale: [1, 0.2]
+        },
+        leave: {
+          opacity: 0,
+          height: 0
+        }
       }
     }
   },
@@ -177,7 +195,13 @@ export default {
           }
         })
       } catch (err) {
-        console.log(err)
+        if (err.response.status === 400) {
+          this.$notify({
+            group: 'message',
+            title: `${err.response.data.error}`,
+            type: 'error'
+          })
+        }
       }
     },
     checkNewPasswordAgain () {
@@ -254,6 +278,9 @@ export default {
       font-size: 1rem;
       font-weight: 600;
     }
+    .btn-change {
+      margin-top: 30px;
+    }
   }
 
   #token-form,
@@ -279,5 +306,8 @@ export default {
     position: absolute;
     right: 10px;
   }
+}
+.noti {
+  padding-top: 10%;
 }
 </style>
