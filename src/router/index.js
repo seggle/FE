@@ -99,9 +99,6 @@ const routes = [{
   path: '/class/:classID',
   name: 'Class',
   beforeEnter: requireClassAuth(),
-  beforeRouteLeave (to, from, next) {
-    localStorage.setItem('ClassTab', 'class-contest')
-  },
   component: Class,
   meta: { auth: true },
   children: [{
