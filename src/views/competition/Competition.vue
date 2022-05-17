@@ -135,7 +135,7 @@
                   }"
                 >
                   <th v-if="user.id===0" scope="row"><font-awesome-icon icon="flag" /></th>
-                  <th v-else scope="row">{{ user.rank }}</th>
+                  <th v-else scope="row">{{ user.id }}</th>
                   <td>{{ user.username }}</td>
                   <td>{{ user.score }}</td>
                   <td>
@@ -292,7 +292,6 @@ export default {
 
       problem: [],
       leaderboardList: [],
-      rank: 0,
 
       submitList: [],
       checkList: [],
@@ -395,10 +394,6 @@ export default {
         this.leaderboardList = res.data
         for (const user of this.leaderboardList) {
           user.created_time = formatTime(user.created_time)
-          if (user.id !== 0) {
-            this.rank += 1
-            user.rank = this.rank
-          }
         }
       } catch (err) {
         console.log(err)
@@ -490,6 +485,8 @@ export default {
               // this.$router.push(this.$router.currentRoute)
               return
             }
+
+
             const formData = new FormData()
             formData.append('csv', this.csv)
             formData.append('ipynb', this.ipynb)
@@ -544,6 +541,7 @@ export default {
           })
         }
       } catch (err) {
+        
       }
     },
     /* 파일 업로드 */
