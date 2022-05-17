@@ -485,8 +485,6 @@ export default {
               // this.$router.push(this.$router.currentRoute)
               return
             }
-
-
             const formData = new FormData()
             formData.append('csv', this.csv)
             formData.append('ipynb', this.ipynb)
@@ -541,7 +539,6 @@ export default {
           })
         }
       } catch (err) {
-        
       }
     },
     /* 파일 업로드 */

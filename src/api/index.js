@@ -4,7 +4,7 @@ import { setInterceptors } from './interceptors'
 function createInstance (formData) {
   const instance = axios.create({
     proxy: {
-      target: 'http://3.37.186.158:7777',
+      target: 'http://3.37.186.158:1004',
       changeOrigin: true
     }
   })
