@@ -3,8 +3,7 @@
     <header>
       <h1 id="title">일반 대회</h1>
       <div v-if="this.$store.getters.isAdmin">
-        <button class="btn" @click="showModal = true">대회 관리</button>
-        <ModalCompetitionManage v-if="showModal" @close="showModal = false" />
+        <button class="btn" @click="goEditCompetitionList">대회 관리</button>
         <button class="btn" @click="goCreateCompetitionProblem">
           대회 생성
         </button>
@@ -32,7 +31,7 @@
             :key="problem"
             @click="goProblem(problem.id)"
           >
-            <td class="col-3 probtitle">{{ problem.problem.title }}</td>
+            <td class="col-3">{{ problem.problem.title }}</td>
             <td>{{ problem.dday }}</td>
             <td>{{ problem.start_time }}</td>
             <td>
@@ -60,13 +59,9 @@
 
 <script>
 import api from '@/api/index.js'
-import ModalCompetitionManage from '@/components/ModalCompetitionManage.vue'
 
 export default {
   name: 'CompetitionList',
-  components: {
-    ModalCompetitionManage
-  },
   data () {
     return {
       problemList: [],
@@ -179,6 +174,11 @@ export default {
       this.$router.push({
         name: 'Competition',
         params: { competitionID: problemID }
+      })
+    },
+    goEditCompetitionList () {
+      this.$router.push({
+        name: 'EditCompetitionList'
       })
     }
   }

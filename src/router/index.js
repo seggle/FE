@@ -50,6 +50,7 @@ import CompetitionList from '@/views/competition/CompetitionList.vue'
 import Competition from '@/views/competition/Competition.vue'
 import CreateCompetition from '@/views/competition/CreateCompetition.vue'
 import EditCompetition from '@/views/competition/EditCompetition.vue'
+import EditCompetitionList from '@/views/competition/EditCompetitionList.vue'
 
 import PageNotFound from '@/views/PageNotFound'
 
@@ -273,6 +274,13 @@ const routes = [{
   component: EditCompetition,
   meta: { isAdmin: true },
   beforeEnter: requireCompetitionAdminAuth()
+},
+{
+  path: '/competition/edit',
+  name: 'EditCompetitionList',
+  component: EditCompetitionList,
+  meta: { isAdmin: true }
+  // beforeEnter: requireCompetitionAdminAuth()
 },
 
 {
